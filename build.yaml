@@ -1,0 +1,13 @@
+targets:
+  $default:
+    builders:
+      freezed:
+        options:
+          map: false
+          when: false
+          fromJson: false
+          toJson: false
+          toString: true
+          equals: true
+          hashCode: true
+          copyWith: true
