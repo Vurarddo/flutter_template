@@ -1,0 +1,5 @@
+{
+  "APP_ENV": "dev",
+  "BASE_URL": "https://api-dev.example.com",
+  "API_KEY": "insert_public_key_here"
+}
