@@ -80,7 +80,7 @@ _bloc.dart (or _cubit.dart)
 - **State & Event Modeling:**
 - Use `sealed class` for the base state/event and `final class` for concrete variants (Dart 3+ pattern).
 - Avoid a single state class with multiple nullable flags. Model explicit lifecycle states instead: `Initial`, `InProgress`, `Success`, `Failure`.
-- Extend `Equatable` for state comparison. Use `@freezed` only when `copyWith` capability is strictly required, adhering to `build.yaml` constraints (NO `map`, `when`, or `toJson`/`fromJson` generation).
+- Extend `Equatable` for state comparison. To generate `copyWith` automatically for state classes that require state modifications, annotate the target state class with `@CopyWith()` from `package:copy_with_extension/copy_with_extension.dart` instead of writing `copyWith` manually.
 - **Dependency Injection:** Annotate all Blocs/Cubits with `@injectable` for DI registration via `injectable` + `get_it`.
 - **UI & BLoC Interaction:**
 - UI MUST ONLY send events via dispatching: `context.read<FeatureBloc>().add(Event())`. Never expose or call public methods on BLoC classes.
@@ -111,30 +111,52 @@ _bloc.dart (or _cubit.dart)
 ## 7. Code Generation & Data Models Constraints
 
 - **Build Runner:** Code generation is executed via `flutter pub run build_runner build --delete-conflicting-outputs`.
-- **Freezed Constraints (per `build.yaml`):**
-- Custom build configuration disables `map`, `when`, `fromJson`, and `toJson` code generation.
-- Do NOT generate, call, or expect `map`, `when`, `fromJson`, or `toJson` methods on `@freezed` models.
-- Use `@freezed` strictly for immutable data classes, `copyWith`, `toString`, `equals`, and `hashCode`.
-- For JSON serialization, use explicit DTOs with `json_serializable` in the Data layer.
+- **Freezed Constraints & Syntax (per `build.yaml` & Freezed 3+):**
+  - **Syntax Standard:** Freezed classes MUST be declared as regular classes with field definitions in the class body and a `const ClassName({required this.field, ...});` constructor with `with _$ClassName`.
+    ```dart
+    @freezed
+    class ExampleItem with _$ExampleItem {
+      final String id;
+      final String title;
+      final String description;
+      final bool isActive;
+      final List<String> tags;
+
+      const ExampleItem({
+        required this.id,
+        required this.title,
+        required this.description,
+        required this.isActive,
+        required this.tags,
+      });
+    }
+    ```
+  - Custom build configuration disables `map`, `when`, `fromJson`, and `toJson` code generation.
+  - Do NOT generate, call, or expect `map`, `when`, `fromJson`, or `toJson` methods on `@freezed` models.
+  - Use `@freezed` strictly for immutable data classes, `copyWith`, `toString`, `equals`, and `hashCode`.
+  - For JSON serialization, use explicit DTOs with `json_serializable` in the Data layer.
 - **Retrofit Constraints:** API services must be defined as abstract classes annotated with `@RestApi()` and use a `Dio` instance injected via `GetIt`.
 
 ---
 
-## 8. Linting, Formatting & BLoC Strict Rules (per `analysis_options.yaml`)
+## 8. Linting, Formatting, Imports & BLoC Strict Rules (per `analysis_options.yaml`)
 
+- **Imports Standard:**
+  - ALWAYS use package imports (`import 'package:flutter_template/...';`) for all project files across all layers.
+  - Relative imports (e.g. `import '../...';` or `import 'movie.dart';`) are strictly prohibited. The only exception is `part` / `part of` compiler directives.
 - **Formatting:**
-- Page width: 100 characters.
-- Trailing commas: MUST be preserved.
+  - Page width: 100 characters.
+  - Trailing commas: MUST be preserved.
 - **Linter Rules Overrides:**
-- `prefer_const_constructors`: true
-- `annotate_overrides`: false
-- `constant_identifier_names`: false
-- `no_leading_underscores_for_library_prefixes`: false
+  - `prefer_const_constructors`: true
+  - `annotate_overrides`: false
+  - `constant_identifier_names`: false
+  - `no_leading_underscores_for_library_prefixes`: false
 - **Strict BLoC Rules:**
-- `avoid_flutter_imports`: true (BLoCs/Cubits must NEVER import `package:flutter/material.dart` or any UI-related imports)
-- `avoid_public_bloc_methods`: true (BLoC methods must be private; state changes must be triggered strictly via Events)
-- `avoid_public_fields`: true (Keep all fields in BLoC/Cubit private)
-- `prefer_void_public_cubit_methods`: true (Cubit public methods must return `void`)
+  - `avoid_flutter_imports`: true (BLoCs/Cubits must NEVER import `package:flutter/material.dart` or any UI-related imports)
+  - `avoid_public_bloc_methods`: true (BLoC methods must be private; state changes must be triggered strictly via Events)
+  - `avoid_public_fields`: true (Keep all fields in BLoC/Cubit private)
+  - `prefer_void_public_cubit_methods`: true (Cubit public methods must return `void`)
 
 ---
 

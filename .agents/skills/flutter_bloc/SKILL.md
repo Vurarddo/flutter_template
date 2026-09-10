@@ -94,13 +94,15 @@ final class FeatureInitial extends FeatureState {}
 
 final class FeatureLoadInProgress extends FeatureState {}
 
+@CopyWith()
 final class FeatureLoadSuccess extends FeatureState {
   final FeatureEntity data;
+  final bool isUpdating;
 
-  const FeatureLoadSuccess(this.data);
+  const FeatureLoadSuccess(this.data, {this.isUpdating = false});
 
   @override
-  List<Object?> get props => [data];
+  List<Object?> get props => [data, isUpdating];
 }
 
 final class FeatureFailure extends FeatureState {
@@ -119,6 +121,7 @@ final class FeatureFailure extends FeatureState {
 ```dart
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 

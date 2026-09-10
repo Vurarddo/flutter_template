@@ -48,7 +48,12 @@ app.*.map.json
 config/env_*.json
 !config/env_template.json
 
-# Generated files
-lib/infrastructure/di/injection.config.dart
+# Generated files (build_runner, freezed, retrofit, injectable, auto_route, l10n, flutter_gen)
+*.g.dart
+*.gr.dart
+*.freezed.dart
+*.config.dart
+lib/l10n/generated/
+lib/presentation/ui_utils/assets/
 
 
