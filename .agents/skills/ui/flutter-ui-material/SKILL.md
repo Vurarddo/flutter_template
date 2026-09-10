@@ -26,7 +26,7 @@ Use this skill whenever:
 | **Theme Extensions** | [flutter-ui-theme-extensions](../theme/flutter-ui-theme-extensions/SKILL.md) | Custom domain tokens and ThemeExtension patterns. |
 | **Parent Hub** | [flutter-ui-hub](../flutter-ui-hub/SKILL.md) | Presentation rules and UI standards. |
 | **Cupertino** | [flutter-ui-cupertino](../flutter-ui-cupertino/SKILL.md) | iOS platform comparisons & adaptive widgets. |
-| **Previews** | [flutter-widget-preview](../../flutter_widget_preview/SKILL.md) | Dual-theme preview verification (Light & Dark). |
+| **Previews** | [flutter-ui-kit-preview](../ui_kit/flutter-ui-kit-preview/SKILL.md) | Dual-theme preview verification (Light & Dark). |
 
 ---
 
@@ -139,6 +139,9 @@ class AppTheme {
 Always use `context.colorScheme` and `context.textTheme`:
 
 ```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_template/presentation/ui_utils/extensions/context_extensions.dart';
+
 class FeatureCard extends StatelessWidget {
   final String title;
   final String description;
@@ -151,8 +154,8 @@ class FeatureCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = context.colorScheme;
+    final textTheme = context.textTheme;
 
     return Card(
       color: colorScheme.surfaceContainerLow,
@@ -178,8 +181,8 @@ class FeatureCard extends StatelessWidget {
 
 | Anti-Pattern | Severity | Corrective Action |
 | :--- | :--- | :--- |
-| Hardcoded colors (`Color(0xFF...)`) in widgets | **CRITICAL** | Access via `Theme.of(context).colorScheme` or `context.customColors`. |
-| Hardcoded text styles with fixed colors | **HIGH** | Use `Theme.of(context).textTheme` with `.copyWith(color: ...)`. |
+| Hardcoded colors (`Color(0xFF...)`) in widgets | **CRITICAL** | Access via `context.colorScheme` or `context.customColors`. |
+| Hardcoded text styles with fixed colors | **HIGH** | Use `context.textTheme` with `.copyWith(color: ...)`. |
 | Missing Dark theme support in custom tokens | **HIGH** | Define distinct light/dark palettes in `ThemeExtension`. |
 | Using deprecated `primaryColor` or `accentColor` | **MEDIUM** | Use `colorScheme.primary` and `colorScheme.secondary`. |
 

@@ -23,7 +23,7 @@ Use this skill whenever:
 | **Parent Hub** | [flutter-ui-hub](../flutter-ui-hub/SKILL.md) | High-level presentation laws and routing. |
 | **Performance** | [flutter-ui-performance](../flutter-ui-performance/SKILL.md) | RepaintBoundary and frame rate optimizations. |
 | **Theming** | [flutter-ui-material](../flutter-ui-material/SKILL.md) | Accessing design tokens inside build methods. |
-| **Previews** | [flutter-widget-preview](../../flutter_widget_preview/SKILL.md) | Visual testing of isolated widgets. |
+| **Previews** | [flutter-ui-kit-preview](../ui_kit/flutter-ui-kit-preview/SKILL.md) | Visual testing of isolated widgets. |
 
 ---
 

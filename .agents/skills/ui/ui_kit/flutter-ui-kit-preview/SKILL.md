@@ -1,22 +1,32 @@
 ---
-name: flutter-widget-preview
-description: Implements real-time widget previews using package:flutter/widget_previews.dart and @Preview annotation. Enforces zero side-effects (no native APIs, no network), mandatory Light/Dark dual testing, PreviewWrapper encapsulation, explicit viewport sizing, MultiPreview transformations, and state-matrix preview patterns. Use when creating UI Kit components, building isolated feature widgets, or setting up visual preview decorators.
+name: flutter-ui-kit-preview
+description: Implements real-time widget previews for UI Kit components using package:flutter/widget_previews.dart and @Preview annotation. Enforces zero side-effects (no native APIs, no network), mandatory Light/Dark dual testing, PreviewWrapper encapsulation, explicit viewport sizing, MultiPreview transformations, and state-matrix preview patterns. Use when creating UI Kit components, building isolated feature widgets, or setting up visual preview decorators.
 ---
 
-# Flutter Widget Preview (@Preview) Expert Skill
+# Flutter UI Kit Widget Preview (@Preview) Guide
 
 ## 1. Overview & When to Apply
 
 Use this skill whenever:
-- Creating new UI Kit components (`lib/presentation/ui_kit/`).
-- Building isolated presentation widgets or feature components.
-- Adding `@Preview` annotations and preview builder functions.
+- Creating new UI Kit components (`lib/presentation/ui_kit/`) and adding `@Preview` annotations.
+- Designing feature widgets in isolation from full application state.
 - Setting up component state matrices (Content, Loading, Error) for designer review.
-- Running and debugging widget previews in IDE or CLI.
+- Encapsulating components in `PreviewWrapper` to supply `MaterialApp`, `ThemeData`, and `Scaffold`.
+- Running and debugging widget previews in IDE sidebar or CLI (`flutter widget-preview start`).
 
 ---
 
-## 2. Technical Constraints & Web-Runner Limitations
+## 2. Prerequisites & Related Skills
+
+| Relation | Skill | Purpose |
+| :--- | :--- | :--- |
+| **Parent UI Kit Hub** | [flutter-ui-kit-hub](../flutter-ui-kit-hub/SKILL.md) | UI Kit architecture and folder standards. |
+| **UI Kit Components** | [flutter-ui-kit-components](../flutter-ui-kit-components/SKILL.md) | Component recipes to decorate with previews. |
+| **Theming System** | [flutter-ui-theme-hub](../../theme/flutter-ui-theme-hub/SKILL.md) | Light and Dark ThemeData providers. |
+
+---
+
+## 3. Technical Constraints & Web-Runner Limitations
 
 Because Flutter Widget Previewer executes preview functions inside a constrained web-based compilation environment:
 
@@ -34,21 +44,11 @@ Because Flutter Widget Previewer executes preview functions inside a constrained
 
 ---
 
-## 3. Core Rules for Widget Previews
-
-1. **100% UI Kit Coverage:**
-   - Every reusable widget in `lib/presentation/ui_kit/` MUST have an accompanying `@Preview` definition.
-2. **Mandatory Dual-Theme Rendering (Light & Dark):**
-   - EVERY UI component MUST provide previews for both **Light** and **Dark** themes to verify text contrast and custom `ThemeExtension` tokens (`context.customColors`).
-3. **Inherited Context Safety (`PreviewWrapper`):**
-   - Preview functions MUST wrap target widgets in a standardized `PreviewWrapper` supplying `MaterialApp`, `Theme`, `Scaffold`, and text directionality.
-
----
-
 ## 4. Standard Preview Wrapper Component
 
 ```dart
 import 'package:flutter/material.dart';
+import 'package:flutter_template/presentation/theme/app_theme.dart';
 
 /// Standard container providing MaterialApp context, theme, and scaffold for @Preview functions.
 class PreviewWrapper extends StatelessWidget {
@@ -92,57 +92,34 @@ class PreviewWrapper extends StatelessWidget {
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
-class CustomCard extends StatelessWidget {
-  final String title;
-  final bool isActive;
-
-  const CustomCard({
-    super.key,
-    required this.title,
-    this.isActive = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(title, style: Theme.of(context).textTheme.bodyLarge),
-    );
-  }
-}
-
 // =============================================================================
 // PREVIEWS
 // =============================================================================
 
 @Preview(
-  name: 'Custom Card - Light',
-  size: Size(375, 120),
+  name: 'Custom Badge - Light',
+  size: Size(200, 80),
 )
-Widget previewCustomCardLight() {
+Widget previewCustomBadgeLight() {
   return const PreviewWrapper(
     brightness: Brightness.light,
-    child: CustomCard(
-      title: 'Active Subscription',
-      isActive: true,
+    child: AppBadge(
+      label: 'Active Plan',
+      variant: AppBadgeVariant.success,
     ),
   );
 }
 
 @Preview(
-  name: 'Custom Card - Dark',
-  size: Size(375, 120),
+  name: 'Custom Badge - Dark',
+  size: Size(200, 80),
 )
-Widget previewCustomCardDark() {
+Widget previewCustomBadgeDark() {
   return const PreviewWrapper(
     brightness: Brightness.dark,
-    child: CustomCard(
-      title: 'Active Subscription',
-      isActive: true,
+    child: AppBadge(
+      label: 'Active Plan',
+      variant: AppBadgeVariant.success,
     ),
   );
 }
@@ -165,10 +142,10 @@ Widget previewFeatureStatesMatrix() {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: const [
           Text('CONTENT STATE:', style: TextStyle(color: Colors.grey)),
-          FeatureCard(data: 'Mock Data Content'),
+          FeatureCard(title: 'Active Card', description: 'Content loaded successfully'),
           SizedBox(height: 16),
           Text('LOADING STATE:', style: TextStyle(color: Colors.grey)),
-          FeatureCardLoading(),
+          FeatureCardShimmer(),
           SizedBox(height: 16),
           Text('ERROR STATE:', style: TextStyle(color: Colors.grey)),
           FeatureCardError(message: 'Failed to sync data'),
@@ -187,7 +164,6 @@ To automatically generate multi-configuration previews (e.g. Light + Dark modes)
 import 'package:flutter/material.dart';
 import 'package:flutter/widget_previews.dart';
 
-/// Creates light and dark mode previews automatically.
 final class MultiBrightnessPreview extends MultiPreview {
   const MultiBrightnessPreview({required this.name});
 
@@ -210,17 +186,6 @@ final class MultiBrightnessPreview extends MultiPreview {
     }).toList();
   }
 }
-
-// Usage with a self-contained component:
-@MultiBrightnessPreview(name: 'Primary Card')
-Widget previewPrimaryCard() => const PreviewWrapper(
-      child: Card(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Text('Content'),
-        ),
-      ),
-    );
 ```
 
 ---
@@ -228,25 +193,18 @@ Widget previewPrimaryCard() => const PreviewWrapper(
 ## 6. Workflows: Interacting with Previews
 
 ### 6.1 Launching Previews
-
 - **Inside IDE (VS Code / Android Studio / IntelliJ with Flutter 3.38+):**
   1. Open the "Flutter Widget Preview" sidebar tab.
-  2. The previewer launches automatically.
-  3. Toggle "Filter previews by selected file" to focus on the active file.
-
+  2. Toggle "Filter previews by selected file" to focus on the active file.
 - **Via Command Line:**
-  1. In the project root, run:
-     ```bash
-     flutter widget-preview start
-     ```
-  2. Interact with the rendered widgets in the browser environment.
+  ```bash
+  flutter widget-preview start
+  ```
 
-### 6.2 Hot Reload & Hot Restart Feedback Loop
-
+### 6.2 Hot Reload Feedback Loop
 1. Modify widget code or `@Preview` parameters.
 2. Changes hot reload automatically in the preview canvas.
-3. If global state/static initializers were altered: trigger **Global Hot Restart** (bottom right).
-4. If only a single preview card needs resetting: click **Card Hot Restart** on that specific preview.
+3. If global state was altered: trigger **Global Hot Restart**.
 
 ---
 
@@ -257,19 +215,16 @@ Widget previewPrimaryCard() => const PreviewWrapper(
 | Direct imports of `dart:io` or `dart:ffi` in previewed paths | **CRITICAL** | Abstract native calls behind interfaces; pass pure Dart mocks. |
 | Initializing Dio/Retrofit/BLoCs inside preview builder | **CRITICAL** | Pass static data props or mock BLoC states directly. |
 | Rendering `@Preview` without `PreviewWrapper` / `MaterialApp` | **HIGH** | Wrap widget in `PreviewWrapper` to supply Theme/Scaffold bounds. |
-| Hardcoding hex colors (`Color(0xFF...)`) in preview code | **HIGH** | Test colors via `Theme.of(context)` / `context.colorScheme` tokens. |
-| Unconstrained preview dimensions causing layout explosion | **MEDIUM** | Supply `size: Size(width, height)` parameter inside `@Preview`. |
+| Hardcoding hex colors (`Color(0xFF...)`) in preview code | **HIGH** | Test colors via `context.colorScheme` / `context.customColors` tokens. |
 | Missing Dark theme preview variant | **MEDIUM** | Provide dual light/dark preview functions or use `@MultiBrightnessPreview`. |
 
 ---
 
-## 8. Agent Verification Checklist
+## 8. Verification Checklist
 
-When generating or auditing `@Preview` implementations:
-
-- [ ] **Import Verification:** Ensure `import 'package:flutter/widget_previews.dart';` is present.
-- [ ] **Top-Level Function:** Ensure `@Preview` is attached to a top-level, parameter-free builder function or valid static constructor.
-- [ ] **Zero Native / Network Dependencies:** Verify zero references to `dart:io`, `dart:ffi`, Dio, or Retrofit in preview execution paths.
-- [ ] **Dual-Theme Coverage:** Verify both `Brightness.light` and `Brightness.dark` preview cases exist.
-- [ ] **PreviewWrapper Safety:** Ensure all previewed widgets are enclosed within `PreviewWrapper` (providing `MaterialApp`, `Scaffold`, and `AppTheme`).
-- [ ] **Sizing Constraints:** Ensure fixed or bounded viewport size (`size: Size(w, h)`) is specified for unconstrained widgets.
+- [ ] Import `package:flutter/widget_previews.dart` is present.
+- [ ] `@Preview` is attached to a top-level, parameter-free builder function.
+- [ ] Zero references to `dart:io`, `dart:ffi`, Dio, or Retrofit in preview execution paths.
+- [ ] Both `Brightness.light` and `Brightness.dark` preview cases exist.
+- [ ] Previewed widgets are enclosed within `PreviewWrapper`.
+- [ ] Explicit viewport size (`size: Size(w, h)`) is specified for unconstrained widgets.

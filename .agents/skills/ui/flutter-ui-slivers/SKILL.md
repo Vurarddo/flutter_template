@@ -108,7 +108,7 @@ class PinnedTabBarDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: Theme.of(context).colorScheme.surface,
+      color: context.colorScheme.surface,
       child: tabBar,
     );
   }

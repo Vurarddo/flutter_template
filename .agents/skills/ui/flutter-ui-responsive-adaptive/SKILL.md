@@ -133,7 +133,7 @@ MouseRegion(
   cursor: SystemMouseCursors.click,
   child: InkWell(
     onTap: () => onAction(),
-    hoverColor: Theme.of(context).colorScheme.primary.withValues(alpha: 0.08),
+    hoverColor: context.colorScheme.primary.withValues(alpha: 0.08),
     borderRadius: BorderRadius.circular(8),
     child: child,
   ),

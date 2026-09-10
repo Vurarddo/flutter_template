@@ -1,35 +1,46 @@
 ---
-name: flutter-reactive-forms
+name: flutter-ui-forms-reactive
 description: Enforces strict architecture, strong typing, custom validation, cross-field checks, dynamic FormArrays, and BLoC integration standards for reactive_forms in Flutter. Guarantees zero mixing of TextEditingController with FormControl, clear boundaries between Presentation forms and Domain DTOs, debounced async validation, and optimal UI rebuilds. Use when creating form controls, dynamic inputs, or complex field validation.
 ---
 
-# Flutter Reactive Forms Expert Skill
+# Flutter Reactive Forms Core Architecture Guide
 
-## When to Apply
+## 1. Overview & When to Apply
 
-Use this skill whenever building data entry UI, custom selections, dynamic collection fields (`FormArray`), cross-field validation rules, or integrating `reactive_forms` with BLoC state management.
+Use this skill whenever:
+- Building data entry UI, registration forms, search filters, or multi-step form workflows.
+- Creating strongly typed `FormGroup`, `FormControl<T>`, and dynamic `FormArray<T>` models.
+- Implementing cross-field validation rules (e.g., password matching, start/end date range).
+- Handling debounced asynchronous field validation with backend checks.
+- Integrating `reactive_forms` with BLoC state management and mapping form state into DTOs.
 
 ---
 
-## Core Architectural Boundaries & Rules
+## 2. Prerequisites & Related Skills
+
+| Relation | Skill | Purpose |
+| :--- | :--- | :--- |
+| **Custom Controls** | [flutter-ui-forms-custom-controls](../flutter-ui-forms-custom-controls/SKILL.md) | Binding custom UI Kit widgets with `reactive_forms`. |
+| **Parent UI Hub** | [flutter-ui-hub](../../flutter-ui-hub/SKILL.md) | Global presentation layer architecture. |
+| **UI Kit Components** | [flutter-ui-kit-components](../../ui_kit/flutter-ui-kit-components/SKILL.md) | Base styled input components. |
+
+---
+
+## 3. Core Architectural Boundaries & Rules
 
 1. **Clean Architecture Boundary (Strict Separation):**
    - **PROHIBITED:** Importing `reactive_forms` inside `Domain` or `Data` layers.
    - `FormGroup`, `FormControl`, and `FormArray` belong EXCLUSIVELY to `Presentation`.
    - Forms map to/from strongly-typed DTOs before communicating with BLoCs or UseCases.
-
 2. **Single Source of Truth:**
    - **STRICTLY PROHIBITED:** Mixing `TextEditingController` state and `FormControl` state.
    - NEVER instantiate a new `FormGroup` directly inside a `build()` method. Store it in state, view controller, or manage it via `ReactiveFormBuilder`.
-
 3. **Strong Typing Mandatory:**
    - Always specify explicit generic types (e.g. `FormControl<String>`, `FormControl<int>`, `FormArray<FormGroup>`). Avoid untyped `FormControl<dynamic>`.
 
 ---
 
-## 1. Strongly Typed Form & Cross-Field Validation Standard
-
-Use typed getters on `FormGroup` extensions and declare cross-field validators at the `FormGroup` level.
+## 4. Strongly Typed Form & Cross-Field Validation Standard
 
 ```dart
 import 'package:flutter/material.dart';
@@ -53,7 +64,6 @@ abstract class RegisterForm {
           validators: [Validators.required],
         ),
       },
-      // Cross-Field Validator for Password Matching
       validators: [Validators.mustMatch(passwordControl, confirmPasswordControl)],
     );
   }
@@ -69,14 +79,13 @@ extension RegisterFormX on FormGroup {
   FormControl<String> get confirmPasswordControl =>
       control(RegisterForm.confirmPasswordControl) as FormControl<String>;
 }
-
 ```
 
 ---
 
-## 2. Async Validation & Debouncing Standard
+## 5. Async Validation & Debouncing Standard
 
-Async validators MUST have a debounce duration configured on the control to prevent backend spamming, and the UI MUST handle the `pending` validation state.
+Async validators MUST have a debounce duration configured on the control to prevent backend spamming:
 
 ```dart
 class UsernameAsyncValidator extends AsyncValidator<String> {
@@ -99,49 +108,13 @@ final usernameControl = FormControl<String>(
   asyncValidators: [UsernameAsyncValidator(getIt())],
   asyncValidatorsDebounceTime: 500, // 500ms debounce
 );
-
 ```
 
 ---
 
-## 3. Dynamic Collections (`FormArray`)
-
-Use `FormArray` for dynamic lists of inputs (e.g., adding multiple phone numbers). Centralize item creation in helper factories.
+## 6. UI Binding, Keyboard UX & BLoC Integration
 
 ```dart
-abstract class DynamicListForm {
-  static const String itemsArray = 'items';
-
-  static FormGroup build() {
-    return FormGroup({
-      itemsArray: FormArray<String>([]),
-    });
-  }
-
-  static void addItem(FormGroup form, [String value = '']) {
-    final array = form.control(itemsArray) as FormArray<String>;
-    array.add(FormControl<String>(value: value, validators: [Validators.required]));
-  }
-
-  static void removeItem(FormGroup form, int index) {
-    final array = form.control(itemsArray) as FormArray<String>;
-    array.removeAt(index);
-  }
-}
-
-```
-
----
-
-## 4. UI Binding, Keyboard UX & BLoC Integration
-
-Ensure narrow rebuilds, proper keyboard navigation (`TextInputAction.next`/`done`), and submission guards.
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:reactive_forms/reactive_forms.dart';
-
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
 
@@ -156,15 +129,12 @@ class RegisterScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
-                // 1. Email Field with Next Action
                 ReactiveTextField<String>(
                   formControlName: RegisterForm.emailControl,
                   textInputAction: TextInputAction.next,
                   decoration: const InputDecoration(labelText: 'Email'),
                 ),
                 const SizedBox(height: 16),
-
-                // 2. Password Field with Next Action
                 ReactiveTextField<String>(
                   formControlName: RegisterForm.passwordControl,
                   obscureText: true,
@@ -172,8 +142,6 @@ class RegisterScreen extends StatelessWidget {
                   decoration: const InputDecoration(labelText: 'Password'),
                 ),
                 const SizedBox(height: 16),
-
-                // 3. Confirm Password Field with Done Action
                 ReactiveTextField<String>(
                   formControlName: RegisterForm.confirmPasswordControl,
                   obscureText: true,
@@ -184,8 +152,6 @@ class RegisterScreen extends StatelessWidget {
                   },
                 ),
                 const SizedBox(height: 24),
-
-                // 4. Submit Button guarded by ReactiveFormConsumer
                 ReactiveFormConsumer(
                   builder: (context, form, child) {
                     return ElevatedButton(
@@ -204,56 +170,37 @@ class RegisterScreen extends StatelessWidget {
 
   void _onSubmit(BuildContext context, FormGroup form) {
     if (form.valid) {
-      // Map form values to strongly-typed DTO
       final dto = RegisterRequestDto(
         email: form.emailControl.value!,
         password: form.passwordControl.value!,
       );
       context.read<AuthBloc>().add(AuthEvent.registerRequested(dto));
     } else {
-      form.markAllAsTouched(); // Force display errors if submitted directly
+      form.markAllAsTouched();
     }
   }
 }
-
 ```
 
 ---
 
-## Anti-Patterns (Strictly Prohibited)
+## 7. Anti-Patterns (Strictly Prohibited)
 
-| Anti-Pattern                                      | Severity     | Corrective Action                              |
-| ------------------------------------------------- | ------------ | ---------------------------------------------- |
+| Anti-Pattern | Severity | Corrective Action |
+| :--- | :--- | :--- |
 | Mixing `TextEditingController` with `FormControl` | **CRITICAL** | Use `FormControl` as the sole source of truth. |
-
-|
-| Re-instantiating `FormGroup` inside `build()` | **CRITICAL** | Use `ReactiveFormBuilder` or manage state in controller/State.
-
-|
-| Async validators without `asyncValidatorsDebounceTime` | **HIGH** | Set explicit debounce delay to prevent spamming backend APIs.
-
-|
-| Sending raw `form.value` map directly to Domain UseCases | **HIGH** | Map form output into a strongly-typed DTO/Model first.
-
-|
-| Rebuilding full screen on single field keystroke | **MEDIUM** | Isolate rebuilds with `ReactiveFormConsumer` or `ReactiveValueListenableBuilder`.
-
-|
+| Re-instantiating `FormGroup` inside `build()` | **CRITICAL** | Use `ReactiveFormBuilder` or manage state in controller/State. |
+| Async validators without `asyncValidatorsDebounceTime` | **HIGH** | Set explicit debounce delay to prevent spamming backend APIs. |
+| Sending raw `form.value` map directly to Domain UseCases | **HIGH** | Map form output into a strongly-typed DTO/Model first. |
+| Rebuilding full screen on single field keystroke | **MEDIUM** | Isolate rebuilds with `ReactiveFormConsumer` or `ReactiveValueListenableBuilder`. |
 
 ---
 
-## Agent Verification Checklist
+## 8. Verification Checklist
 
-When building or updating forms:
-
-1. **Type Safety:** All controls use explicit generic parameters (`FormControl<T>`).
-
-2. **Architecture Boundary:** `reactive_forms` imports are strictly inside `lib/presentation/`.
-
-3. **Rebuild Scope:** `ReactiveFormConsumer` wraps ONLY widgets depending on dynamic form state (like submit buttons).
-
-4. **Keyboard Actions:** Fields configure `textInputAction: TextInputAction.next` or `.done`.
-
-5. **Debounced Async Rules:** Async validators specify a debounce time and UI accounts for pending status.
-
-6. **Submit Guards:** Submissions check `form.valid` and call `form.markAllAsTouched()` when invalid.
+- [ ] All controls use explicit generic parameters (`FormControl<T>`).
+- [ ] `reactive_forms` imports are strictly inside `lib/presentation/`.
+- [ ] `ReactiveFormConsumer` wraps ONLY widgets depending on dynamic form state (like submit buttons).
+- [ ] Fields configure `textInputAction: TextInputAction.next` or `.done`.
+- [ ] Async validators specify a debounce time and UI accounts for pending status.
+- [ ] Submissions check `form.valid` and call `form.markAllAsTouched()` when invalid.

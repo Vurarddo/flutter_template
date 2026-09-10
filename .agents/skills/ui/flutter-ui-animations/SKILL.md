@@ -46,6 +46,9 @@ Use implicit widgets whenever state changes trigger a transition without needing
 
 ### 4.1 AnimatedContainer & AnimatedCrossFade
 ```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_template/presentation/ui_utils/extensions/context_extensions.dart';
+
 class ExpandableFilterCard extends StatelessWidget {
   final bool isExpanded;
   final VoidCallback onToggle;
@@ -58,12 +61,14 @@ class ExpandableFilterCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = context.colorScheme;
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeInOutCubic,
       padding: EdgeInsets.all(isExpanded ? 24.0 : 12.0),
       decoration: BoxDecoration(
-        color: isExpanded ? Theme.of(context).colorScheme.primaryContainer : Theme.of(context).colorScheme.surface,
+        color: isExpanded ? colorScheme.primaryContainer : colorScheme.surface,
         borderRadius: BorderRadius.circular(isExpanded ? 16 : 8),
       ),
       child: InkWell(

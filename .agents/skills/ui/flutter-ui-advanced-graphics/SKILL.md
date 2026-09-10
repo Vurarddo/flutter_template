@@ -99,7 +99,7 @@ class CircularProgressGauge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = context.colorScheme;
 
     return RepaintBoundary(
       child: CustomPaint(
@@ -210,7 +210,7 @@ class _PhysicsSpringDraggableState extends State<PhysicsSpringDraggable>
 | Returning `true` unconditionally inside `shouldRepaint` | **CRITICAL** | Compare all drawing parameters (`oldDelegate.prop != prop`). |
 | Allocating heavy resources (images, shaders, paths) inside `paint()` loop | **HIGH** | Precompute or allocate paths outside the paint callback. |
 | Missing `RepaintBoundary` on animated or complex `CustomPainter` widgets | **HIGH** | Wrap the `CustomPaint` in `RepaintBoundary`. |
-| Hardcoding canvas colors rather than receiving them from Theme tokens | **MEDIUM** | Pass `Theme.of(context).colorScheme` colors to the painter constructor. |
+| Hardcoding canvas colors rather than receiving them from Theme tokens | **MEDIUM** | Pass `context.colorScheme` colors to the painter constructor. |
 
 ---
 

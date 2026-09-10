@@ -12,7 +12,7 @@ This skill serves as the central root coordinator for all UI development within 
 ### Core Presentation Rules (per `AGENTS.md`):
 1. **Strict Line Limits:** Keep widget and screen files strictly within **150–200 lines**.
 2. **Zero Helper Builder Methods:** Strictly **DISALLOW** helper builder methods (e.g., `Widget _buildHeader()`). Always extract subtrees into standalone `StatelessWidget` classes inside `widgets/` or `parts/` to preserve element tree diffing efficiency.
-3. **No Direct Hardcoded Values:** Strictly **NO** raw `Color(0x...)` or static `AppColors` directly in widgets. ALL colors must come from `Theme.of(context).colorScheme` or `context.customColors` (`ThemeExtension`).
+3. **No Direct Hardcoded Values:** Strictly **NO** raw `Color(0x...)` or static `AppColors` directly in widgets. ALL colors must come from `context.colorScheme` or `context.customColors` (`ThemeExtension`).
 4. **Clean Architecture Boundary:** UI Widgets MUST ONLY interact with BLoCs/Cubits via Events (`context.read<Bloc>().add(Event())`). UI must never call Repositories, Data Sources, or Analytics SDKs directly.
 5. **Stateful vs Stateless:** Prefer `StatelessWidget` wherever possible. Use `StatefulWidget` strictly for local ephemeral UI state (e.g., `AnimationController`, `FocusNode`, `ScrollController`, `TextEditingController`).
 
@@ -22,19 +22,20 @@ This skill serves as the central root coordinator for all UI development within 
 
 Use this matrix to navigate to the specialized sub-skill matching your specific UI task:
 
-| Sub-Domain | Target Sub-Skill | When to Activate |
-| :--- | :--- | :--- |
-| **Widget Architecture** | [flutter-ui-stateless-stateful](../flutter-ui-stateless-stateful/SKILL.md) | Choosing between Stateless/Stateful, element tree diffing, local state vs BLoC, lifecycle (`initState`, `dispose`). |
-| **Rendering Performance** | [flutter-ui-performance](../flutter-ui-performance/SKILL.md) | Optimizing 60/120 FPS, `const` constructors, `RepaintBoundary`, avoiding rebuild churn, `BlocSelector`. |
-| **Responsive & Desktop** | [flutter-ui-responsive-adaptive](../flutter-ui-responsive-adaptive/SKILL.md) | Breakpoints (Mobile `<600`, Tablet `600-1024`, Desktop `>=1024`), `MediaQuery.sizeOf`, hover, keyboard shortcuts, scrollbars. |
+| **UI Kit Architecture** | [flutter-ui-kit-hub](../ui_kit/flutter-ui-kit-hub/SKILL.md) | Pure decoupled components in `lib/presentation/ui_kit/`, buttons, cards, modals, badges. |
+| **Widget Previews** | [flutter-ui-kit-preview](../ui_kit/flutter-ui-kit-preview/SKILL.md) | `@Preview` decorators, `PreviewWrapper`, isolated component verification in IDE/web-runner. |
+| **Reactive Forms Core** | [flutter-ui-forms-reactive](../forms/flutter-ui-forms-reactive/SKILL.md) | Strongly-typed `reactive_forms`, `FormGroup`, `FormControl`, cross-field validation, async debounce. |
+| **Custom Form Controls** | [flutter-ui-forms-custom-controls](../forms/flutter-ui-forms-custom-controls/SKILL.md) | `ControlValueAccessor`, custom chips, date pickers, masks, and stylized reactive inputs. |
 | **Theming System** | [flutter-ui-theme-hub](../theme/flutter-ui-theme-hub/SKILL.md) | Modular theme architecture (`app_theme.dart`, `app_color_scheme.dart`, `app_text_theme.dart`, `app_custom_colors.dart`). |
 | **Material 3 Components** | [flutter-ui-material](../flutter-ui-material/SKILL.md) | Material 3 components (`FilledButton`, `Card`, `SegmentedButton`, `NavigationBar`, `InputDecoration`). |
 | **Theme Generator** | [create-theme](../../create-theme/SKILL.md) | Scaffolding new themes and boilerplate via `/create-theme`. |
+| **Widget Architecture** | [flutter-ui-stateless-stateful](../flutter-ui-stateless-stateful/SKILL.md) | Choosing between Stateless/Stateful, element tree diffing, local state vs BLoC, lifecycle (`initState`, `dispose`). |
+| **Rendering Performance** | [flutter-ui-performance](../flutter-ui-performance/SKILL.md) | Optimizing 60/120 FPS, `const` constructors, `RepaintBoundary`, avoiding rebuild churn, `BlocSelector`. |
+| **Responsive & Desktop** | [flutter-ui-responsive-adaptive](../flutter-ui-responsive-adaptive/SKILL.md) | Breakpoints (Mobile `<600`, Tablet `600-1024`, Desktop `>=1024`), `MediaQuery.sizeOf`, hover, keyboard shortcuts, scrollbars. |
 | **iOS / Cupertino UX** | [flutter-ui-cupertino](../flutter-ui-cupertino/SKILL.md) | iOS design conventions, `CupertinoNavigationBar`, `CupertinoActionSheet`, haptics, swipe-to-dismiss, adaptive widgets. |
 | **Slivers & Scrolling** | [flutter-ui-slivers](../flutter-ui-slivers/SKILL.md) | `CustomScrollView`, `SliverAppBar`, `SliverList.builder`, `SliverGrid`, lazy building, nested scrolling. |
 | **Animations (Tiers 1 & 2)** | [flutter-ui-animations](../flutter-ui-animations/SKILL.md) | Implicit animations (`AnimatedContainer`, `AnimatedSwitcher`), explicit controllers (`CurvedAnimation`, staggered motion). |
 | **Advanced Graphics (Tiers 3 & 4)** | [flutter-ui-advanced-graphics](../flutter-ui-advanced-graphics/SKILL.md) | `CustomPainter`, `Canvas`/`Path` drawing, shader masks, physics spring simulations, Rive/Lottie integration. |
-| **Visual Previews & UI Kit** | [flutter-widget-preview](../../flutter_widget_preview/SKILL.md) | `@Preview` decorators, `PreviewWrapper`, isolated component verification in IDE/web-runner. |
 
 ---
 

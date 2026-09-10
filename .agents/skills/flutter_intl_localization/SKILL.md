@@ -123,7 +123,7 @@ class CartBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       context.l10n.itemCount(count),
-      style: Theme.of(context).textTheme.bodySmall,
+      style: context.textTheme.bodySmall,
     );
   }
 }
