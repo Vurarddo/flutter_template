@@ -1,3 +1,33 @@
+---
+name: flutter-ui-theme-extensions
+description: Custom ThemeExtension and domain design token skill. Use when creating or modifying AppCustomColors, defining domain-specific tokens (shimmer colors, borders, badges, status colors, gradients), implementing lerp and copyWith, or configuring BuildContext theme extensions.
+---
+
+# Flutter UI Theme Extensions & Custom Tokens Guide
+
+## 1. Overview & When to Apply
+
+Use this skill whenever:
+- Creating or extending `AppCustomColors` in `lib/presentation/theme/app_custom_colors.dart`.
+- Defining domain-specific or UI-specific design tokens not covered by standard `ColorScheme` (e.g. `cardBorder`, `secondaryText`, `shimmerBase`, `surfaceElevated`, `ratingBackground`, `ratingGold`, `success`, `warning`, `info`).
+- Implementing `ThemeExtension<T>` with immutable fields, `copyWith`, and proper linear interpolation (`lerp`).
+- Accessing custom tokens in widgets via `context.customColors`.
+
+---
+
+## 2. Prerequisites & Related Skills
+
+| Relation | Skill | Purpose |
+| :--- | :--- | :--- |
+| **Parent Theme Hub** | [flutter-ui-theme-hub](../flutter-ui-theme-hub/SKILL.md) | Central theming architecture and modular layout. |
+| **Theme Colors** | [flutter-ui-theme-colors](../flutter-ui-theme-colors/SKILL.md) | Aligning custom tokens with ColorScheme palettes. |
+| **Material 3 Components** | [flutter-ui-material](../../flutter-ui-material/SKILL.md) | Using custom tokens inside UI components. |
+
+---
+
+## 3. Standard Implementation Pattern (`app_custom_colors.dart`)
+
+```dart
 import 'package:flutter/material.dart';
 
 class AppCustomColors extends ThemeExtension<AppCustomColors> {
@@ -53,7 +83,7 @@ class AppCustomColors extends ThemeExtension<AppCustomColors> {
     ratingGold: Color(0xffffc107),
     success: Color(0xff66bb6a),
     onSuccess: Color(0xff003300),
-    warning: Color(0xffffa726),
+    warning: Color(0xffffffa726),
     onWarning: Color(0xff3e2723),
     info: Color(0xff29b6f6),
     onInfo: Color(0xff001e3c),
@@ -111,3 +141,64 @@ class AppCustomColors extends ThemeExtension<AppCustomColors> {
     );
   }
 }
+```
+
+---
+
+## 4. UI Usage Standard
+
+Always access custom tokens via `context.customColors`:
+
+```dart
+class RatingBadge extends StatelessWidget {
+  final double rating;
+
+  const RatingBadge({super.key, required this.rating});
+
+  @override
+  Widget build(BuildContext context) {
+    final customColors = context.customColors;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      decoration: BoxDecoration(
+        color: customColors.ratingBackground,
+        borderRadius: BorderRadius.circular(6),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.star_rounded, size: 16, color: customColors.ratingGold),
+          const SizedBox(width: 4),
+          Text(
+            rating.toStringAsFixed(1),
+            style: context.textTheme.labelMedium?.copyWith(
+              color: customColors.ratingGold,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+```
+
+---
+
+## 5. Anti-Patterns (Strictly Prohibited)
+
+| Anti-Pattern | Severity | Corrective Action |
+| :--- | :--- | :--- |
+| Nullable fields in `ThemeExtension` causing UI null checks | **HIGH** | Use non-nullable `final Color` fields with fallback in `lerp`. |
+| Omitting `lerp` or `copyWith` overrides | **HIGH** | Always implement smooth color interpolation in `lerp`. |
+| Missing fallback in `context_extensions.dart` | **MEDIUM** | Provide `theme.extension<AppCustomColors>() ?? AppCustomColors.light`. |
+
+---
+
+## 6. Verification Checklist
+
+- [ ] All custom tokens are defined for both `AppCustomColors.light` and `AppCustomColors.dark`.
+- [ ] Fields are non-nullable and immutable.
+- [ ] `copyWith` and `lerp` correctly handle all tokens.
+- [ ] Registered in `AppTheme.light` and `AppTheme.dark` under `extensions: [...]`.

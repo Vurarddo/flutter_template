@@ -1,70 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/presentation/theme/app_colors.dart';
+import 'package:flutter_template/presentation/theme/app_color_scheme.dart';
 import 'package:flutter_template/presentation/theme/app_custom_colors.dart';
+import 'package:flutter_template/presentation/theme/app_text_theme.dart';
 
 abstract final class AppTheme {
-  static ThemeData get light {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: Brightness.light,
-      primary: AppColors.primary,
-      surface: AppColors.lightSurface,
-    );
+  static ThemeData get light => _buildTheme(
+        colorScheme: AppColorScheme.light,
+        customColors: AppCustomColors.light,
+      );
+
+  static ThemeData get dark => _buildTheme(
+        colorScheme: AppColorScheme.dark,
+        customColors: AppCustomColors.dark,
+      );
+
+  static ThemeData _buildTheme({
+    required ColorScheme colorScheme,
+    required AppCustomColors customColors,
+  }) {
+    final textTheme = AppTextTheme.createTextTheme(colorScheme);
 
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.light,
+      brightness: colorScheme.brightness,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: AppColors.lightBackground,
-      extensions: const <ThemeExtension<dynamic>>[
-        AppCustomColors.light,
+      textTheme: textTheme,
+      scaffoldBackgroundColor: colorScheme.surface,
+      canvasColor: colorScheme.surface,
+      extensions: <ThemeExtension<dynamic>>[
+        customColors,
       ],
-      appBarTheme: const AppBarTheme(
-        centerTitle: false,
+      appBarTheme: AppBarTheme(
+        backgroundColor: colorScheme.surface,
+        foregroundColor: colorScheme.onSurface,
         elevation: 0,
-        scrolledUnderElevation: 0,
-        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        titleTextStyle: textTheme.titleLarge,
       ),
       cardTheme: CardThemeData(
+        color: colorScheme.surfaceContainerLow,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.lightBorder),
+          borderRadius: BorderRadius.circular(12),
+          side: BorderSide(
+            color: colorScheme.outlineVariant,
+          ),
         ),
-        color: AppColors.lightSurface,
       ),
-    );
-  }
-
-  static ThemeData get dark {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: AppColors.primary,
-      brightness: Brightness.dark,
-      primary: AppColors.primary,
-      surface: AppColors.darkSurface,
-    );
-
-    return ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.dark,
-      colorScheme: colorScheme,
-      scaffoldBackgroundColor: AppColors.darkBackground,
-      extensions: const <ThemeExtension<dynamic>>[
-        AppCustomColors.dark,
-      ],
-      appBarTheme: const AppBarTheme(
-        centerTitle: false,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        backgroundColor: Colors.transparent,
+      dividerTheme: DividerThemeData(
+        color: colorScheme.outlineVariant,
+        thickness: 1,
       ),
-      cardTheme: CardThemeData(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-          side: const BorderSide(color: AppColors.darkBorder),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: colorScheme.primary,
+          foregroundColor: colorScheme.onPrimary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
-        color: AppColors.darkSurface,
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: colorScheme.primary,
+          side: BorderSide(color: colorScheme.outline),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          foregroundColor: colorScheme.primary,
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: colorScheme.surfaceContainerHighest,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: colorScheme.outline),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: colorScheme.outlineVariant),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: colorScheme.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(color: colorScheme.error),
+        ),
       ),
     );
   }

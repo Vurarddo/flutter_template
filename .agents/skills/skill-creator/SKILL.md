@@ -1,0 +1,310 @@
+---
+name: skill-creator
+description: Guides the creation, structuring, authoring, and validation of high-quality agent skills for Antigravity, including standalone skills, modular skill trees, domain hierarchies, and interlinked skill meshes. Use when asked to create a new skill, author a skill hierarchy/tree from scratch, refactor/improve existing skills, or standardize workflow runbooks and coding conventions into reusable skill packages.
+---
+
+# Antigravity Skill Creator & Standardizer
+
+## 1. Overview & When to Apply
+
+Use this skill whenever:
+- Creating a new skill from scratch for Antigravity or a specific codebase.
+- Designing a **Skill Tree / Graph / Mesh** for complex domains (e.g., UI, Networking, State Management) with root coordinators and specialized sub-skills.
+- Converting complex workflows, architecture guidelines, or API specifications into modular skills.
+- Refactoring, modularizing, or interconnecting existing skills with explicit cross-dependencies.
+- Auditing skills for progressive disclosure, frontmatter clarity, and actionable instructions.
+
+---
+
+## 2. Skill vs Rule Decision Matrix
+
+Before creating a skill, determine if a **Skill** is the right customization primitive:
+
+| Need | Use Customization | Location |
+| :--- | :--- | :--- |
+| **Always-on constraints & guidelines** (e.g., response language, strict layer boundaries, banned packages) | **Rule (`AGENTS.md` / `GEMINI.md`)** | Project root or `.agents/rules/` |
+| **On-demand workflow, runbook, or specialized domain knowledge** (e.g., Flutter BLoC patterns, Firebase setup, OAuth flow) | **Skill (`SKILL.md`)** | `.agents/skills/<name>/` or `.agents/skills/<domain>/<name>/` |
+| **Executable lifecycle hook** (e.g., auto-formatting after edits, pre-commit checks) | **Hook** | `hooks.json` |
+| **External tools, protocol servers, or database connections** | **MCP Server** | `mcp_config.json` |
+
+---
+
+## 3. Skill Architecture: Standalone vs Skill Trees & Meshes
+
+Skills should be modular and avoid monolithic bloat. When a domain covers multiple distinct responsibilities, structure skills as a **Hierarchical Tree or Interlinked Mesh**.
+
+```mermaid
+graph TD
+    Root["Domain Hub / Coordinator Skill<br/>(e.g., flutter-ui)"]
+    Child1["Specialized Sub-Skill 1<br/>(e.g., flutter-ui-theme)"]
+    Child2["Specialized Sub-Skill 2<br/>(e.g., flutter-ui-components)"]
+    Child3["Specialized Sub-Skill 3<br/>(e.g., flutter-ui-animations)"]
+    Util["Cross-Cutting Utility Skill<br/>(e.g., flutter-widget-preview)"]
+
+    Root -->|Coordinates & Routes| Child1
+    Root -->|Coordinates & Routes| Child2
+    Root -->|Coordinates & Routes| Child3
+    Child2 -->|Depends on tokens| Child1
+    Child2 -->|Requires preview validation| Util
+```
+
+### 3.1 Skill Hierarchy Roles
+
+1. **Root / Hub Skill (Coordinator):**
+   - Serves as the primary entry point and high-level architectural overview for a domain (e.g., `flutter-ui`, `network-layer`).
+   - Outlines domain philosophy, general constraints, and a **Routing Decision Table** pointing to specialized sub-skills.
+   - Does NOT contain exhaustive implementation code for every sub-topic.
+
+2. **Specialized Sub-Skill (Child / Leaf):**
+   - Deep-dives into a specific sub-domain (e.g., `flutter-ui-theme`, `flutter-ui-responsive`, `flutter-reactive-forms`).
+   - Contains concrete code snippets, anti-patterns, and step-by-step implementation recipes.
+   - Explicitly references parent or sibling skills for prerequisites.
+
+3. **Cross-Cutting / Utility Skill:**
+   - Provides shared workflows or tools utilized across multiple domains (e.g., `flutter-widget-preview`, `dart-run-static-analysis`, `flutter-testing`).
+
+---
+
+## 4. Skill Directory & Folder Organization
+
+### 4.1 Standalone Skill Structure
+
+For single-purpose, self-contained skills:
+
+```text
+skills/<skill-name>/
+├── SKILL.md            # REQUIRED: Main instruction file with YAML frontmatter
+├── scripts/            # OPTIONAL: Executable helper scripts and CLI utilities
+├── examples/           # OPTIONAL: Reference implementations and boilerplate code
+├── resources/          # OPTIONAL: Configuration templates, JSON schemas, assets
+└── references/         # OPTIONAL: Extended manuals and detailed docs (progressive disclosure)
+```
+
+### 4.2 Domain-Grouped Skill Tree Structure
+
+When organizing complex domain trees, group related skills under a dedicated domain folder:
+
+```text
+skills/<domain>/
+├── <domain>-root/                      # Hub / Coordinator skill
+│   ├── SKILL.md                        # Entry point, routing table, general domain rules
+│   └── references/                     # Architecture diagrams and domain specifications
+├── <domain>-<sub-feature-a>/           # Specialized sub-skill A
+│   ├── SKILL.md                        # Focused recipes, rules, and code snippets
+│   └── examples/                       # Concrete implementation examples
+├── <domain>-<sub-feature-b>/           # Specialized sub-skill B
+│   └── SKILL.md
+└── <domain>-<sub-feature-c>/           # Specialized sub-skill C
+    └── SKILL.md
+```
+
+*Example: UI Domain Hierarchy:*
+```text
+skills/ui/
+├── flutter-ui-hub/                     # Root UI coordinator & routing
+│   └── SKILL.md
+├── flutter-ui-theme/                   # Design tokens, ColorScheme, ThemeExtensions
+│   └── SKILL.md
+├── flutter-ui-components/              # UI Kit widgets, Atomic composition
+│   └── SKILL.md
+├── flutter-ui-responsive/              # Adaptive layouts, Breakpoints, MediaQuery
+│   └── SKILL.md
+└── flutter-ui-animations/              # Custom transitions, Rive, AnimationControllers
+    └── SKILL.md
+```
+
+---
+
+## 5. Frontmatter Specifications
+
+The `SKILL.md` MUST start with a YAML frontmatter block:
+
+```yaml
+---
+name: my-specialized-skill
+description: >-
+  Concise summary of what the skill does and explicit triggers of when to use it.
+  Use third-person phrasing with relevant keywords, file paths, and package names.
+---
+```
+
+### Frontmatter Rules:
+- **`name`** (required): Kebab-case (`[a-z0-9-]+`), concise (≤ 64 characters).
+- **`description`** (required): The primary agent reads this description during routing to decide whether to activate the skill. Must clearly specify:
+  1. **What** the skill accomplishes.
+  2. **When / Trigger conditions** the agent must activate it (e.g., "Use when editing `android/` native code...", "Use when creating BLoC classes...").
+  3. **Domain hierarchy context** (if part of a tree, e.g., "Primary entry point for UI architecture. Routes to specialized skills for theming, responsive layouts, and animations.").
+
+---
+
+## 6. Interlinking & Dependency Guidelines for Skill Meshes
+
+To enable seamless navigation across trees and meshes:
+
+1. **Explicit Skill Linking (Mandatory Relative Paths):**
+   - ALWAYS link related and dependent skills using **relative markdown links** (e.g., `[Skill Title](../<sub-skill>/SKILL.md)` or `[Root Hub](../<domain>-hub/SKILL.md)`).
+   - **STRICTLY PROHIBITED:** Using machine-specific absolute paths (`file:///Users/...` or `C:\...`). Relative paths guarantee 100% portability across different developer machines, operating systems (macOS/Linux/Windows), CI/CD environments, and git clones.
+2. **Hub Skill Routing Decision Matrix:**
+   - Include a routing table in Hub skills mapping user intent/tasks directly to child skills using relative links.
+3. **Prerequisites & Downstream Dependencies:**
+   - Child skills must explicitly state upstream dependencies (e.g., "Requires tokens defined in `flutter-ui-theme` before authoring UI components").
+4. **Prevent Circular Dependencies & Context Overload:**
+   - Do NOT load every child skill simultaneously. Provide clear criteria for when to transition from Hub to Child, or from Child A to Child B.
+
+---
+
+## 7. Core Authoring Principles
+
+1. **Progressive Disclosure:**
+   - Keep the root `SKILL.md` concise and high-signal (under 250–350 lines).
+   - Move large reference manuals, exhaustive API docs, or heavy schemas into `references/` and link to them using relative links (`./references/doc.md`).
+2. **Zero Redundant Boilerplate:**
+   - Focus strictly on project conventions, exact architecture patterns, constraints, and non-obvious nuances.
+3. **Actionable Code Examples:**
+   - Provide concrete, copy-paste-ready before/after code snippets reflecting production standards.
+4. **Anti-Patterns & Severity Matrix:**
+   - Include a dedicated table listing common mistakes, why they fail, their severity (`CRITICAL`, `HIGH`, `MEDIUM`), and the explicit remedy.
+5. **Agent Verification Checklist:**
+   - End with a task-oriented markdown checklist (`- [ ] ...`) allowing the agent to self-verify its work before finishing.
+
+---
+
+## 8. Standard `SKILL.md` Templates
+
+### 8.1 Hub / Coordinator Skill Template
+
+```markdown
+---
+name: <domain>-hub
+description: Primary coordinator and architecture guide for <domain>. Use when designing, reviewing, or organizing <domain> features. Routes to specialized sub-skills for <feature-a>, <feature-b>, and <feature-c>.
+---
+
+# <Domain Title> Coordinator & Architecture
+
+## 1. Overview & Domain Scope
+- High-level domain responsibilities, core philosophy, and foundational principles.
+
+---
+
+## 2. Skill Tree & Routing Matrix
+
+Use this table to navigate to the specialized sub-skill matching your task:
+
+| Task / Sub-Domain | Target Sub-Skill | Purpose |
+| :--- | :--- | :--- |
+| <Sub-domain task A> | [<domain>-<sub-a>](../<domain>-<sub-a>/SKILL.md) | <What sub-skill A handles> |
+| <Sub-domain task B> | [<domain>-<sub-b>](../<domain>-<sub-b>/SKILL.md) | <What sub-skill B handles> |
+| <Sub-domain task C> | [<domain>-<sub-c>](../<domain>-<sub-c>/SKILL.md) | <What sub-skill C handles> |
+
+---
+
+## 3. Global Technical Constraints
+- Core constraints applicable across all sub-skills in this domain.
+
+---
+
+## 4. Shared Verification Checklist
+- [ ] Domain architectural boundaries respected.
+- [ ] Appropriate sub-skills invoked for specialized workflows.
+```
+
+### 8.2 Specialized / Leaf Skill Template
+
+```markdown
+---
+name: <domain>-<sub-feature>
+description: <What the skill does and exact triggers/keywords for when to activate it.>
+---
+
+# <Sub-Feature Title>
+
+## 1. Overview & When to Apply
+- Bullet points defining exact scenarios, target directories, file types, or tasks that trigger this skill.
+
+---
+
+## 2. Prerequisites & Related Skills
+
+| Relation | Skill | When to Consult |
+| :--- | :--- | :--- |
+| **Parent Hub** | [<domain>-hub](../<domain>-hub/SKILL.md) | For global domain rules and routing |
+| **Prerequisite** | [<dependency-skill>](../<dependency-skill>/SKILL.md) | If prerequisite models/tokens are missing |
+| **Next Step** | [<downstream-skill>](../<downstream-skill>/SKILL.md) | For validation or testing after implementation |
+
+---
+
+## 3. Technical Constraints & Architecture Rules
+- Layer boundaries, banned APIs, strict typing rules, performance requirements, or environment constraints.
+
+---
+
+## 4. Standard Implementation Patterns
+
+### 4.1 Pattern A: <Common Use Case>
+\`\`\`dart
+// Concrete, clean, production-ready code example
+\`\`\`
+
+### 4.2 Pattern B: <Advanced / Edge Case>
+\`\`\`dart
+// Concrete, clean, production-ready code example
+\`\`\`
+
+---
+
+## 5. Workflows & Step-by-Step Instructions
+
+### Step 1: <Action>
+...
+
+### Step 2: <Action>
+...
+
+---
+
+## 6. Anti-Patterns (Strictly Prohibited)
+
+| Anti-Pattern | Severity | Corrective Action |
+| :--- | :--- | :--- |
+| <Banned practice / bug> | **CRITICAL** | <Exact fix> |
+| <Suboptimal pattern> | **HIGH** | <Exact fix> |
+
+---
+
+## 7. Agent Verification Checklist
+
+When implementing or reviewing code with this skill:
+- [ ] Criterion 1 (e.g., layer separation, naming convention)
+- [ ] Criterion 2 (e.g., error handling, type safety)
+- [ ] Criterion 3 (e.g., tests and validation steps)
+```
+
+---
+
+## 9. Step-by-Step Skill Creation & Tree Scaffolding Workflow
+
+### Step 1: Scope & Hierarchy Planning
+1. Determine if the task needs a **Single Standalone Skill** or a **Skill Tree/Mesh**.
+2. If building a tree/mesh:
+   - Identify the **Domain Root (Hub)**.
+   - List distinct **Sub-Skills (Leaves)** and map inter-dependencies (upstream/downstream).
+   - Identify cross-cutting **Utility Skills** needed.
+
+### Step 2: Scaffold Skill Folder Structure
+- For Standalone: Create `.agents/skills/<skill-name>/`.
+- For Skill Tree: Create domain folder `.agents/skills/<domain>/` with subdirectories for the hub and each child skill.
+
+### Step 3: Author Content with Interlinking
+1. Draft YAML frontmatters with clear triggers and hierarchical context.
+2. Fill Hub skills with domain routing tables and global constraints.
+3. Fill Child skills with actionable recipes, code patterns, and prerequisite links.
+4. Establish clear markdown file links between related skills.
+
+### Step 4: Validate Skill & Mesh Quality
+- [ ] Is the frontmatter `name` kebab-case?
+- [ ] Does the `description` contain clear "Use when..." activation triggers?
+- [ ] Are inter-skill dependencies and routing matrices explicitly documented with clickable markdown links?
+- [ ] Are code examples modern, complete, and syntactically valid?
+- [ ] Is progressive disclosure applied to prevent monolithic skill files?
+- [ ] Is the skill free of generic tutorial fluff?
+
