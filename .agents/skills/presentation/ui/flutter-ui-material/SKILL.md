@@ -20,10 +20,10 @@ Use this skill whenever:
 
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
-| **Theme Coordinator** | [flutter-ui-theme-hub](../theme/flutter-ui-theme-hub/SKILL.md) | Modular theme system (`AppTheme`, `AppColorScheme`, `AppTextTheme`, `AppCustomColors`). |
-| **Theme Colors** | [flutter-ui-theme-colors](../theme/flutter-ui-theme-colors/SKILL.md) | Material 3 ColorScheme specifications & palettes. |
-| **Theme Typography** | [flutter-ui-theme-typography](../theme/flutter-ui-theme-typography/SKILL.md) | TextTheme scales and custom font setup. |
-| **Theme Extensions** | [flutter-ui-theme-extensions](../theme/flutter-ui-theme-extensions/SKILL.md) | Custom domain tokens and ThemeExtension patterns. |
+| **Theme Coordinator** | [flutter-ui-theme-hub](../../theme/flutter-ui-theme-hub/SKILL.md) | Modular theme system (`AppTheme`, `AppColorScheme`, `AppTextTheme`, `AppCustomColors`). |
+| **Theme Colors** | [flutter-ui-theme-colors](../../theme/flutter-ui-theme-colors/SKILL.md) | Material 3 ColorScheme specifications & palettes. |
+| **Theme Typography** | [flutter-ui-theme-typography](../../theme/flutter-ui-theme-typography/SKILL.md) | TextTheme scales and custom font setup. |
+| **Theme Extensions** | [flutter-ui-theme-extensions](../../theme/flutter-ui-theme-extensions/SKILL.md) | Custom domain tokens and ThemeExtension patterns. |
 | **Parent Hub** | [flutter-ui-hub](../flutter-ui-hub/SKILL.md) | Presentation rules and UI standards. |
 | **Cupertino** | [flutter-ui-cupertino](../flutter-ui-cupertino/SKILL.md) | iOS platform comparisons & adaptive widgets. |
 | **Previews** | [flutter-ui-kit-preview](../ui_kit/flutter-ui-kit-preview/SKILL.md) | Dual-theme preview verification (Light & Dark). |

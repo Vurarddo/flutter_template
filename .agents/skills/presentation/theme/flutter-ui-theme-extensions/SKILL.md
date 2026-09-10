@@ -21,7 +21,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Theme Hub** | [flutter-ui-theme-hub](../flutter-ui-theme-hub/SKILL.md) | Central theming architecture and modular layout. |
 | **Theme Colors** | [flutter-ui-theme-colors](../flutter-ui-theme-colors/SKILL.md) | Aligning custom tokens with ColorScheme palettes. |
-| **Material 3 Components** | [flutter-ui-material](../../flutter-ui-material/SKILL.md) | Using custom tokens inside UI components. |
+| **Material 3 Components** | [flutter-ui-material](../../ui/flutter-ui-material/SKILL.md) | Using custom tokens inside UI components. |
 
 ---
 

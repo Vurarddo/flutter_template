@@ -22,7 +22,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Reactive Forms Core** | [flutter-ui-forms-reactive](../flutter-ui-forms-reactive/SKILL.md) | FormGroup/FormControl models & validation rules. |
 | **UI Kit Components** | [flutter-ui-kit-components](../../ui_kit/flutter-ui-kit-components/SKILL.md) | Base visual widgets and badges. |
-| **Theming System** | [flutter-ui-theme-hub](../../theme/flutter-ui-theme-hub/SKILL.md) | Error colors and input decoration styles. |
+| **Theming System** | [flutter-ui-theme-hub](../../../theme/flutter-ui-theme-hub/SKILL.md) | Error colors and input decoration styles. |
 
 ---
 

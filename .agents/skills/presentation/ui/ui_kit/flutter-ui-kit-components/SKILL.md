@@ -22,7 +22,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent UI Kit Hub** | [flutter-ui-kit-hub](../flutter-ui-kit-hub/SKILL.md) | UI Kit architecture, laws, and folder standards. |
 | **Widget Previews** | [flutter-ui-kit-preview](../flutter-ui-kit-preview/SKILL.md) | Attaching `@Preview` decorators to components. |
-| **Theming Tokens** | [flutter-ui-theme-hub](../../theme/flutter-ui-theme-hub/SKILL.md) | Accessing ColorScheme, TextTheme, and CustomColors. |
+| **Theming Tokens** | [flutter-ui-theme-hub](../../../theme/flutter-ui-theme-hub/SKILL.md) | Accessing ColorScheme, TextTheme, and CustomColors. |
 | **Custom Controls** | [flutter-ui-forms-custom-controls](../../forms/flutter-ui-forms-custom-controls/SKILL.md) | Wrapping UI Kit inputs with reactive form bindings. |
 
 ---

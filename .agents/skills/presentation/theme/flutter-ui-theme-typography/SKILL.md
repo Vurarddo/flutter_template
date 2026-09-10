@@ -21,7 +21,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Theme Hub** | [flutter-ui-theme-hub](../flutter-ui-theme-hub/SKILL.md) | Central theming architecture and modular layout. |
 | **Theme Colors** | [flutter-ui-theme-colors](../flutter-ui-theme-colors/SKILL.md) | Supplying `ColorScheme` for dynamic text coloring. |
-| **Material 3 Components** | [flutter-ui-material](../../flutter-ui-material/SKILL.md) | Using `context.textTheme` inside UI widgets. |
+| **Material 3 Components** | [flutter-ui-material](../../ui/flutter-ui-material/SKILL.md) | Using `context.textTheme` inside UI widgets. |
 
 ---
 

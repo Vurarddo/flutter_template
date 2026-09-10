@@ -18,10 +18,10 @@ Use this skill whenever:
 
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
-| **Theme Coordinator** | [flutter-ui-theme-hub](../ui/theme/flutter-ui-theme-hub/SKILL.md) | Theming architecture guidelines and conventions. |
-| **Theme Colors** | [flutter-ui-theme-colors](../ui/theme/flutter-ui-theme-colors/SKILL.md) | Material 3 ColorScheme specifications. |
-| **Theme Typography** | [flutter-ui-theme-typography](../ui/theme/flutter-ui-theme-typography/SKILL.md) | TextTheme scales and custom font setup. |
-| **Theme Extensions** | [flutter-ui-theme-extensions](../ui/theme/flutter-ui-theme-extensions/SKILL.md) | Custom domain tokens and ThemeExtension patterns. |
+| **Theme Coordinator** | [flutter-ui-theme-hub](../presentation/theme/flutter-ui-theme-hub/SKILL.md) | Theming architecture guidelines and conventions. |
+| **Theme Colors** | [flutter-ui-theme-colors](../presentation/theme/flutter-ui-theme-colors/SKILL.md) | Material 3 ColorScheme specifications. |
+| **Theme Typography** | [flutter-ui-theme-typography](../presentation/theme/flutter-ui-theme-typography/SKILL.md) | TextTheme scales and custom font setup. |
+| **Theme Extensions** | [flutter-ui-theme-extensions](../presentation/theme/flutter-ui-theme-extensions/SKILL.md) | Custom domain tokens and ThemeExtension patterns. |
 
 ---
 

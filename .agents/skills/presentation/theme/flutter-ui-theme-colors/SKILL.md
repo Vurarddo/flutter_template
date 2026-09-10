@@ -21,7 +21,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Theme Hub** | [flutter-ui-theme-hub](../flutter-ui-theme-hub/SKILL.md) | Central theming architecture and modular layout. |
 | **Theme Extensions** | [flutter-ui-theme-extensions](../flutter-ui-theme-extensions/SKILL.md) | Domain tokens that don't fit standard ColorScheme roles. |
-| **Material 3 Components** | [flutter-ui-material](../../flutter-ui-material/SKILL.md) | Applying colors to M3 UI widgets. |
+| **Material 3 Components** | [flutter-ui-material](../../ui/flutter-ui-material/SKILL.md) | Applying colors to M3 UI widgets. |
 
 ---
 

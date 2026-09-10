@@ -38,8 +38,8 @@ Use this matrix to navigate to specialized sub-skills matching your theming task
 | **Typography & Font Management** | [flutter-ui-theme-typography](../flutter-ui-theme-typography/SKILL.md) | Configuring `AppTextTheme`, Material 3 text scales (display, headline, title, body, label), and `FontFamily` setup. |
 | **Theme Extensions & Custom Tokens** | [flutter-ui-theme-extensions](../flutter-ui-theme-extensions/SKILL.md) | Creating `AppCustomColors`, implementing `ThemeExtension<T>`, `lerp`, `copyWith`, and domain tokens. |
 | **Scaffold / New Theme Generator** | [create-theme](../../../create-theme/SKILL.md) | Generating standard boilerplate files and scaffolding a new theme via `/create-theme`. |
-| **Parent UI Coordinator** | [flutter-ui-hub](../../flutter-ui-hub/SKILL.md) | Presentation layer laws, widget architecture, responsive layouts, and UI kit integration. |
-| **Material 3 Components** | [flutter-ui-material](../../flutter-ui-material/SKILL.md) | Styling M3 widgets (`FilledButton`, `Card`, `NavigationBar`, `InputDecoration`). |
+| **Parent UI Coordinator** | [flutter-ui-hub](../../ui/flutter-ui-hub/SKILL.md) | Presentation layer laws, widget architecture, responsive layouts, and UI kit integration. |
+| **Material 3 Components** | [flutter-ui-material](../../ui/flutter-ui-material/SKILL.md) | Styling M3 widgets (`FilledButton`, `Card`, `NavigationBar`, `InputDecoration`). |
 
 ---
 

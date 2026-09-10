@@ -25,7 +25,7 @@ This skill serves as the central entry point for the **UI Kit** subsystem (`lib/
 | **Component Authoring** | [flutter-ui-kit-components](../flutter-ui-kit-components/SKILL.md) | Standard recipes for buttons, cards, badges, dialogs, bottom sheets, snackbars. |
 | **Widget Previews** | [flutter-ui-kit-preview](../flutter-ui-kit-preview/SKILL.md) | `@Preview` decorators, `PreviewWrapper`, dual-theme verification, state matrices. |
 | **Parent UI Hub** | [flutter-ui-hub](../../flutter-ui-hub/SKILL.md) | Global presentation layer rules and overall UI routing. |
-| **Theming System** | [flutter-ui-theme-hub](../../theme/flutter-ui-theme-hub/SKILL.md) | Material 3 ColorScheme, TextTheme, and ThemeExtensions. |
+| **Theming System** | [flutter-ui-theme-hub](../../../theme/flutter-ui-theme-hub/SKILL.md) | Material 3 ColorScheme, TextTheme, and ThemeExtensions. |
 | **Reactive Form Controls** | [flutter-ui-forms-custom-controls](../../forms/flutter-ui-forms-custom-controls/SKILL.md) | Binding UI Kit input fields with `reactive_forms`. |
 
 ---

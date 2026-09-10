@@ -26,9 +26,9 @@ Use this matrix to navigate to the specialized sub-skill matching your specific 
 | **Widget Previews** | [flutter-ui-kit-preview](../ui_kit/flutter-ui-kit-preview/SKILL.md) | `@Preview` decorators, `PreviewWrapper`, isolated component verification in IDE/web-runner. |
 | **Reactive Forms Core** | [flutter-ui-forms-reactive](../forms/flutter-ui-forms-reactive/SKILL.md) | Strongly-typed `reactive_forms`, `FormGroup`, `FormControl`, cross-field validation, async debounce. |
 | **Custom Form Controls** | [flutter-ui-forms-custom-controls](../forms/flutter-ui-forms-custom-controls/SKILL.md) | `ControlValueAccessor`, custom chips, date pickers, masks, and stylized reactive inputs. |
-| **Theming System** | [flutter-ui-theme-hub](../theme/flutter-ui-theme-hub/SKILL.md) | Modular theme architecture (`app_theme.dart`, `app_color_scheme.dart`, `app_text_theme.dart`, `app_custom_colors.dart`). |
+| **Theming System** | [flutter-ui-theme-hub](../../theme/flutter-ui-theme-hub/SKILL.md) | Modular theme architecture (`app_theme.dart`, `app_color_scheme.dart`, `app_text_theme.dart`, `app_custom_colors.dart`). |
 | **Material 3 Components** | [flutter-ui-material](../flutter-ui-material/SKILL.md) | Material 3 components (`FilledButton`, `Card`, `SegmentedButton`, `NavigationBar`, `InputDecoration`). |
-| **Theme Generator** | [create-theme](../../create-theme/SKILL.md) | Scaffolding new themes and boilerplate via `/create-theme`. |
+| **Theme Generator** | [create-theme](../../../create-theme/SKILL.md) | Scaffolding new themes and boilerplate via `/create-theme`. |
 | **Widget Architecture** | [flutter-ui-stateless-stateful](../flutter-ui-stateless-stateful/SKILL.md) | Choosing between Stateless/Stateful, element tree diffing, local state vs BLoC, lifecycle (`initState`, `dispose`). |
 | **Rendering Performance** | [flutter-ui-performance](../flutter-ui-performance/SKILL.md) | Optimizing 60/120 FPS, `const` constructors, `RepaintBoundary`, avoiding rebuild churn, `BlocSelector`. |
 | **Responsive & Desktop** | [flutter-ui-responsive-adaptive](../flutter-ui-responsive-adaptive/SKILL.md) | Breakpoints (Mobile `<600`, Tablet `600-1024`, Desktop `>=1024`), `MediaQuery.sizeOf`, hover, keyboard shortcuts, scrollbars. |

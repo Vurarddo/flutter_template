@@ -22,7 +22,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent UI Kit Hub** | [flutter-ui-kit-hub](../flutter-ui-kit-hub/SKILL.md) | UI Kit architecture and folder standards. |
 | **UI Kit Components** | [flutter-ui-kit-components](../flutter-ui-kit-components/SKILL.md) | Component recipes to decorate with previews. |
-| **Theming System** | [flutter-ui-theme-hub](../../theme/flutter-ui-theme-hub/SKILL.md) | Light and Dark ThemeData providers. |
+| **Theming System** | [flutter-ui-theme-hub](../../../theme/flutter-ui-theme-hub/SKILL.md) | Light and Dark ThemeData providers. |
 
 ---
 
