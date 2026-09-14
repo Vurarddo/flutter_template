@@ -514,7 +514,7 @@ pre {
 <span class="badge badge-tag">#production</span>
       </div>
       <h1 class="hero-title">project-bootstrap-hub</h1>
-      <p class="hero-description">Primary coordinator and master orchestrator for scaffolding and bootstrapping a brand new production Flutter project from scratch. Coordinates Flutter initialization, dependency injection &amp; conflict resolution, package compatibility auditing, Clean Architecture &amp; Flavors scaffolding, Material 3 (#FFDE3F) theme &amp; interactive UiKit showcase generation, Hydrated ThemeCubit, and test verification with runbook documentation.</p>
+      <p class="hero-description">Primary coordinator and master orchestrator for scaffolding and bootstrapping a brand new production Flutter project from scratch. Coordinates Flutter initialization, dependency injection &amp; conflict resolution, package compatibility auditing, Clean Architecture &amp; Flavors scaffolding, initial domain/data example feature, .gitignore protection, Material 3 (#FFDE3F) theme &amp; interactive UiKit showcase generation, Hydrated ThemeCubit, and test verification with runbook documentation.</p>
     </section>
 
     <div class="progress-card">
@@ -534,17 +534,20 @@ pre {
 <p class="doc-p">To prevent misconfigurations and ensure 100% alignment, the bootstrapping process operates in <strong>two strict phases</strong>:</p>
 <div class="mermaid-container"><div class="mermaid">graph TD
     subgraph "Phase 1: Interactive Grill-Me Interview & Planning"
-        Q1["1. SDK Upgrade & Version Check"] --> Q2["2. Project Name, Org & Platforms"]
-        Q2 --> Q3["3. Theme Brand Color (#FFDE3F) & Modes"]
-        Q3 --> Q4["4. Flavors & Environment Endpoints"]
-        Q4 --> Plan["5. Generate Detailed implementation_plan.md<br/>(Request User Approval)"]
+        Q1["1. SDK Upgrade & Version Check"] --> Q2["2. Project Identity (Name, Org) & Purpose"]
+        Q2 --> Q3["3. Target Platforms"]
+        Q3 --> Q4["4. Domain & Data Layers Selection"]
+        Q4 --> Q5["5. Theme Brand Color (#FFDE3F) & Modes"]
+        Q5 --> Q6["6. Flavors & Environment Endpoints"]
+        Q6 --> Q7["7. Additional Wishes & Custom Requirements"]
+        Q7 --> Plan["8. Generate Detailed implementation_plan.md<br/>(Request User Approval)"]
     end
 
     subgraph "Phase 2: Approved Autonomous Execution"
         Plan -->|User Approves| Exec1["1. flutter create<br/>(bootstrap-flutter-init)"]
         Exec1 --> Exec2["2. Dependencies & Conflicts<br/>(bootstrap-dependencies-sync)"]
         Exec2 --> Exec3["3. Package & Signature Audit<br/>(bootstrap-package-auditor)"]
-        Exec3 --> Exec4["4. Clean Architecture & Flavors<br/>(bootstrap-architecture-scaffold)"]
+        Exec3 --> Exec4["4. Clean Architecture, Flavors & Initial Feature<br/>(bootstrap-architecture-scaffold)"]
         Exec4 --> Exec5["5. M3 Theme & UiKit Showcase<br/>(bootstrap-theme-uikit)"]
         Exec5 --> Exec6["6. Verification & Runbook Docs<br/>(bootstrap-verification-docs)"]
     end
@@ -552,20 +555,33 @@ pre {
 <hr class="doc-divider">
 <h2 id="2--phase-1--interactive-discovery-interview---grill-me--protocol-" class="doc-h2"><a href="#2--phase-1--interactive-discovery-interview---grill-me--protocol-" class="heading-anchor">#</a> 2. Phase 1: Interactive Discovery Interview (<code class="inline-code">grill-me</code> Protocol)</h2>
 <p class="doc-p">When the user asks to create/bootstrap a new project (e.g. <em>&quot;створи новий проект&quot;</em>, <em>&quot;bootstrap new flutter app&quot;</em>, <em>&quot;ініціалізуй проект з шаблону&quot;</em>):</p>
-<p class="doc-p">The agent <strong>MUST NOT</strong> immediately run modifying commands. Instead, the agent conducts a structured interview using the <code class="inline-code">ask_question</code> tool:</p>
+<p class="doc-p">The agent <strong>MUST NOT</strong> immediately run modifying commands. Instead, the agent conducts a structured interview using the <code class="inline-code">ask_question</code> tool covering the following 7 discovery areas:</p>
 <ol class="doc-ordered-list">
-<li><strong>Flutter SDK Upgrade:</strong> Check current SDK and ask if user wants to upgrade to latest <code class="inline-code">stable</code>.</li>
-<li><strong>Project Identity:</strong> Discover project name (snake_case), description, and organization reverse-domain (<code class="inline-code">--org com.example</code>).</li>
-<li><strong>Target Platforms:</strong> Select platforms (<code class="inline-code">android</code>, <code class="inline-code">ios</code>, <code class="inline-code">web</code>, <code class="inline-code">macos</code>, <code class="inline-code">windows</code>, <code class="inline-code">linux</code>).</li>
-<li><strong>Primary Brand Theme:</strong> Confirm <code class="inline-code">#FFDE3F</code> or allow custom primary seed color.</li>
-<li><strong>Flavors &amp; Environments:</strong> Confirm standard environments (<code class="inline-code">dev</code>, <code class="inline-code">stage</code>, <code class="inline-code">prod</code>) and base URLs.</li>
+<li><strong>Flutter SDK Upgrade:</strong></li>
+<li>Check current Flutter SDK version and ask if the user wishes to upgrade to the latest <code class="inline-code">stable</code> channel.</li>
+<li><strong>Project Identity &amp; Domain Purpose (Optional):</strong></li>
+<li><strong>Project Name:</strong> Lowercase <code class="inline-code">snake_case</code> Dart identifier (e.g. <code class="inline-code">cinema_app</code>, <code class="inline-code">habit_tracker</code>).</li>
+<li><strong>Organization Reverse-Domain:</strong> <code class="inline-code">--org &lt;org&gt;</code> identifier (e.g. <code class="inline-code">com.company</code>, <code class="inline-code">com.example</code>).</li>
+<li><strong>Project Purpose / Description (Optional):</strong> Brief or detailed summary of the application&#039;s domain (e.g. <em>&quot;A movie discovery app with trailers and favorites&quot;</em> or <em>&quot;Fintech budget manager&quot;</em>). This helps the agent tailor initial models, entity names, and UI copy to the app&#039;s real domain instead of generic placeholders.</li>
+<li><strong>Target Platforms:</strong></li>
+<li>Select deployment targets: <code class="inline-code">android</code>, <code class="inline-code">ios</code>, <code class="inline-code">web</code>, <code class="inline-code">macos</code>, <code class="inline-code">windows</code>, <code class="inline-code">linux</code>.</li>
+<li><strong>Domain &amp; Data Layers Generation Decision:</strong></li>
+<li>Ask if the user wants to generate the initial <strong>Domain &amp; Data layers</strong> with a working sample feature (<code class="inline-code">ExampleItem</code> / <code class="inline-code">&lt;Domain&gt;Item</code> with <code class="inline-code">@freezed</code>, <code class="inline-code">Failure</code> sealed hierarchy, <code class="inline-code">IRepository</code>, <code class="inline-code">UseCase</code>, <code class="inline-code">@JsonSerializable</code> DTO with <code class="inline-code">toDomain()</code>, Retrofit <code class="inline-code">@RestApi</code> client, and Repository Implementation), OR keep the initial scaffold lightweight (Presentation + Infrastructure/Core only).</li>
+<li><strong>Primary Brand Theme:</strong></li>
+<li>Confirm default brand color <code class="inline-code">#FFDE3F</code> (Warm Gold / Yellow) or provide a custom primary seed hex color.</li>
+<li><strong>Flavors &amp; Environments:</strong></li>
+<li>Confirm standard environments (<code class="inline-code">dev</code>, <code class="inline-code">stage</code>, <code class="inline-code">prod</code>) and custom API Base URLs.</li>
+<li><strong>Additional Wishes &amp; Custom Requirements (Optional):</strong></li>
+<li>Open question for any custom packages, backend integrations (Firebase, Supabase, GraphQL), navigation nuances, specific hardware permissions, or architectural preferences before generation starts.</li>
 </ul>
 <h3 class="doc-h3">Bootstrap Manifest &amp; Implementation Plan Generation</h3>
 <p class="doc-p">Once all questions are answered, the agent compiles a comprehensive <code class="inline-code">implementation_plan.md</code> artifact containing:</p>
 <ul class="doc-list">
-<li>Selected project metadata and exact CLI command to be executed.</li>
-<li>Dependencies list with version locks.</li>
-<li>Layer directory map.</li>
+<li>Selected project metadata, domain purpose, and exact CLI command to be executed.</li>
+<li>Dependencies list with version locks (including any user-requested extra packages).</li>
+<li>Layer directory map reflecting the chosen architecture configuration (with explicit <code class="inline-code">lib/presentation/pages/</code>, <code class="inline-code">lib/presentation/state_management/</code>, <code class="inline-code">lib/presentation/ui_kit/</code>, <code class="inline-code">lib/presentation/ui_utils/</code>).</li>
+<li>Initial domain/data feature plan (if enabled).</li>
+<li>Complete <code class="inline-code">.gitignore</code> template protecting secret environment credentials and ignoring generated code.</li>
 <li>ColorScheme tokens and <code class="inline-code">UiKitPage</code> showcase outline.</li>
 <li>Test and verification plan.</li>
 </ul>
@@ -583,12 +599,12 @@ pre {
 <tr>
 <td><strong>1. Flutter Initialization</strong></td>
 <td><a href="../bootstrap-flutter-init/bootstrap-flutter-init.html" class="skill-ref-link" title="Handles the first phase of project creation. Prompts user to upgrade Flutter SDK to latest stable, gathers project parameters (name, organization, platforms), and executes `flutter create` with strict arguments. Use when initializing a new Flutter project from scratch.">bootstrap-flutter-init <span class="ext-icon">↗</span></a></td>
-<td>Executing <code class="inline-code">flutter create</code> with approved org, name, and platforms.</td>
+<td>Executing <code class="inline-code">flutter create</code> with approved org, name, description, and platforms.</td>
 </tr>
 <tr>
 <td><strong>2. Dependencies &amp; Conflicts</strong></td>
 <td><a href="../bootstrap-dependencies-sync/bootstrap-dependencies-sync.html" class="skill-ref-link" title="Injects standard production packages into pubspec.yaml, executes flutter pub get, resolves version locks, and upgrades packages to the latest compatible versions. Use when configuring or synchronizing dependencies for a new or updated Flutter project.">bootstrap-dependencies-sync <span class="ext-icon">↗</span></a></td>
-<td>Injecting <code class="inline-code">pubspec.yaml</code> packages, running <code class="inline-code">flutter pub get</code>, upgrading &amp; tightening constraints.</td>
+<td>Injecting <code class="inline-code">pubspec.yaml</code> packages (plus extra requested packages), running <code class="inline-code">flutter pub get</code>, upgrading &amp; tightening constraints.</td>
 </tr>
 <tr>
 <td><strong>3. Package Compatibility Audit</strong></td>
@@ -596,14 +612,14 @@ pre {
 <td>Running <code class="inline-code">dart analyze</code>, applying <code class="inline-code">dart fix --apply</code>, checking breaking changes.</td>
 </tr>
 <tr>
-<td><strong>4. Architecture &amp; Flavors</strong></td>
-<td><a href="../bootstrap-architecture-scaffold/bootstrap-architecture-scaffold.html" class="skill-ref-link" title="Scaffolds the complete Clean Architecture directory hierarchy, multi-environment Flavors (dev, stage, prod), configuration models, DI container, and core entrypoints (main.dart, application.dart). Use when establishing the architecture backbone for a new Flutter project.">bootstrap-architecture-scaffold <span class="ext-icon">↗</span></a></td>
-<td>Scaffolding layer folders, native flavors (Android, iOS, Windows, Linux, macOS), <code class="inline-code">.vscode/</code> configs, <code class="inline-code">config/env_*.json</code>, <code class="inline-code">AppConfig</code>, <code class="inline-code">main.dart</code>, and <code class="inline-code">application.dart</code>.</td>
+<td><strong>4. Architecture, Flavors &amp; Initial Feature</strong></td>
+<td><a href="../bootstrap-architecture-scaffold/bootstrap-architecture-scaffold.html" class="skill-ref-link" title="Scaffolds the complete Clean Architecture directory hierarchy, multi-environment Flavors (dev, stage, prod), configuration models, DI container, initial domain/data example feature, .gitignore, and core entrypoints (main.dart, application.dart). Use when establishing the architecture backbone for a new Flutter project.">bootstrap-architecture-scaffold <span class="ext-icon">↗</span></a></td>
+<td>Scaffolding layer folders, native flavors, <code class="inline-code">.gitignore</code>, initial feature (if chosen in Phase 1), <code class="inline-code">.vscode/</code> configs, <code class="inline-code">config/env_*.json</code>, <code class="inline-code">AppConfig</code>, <code class="inline-code">main.dart</code>, and <code class="inline-code">application.dart</code>.</td>
 </tr>
 <tr>
 <td><strong>5. Theme &amp; UiKit Showcase</strong></td>
 <td><a href="../bootstrap-theme-uikit/bootstrap-theme-uikit.html" class="skill-ref-link" title="Generates a complete Material 3 Theme with primary color #FFDE3F (Light &amp; Dark ColorScheme, TextTheme, AppCustomColors ThemeExtension), an injectable Hydrated ThemeCubit for persistent theme mode switching, and an interactive adaptive UiKitPage showcase landing displaying all core UI widgets. Use when generating project theming and the design system showcase.">bootstrap-theme-uikit <span class="ext-icon">↗</span></a></td>
-<td>Generating M3 theme <code class="inline-code">#FFDE3F</code>, pure Dart <code class="inline-code">AppThemeMode</code> with <code class="inline-code">AppThemeModeX</code>, injectable <code class="inline-code">HydratedThemeCubit</code>, and adaptive <code class="inline-code">UiKitPage</code>.</td>
+<td>Generating M3 theme <code class="inline-code">#FFDE3F</code> (or custom seed), pure Dart <code class="inline-code">AppThemeMode</code> with <code class="inline-code">AppThemeModeX</code>, injectable <code class="inline-code">HydratedThemeCubit</code>, and adaptive <code class="inline-code">UiKitPage</code> (<code class="inline-code">lib/presentation/pages/uikit/</code>).</td>
 </tr>
 <tr>
 <td><strong>6. Verification &amp; Runbooks</strong></td>
@@ -614,12 +630,15 @@ pre {
 <hr class="doc-divider">
 <h2 id="4--global-bootstrapping-laws" class="doc-h2"><a href="#4--global-bootstrapping-laws" class="heading-anchor">#</a> 4. Global Bootstrapping Laws</h2>
 <ol class="doc-ordered-list">
-<li><strong>Zero Domain Pollution:</strong> All scaffolded template code must use universal, domain-agnostic identifiers (<code class="inline-code">Item</code>, <code class="inline-code">Payload</code>, <code class="inline-code">AppConfig</code>, <code class="inline-code">AppThemeMode</code>).</li>
+<li><strong>User Discovery Alignment:</strong> The agent MUST strictly honor user decisions from the Phase 1 interview regarding project purpose, layer choices (Domain/Data inclusion), custom packages, and brand colors.</li>
+<li><strong>Initial Domain &amp; Data Feature:</strong> When Domain &amp; Data layers are requested, scaffold a clean initial sample feature (<code class="inline-code">domain/&lt;feature&gt;/</code> and <code class="inline-code">data/&lt;feature&gt;/</code>) tailored to the project purpose (or generic <code class="inline-code">example/</code>) with an Entity (<code class="inline-code">@freezed</code>), Failure hierarchy, Repository contract, UseCase (<code class="inline-code">@injectable</code>), DTO (<code class="inline-code">@JsonSerializable</code> + <code class="inline-code">toDomain()</code>), Retrofit client, and Repository Implementation (<code class="inline-code">@LazySingleton</code>).</li>
 <li><strong>Strict Clean Architecture:</strong> Domain contains pure Dart only. Data maps DTOs to Entities. BLoC/Cubit communicates exclusively with Use Cases.</li>
-<li><strong>Zero Flutter Imports in State Management:</strong> BLoCs/Cubits must NEVER import <code class="inline-code">flutter/material.dart</code> (<code class="inline-code">avoid_flutter_imports</code>). State enums like <code class="inline-code">AppThemeMode</code> map to Flutter types via <code class="inline-code">AppThemeModeX.toFlutter()</code> in Presentation.</li>
+<li><strong>Strict Presentation Paths:</strong> Pages and screens MUST reside in <code class="inline-code">lib/presentation/pages/&lt;feature&gt;/</code> (never <code class="inline-code">lib/presentation/ui/&lt;feature&gt;/</code>). State management in <code class="inline-code">lib/presentation/state_management/</code>, UI Kit in <code class="inline-code">lib/presentation/ui_kit/</code>, UI utilities in <code class="inline-code">lib/presentation/ui_utils/</code>.</li>
+<li><strong>Complete <code class="inline-code">.gitignore</code> Scaffolding:</strong> Root <code class="inline-code">.gitignore</code> MUST protect all <code class="inline-code">config/env_<em>.json</code> credentials and ignore all generated files (<code class="inline-code"></em>.g.dart</code>, <code class="inline-code"><em>.freezed.dart</code>, <code class="inline-code"></em>.config.dart</code>, <code class="inline-code">lib/l10n/generated/</code>, <code class="inline-code">lib/presentation/ui_utils/assets/</code>) and local agent overrides.</li>
+<li><strong>Zero Flutter Imports in State Management:</strong> BLoCs/Cubits must NEVER import <code class="inline-code">flutter/material.dart</code> (<code class="inline-code">avoid_flutter_imports</code>). State enums map to Flutter types via <code class="inline-code">AppThemeModeX.toFlutter()</code> in Presentation.</li>
 <li><strong>Flavors First-Class &amp; Multi-Platform:</strong> Every project must support distinct environments (<code class="inline-code">dev</code>, <code class="inline-code">stage</code>, <code class="inline-code">prod</code>) driven by <code class="inline-code">config/env_*.json</code> and <code class="inline-code">--dart-define-from-file</code>, with native flavor settings across Android, iOS, Windows, Linux, and macOS.</li>
 <li><strong>Continuous Import Sorting:</strong> <code class="inline-code">import_sorter</code> must be configured (<code class="inline-code">comments: false</code>) and executed across all files.</li>
-<li><strong>Theme Resilience:</strong> Theme primary color <code class="inline-code">#FFDE3F</code> must be dynamically applied with Light &amp; Dark ColorSchemes, TextTheme, and <code class="inline-code">AppCustomColors</code> ThemeExtension.</li>
+<li><strong>Theme Resilience:</strong> Theme primary seed color must be dynamically applied with Light &amp; Dark ColorSchemes, TextTheme, and <code class="inline-code">AppCustomColors</code> ThemeExtension.</li>
 <li><strong>Asset Structure Hygiene:</strong> Assets must reside in <code class="inline-code">assets/</code> subfolders (<code class="inline-code">fonts/</code>, <code class="inline-code">images/</code>, <code class="inline-code">icons/</code>, <code class="inline-code">svgs/</code>) with <code class="inline-code">flutter_gen</code> output strictly set to <code class="inline-code">lib/presentation/ui_utils/assets</code> (never <code class="inline-code">lib/gen</code>).</li>
 <li><strong>Automated Integration Testing:</strong> Bootstrapping must generate and verify an end-to-end integration test (<code class="inline-code">integration_test/uikit_page_test.dart</code>) exercising the <code class="inline-code">UiKitPage</code>.</li>
 </ul>
@@ -629,14 +648,14 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Interactive Grill-Me interview conducted with user.</span>
+    <span class="check-text">Interactive Grill-Me interview conducted with user (all 7 discovery areas covered).</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">implementation_plan.md</code> created and approved by user.</span>
+    <span class="check-text"><code class="inline-code">implementation_plan.md</code> created with project purpose, selected layers, and custom requirements, and approved by user.</span>
   </label>
 </div>
 <div class="checklist-item">
@@ -650,14 +669,21 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">flutter create</code> executed with explicit <code class="inline-code">--org</code> and <code class="inline-code">--platforms</code>.</span>
+    <span class="check-text"><code class="inline-code">flutter create</code> executed with explicit <code class="inline-code">--org</code>, <code class="inline-code">--project-name</code>, <code class="inline-code">--description</code>, and <code class="inline-code">--platforms</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Dependencies injected and synchronized in <code class="inline-code">pubspec.yaml</code> (including <code class="inline-code">import_sorter</code> and <code class="inline-code">flutter_gen</code>).</span>
+    <span class="check-text">Dependencies injected and synchronized in <code class="inline-code">pubspec.yaml</code> (including requested custom packages, <code class="inline-code">import_sorter</code> and <code class="inline-code">flutter_gen</code>).</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Root <code class="inline-code">.gitignore</code> scaffolded from <a href="../bootstrap-architecture-scaffold/resources/.gitignore" class="doc-link">resources/.gitignore</a>.</span>
   </label>
 </div>
 <div class="checklist-item">
@@ -678,6 +704,13 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
+    <span class="check-text">Initial domain/data feature scaffolded (if requested in Phase 1).</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
     <span class="check-text">Flavors configured natively for Android, iOS, Windows, Linux, macOS, and Dart (<code class="inline-code">AppConfig</code>).</span>
   </label>
 </div>
@@ -692,14 +725,14 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Primary theme <code class="inline-code">#FFDE3F</code> generated with Light/Dark support and framework-isolated <code class="inline-code">ThemeCubit</code>.</span>
+    <span class="check-text">Primary theme generated with Light/Dark support and framework-isolated <code class="inline-code">ThemeCubit</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Interactive <code class="inline-code">UiKitPage</code> created showcasing all design system components.</span>
+    <span class="check-text">Interactive <code class="inline-code">UiKitPage</code> created in <code class="inline-code">lib/presentation/pages/uikit/</code> showcasing all design system components.</span>
   </label>
 </div>
 <div class="checklist-item">

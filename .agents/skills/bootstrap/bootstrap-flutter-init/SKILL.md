@@ -49,7 +49,7 @@ Collect the following parameters before executing project generation:
 | :--- | :--- | :--- | :--- |
 | **Project Name** | `my_app` | `<project_name>` | Lowercase with underscores (snake_case), valid Dart identifier. |
 | **Organization** | `com.example` | `--org <org>` | Reverse domain name for bundle ID & applicationId. |
-| **Description** | `"Production Flutter Application."` | `--description "<desc>"` | Summary string in `pubspec.yaml`. |
+| **Domain Purpose / Description** | `"Production Flutter Application."` | `--description "<desc>"` | Domain summary for `pubspec.yaml` and initial architecture context. |
 | **Platforms** | `android,ios,web,macos` | `--platforms android,ios,web,macos` | Comma-separated list of target platforms. |
 | **Project Template** | `app` | `-t app` | Standard Flutter application template. |
 

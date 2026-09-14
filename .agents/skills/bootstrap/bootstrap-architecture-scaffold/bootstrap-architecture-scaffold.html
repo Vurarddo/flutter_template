@@ -514,7 +514,7 @@ pre {
 <span class="badge badge-tag">#flavors</span>
       </div>
       <h1 class="hero-title">bootstrap-architecture-scaffold</h1>
-      <p class="hero-description">Scaffolds the complete Clean Architecture directory hierarchy, multi-environment Flavors (dev, stage, prod), configuration models, DI container, and core entrypoints (main.dart, application.dart). Use when establishing the architecture backbone for a new Flutter project.</p>
+      <p class="hero-description">Scaffolds the complete Clean Architecture directory hierarchy, multi-environment Flavors (dev, stage, prod), configuration models, DI container, initial domain/data example feature, .gitignore, and core entrypoints (main.dart, application.dart). Use when establishing the architecture backbone for a new Flutter project.</p>
     </section>
 
     <div class="progress-card">
@@ -528,11 +528,13 @@ pre {
     </div>
 
     <article class="doc-content">
-<h1 class="doc-h1">Clean Architecture &amp; Flavors Scaffolding</h1>
+<h1 class="doc-h1">Clean Architecture, Flavors &amp; Domain/Data Scaffolding</h1>
 <h2 id="1--overview---when-to-apply" class="doc-h2"><a href="#1--overview---when-to-apply" class="heading-anchor">#</a> 1. Overview &amp; When to Apply</h2>
 <p class="doc-p">Use this skill to scaffold the architectural backbone of a new Flutter application:</p>
 <ul class="doc-list">
 <li>Generating the Clean Architecture layer folders (<code class="inline-code">core/</code>, <code class="inline-code">domain/</code>, <code class="inline-code">data/</code>, <code class="inline-code">infrastructure/</code>, <code class="inline-code">presentation/</code>, <code class="inline-code">l10n/</code>).</li>
+<li>Scaffolding the <strong>initial template feature</strong> (<code class="inline-code">example</code>) across <code class="inline-code">domain/</code> and <code class="inline-code">data/</code> (<code class="inline-code">ExampleItem</code>, <code class="inline-code">ExampleFailure</code>, <code class="inline-code">IExampleRepository</code>, <code class="inline-code">GetExampleItemsUseCase</code>, <code class="inline-code">ExampleItemDto</code>, <code class="inline-code">ExampleApiClient</code>, <code class="inline-code">ExampleRepositoryImpl</code>) so that <code class="inline-code">build_runner</code> and DI immediately compile.</li>
+<li>Setting up the complete, production-ready <code class="inline-code">.gitignore</code> protecting environment credentials (<code class="inline-code">config/env_*.json</code>) and excluding all generated files.</li>
 <li>Setting up multi-environment Flavors (<code class="inline-code">config/env_dev.json</code>, <code class="inline-code">config/env_stage.json</code>, <code class="inline-code">config/env_prod.json</code>, <code class="inline-code">config/env_template.json</code>).</li>
 <li>Configuring Android <code class="inline-code">productFlavors</code> and iOS Build Configurations / Schemes.</li>
 <li>Authoring production-ready entrypoints: <code class="inline-code">lib/main.dart</code> and <code class="inline-code">lib/application.dart</code>.</li>
@@ -547,13 +549,28 @@ pre {
 </tr></thead><tbody>
 <tr>
 <td><strong>Parent Hub</strong></td>
-<td><a href="../project-bootstrap-hub/project-bootstrap-hub.html" class="skill-ref-link" title="Primary coordinator and master orchestrator for scaffolding and bootstrapping a brand new production Flutter project from scratch. Coordinates Flutter initialization, dependency injection &amp; conflict resolution, package compatibility auditing, Clean Architecture &amp; Flavors scaffolding, Material 3 (#FFDE3F) theme &amp; interactive UiKit showcase generation, Hydrated ThemeCubit, and test verification with runbook documentation.">project-bootstrap-hub <span class="ext-icon">↗</span></a></td>
+<td><a href="../project-bootstrap-hub/project-bootstrap-hub.html" class="skill-ref-link" title="Primary coordinator and master orchestrator for scaffolding and bootstrapping a brand new production Flutter project from scratch. Coordinates Flutter initialization, dependency injection &amp; conflict resolution, package compatibility auditing, Clean Architecture &amp; Flavors scaffolding, initial domain/data example feature, .gitignore protection, Material 3 (#FFDE3F) theme &amp; interactive UiKit showcase generation, Hydrated ThemeCubit, and test verification with runbook documentation.">project-bootstrap-hub <span class="ext-icon">↗</span></a></td>
 <td>Master bootstrapping coordinator.</td>
 </tr>
 <tr>
 <td><strong>Architecture Guide</strong></td>
 <td><a href="../../flutter-clean-architecture/flutter-clean-architecture.html" class="skill-ref-link" title="Enforces Clean Architecture, DDD, and SOLID with Layer-First packaging (domain, data, presentation, infrastructure), repository interfaces in Domain, single-responsibility UseCases, DTOs with inline toDomain() mappers in Data, Retrofit clients, sealed class failures, and BLoC state management. Use when creating new features, refactoring layers, reviewing PRs, or implementing architecture logic.">flutter-clean-architecture <span class="ext-icon">↗</span></a></td>
 <td>Layer-First rules, boundaries, and DDD contracts.</td>
+</tr>
+<tr>
+<td><strong>Domain Entities</strong></td>
+<td><a href="../../domain/domain-entities-freezed/domain-entities-freezed.html" class="skill-ref-link" title="Standards and patterns for creating immutable Domain Entities using Freezed 3+ and Equatable under strict build.yaml generation flags (copyWith, equals, hashCode, toString only). Enforces field definitions in class body, const constructors with _$ClassName, zero fromJson/toJson/when/map generation, and defensive collection immutability.">domain-entities-freezed <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">@freezed</code> immutable entity standards.</td>
+</tr>
+<tr>
+<td><strong>Domain UseCases</strong></td>
+<td><a href="../../domain/domain-usecases/domain-usecases.html" class="skill-ref-link" title="Standards and patterns for creating Single Responsibility UseCases (Interactors) in lib/domain/&lt;feature&gt;/usecases/. Covers callable class call() methods, typed input parameters, @injectable DI registration, error propagation, and enforcing the mandatory UseCase boundary between BLoC and Repositories.">domain-usecases <span class="ext-icon">↗</span></a></td>
+<td>SRP Use Case contracts and DI injection.</td>
+</tr>
+<tr>
+<td><strong>Data Mappers &amp; DTOs</strong></td>
+<td><a href="../../data/data-dto-mappers/data-dto-mappers.html" class="skill-ref-link" title="Standards and patterns for Data Transfer Objects (DTOs) and inline toDomain() mappers in lib/data/&lt;feature&gt;/dto/. Covers json_serializable configuration (@JsonSerializable, @JsonKey), safe parsing fallbacks, nested collection mapping, enum translations, and strict DTO encapsulation.">data-dto-mappers <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">@JsonSerializable</code> DTOs with inline <code class="inline-code">toDomain()</code> mappers.</td>
 </tr>
 <tr>
 <td><strong>Flavors Guide</strong></td>
@@ -568,7 +585,7 @@ pre {
 </tbody></table></div>
 <hr class="doc-divider">
 <h2 id="3--directory-hierarchy-scaffolding" class="doc-h2"><a href="#3--directory-hierarchy-scaffolding" class="heading-anchor">#</a> 3. Directory Hierarchy Scaffolding</h2>
-<p class="doc-p">Scaffold the standard directory structure:</p>
+<p class="doc-p">Scaffold the standard directory structure with strict layer boundaries:</p>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">text</span>
@@ -578,38 +595,137 @@ pre {
     </button>
   </div>
   <pre><code class="language-text">lib/
-├── core/
+├── core/                                   # Pure Dart (Zero Flutter SDK)
 │   ├── constants/
 │   ├── extensions/
 │   └── utils/
-├── domain/
-├── data/
-├── infrastructure/
-│   ├── config/
-│   ├── di/
-│   ├── network/
-│   ├── storage/
-│   ├── services/
-│   └── logging/
-├── l10n/
+│
+├── domain/example/                         # Initial Pure Domain Feature
+│   ├── entities/example_item.dart          # Freezed immutable entity
+│   ├── failures/example_failure.dart       # Sealed Domain Failure hierarchy
+│   ├── repositories/i_example_repository.dart # Abstract repository interface
+│   └── usecases/get_example_items_usecase.dart # SRP @injectable UseCase
+│
+├── data/example/                           # Initial Data Layer Feature
+│   ├── dto/example_item_dto.dart           # JsonSerializable DTO + toDomain()
+│   ├── endpoints/example_endpoints.dart    # Centralized endpoint constants
+│   ├── client/example_api_client.dart      # Retrofit @RestApi client
+│   └── repositories/example_repository_impl.dart # @LazySingleton repository impl
+│
+├── infrastructure/                         # Framework &amp; Core Modules
+│   ├── config/                             # AppConfig, AppEnvironment
+│   ├── di/                                 # Injectable &amp; GetIt container
+│   ├── network/                            # Dio singleton, interceptors
+│   ├── storage/                            # SecureStorage &amp; SharedPreferences
+│   ├── services/                           # Firebase, DeepLink, Purchase
+│   └── logging/                            # AppLogger
+│
+├── l10n/                                   # Localization
 │   ├── intl_en.arb
 │   └── intl_uk.arb
-└── presentation/
-    ├── navigation/
-    ├── state-management/
-    ├── theme/
-    ├── ui/
-    │   └── ui-kit/
-    └── ui-utils/
+│
+└── presentation/                           # Presentation Layer
+    ├── navigation/                         # AutoRoute router &amp; guards
+    │   ├── app_router.dart
+    │   └── guards/
+    ├── state_management/example/           # Feature BLoC / Cubit
+    │   ├── example_bloc.dart
+    │   ├── example_event.dart
+    │   └── example_state.dart
+    ├── pages/                              # UI Screens &amp; Pages
+    │   ├── example/                        # Feature Page
+    │   │   ├── example_page.dart
+    │   │   └── widgets/
+    │   └── uikit/                          # Design System Showcase Landing
+    │       ├── uikit_page.dart
+    │       └── widgets/
+    ├── theme/                              # Material 3 Theme &amp; Extensions
+    ├── ui_kit/                             # Pure Reusable UI Kit Components
+    └── ui_utils/                           # UI Extensions, Formatters, Helpers
         ├── extensions/
         ├── formatters/
         ├── forms/
         └── helpers/
 </code></pre>
 </div>
+<div class="alert-box alert-warning"><div class="alert-title">ВАЖЛИВО / IMPORTANT</div><div class="alert-content">
+<p><strong>Path Standards:</strong></p>
+<p>- UI screens and feature pages MUST strictly be placed in <code class="inline-code">lib/presentation/pages/&lt;feature&gt;/</code> (never <code class="inline-code">lib/presentation/ui/&lt;feature&gt;/</code>).</p>
+<p>- Reusable UI widgets belong in <code class="inline-code">lib/presentation/ui_kit/</code>.</p>
+<p>- State management belongs in <code class="inline-code">lib/presentation/state_management/&lt;feature&gt;/</code>.</p>
+<p>- UI utility extensions belong in <code class="inline-code">lib/presentation/ui_utils/extensions/</code>.</p>
 <hr class="doc-divider">
-<h2 id="4--multi-environment-flavors---native-configuration---config---" class="doc-h2"><a href="#4--multi-environment-flavors---native-configuration---config---" class="heading-anchor">#</a> 4. Multi-Environment Flavors &amp; Native Configuration (<code class="inline-code">config/</code>)</h2>
-<h3 class="doc-h3">4.1 Create Environment JSON Files (Added to <code class="inline-code">.gitignore</code>):</h3>
+<h2 id="4--git-hygiene-----gitignore--scaffolding" class="doc-h2"><a href="#4--git-hygiene-----gitignore--scaffolding" class="heading-anchor">#</a> 4. Git Hygiene &amp; <code class="inline-code">.gitignore</code> Scaffolding</h2>
+<p class="doc-p">Scaffold root <code class="inline-code">.gitignore</code> from <a href="resources/.gitignore" class="doc-link">resources/.gitignore</a> containing all standard Flutter ignores, sensitive credentials, and generated code exclusions:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">gitignore</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-gitignore"># Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Symbolication &amp; Obfuscation
+app.*.symbols
+app.*.map.json
+
+# Android Studio build artifacts
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Environment configurations (Protect secret credentials)
+config/env_*.json
+!config/env_template.json
+
+# Generated files (build_runner, freezed, retrofit, injectable, auto_route, l10n, flutter_gen)
+*.g.dart
+*.gr.dart
+*.freezed.dart
+*.config.dart
+lib/l10n/generated/
+lib/presentation/ui_utils/assets/
+
+# Local agent configuration &amp; user overrides
+.agents/rules/local_*.md
+.agents/rules/*.local.md
+.agents/local.json
+.agents/local_*.json
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="5--multi-environment-flavors---native-configuration---config---" class="doc-h2"><a href="#5--multi-environment-flavors---native-configuration---config---" class="heading-anchor">#</a> 5. Multi-Environment Flavors &amp; Native Configuration (<code class="inline-code">config/</code>)</h2>
+<h3 class="doc-h3">5.1 Create Environment JSON Files:</h3>
 <h4 class="doc-h4"><code class="inline-code">config/env_dev.json</code></h4>
 <div class="code-block-wrapper">
   <div class="code-header">
@@ -675,7 +791,7 @@ pre {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h3 class="doc-h3">4.2 Native Platform Flavors Summary</h3>
+<h3 class="doc-h3">5.2 Native Platform Flavors Summary</h3>
 <p class="doc-p">Reference guides:</p>
 <ul class="doc-list">
 <li><a href="https://docs.flutter.dev/deployment/flavors" class="doc-link">Android Flavors</a></li>
@@ -685,7 +801,7 @@ pre {
 <li>For comprehensive multi-platform native configurations, consult <a href="../../native/native-flavors-environments/native-flavors-environments.html" class="skill-ref-link" title="Complete guide for setting up and managing Flutter Multi-Environment Flavors (dev, stage, prod) across Android, iOS, and Dart. Covers --dart-define-from-file with config/*.json, Android productFlavors in Gradle, iOS Xcode Schemes/Configurations/xcconfig, per-flavor app icons with flutter_launcher_icons, and release build commands.">native-flavors-environments <span class="ext-icon">↗</span></a>.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="5--vs-code-configuration----vscode---" class="doc-h2"><a href="#5--vs-code-configuration----vscode---" class="heading-anchor">#</a> 5. VS Code Configuration (<code class="inline-code">.vscode/</code>)</h2>
+<h2 id="6--vs-code-configuration----vscode---" class="doc-h2"><a href="#6--vs-code-configuration----vscode---" class="heading-anchor">#</a> 6. VS Code Configuration (<code class="inline-code">.vscode/</code>)</h2>
 <p class="doc-p">Place the standard multi-flavor launch configurations and IDE settings:</p>
 <ul class="doc-list">
 <li><strong>Launch Configurations:</strong> Reference template: <a href="resources/launch.json" class="doc-link">resources/launch.json</a>.</li>
@@ -711,13 +827,229 @@ pre {
 <li><strong>Recommended Extensions (<code class="inline-code">.vscode/extensions.json</code>):</strong> Include <code class="inline-code">Dart-Code.dart-code</code>, <code class="inline-code">Dart-Code.flutter</code>, <code class="inline-code">localizely.flutter-intl</code>, <code class="inline-code">felangel.bloc</code>.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="6--quality---linter-configuration---analysis_options-yaml--" class="doc-h2"><a href="#6--quality---linter-configuration---analysis_options-yaml--" class="heading-anchor">#</a> 6. Quality &amp; Linter Configuration (<code class="inline-code">analysis_options.yaml</code>)</h2>
+<h2 id="7--initial-clean-architecture-domain---data-example-scaffolding" class="doc-h2"><a href="#7--initial-clean-architecture-domain---data-example-scaffolding" class="heading-anchor">#</a> 7. Initial Clean Architecture Domain &amp; Data Example Scaffolding</h2>
+<p class="doc-p">Scaffold the initial example feature across <code class="inline-code">domain/</code> and <code class="inline-code">data/</code> using reference code from <a href="examples/example_feature_bundle.dart" class="doc-link">examples/example_feature_bundle.dart</a>:</p>
+<h3 class="doc-h3">7.1 Domain Layer (<code class="inline-code">lib/domain/example/</code>)</h3>
+<ol class="doc-ordered-list">
+<li><strong>Entity (<code class="inline-code">entities/example_item.dart</code>):</strong> Immutable Freezed model:</li>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   import &#039;package:freezed_annotation/freezed_annotation.dart&#039;;
+
+   part &#039;example_item.freezed.dart&#039;;
+
+   @freezed
+   class ExampleItem with _$ExampleItem {
+     final String id;
+     final String title;
+     final String description;
+     final bool isActive;
+
+     const ExampleItem({
+       required this.id,
+       required this.title,
+       required this.description,
+       required this.isActive,
+     });
+   }
+</code></pre>
+</div>
+<li><strong>Failure (<code class="inline-code">failures/example_failure.dart</code>):</strong> Typed sealed error hierarchy:</li>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   sealed class ExampleFailure {
+     final String message;
+     const ExampleFailure([this.message = &#039;An unexpected error occurred.&#039;]);
+   }
+
+   final class NetworkExampleFailure extends ExampleFailure {
+     const NetworkExampleFailure([super.message = &#039;No internet connection.&#039;]);
+   }
+
+   final class ServerExampleFailure extends ExampleFailure {
+     final int? statusCode;
+     const ServerExampleFailure({String message = &#039;Server error.&#039;, this.statusCode}) : super(message);
+   }
+
+   final class UnknownExampleFailure extends ExampleFailure {
+     final Object? error;
+     final StackTrace? stackTrace;
+     const UnknownExampleFailure({String message = &#039;Unexpected error.&#039;, this.error, this.stackTrace}) : super(message);
+   }
+</code></pre>
+</div>
+<li><strong>Repository Interface (<code class="inline-code">repositories/i_example_repository.dart</code>):</strong> Pure abstract contract:</li>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   import &#039;package:flutter_template/domain/example/entities/example_item.dart&#039;;
+
+   abstract interface class IExampleRepository {
+     Future&lt;List&lt;ExampleItem&gt;&gt; getExampleItems();
+   }
+</code></pre>
+</div>
+<li><strong>Use Case (<code class="inline-code">usecases/get_example_items_usecase.dart</code>):</strong> Single-responsibility action:</li>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   import &#039;package:injectable/injectable.dart&#039;;
+   import &#039;package:flutter_template/domain/example/entities/example_item.dart&#039;;
+   import &#039;package:flutter_template/domain/example/repositories/i_example_repository.dart&#039;;
+
+   @injectable
+   class GetExampleItemsUseCase {
+     final IExampleRepository _repository;
+     const GetExampleItemsUseCase(this._repository);
+
+     Future&lt;List&lt;ExampleItem&gt;&gt; call() =&gt; _repository.getExampleItems();
+   }
+</code></pre>
+</div>
+</ul>
+<h3 class="doc-h3">7.2 Data Layer (<code class="inline-code">lib/data/example/</code>)</h3>
+<ol class="doc-ordered-list">
+<li><strong>DTO &amp; Inline Mapper (<code class="inline-code">dto/example_item_dto.dart</code>):</strong></li>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   import &#039;package:json_annotation/json_annotation.dart&#039;;
+   import &#039;package:flutter_template/domain/example/entities/example_item.dart&#039;;
+
+   part &#039;example_item_dto.g.dart&#039;;
+
+   @JsonSerializable()
+   class ExampleItemDto {
+     final String id;
+     final String title;
+     final String description;
+     @JsonKey(name: &#039;is_active&#039;, defaultValue: true)
+     final bool isActive;
+
+     const ExampleItemDto({required this.id, required this.title, required this.description, required this.isActive});
+
+     factory ExampleItemDto.fromJson(Map&lt;String, dynamic&gt; json) =&gt; _$ExampleItemDtoFromJson(json);
+     Map&lt;String, dynamic&gt; toJson() =&gt; _$ExampleItemDtoToJson(this);
+
+     ExampleItem toDomain() =&gt; ExampleItem(id: id, title: title, description: description, isActive: isActive);
+   }
+</code></pre>
+</div>
+<li><strong>Endpoints (<code class="inline-code">endpoints/example_endpoints.dart</code>):</strong></li>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   abstract final class ExampleEndpoints {
+     static const String items = &#039;/v1/example-items&#039;;
+   }
+</code></pre>
+</div>
+<li><strong>API Client (<code class="inline-code">client/example_api_client.dart</code>):</strong> Retrofit service:</li>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   import &#039;package:dio/dio.dart&#039;;
+   import &#039;package:retrofit/retrofit.dart&#039;;
+   import &#039;package:flutter_template/data/example/dto/example_item_dto.dart&#039;;
+   import &#039;package:flutter_template/data/example/endpoints/example_endpoints.dart&#039;;
+
+   part &#039;example_api_client.g.dart&#039;;
+
+   @RestApi()
+   abstract class ExampleApiClient {
+     factory ExampleApiClient(Dio dio, {String baseUrl}) = _ExampleApiClient;
+
+     @GET(ExampleEndpoints.items)
+     Future&lt;List&lt;ExampleItemDto&gt;&gt; getExampleItems();
+   }
+</code></pre>
+</div>
+<li><strong>Repository Implementation (<code class="inline-code">repositories/example_repository_impl.dart</code>):</strong></li>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   import &#039;package:dio/dio.dart&#039;;
+   import &#039;package:injectable/injectable.dart&#039;;
+   import &#039;package:flutter_template/data/example/client/example_api_client.dart&#039;;
+   import &#039;package:flutter_template/domain/example/entities/example_item.dart&#039;;
+   import &#039;package:flutter_template/domain/example/failures/example_failure.dart&#039;;
+   import &#039;package:flutter_template/domain/example/repositories/i_example_repository.dart&#039;;
+
+   @LazySingleton(as: IExampleRepository)
+   class ExampleRepositoryImpl implements IExampleRepository {
+     final ExampleApiClient _apiClient;
+     const ExampleRepositoryImpl(this._apiClient);
+
+     @override
+     Future&lt;List&lt;ExampleItem&gt;&gt; getExampleItems() async {
+       try {
+         final dtos = await _apiClient.getExampleItems();
+         return dtos.map((dto) =&gt; dto.toDomain()).toList();
+       } on DioException catch (dioError) {
+         if (dioError.type == DioExceptionType.connectionTimeout ||
+             dioError.type == DioExceptionType.receiveTimeout ||
+             dioError.type == DioExceptionType.connectionError) {
+           throw const NetworkExampleFailure();
+         }
+         throw ServerExampleFailure(message: dioError.message ?? &#039;Server error&#039;, statusCode: dioError.response?.statusCode);
+       } catch (e, st) {
+         throw UnknownExampleFailure(error: e, stackTrace: st);
+       }
+     }
+   }
+</code></pre>
+</div>
+</ul>
+<hr class="doc-divider">
+<h2 id="8--quality---linter-configuration---analysis_options-yaml--" class="doc-h2"><a href="#8--quality---linter-configuration---analysis_options-yaml--" class="heading-anchor">#</a> 8. Quality &amp; Linter Configuration (<code class="inline-code">analysis_options.yaml</code>)</h2>
 <p class="doc-p">Scaffold root <code class="inline-code">analysis_options.yaml</code> with strict BLoC rules and code generation exclusions.</p>
 <ul class="doc-list">
 <li>Full configuration file: <a href="resources/analysis_options.yaml" class="doc-link">resources/analysis_options.yaml</a>.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="7--core-architecture-boilerplates---entrypoints" class="doc-h2"><a href="#7--core-architecture-boilerplates---entrypoints" class="heading-anchor">#</a> 7. Core Architecture Boilerplates &amp; Entrypoints</h2>
+<h2 id="9--core-architecture-boilerplates---entrypoints" class="doc-h2"><a href="#9--core-architecture-boilerplates---entrypoints" class="heading-anchor">#</a> 9. Core Architecture Boilerplates &amp; Entrypoints</h2>
 <p class="doc-p">Refer to production-ready boilerplate implementations in <code class="inline-code">examples/</code>:</p>
 <ol class="doc-ordered-list">
 <li><strong>Centralized Configuration Model:</strong> <a href="examples/app_config.dart" class="doc-link">examples/app_config.dart</a></li>
@@ -728,7 +1060,7 @@ pre {
 <li><code class="inline-code">MaterialApp.router</code> bound to <code class="inline-code">AppRouter</code>, <code class="inline-code">ThemeCubit</code> (with <code class="inline-code">AppThemeModeX</code>), and localization delegates.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="8--assets-hierarchy-scaffolding" class="doc-h2"><a href="#8--assets-hierarchy-scaffolding" class="heading-anchor">#</a> 8. Assets Hierarchy Scaffolding</h2>
+<h2 id="10--assets-hierarchy-scaffolding" class="doc-h2"><a href="#10--assets-hierarchy-scaffolding" class="heading-anchor">#</a> 10. Assets Hierarchy Scaffolding</h2>
 <p class="doc-p">Scaffold empty asset folders with <code class="inline-code">.gitkeep</code> files:</p>
 <ul class="doc-list">
 <li><code class="inline-code">assets/fonts/.gitkeep</code></li>
@@ -737,12 +1069,26 @@ pre {
 <li><code class="inline-code">assets/svgs/.gitkeep</code></li>
 </ul>
 <hr class="doc-divider">
-<h2 id="9--verification-checklist" class="doc-h2"><a href="#9--verification-checklist" class="heading-anchor">#</a> 9. Verification Checklist</h2>
+<h2 id="11--verification-checklist" class="doc-h2"><a href="#11--verification-checklist" class="heading-anchor">#</a> 11. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Clean Architecture layer folders created.</span>
+    <span class="check-text">Clean Architecture layer folders created (<code class="inline-code">core/</code>, <code class="inline-code">domain/</code>, <code class="inline-code">data/</code>, <code class="inline-code">infrastructure/</code>, <code class="inline-code">presentation/pages/</code>, <code class="inline-code">presentation/state_management/</code>, <code class="inline-code">presentation/ui_kit/</code>, <code class="inline-code">presentation/ui_utils/</code>, <code class="inline-code">l10n/</code>).</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Initial example feature scaffolded in <code class="inline-code">domain/example/</code> and <code class="inline-code">data/example/</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Root <code class="inline-code">.gitignore</code> created from <a href="resources/.gitignore" class="doc-link">resources/.gitignore</a> protecting env configs, generated files, and agent overrides.</span>
   </label>
 </div>
 <div class="checklist-item">
@@ -856,6 +1202,39 @@ pre {
   </div>
   <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
     Enforces Clean Architecture, DDD, and SOLID with Layer-First packaging (domain, data, presentation, infrastruc...
+  </div>
+</a>
+<a href="../../data/data-dto-mappers/data-dto-mappers.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    data-dto-mappers ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Data (Дані та API)" data-cat-en="Data Layer">
+    Шар Data (Дані та API)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for Data Transfer Objects (DTOs) and inline toDomain() mappers in lib/data/&lt;feature&gt;/dt...
+  </div>
+</a>
+<a href="../../domain/domain-usecases/domain-usecases.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    domain-usecases ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Domain (Бізнес-логіка)" data-cat-en="Domain Layer">
+    Шар Domain (Бізнес-логіка)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for creating Single Responsibility UseCases (Interactors) in lib/domain/&lt;feature&gt;/useca...
+  </div>
+</a>
+<a href="../../domain/domain-entities-freezed/domain-entities-freezed.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    domain-entities-freezed ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Domain (Бізнес-логіка)" data-cat-en="Domain Layer">
+    Шар Domain (Бізнес-логіка)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for creating immutable Domain Entities using Freezed 3+ and Equatable under strict buil...
   </div>
 </a>
 </div></div>

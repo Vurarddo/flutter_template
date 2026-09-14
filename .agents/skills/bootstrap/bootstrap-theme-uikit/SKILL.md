@@ -55,7 +55,7 @@ Use this skill during the theming and presentation scaffolding phase:
 
 ---
 
-## 4. Injectable Hydrated `ThemeCubit` (`lib/presentation/state-management/theme/`)
+## 4. Injectable Hydrated `ThemeCubit` (`lib/presentation/state_management/theme/`)
 
 > [!IMPORTANT]
 > **Zero Flutter SDK Imports in BLoC / Cubit:**

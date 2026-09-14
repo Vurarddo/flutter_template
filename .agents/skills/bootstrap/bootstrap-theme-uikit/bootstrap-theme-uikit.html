@@ -547,7 +547,7 @@ pre {
 </tr></thead><tbody>
 <tr>
 <td><strong>Parent Hub</strong></td>
-<td><a href="../project-bootstrap-hub/project-bootstrap-hub.html" class="skill-ref-link" title="Primary coordinator and master orchestrator for scaffolding and bootstrapping a brand new production Flutter project from scratch. Coordinates Flutter initialization, dependency injection &amp; conflict resolution, package compatibility auditing, Clean Architecture &amp; Flavors scaffolding, Material 3 (#FFDE3F) theme &amp; interactive UiKit showcase generation, Hydrated ThemeCubit, and test verification with runbook documentation.">project-bootstrap-hub <span class="ext-icon">↗</span></a></td>
+<td><a href="../project-bootstrap-hub/project-bootstrap-hub.html" class="skill-ref-link" title="Primary coordinator and master orchestrator for scaffolding and bootstrapping a brand new production Flutter project from scratch. Coordinates Flutter initialization, dependency injection &amp; conflict resolution, package compatibility auditing, Clean Architecture &amp; Flavors scaffolding, initial domain/data example feature, .gitignore protection, Material 3 (#FFDE3F) theme &amp; interactive UiKit showcase generation, Hydrated ThemeCubit, and test verification with runbook documentation.">project-bootstrap-hub <span class="ext-icon">↗</span></a></td>
 <td>Master bootstrapping coordinator.</td>
 </tr>
 <tr>
@@ -607,7 +607,7 @@ pre {
 </div>
 </ul>
 <hr class="doc-divider">
-<h2 id="4--injectable-hydrated--themecubit----lib-presentation-state-management-theme---" class="doc-h2"><a href="#4--injectable-hydrated--themecubit----lib-presentation-state-management-theme---" class="heading-anchor">#</a> 4. Injectable Hydrated <code class="inline-code">ThemeCubit</code> (<code class="inline-code">lib/presentation/state-management/theme/</code>)</h2>
+<h2 id="4--injectable-hydrated--themecubit----lib-presentation-state_management-theme---" class="doc-h2"><a href="#4--injectable-hydrated--themecubit----lib-presentation-state_management-theme---" class="heading-anchor">#</a> 4. Injectable Hydrated <code class="inline-code">ThemeCubit</code> (<code class="inline-code">lib/presentation/state_management/theme/</code>)</h2>
 <div class="alert-box alert-warning"><div class="alert-title">ВАЖЛИВО / IMPORTANT</div><div class="alert-content">
 <p><strong>Zero Flutter SDK Imports in BLoC / Cubit:</strong></p>
 <p><code class="inline-code">ThemeCubit</code>, <code class="inline-code">ThemeState</code>, and <code class="inline-code">HydratedThemeCubitMixin</code> must NEVER import <code class="inline-code">package:flutter/material.dart</code> (enforced by <code class="inline-code">avoid_flutter_imports</code>). Map to Flutter types in UI via <code class="inline-code">AppThemeModeX.toFlutter()</code>.</p>
