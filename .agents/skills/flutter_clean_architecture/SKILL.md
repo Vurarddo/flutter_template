@@ -30,13 +30,12 @@ Presentation → Domain ← Data
 ## Layer Responsibilities & Contracts
 
 ### 1. Domain Layer (`lib/domain/<feature_name>/`)
-
-- **Entities:** Pure Dart immutable classes using `@freezed`.
+- Consult [domain-hub](domain/domain-hub/SKILL.md).
+- **Entities:** Pure Dart immutable classes using `@freezed` (consult [domain-entities-freezed](domain/domain-entities-freezed/SKILL.md)).
 - _Strict Restriction (per `build.yaml`):_ DO NOT generate or use `map`, `when`, `fromJson`, or `toJson` on Freezed models.
-
-- **Repository Contracts:** `abstract class I<Feature>Repository`. Methods return Domain Entities or throw typed `DomainFailure` states.
-- **Failures:** Model error states using Dart 3 `sealed class` hierarchies (e.g., `sealed class AuthFailure`). **NO `dartz` / `fpdart` (`Either`)**.
-- **Use Cases (SRP):** Single responsibility business actions (e.g., `GetAccountDetailsUseCase`). Must implement `call()` method and accept typed params. Must depend ONLY on Repository Interfaces.
+- **Repository Contracts:** `abstract class I<Feature>Repository` (consult [domain-repositories](domain/domain-repositories/SKILL.md)). Methods return Domain Entities or Streams.
+- **Failures:** Model error states using Dart 3 `sealed class` hierarchies (consult [domain-failures](domain/domain-failures/SKILL.md)). **NO `dartz` / `fpdart` (`Either`)**.
+- **Use Cases (SRP):** Single responsibility business actions with `call()` method (consult [domain-usecases](domain/domain-usecases/SKILL.md)). Must depend ONLY on Repository Interfaces. BLoCs/Cubits MUST ONLY interact with Use Cases.
 
 ### 2. Data Layer (`lib/data/<feature_name>/`)
 
