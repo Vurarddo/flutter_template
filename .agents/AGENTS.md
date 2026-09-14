@@ -2,7 +2,7 @@
 
 ## 1. General Communication & Language Configuration Protocol
 
-- **Configured Communication Language:** Ukrainian
+- **Configured Communication Language:** [NOT_CONFIGURED]
   *(Template default: if set to `[NOT_CONFIGURED]`, agent defaults to English for the initial turn, asks the user for their preferred communication language, and updates this field in `.agents/AGENTS.md` upon confirmation).*
 - **Language Separation Guidelines:**
   - **User Chat & Direct Responses:** ALWAYS communicate with the user in the **Configured Communication Language** (e.g., Ukrainian).
@@ -117,6 +117,7 @@ _bloc.dart (or _cubit.dart)
 - **Build Runner:** Code generation is executed via `flutter pub run build_runner build --delete-conflicting-outputs`.
 - **Freezed Constraints & Syntax (per `build.yaml` & Freezed 3+):**
   - **Syntax Standard:** Freezed classes MUST be declared as regular classes with field definitions in the class body and a `const ClassName({required this.field, ...});` constructor with `with _$ClassName`.
+
     ```dart
     @freezed
     class ExampleItem with _$ExampleItem {
@@ -135,10 +136,12 @@ _bloc.dart (or _cubit.dart)
       });
     }
     ```
+
   - Custom build configuration disables `map`, `when`, `fromJson`, and `toJson` code generation.
   - Do NOT generate, call, or expect `map`, `when`, `fromJson`, or `toJson` methods on `@freezed` models.
   - Use `@freezed` strictly for immutable data classes, `copyWith`, `toString`, `equals`, and `hashCode`.
   - For JSON serialization, use explicit DTOs with `json_serializable` in the Data layer.
+
 - **Retrofit Constraints:** API services must be defined as abstract classes annotated with `@RestApi()` and use a `Dio` instance injected via `GetIt`.
 
 ---
