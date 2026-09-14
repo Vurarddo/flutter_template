@@ -20,8 +20,11 @@ Use this skill whenever:
 
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
+| **Performance Hub** | [performance-hub](../../performance/performance-hub/SKILL.md) | Master performance architecture & DevTools profiling. |
+| **Build Optimization** | [performance-rendering-build](../../performance/performance-rendering-build/SKILL.md) | `build()` cost reduction, child caching, and `StatelessWidget`. |
+| **Expensive Operations** | [performance-expensive-operations](../../performance/performance-expensive-operations/SKILL.md) | Eliminating `saveLayer()`, `Opacity`, and clipping jank. |
+| **Lists & Slivers** | [performance-lists-slivers](../../performance/performance-lists-slivers/SKILL.md) | `itemExtent`, `prototypeItem`, and element recycling. |
 | **Parent Hub** | [flutter-ui-hub](../flutter-ui-hub/SKILL.md) | High-level presentation rules and routing. |
-| **Widgets** | [flutter-ui-stateless-stateful](../flutter-ui-stateless-stateful/SKILL.md) | Element diffing and component decomposition. |
 | **Animations** | [flutter-ui-animations](../flutter-ui-animations/SKILL.md) | High-performance animation choreography. |
 | **Slivers** | [flutter-ui-slivers](../flutter-ui-slivers/SKILL.md) | Lazy scrolling list optimizations. |
 

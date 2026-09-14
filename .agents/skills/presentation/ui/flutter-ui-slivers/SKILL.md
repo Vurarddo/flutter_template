@@ -21,7 +21,8 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [flutter-ui-hub](../flutter-ui-hub/SKILL.md) | Presentation laws and UI routing. |
-| **Performance** | [flutter-ui-performance](../flutter-ui-performance/SKILL.md) | Lazy list item caching and extent optimization. |
+| **UI Performance** | [flutter-ui-performance](../flutter-ui-performance/SKILL.md) | RepaintBoundary and raster optimization. |
+| **Performance Lists & Slivers** | [performance-lists-slivers](../../performance/performance-lists-slivers/SKILL.md) | Extent optimization, prototypeItem, findChildIndexCallback, and keepAlive. |
 | **Material 3** | [flutter-ui-material](../flutter-ui-material/SKILL.md) | Theme styling for app bars and list items. |
 
 ---

@@ -22,7 +22,9 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [flutter-ui-hub](../flutter-ui-hub/SKILL.md) | Presentation laws and UI routing. |
 | **Advanced Motion** | [flutter-ui-advanced-graphics](../flutter-ui-advanced-graphics/SKILL.md) | Tier 3 & 4 (CustomPainter, Shaders, Rive, Physics). |
-| **Performance** | [flutter-ui-performance](../flutter-ui-performance/SKILL.md) | RepaintBoundary and raster optimization. |
+| **UI Performance** | [flutter-ui-performance](../flutter-ui-performance/SKILL.md) | RepaintBoundary and raster optimization. |
+| **Performance Rendering** | [performance-rendering-build](../../performance/performance-rendering-build/SKILL.md) | Child parameter caching and build optimization. |
+| **Expensive Operations** | [performance-expensive-operations](../../performance/performance-expensive-operations/SKILL.md) | Opacity anti-patterns, saveLayer, and GPU offscreen buffers. |
 
 ---
 

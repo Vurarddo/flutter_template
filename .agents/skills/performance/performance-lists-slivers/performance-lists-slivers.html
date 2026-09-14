@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>flutter-ui-performance — Agent Skill Documentation</title>
+  <title>performance-lists-slivers — Agent Skill Documentation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
@@ -472,20 +472,20 @@ pre {
 <body>
   <header class="top-nav">
     <div style="display: flex; align-items: center; gap: 1.5rem;">
-      <a href="../../../../index.html" class="nav-brand">
+      <a href="../../../index.html" class="nav-brand">
         <div class="brand-logo">AG</div>
         <span>Antigravity Docs</span>
       </a>
       <div class="nav-breadcrumbs">
-        <a href="../../../../index.html" data-i18n="portal_title">Центр Документації</a>
+        <a href="../../../index.html" data-i18n="portal_title">Центр Документації</a>
         <span>/</span>
-        <span data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">UI Віджети та Анімації</span>
+        <span data-cat-ua="General" data-cat-en="General">General</span>
         <span>/</span>
-        <span style="color: var(--text-primary); font-weight: 600;">flutter-ui-performance</span>
+        <span style="color: var(--text-primary); font-weight: 600;">performance-lists-slivers</span>
       </div>
     </div>
     <div class="nav-actions">
-      <a href="../../../../agents-rules.html" class="btn-icon">
+      <a href="../../../agents-rules.html" class="btn-icon">
         <span>📜</span>
         <span data-i18n="project_rules">Правила AGENTS.md</span>
       </a>
@@ -502,19 +502,19 @@ pre {
   <main class="container">
     <section class="hero">
       <div class="hero-badges">
-        <span class="badge badge-category" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">UI Віджети та Анімації</span>
+        <span class="badge badge-category" data-cat-ua="General" data-cat-en="General">General</span>
         <span class="badge badge-tag">SKILL</span>
         <span class="badge badge-tag">#high-performance</span>
-<span class="badge badge-tag">#flutter</span>
-<span class="badge badge-tag">#rendering</span>
+<span class="badge badge-tag">#scrollable</span>
+<span class="badge badge-tag">#lists</span>
+<span class="badge badge-tag">#slivers</span>
+<span class="badge badge-tag">#optimization</span>
 <span class="badge badge-tag">#skill</span>
-<span class="badge badge-tag">#enforcing</span>
-<span class="badge badge-tag">#60/120</span>
-<span class="badge badge-tag">#frame</span>
-<span class="badge badge-tag">#rates</span>
+<span class="badge badge-tag">#covers</span>
+<span class="badge badge-tag">#lazy</span>
       </div>
-      <h1 class="hero-title">flutter-ui-performance</h1>
-      <p class="hero-description">High-performance Flutter rendering skill enforcing 60/120 FPS frame rates, const constructor optimization, RepaintBoundary layer isolation, selective rebuilds via BlocSelector and ListenableBuilder, raster cache tuning, and off-main-thread compute/isolates. Use when diagnosing jank, optimizing heavy lists, animations, or custom rendering.</p>
+      <h1 class="hero-title">performance-lists-slivers</h1>
+      <p class="hero-description">High-performance scrollable lists and Slivers optimization skill. Covers lazy evaluation in ListView.builder/SliverList.builder, fixed extent optimization with itemExtent and prototypeItem, child lifecycle and state preservation via findChildIndexCallback, AutomaticKeepAliveClientMixin tuning, and elimination of shrinkWrap nested list anti-patterns. Grounded in official Flutter docs.</p>
     </section>
 
     <div class="progress-card">
@@ -528,73 +528,21 @@ pre {
     </div>
 
     <article class="doc-content">
-<h1 class="doc-h1">Flutter UI Rendering Performance &amp; Optimization Guide (60/120 FPS)</h1>
-<h2 id="1--overview---when-to-apply" class="doc-h2"><a href="#1--overview---when-to-apply" class="heading-anchor">#</a> 1. Overview &amp; When to Apply</h2>
-<p class="doc-p">Use this skill whenever:</p>
-<ul class="doc-list">
-<li>Diagnosing and eliminating UI jank, stutter, or dropped frames (targeting constant 60/120 FPS).</li>
-<li>Optimizing rebuild scopes for complex screens using <code class="inline-code">BlocSelector</code> or <code class="inline-code">ListenableBuilder</code>.</li>
-<li>Applying <code class="inline-code">RepaintBoundary</code> to isolate pixel rasterization from the main layer tree.</li>
-<li>Preventing memory churn by enforcing <code class="inline-code">const</code> constructor usage.</li>
-<li>Offloading CPU-heavy data transformations (sorting, large JSON parsing) to worker isolates.</li>
-</ul>
+<h1 class="doc-h1">High-Performance Lists &amp; Slivers Optimization Guide</h1>
+<h2 id="1--overview---architectural-role" class="doc-h2"><a href="#1--overview---architectural-role" class="heading-anchor">#</a> 1. Overview &amp; Architectural Role</h2>
+<p class="doc-p">Scrollable views (lists, grids, feeds) are the primary source of scroll stutter and frame drops if elements are instantiated eagerly or if layout measurements must be recalculated on every scroll delta.</p>
+<p class="doc-p">Optimizing scroll performance requires <strong>lazy element instantiation</strong>, <strong>instant scroll offset computation</strong>, and <strong>proper element recycling</strong>.</p>
 <hr class="doc-divider">
-<h2 id="2--prerequisites---related-skills" class="doc-h2"><a href="#2--prerequisites---related-skills" class="heading-anchor">#</a> 2. Prerequisites &amp; Related Skills</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Relation</th>
-<th>Skill</th>
-<th>Purpose</th>
-</tr></thead><tbody>
-<tr>
-<td><strong>Performance Hub</strong></td>
-<td><a href="../../../performance/performance-hub/performance-hub.html" class="skill-ref-link" title="Primary coordinator and master guide for Flutter performance profiling, diagnostics, and optimization. Covers Flutter DevTools (Performance View, Widget Rebuild Tracker, Highlight Repaints), CPU/GPU jank troubleshooting, Profile mode benchmarking, and routing to specialized sub-skills.">performance-hub <span class="ext-icon">↗</span></a></td>
-<td>Master performance architecture &amp; DevTools profiling.</td>
-</tr>
-<tr>
-<td><strong>Build Optimization</strong></td>
-<td><a href="../../../performance/performance-rendering-build/performance-rendering-build.html" class="skill-ref-link" title="Deep-dive performance optimization for Flutter widget build() methods and widget tree evaluation. Covers build cost minimization, StatelessWidget decomposition vs helper methods, BlocSelector rebuild localization, AnimatedBuilder child caching, const constructor short-circuiting, and StringBuffer. Grounded in official Flutter docs.">performance-rendering-build <span class="ext-icon">↗</span></a></td>
-<td><code class="inline-code">build()</code> cost reduction, child caching, and <code class="inline-code">StatelessWidget</code>.</td>
-</tr>
-<tr>
-<td><strong>Expensive Operations</strong></td>
-<td><a href="../../../performance/performance-expensive-operations/performance-expensive-operations.html" class="skill-ref-link" title="Deep-dive performance guide for eliminating expensive GPU and paint operations in Flutter. Covers the true cost of saveLayer(), replacing Opacity with FadeTransition and alpha colors, clipping optimizations (BoxDecoration vs ClipRRect), RepaintBoundary placement rules, and BackdropFilter limits. Grounded in official Flutter docs.">performance-expensive-operations <span class="ext-icon">↗</span></a></td>
-<td>Eliminating <code class="inline-code">saveLayer()</code>, <code class="inline-code">Opacity</code>, and clipping jank.</td>
-</tr>
-<tr>
-<td><strong>Lists &amp; Slivers</strong></td>
-<td><a href="../../../performance/performance-lists-slivers/performance-lists-slivers.html" class="skill-ref-link" title="High-performance scrollable lists and Slivers optimization skill. Covers lazy evaluation in ListView.builder/SliverList.builder, fixed extent optimization with itemExtent and prototypeItem, child lifecycle and state preservation via findChildIndexCallback, AutomaticKeepAliveClientMixin tuning, and elimination of shrinkWrap nested list anti-patterns. Grounded in official Flutter docs.">performance-lists-slivers <span class="ext-icon">↗</span></a></td>
-<td><code class="inline-code">itemExtent</code>, <code class="inline-code">prototypeItem</code>, and element recycling.</td>
-</tr>
-<tr>
-<td><strong>Parent Hub</strong></td>
-<td><a href="../flutter-ui-hub/flutter-ui-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter UI development. Use when designing, creating, refactoring, or auditing UI widgets, pages, layouts, and animations. Serves as the central entry point and routes to specialized sub-skills for widgets, performance, theming, slivers, responsiveness, and motion design.">flutter-ui-hub <span class="ext-icon">↗</span></a></td>
-<td>High-level presentation rules and routing.</td>
-</tr>
-<tr>
-<td><strong>Animations</strong></td>
-<td><a href="../flutter-ui-animations/flutter-ui-animations.html" class="skill-ref-link" title="Multi-tier Flutter animation skill covering Tier 1 (Implicit animations like AnimatedContainer, AnimatedOpacity, AnimatedSwitcher) and Tier 2 (Explicit choreography with AnimationController, CurvedAnimation, TweenSequence, Staggered transitions, and static child parameter reuse). Use when building smooth 60/120 FPS UI transitions, micro-interactions, or complex choreographies.">flutter-ui-animations <span class="ext-icon">↗</span></a></td>
-<td>High-performance animation choreography.</td>
-</tr>
-<tr>
-<td><strong>Slivers</strong></td>
-<td><a href="../flutter-ui-slivers/flutter-ui-slivers.html" class="skill-ref-link" title="Slivers-first scrolling architecture skill. Enforces CustomScrollView composition, collapsible SliverAppBars (pinned/floating/stretch), SliverList.builder, SliverGrid, custom SliverPersistentHeaders with persistent tabs, and lazy viewport building. Use when creating complex scrollable views, dashboards, or parallax headers.">flutter-ui-slivers <span class="ext-icon">↗</span></a></td>
-<td>Lazy scrolling list optimizations.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="3--core-pillars-of-flutter-ui-performance" class="doc-h2"><a href="#3--core-pillars-of-flutter-ui-performance" class="heading-anchor">#</a> 3. Core Pillars of Flutter UI Performance</h2>
+<h2 id="2--lazy-viewport-evaluation-vs-eager-lists" class="doc-h2"><a href="#2--lazy-viewport-evaluation-vs-eager-lists" class="heading-anchor">#</a> 2. Lazy Viewport Evaluation vs Eager Lists</h2>
+<p class="doc-p">Official Flutter Documentation: <a href="https://api.flutter.dev/flutter/widgets/ListView-class.html#child-elements-lifecycle" class="doc-link">ListView Child Elements&#039; Lifecycle</a>.</p>
 <div class="mermaid-container"><div class="mermaid">graph TD
-    A["Flutter Render Pipeline"] --> B["1. Build Phase (Widget Tree)"]
-    A --> C["2. Layout Phase (RenderObject Tree)"]
-    A --> D["3. Paint Phase (Layer Tree & Rasterizer)"]
-
-    B -->|Optimize with| O1["const constructors & BlocSelector"]
-    C -->|Optimize with| O2["Precise Constraints & LayoutBuilder"]
-    D -->|Optimize with| O3["RepaintBoundary & Cached Shaders"]
+    A["Scroll View Implementation"] -->|Anti-Pattern| B["Eager List: Column / ListView(children: [...])<br/>(Instantiates 1,000 widgets immediately -> Out of Memory & Freeze)"]
+    A -->|Best Practice| C["Lazy List: ListView.builder / SliverList.builder<br/>(Instantiates ONLY visible widgets + small cacheExtent buffer)"]
 </div></div>
-<h3 class="doc-h3">3.1 Rebuild Scope Minimization with <code class="inline-code">BlocSelector</code></h3>
-<p class="doc-p">Do NOT rebuild an entire page when only a single property changes:</p>
+<hr class="doc-divider">
+<h2 id="3--fixed-extent-optimization---itemextent-----prototypeitem--" class="doc-h2"><a href="#3--fixed-extent-optimization---itemextent-----prototypeitem--" class="heading-anchor">#</a> 3. Fixed Extent Optimization (<code class="inline-code">itemExtent</code> &amp; <code class="inline-code">prototypeItem</code>)</h2>
+<p class="doc-p">By default, Flutter must lay out every child widget as it approaches the viewport to calculate its height and update the scrollbar position.</p>
+<p class="doc-p">Specifying <strong><code class="inline-code">itemExtent</code></strong> or <strong><code class="inline-code">prototypeItem</code></strong> allows Flutter to bypass layout measurement entirely, computing scroll positions with simple arithmetic ($O(1)$ complexity):</p>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -603,67 +551,33 @@ pre {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">// ❌ BAD: Rebuilds the whole tree whenever ANY property in HomeState changes!
-BlocBuilder&lt;HomeBloc, HomeState&gt;(
-  builder: (context, state) {
-    return Badge(count: state.unreadNotificationCount);
-  },
-);
-
-// ✅ GOOD: Rebuilds ONLY when unreadNotificationCount specifically changes!
-BlocSelector&lt;HomeBloc, HomeState, int&gt;(
-  selector: (state) =&gt; state.unreadNotificationCount,
-  builder: (context, unreadCount) {
-    return NotificationBadge(count: unreadCount);
-  },
-);
-</code></pre>
-</div>
-<h3 class="doc-h3">3.2 Raster Layer Isolation with <code class="inline-code">RepaintBoundary</code></h3>
-<p class="doc-p">Wrap frequently repainting widgets (e.g. custom visualizers, live counters, complex animations) in <code class="inline-code">RepaintBoundary</code> to prevent repainting their parent and sibling widgets:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class LiveTradingChartWrapper extends StatelessWidget {
-  const LiveTradingChartWrapper({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const RepaintBoundary(
-      child: LiveTradingCandlestickChart(),
-    );
-  }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">3.3 List Item Lazy Rendering</h3>
-<p class="doc-p">Never build unbounded lists inside <code class="inline-code">SingleChildScrollView</code> + <code class="inline-code">Column</code>. Always use <code class="inline-code">ListView.builder</code> or <code class="inline-code">SliverList.builder</code> to ensure widgets outside the viewport are not instantiated.</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// ✅ GOOD: Creates elements on-demand as the user scrolls
+  <pre><code class="language-dart">// ❌ BAD: Flutter must perform layout measurement on every child item!
 ListView.builder(
   itemCount: items.length,
-  itemExtent: 72.0, // Fixed extent gives instantaneous scroll offset calculations!
-  itemBuilder: (context, index) {
-    return ItemListTile(item: items[index]);
-  },
+  itemBuilder: (context, index) =&gt; ItemCard(item: items[index]),
+);
+
+// ✅ GOOD (Fixed Double): Bypasses child layout measurements!
+ListView.builder(
+  itemCount: items.length,
+  itemExtent: 80.0, // Fixed height for every item
+  itemBuilder: (context, index) =&gt; ItemCard(item: items[index]),
+);
+
+// ✅ GOOD (Prototype Widget): Uses a sample item to determine height dynamically
+ListView.builder(
+  itemCount: items.length,
+  prototypeItem: const ItemCard(item: Item.dummy),
+  itemBuilder: (context, index) =&gt; ItemCard(item: items[index]),
 );
 </code></pre>
 </div>
+<div class="alert-box alert-success"><div class="alert-title">ПОРАДА / TIP</div><div class="alert-content">
+<p>In Sliver architecture, use <code class="inline-code">SliverFixedExtentList</code> or <code class="inline-code">SliverPrototypeExtentList</code> instead of generic <code class="inline-code">SliverList</code>.</p>
 <hr class="doc-divider">
-<h2 id="4--offloading-heavy-work-to-background-isolates" class="doc-h2"><a href="#4--offloading-heavy-work-to-background-isolates" class="heading-anchor">#</a> 4. Offloading Heavy Work to Background Isolates</h2>
-<p class="doc-p">Never perform blocking computations inside the UI thread or <code class="inline-code">build()</code>:</p>
+<h2 id="4--state-preservation---reordering-with--findchildindexcallback-" class="doc-h2"><a href="#4--state-preservation---reordering-with--findchildindexcallback-" class="heading-anchor">#</a> 4. State Preservation &amp; Reordering with <code class="inline-code">findChildIndexCallback</code></h2>
+<p class="doc-p">When items in a lazy list change order (e.g. user reordering, dynamic sorting, filtering), Flutter might mismatch old <code class="inline-code">Element</code> states with new indices, causing flicker or lost form input state.</p>
+<p class="doc-p">Provide <strong><code class="inline-code">findChildIndexCallback</code></strong> so the framework can map Keys directly to their new indices:</p>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -672,15 +586,114 @@ ListView.builder(
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">// ❌ BAD: Freezes the UI thread during heavy JSON parsing or sorting!
-final sortedList = heavySort(rawItems);
-
-// ✅ GOOD: Dispatches heavy CPU task to a worker isolate
-final sortedList = await Isolate.run(() =&gt; heavySort(rawItems));
+  <pre><code class="language-dart">ListView.builder(
+  itemCount: items.length,
+  findChildIndexCallback: (Key key) {
+    final valueKey = key as ValueKey&lt;String&gt;;
+    final index = items.indexWhere((item) =&gt; item.id == valueKey.value);
+    return index != -1 ? index : null;
+  },
+  itemBuilder: (context, index) {
+    final item = items[index];
+    return ItemCard(
+      key: ValueKey(item.id), // Mandatory Key for element identity
+      item: item,
+    );
+  },
+);
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="5--performance-anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#5--performance-anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 5. Performance Anti-Patterns (Strictly Prohibited)</h2>
+<h2 id="5--child-element-lifecycle---keep-alive-tuning" class="doc-h2"><a href="#5--child-element-lifecycle---keep-alive-tuning" class="heading-anchor">#</a> 5. Child Element Lifecycle &amp; Keep-Alive Tuning</h2>
+<p class="doc-p">Each list child element has three performance flags inside <code class="inline-code">SliverChildBuilderDelegate</code>:</p>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Parameter</th>
+<th>Default</th>
+<th>Performance Impact</th>
+<th>Recommended Usage</th>
+</tr></thead><tbody>
+<tr>
+<td><strong><code class="inline-code">addAutomaticKeepAlives</code></strong></td>
+<td><code class="inline-code">true</code></td>
+<td>Keeps off-screen children alive in memory if they use <code class="inline-code">AutomaticKeepAliveClientMixin</code>.</td>
+<td>Set <code class="inline-code">false</code> for simple read-only feeds to free memory immediately upon scrolling off-screen.</td>
+</tr>
+<tr>
+<td><strong><code class="inline-code">addRepaintBoundaries</code></strong></td>
+<td><code class="inline-code">true</code></td>
+<td>Wraps each child in a <code class="inline-code">RepaintBoundary</code>.</td>
+<td>Set <code class="inline-code">false</code> if children are trivial/simple and rarely repaint independently to save texture memory.</td>
+</tr>
+<tr>
+<td><strong><code class="inline-code">addSemanticIndexes</code></strong></td>
+<td><code class="inline-code">true</code></td>
+<td>Generates accessibility indices for screen readers.</td>
+<td>Keep <code class="inline-code">true</code> for accessibility compliance.</td>
+</tr>
+</tbody></table></div>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">// Optimized list for thousands of lightweight static text items
+SliverList(
+  delegate: SliverChildBuilderDelegate(
+    (context, index) =&gt; SimpleTextItem(item: items[index]),
+    childCount: items.length,
+    addAutomaticKeepAlives: false, // Discard offscreen elements immediately
+    addRepaintBoundaries: false,   // Lightweight items do not need isolated GPU layers
+  ),
+);
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="6--the--shrinkwrap--true--anti-pattern" class="doc-h2"><a href="#6--the--shrinkwrap--true--anti-pattern" class="heading-anchor">#</a> 6. The <code class="inline-code">shrinkWrap: true</code> Anti-Pattern</h2>
+<p class="doc-p">Wrapping a <code class="inline-code">ListView</code> with <code class="inline-code">shrinkWrap: true</code> inside another scrollable view causes the inner list to calculate the height of <strong>every single item upfront</strong>, destroying all benefits of lazy evaluation:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">// ❌ CRITICAL ANTI-PATTERN: Destroys lazy loading and causes frame drops!
+SingleChildScrollView(
+  child: Column(
+    children: [
+      const HeaderWidget(),
+      ListView.builder(
+        shrinkWrap: true, // Forces layout of all 500 items!
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: items.length,
+        itemBuilder: (context, index) =&gt; ItemCard(item: items[index]),
+      ),
+    ],
+  ),
+);
+
+// ✅ ARCHITECTURAL STANDARD: Slivers-First CustomScrollView
+CustomScrollView(
+  slivers: [
+    const SliverToBoxAdapter(child: HeaderWidget()),
+    SliverFixedExtentList(
+      itemExtent: 80.0,
+      delegate: SliverChildBuilderDelegate(
+        (context, index) =&gt; ItemCard(item: items[index]),
+        childCount: items.length,
+      ),
+    ),
+  ],
+);
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="7--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#7--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 7. Anti-Patterns (Strictly Prohibited)</h2>
 <div class="table-responsive"><table class="doc-table">
 <thead><tr>
 <th>Anti-Pattern</th>
@@ -688,156 +701,63 @@ final sortedList = await Isolate.run(() =&gt; heavySort(rawItems));
 <th>Corrective Action</th>
 </tr></thead><tbody>
 <tr>
-<td>Heavy computations / parsing inside <code class="inline-code">build()</code></td>
+<td><code class="inline-code">shrinkWrap: true</code> on long lists inside <code class="inline-code">SingleChildScrollView</code></td>
 <td><strong>CRITICAL</strong></td>
-<td>Offload to <code class="inline-code">Isolate.run()</code> or UseCase in Domain/Data layer.</td>
+<td>Convert to <code class="inline-code">CustomScrollView</code> with slivers.</td>
 </tr>
 <tr>
-<td>Instantiating non-const widgets in hot build paths</td>
-<td><strong>HIGH</strong></td>
-<td>Add <code class="inline-code">const</code> to all static widgets, EdgeInsets, and TextStyles.</td>
-</tr>
-<tr>
-<td>Using <code class="inline-code">BlocBuilder</code> for whole screens with fine-grained changes</td>
-<td><strong>HIGH</strong></td>
-<td>Decompose and use <code class="inline-code">BlocSelector</code> on targeted leaf widgets.</td>
-</tr>
-<tr>
-<td><code class="inline-code">SingleChildScrollView</code> + <code class="inline-code">Column</code> for large datasets</td>
-<td><strong>HIGH</strong></td>
-<td>Replace with <code class="inline-code">ListView.builder</code> or <code class="inline-code">SliverList.builder</code>.</td>
+<td>Eager <code class="inline-code">ListView(children: [...])</code> for collections &gt; 10 items</td>
+<td><strong>CRITICAL</strong></td>
+<td>Use <code class="inline-code">ListView.builder</code> or <code class="inline-code">SliverList.builder</code>.</td>
 </tr>
 <tr>
 <td>Omitting <code class="inline-code">itemExtent</code> or <code class="inline-code">prototypeItem</code> on uniform lists</td>
+<td><strong>HIGH</strong></td>
+<td>Provide <code class="inline-code">itemExtent</code> to bypass per-item layout computation.</td>
+</tr>
+<tr>
+<td>Forgetting <code class="inline-code">findChildIndexCallback</code> on dynamic reordering lists</td>
 <td><strong>MEDIUM</strong></td>
-<td>Provide <code class="inline-code">itemExtent</code> to bypass per-item layout measurement.</td>
+<td>Supply callback with <code class="inline-code">ValueKey</code> to preserve state.</td>
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="6--performance-audit-checklist" class="doc-h2"><a href="#6--performance-audit-checklist" class="heading-anchor">#</a> 6. Performance Audit Checklist</h2>
+<h2 id="8--verification-checklist" class="doc-h2"><a href="#8--verification-checklist" class="heading-anchor">#</a> 8. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">All eligible constructors, insets, and borders are annotated with <code class="inline-code">const</code>.</span>
+    <span class="check-text">All scrollable lists use lazy builder constructors (<code class="inline-code">ListView.builder</code>, <code class="inline-code">SliverList.builder</code>).</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">BlocSelector</code> is used instead of broad <code class="inline-code">BlocBuilder</code> for leaf state updates.</span>
+    <span class="check-text">Uniform height lists specify <code class="inline-code">itemExtent</code> or <code class="inline-code">prototypeItem</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Frequently repainting elements (animations/charts) are isolated with <code class="inline-code">RepaintBoundary</code>.</span>
+    <span class="check-text">Zero instances of <code class="inline-code">shrinkWrap: true</code> nested inside scrollables.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Long scrollable lists use lazy builders with known item heights.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Heavy sorting or parsing operations run inside <code class="inline-code">Isolate.run()</code> or background UseCases.</span>
+    <span class="check-text">Dynamic lists with reordering specify <code class="inline-code">findChildIndexCallback</code> and <code class="inline-code">ValueKey</code>.</span>
   </label>
 </div>
 
     </article>
 
-<div class="related-skills-section" style="margin-top: 3rem;">
-<h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
-<a href="../../../performance/performance-rendering-build/performance-rendering-build.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    performance-rendering-build ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
-    General
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Deep-dive performance optimization for Flutter widget build() methods and widget tree evaluation. Covers build...
-  </div>
-</a>
-<a href="../../../performance/performance-hub/performance-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    performance-hub ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
-    General
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Primary coordinator and master guide for Flutter performance profiling, diagnostics, and optimization. Covers ...
-  </div>
-</a>
-<a href="../../../performance/performance-lists-slivers/performance-lists-slivers.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    performance-lists-slivers ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
-    General
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    High-performance scrollable lists and Slivers optimization skill. Covers lazy evaluation in ListView.builder/S...
-  </div>
-</a>
-<a href="../../../performance/performance-expensive-operations/performance-expensive-operations.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    performance-expensive-operations ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
-    General
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Deep-dive performance guide for eliminating expensive GPU and paint operations in Flutter. Covers the true cos...
-  </div>
-</a>
-<a href="../flutter-ui-slivers/flutter-ui-slivers.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-slivers ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
-    UI Віджети та Анімації
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Slivers-first scrolling architecture skill. Enforces CustomScrollView composition, collapsible SliverAppBars (...
-  </div>
-</a>
-<a href="../flutter-ui-hub/flutter-ui-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-hub ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
-    UI Віджети та Анімації
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Primary coordinator and architecture guide for Flutter UI development. Use when designing, creating, refactori...
-  </div>
-</a>
-<a href="../flutter-ui-animations/flutter-ui-animations.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-animations ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
-    UI Віджети та Анімації
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Multi-tier Flutter animation skill covering Tier 1 (Implicit animations like AnimatedContainer, AnimatedOpacit...
-  </div>
-</a>
-</div></div>
 
 
     <footer class="footer">
-      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../../../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
+      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
     </footer>
   </main>
 

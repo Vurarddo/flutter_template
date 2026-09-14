@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>flutter-ui-performance — Agent Skill Documentation</title>
+  <title>performance-rendering-build — Agent Skill Documentation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
@@ -472,20 +472,20 @@ pre {
 <body>
   <header class="top-nav">
     <div style="display: flex; align-items: center; gap: 1.5rem;">
-      <a href="../../../../index.html" class="nav-brand">
+      <a href="../../../index.html" class="nav-brand">
         <div class="brand-logo">AG</div>
         <span>Antigravity Docs</span>
       </a>
       <div class="nav-breadcrumbs">
-        <a href="../../../../index.html" data-i18n="portal_title">Центр Документації</a>
+        <a href="../../../index.html" data-i18n="portal_title">Центр Документації</a>
         <span>/</span>
-        <span data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">UI Віджети та Анімації</span>
+        <span data-cat-ua="General" data-cat-en="General">General</span>
         <span>/</span>
-        <span style="color: var(--text-primary); font-weight: 600;">flutter-ui-performance</span>
+        <span style="color: var(--text-primary); font-weight: 600;">performance-rendering-build</span>
       </div>
     </div>
     <div class="nav-actions">
-      <a href="../../../../agents-rules.html" class="btn-icon">
+      <a href="../../../agents-rules.html" class="btn-icon">
         <span>📜</span>
         <span data-i18n="project_rules">Правила AGENTS.md</span>
       </a>
@@ -502,19 +502,19 @@ pre {
   <main class="container">
     <section class="hero">
       <div class="hero-badges">
-        <span class="badge badge-category" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">UI Віджети та Анімації</span>
+        <span class="badge badge-category" data-cat-ua="General" data-cat-en="General">General</span>
         <span class="badge badge-tag">SKILL</span>
-        <span class="badge badge-tag">#high-performance</span>
+        <span class="badge badge-tag">#deep-dive</span>
+<span class="badge badge-tag">#performance</span>
+<span class="badge badge-tag">#optimization</span>
 <span class="badge badge-tag">#flutter</span>
-<span class="badge badge-tag">#rendering</span>
-<span class="badge badge-tag">#skill</span>
-<span class="badge badge-tag">#enforcing</span>
-<span class="badge badge-tag">#60/120</span>
-<span class="badge badge-tag">#frame</span>
-<span class="badge badge-tag">#rates</span>
+<span class="badge badge-tag">#widget</span>
+<span class="badge badge-tag">#build</span>
+<span class="badge badge-tag">#methods</span>
+<span class="badge badge-tag">#tree</span>
       </div>
-      <h1 class="hero-title">flutter-ui-performance</h1>
-      <p class="hero-description">High-performance Flutter rendering skill enforcing 60/120 FPS frame rates, const constructor optimization, RepaintBoundary layer isolation, selective rebuilds via BlocSelector and ListenableBuilder, raster cache tuning, and off-main-thread compute/isolates. Use when diagnosing jank, optimizing heavy lists, animations, or custom rendering.</p>
+      <h1 class="hero-title">performance-rendering-build</h1>
+      <p class="hero-description">Deep-dive performance optimization for Flutter widget build() methods and widget tree evaluation. Covers build cost minimization, StatelessWidget decomposition vs helper methods, BlocSelector rebuild localization, AnimatedBuilder child caching, const constructor short-circuiting, and StringBuffer. Grounded in official Flutter docs.</p>
     </section>
 
     <div class="progress-card">
@@ -528,73 +528,28 @@ pre {
     </div>
 
     <article class="doc-content">
-<h1 class="doc-h1">Flutter UI Rendering Performance &amp; Optimization Guide (60/120 FPS)</h1>
-<h2 id="1--overview---when-to-apply" class="doc-h2"><a href="#1--overview---when-to-apply" class="heading-anchor">#</a> 1. Overview &amp; When to Apply</h2>
-<p class="doc-p">Use this skill whenever:</p>
-<ul class="doc-list">
-<li>Diagnosing and eliminating UI jank, stutter, or dropped frames (targeting constant 60/120 FPS).</li>
-<li>Optimizing rebuild scopes for complex screens using <code class="inline-code">BlocSelector</code> or <code class="inline-code">ListenableBuilder</code>.</li>
-<li>Applying <code class="inline-code">RepaintBoundary</code> to isolate pixel rasterization from the main layer tree.</li>
-<li>Preventing memory churn by enforcing <code class="inline-code">const</code> constructor usage.</li>
-<li>Offloading CPU-heavy data transformations (sorting, large JSON parsing) to worker isolates.</li>
-</ul>
+<h1 class="doc-h1">Flutter Build Phase &amp; Widget Tree Optimization Guide</h1>
+<h2 id="1--overview---architectural-role" class="doc-h2"><a href="#1--overview---architectural-role" class="heading-anchor">#</a> 1. Overview &amp; Architectural Role</h2>
+<p class="doc-p">The <code class="inline-code">build()</code> method is invoked frequently during the lifecycle of an application—whenever an ancestor widget rebuilds, media query changes, or state updates.</p>
+<p class="doc-p">Optimizing the <strong>Build Phase</strong> ensures the UI thread remains well under <strong>16.6ms</strong> (60 FPS) / <strong>8.3ms</strong> (120 FPS) by eliminating unnecessary computations, short-circuiting widget subtree rebuilds, and caching immutable subtrees.</p>
 <hr class="doc-divider">
-<h2 id="2--prerequisites---related-skills" class="doc-h2"><a href="#2--prerequisites---related-skills" class="heading-anchor">#</a> 2. Prerequisites &amp; Related Skills</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Relation</th>
-<th>Skill</th>
-<th>Purpose</th>
-</tr></thead><tbody>
-<tr>
-<td><strong>Performance Hub</strong></td>
-<td><a href="../../../performance/performance-hub/performance-hub.html" class="skill-ref-link" title="Primary coordinator and master guide for Flutter performance profiling, diagnostics, and optimization. Covers Flutter DevTools (Performance View, Widget Rebuild Tracker, Highlight Repaints), CPU/GPU jank troubleshooting, Profile mode benchmarking, and routing to specialized sub-skills.">performance-hub <span class="ext-icon">↗</span></a></td>
-<td>Master performance architecture &amp; DevTools profiling.</td>
-</tr>
-<tr>
-<td><strong>Build Optimization</strong></td>
-<td><a href="../../../performance/performance-rendering-build/performance-rendering-build.html" class="skill-ref-link" title="Deep-dive performance optimization for Flutter widget build() methods and widget tree evaluation. Covers build cost minimization, StatelessWidget decomposition vs helper methods, BlocSelector rebuild localization, AnimatedBuilder child caching, const constructor short-circuiting, and StringBuffer. Grounded in official Flutter docs.">performance-rendering-build <span class="ext-icon">↗</span></a></td>
-<td><code class="inline-code">build()</code> cost reduction, child caching, and <code class="inline-code">StatelessWidget</code>.</td>
-</tr>
-<tr>
-<td><strong>Expensive Operations</strong></td>
-<td><a href="../../../performance/performance-expensive-operations/performance-expensive-operations.html" class="skill-ref-link" title="Deep-dive performance guide for eliminating expensive GPU and paint operations in Flutter. Covers the true cost of saveLayer(), replacing Opacity with FadeTransition and alpha colors, clipping optimizations (BoxDecoration vs ClipRRect), RepaintBoundary placement rules, and BackdropFilter limits. Grounded in official Flutter docs.">performance-expensive-operations <span class="ext-icon">↗</span></a></td>
-<td>Eliminating <code class="inline-code">saveLayer()</code>, <code class="inline-code">Opacity</code>, and clipping jank.</td>
-</tr>
-<tr>
-<td><strong>Lists &amp; Slivers</strong></td>
-<td><a href="../../../performance/performance-lists-slivers/performance-lists-slivers.html" class="skill-ref-link" title="High-performance scrollable lists and Slivers optimization skill. Covers lazy evaluation in ListView.builder/SliverList.builder, fixed extent optimization with itemExtent and prototypeItem, child lifecycle and state preservation via findChildIndexCallback, AutomaticKeepAliveClientMixin tuning, and elimination of shrinkWrap nested list anti-patterns. Grounded in official Flutter docs.">performance-lists-slivers <span class="ext-icon">↗</span></a></td>
-<td><code class="inline-code">itemExtent</code>, <code class="inline-code">prototypeItem</code>, and element recycling.</td>
-</tr>
-<tr>
-<td><strong>Parent Hub</strong></td>
-<td><a href="../flutter-ui-hub/flutter-ui-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter UI development. Use when designing, creating, refactoring, or auditing UI widgets, pages, layouts, and animations. Serves as the central entry point and routes to specialized sub-skills for widgets, performance, theming, slivers, responsiveness, and motion design.">flutter-ui-hub <span class="ext-icon">↗</span></a></td>
-<td>High-level presentation rules and routing.</td>
-</tr>
-<tr>
-<td><strong>Animations</strong></td>
-<td><a href="../flutter-ui-animations/flutter-ui-animations.html" class="skill-ref-link" title="Multi-tier Flutter animation skill covering Tier 1 (Implicit animations like AnimatedContainer, AnimatedOpacity, AnimatedSwitcher) and Tier 2 (Explicit choreography with AnimationController, CurvedAnimation, TweenSequence, Staggered transitions, and static child parameter reuse). Use when building smooth 60/120 FPS UI transitions, micro-interactions, or complex choreographies.">flutter-ui-animations <span class="ext-icon">↗</span></a></td>
-<td>High-performance animation choreography.</td>
-</tr>
-<tr>
-<td><strong>Slivers</strong></td>
-<td><a href="../flutter-ui-slivers/flutter-ui-slivers.html" class="skill-ref-link" title="Slivers-first scrolling architecture skill. Enforces CustomScrollView composition, collapsible SliverAppBars (pinned/floating/stretch), SliverList.builder, SliverGrid, custom SliverPersistentHeaders with persistent tabs, and lazy viewport building. Use when creating complex scrollable views, dashboards, or parallax headers.">flutter-ui-slivers <span class="ext-icon">↗</span></a></td>
-<td>Lazy scrolling list optimizations.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="3--core-pillars-of-flutter-ui-performance" class="doc-h2"><a href="#3--core-pillars-of-flutter-ui-performance" class="heading-anchor">#</a> 3. Core Pillars of Flutter UI Performance</h2>
+<h2 id="2--core-optimization-techniques" class="doc-h2"><a href="#2--core-optimization-techniques" class="heading-anchor">#</a> 2. Core Optimization Techniques</h2>
 <div class="mermaid-container"><div class="mermaid">graph TD
-    A["Flutter Render Pipeline"] --> B["1. Build Phase (Widget Tree)"]
-    A --> C["2. Layout Phase (RenderObject Tree)"]
-    A --> D["3. Paint Phase (Layer Tree & Rasterizer)"]
-
-    B -->|Optimize with| O1["const constructors & BlocSelector"]
-    C -->|Optimize with| O2["Precise Constraints & LayoutBuilder"]
-    D -->|Optimize with| O3["RepaintBoundary & Cached Shaders"]
+    A["Minimizing build() Cost"] --> B["1. Extract StatelessWidget Classes<br/>(Bypass Helper Methods)"]
+    A --> C["2. Target State Rebuilds<br/>(BlocSelector & buildWhen)"]
+    A --> D["3. Short-Circuit Subtrees<br/>(const constructors)"]
+    A --> E["4. Cache Subtrees in Animations<br/>(AnimatedBuilder child parameter)"]
+    A --> F["5. Efficient String Concatenation<br/>(StringBuffer)"]
 </div></div>
-<h3 class="doc-h3">3.1 Rebuild Scope Minimization with <code class="inline-code">BlocSelector</code></h3>
-<p class="doc-p">Do NOT rebuild an entire page when only a single property changes:</p>
+<hr class="doc-divider">
+<h2 id="3---statelesswidget--classes-vs-helper-methods" class="doc-h2"><a href="#3---statelesswidget--classes-vs-helper-methods" class="heading-anchor">#</a> 3. <code class="inline-code">StatelessWidget</code> Classes vs Helper Methods</h2>
+<p class="doc-p">Official Flutter Documentation &amp; YouTube Guideline: <a href="https://www.youtube.com/watch?v=IOyq-eTRhvo" class="doc-link">Widgets vs Helper Methods</a>.</p>
+<h3 class="doc-h3">Why Helper Methods (<code class="inline-code">Widget _buildHeader()</code>) are an Anti-Pattern:</h3>
+<ol class="doc-ordered-list">
+<li><strong>No Element Lifecycle:</strong> Flutter sees helper methods as part of the parent&#039;s single <code class="inline-code">build()</code> method. When <code class="inline-code">setState()</code> or BLoC emits in the parent, all helper methods are forcibly re-executed.</li>
+<li><strong>Cannot Use <code class="inline-code">const</code>:</strong> Functions cannot be marked <code class="inline-code">const</code>, forcing element allocation on every build frame.</li>
+<li><strong>No Granular DevTools Profiling:</strong> Helper methods do not show up as discrete nodes in the Flutter Inspector.</li>
+</ul>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -603,46 +558,93 @@ pre {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">// ❌ BAD: Rebuilds the whole tree whenever ANY property in HomeState changes!
-BlocBuilder&lt;HomeBloc, HomeState&gt;(
-  builder: (context, state) {
-    return Badge(count: state.unreadNotificationCount);
-  },
-);
-
-// ✅ GOOD: Rebuilds ONLY when unreadNotificationCount specifically changes!
-BlocSelector&lt;HomeBloc, HomeState, int&gt;(
-  selector: (state) =&gt; state.unreadNotificationCount,
-  builder: (context, unreadCount) {
-    return NotificationBadge(count: unreadCount);
-  },
-);
-</code></pre>
-</div>
-<h3 class="doc-h3">3.2 Raster Layer Isolation with <code class="inline-code">RepaintBoundary</code></h3>
-<p class="doc-p">Wrap frequently repainting widgets (e.g. custom visualizers, live counters, complex animations) in <code class="inline-code">RepaintBoundary</code> to prevent repainting their parent and sibling widgets:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class LiveTradingChartWrapper extends StatelessWidget {
-  const LiveTradingChartWrapper({super.key});
+  <pre><code class="language-dart">// ❌ BAD: Re-executes on every parent rebuild and cannot be const!
+class BadParentView extends StatelessWidget {
+  const BadParentView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const RepaintBoundary(
-      child: LiveTradingCandlestickChart(),
+    return Column(
+      children: [
+        _buildHeader(), // Inefficient function call
+        _buildBody(),
+      ],
+    );
+  }
+
+  Widget _buildHeader() =&gt; const Text(&#039;Header&#039;);
+  Widget _buildBody() =&gt; const Text(&#039;Body&#039;);
+}
+
+// ✅ GOOD: Discrete StatelessWidget classes with const constructors!
+class GoodParentView extends StatelessWidget {
+  const GoodParentView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        HeaderWidget(), // Short-circuits subtree traversal!
+        BodyWidget(),
+      ],
+    );
+  }
+}
+
+class HeaderWidget extends StatelessWidget {
+  const HeaderWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) =&gt; const Text(&#039;Header&#039;);
+}
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="4--rebuild-scope-localization-with--blocselector-" class="doc-h2"><a href="#4--rebuild-scope-localization-with--blocselector-" class="heading-anchor">#</a> 4. Rebuild Scope Localization with <code class="inline-code">BlocSelector</code></h2>
+<p class="doc-p">Do not place <code class="inline-code">BlocBuilder</code> high up in the widget hierarchy if only a tiny piece of the UI changes. Use <code class="inline-code">BlocSelector</code> or <code class="inline-code">BlocBuilder.buildWhen</code> to restrict rebuilds to the exact leaf node:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">// ❌ BAD: Entire dashboard screen rebuilds when only user unread count updates!
+BlocBuilder&lt;DashboardBloc, DashboardState&gt;(
+  builder: (context, state) {
+    return Column(
+      children: [
+        HeavyAnalyticsChart(data: state.chartData), // Rebuilds unnecessarily!
+        UnreadBadge(count: state.unreadCount),
+      ],
+    );
+  },
+);
+
+// ✅ GOOD: Only the badge widget rebuilds when unreadCount changes!
+class DashboardView extends StatelessWidget {
+  const DashboardView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const HeavyAnalyticsChartWrapper(),
+        BlocSelector&lt;DashboardBloc, DashboardState, int&gt;(
+          selector: (state) =&gt; state.unreadCount,
+          builder: (context, count) =&gt; UnreadBadge(count: count),
+        ),
+      ],
     );
   }
 }
 </code></pre>
 </div>
-<h3 class="doc-h3">3.3 List Item Lazy Rendering</h3>
-<p class="doc-p">Never build unbounded lists inside <code class="inline-code">SingleChildScrollView</code> + <code class="inline-code">Column</code>. Always use <code class="inline-code">ListView.builder</code> or <code class="inline-code">SliverList.builder</code> to ensure widgets outside the viewport are not instantiated.</p>
+<hr class="doc-divider">
+<h2 id="5---animatedbuilder-----transitionbuilder--child-caching" class="doc-h2"><a href="#5---animatedbuilder-----transitionbuilder--child-caching" class="heading-anchor">#</a> 5. <code class="inline-code">AnimatedBuilder</code> &amp; <code class="inline-code">TransitionBuilder</code> Child Caching</h2>
+<p class="doc-p">Official Documentation: <a href="https://api.flutter.dev/flutter/widgets/AnimatedBuilder-class.html#performance-optimizations" class="doc-link">AnimatedBuilder Performance Optimizations</a>.</p>
+<p class="doc-p">If an animation only transforms (rotates, scales, slides, fades) a child widget, pass the child into the <code class="inline-code">child</code> parameter of <code class="inline-code">AnimatedBuilder</code> rather than constructing it inside the <code class="inline-code">builder</code> closure.</p>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -651,19 +653,34 @@ BlocSelector&lt;HomeBloc, HomeState, int&gt;(
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">// ✅ GOOD: Creates elements on-demand as the user scrolls
-ListView.builder(
-  itemCount: items.length,
-  itemExtent: 72.0, // Fixed extent gives instantaneous scroll offset calculations!
-  itemBuilder: (context, index) {
-    return ItemListTile(item: items[index]);
+  <pre><code class="language-dart">// ❌ BAD: HeavyChildWidget is reconstructed 60/120 times per second!
+AnimatedBuilder(
+  animation: _controller,
+  builder: (context, child) {
+    return Transform.rotate(
+      angle: _controller.value * 2.0 * math.pi,
+      child: const HeavyChildWidget(), // Rebuilt every animation tick!
+    );
+  },
+);
+
+// ✅ GOOD: HeavyChildWidget is built ONCE and passed into the builder closure
+AnimatedBuilder(
+  animation: _controller,
+  child: const HeavyChildWidget(), // Built ONCE
+  builder: (context, child) {
+    return Transform.rotate(
+      angle: _controller.value * 2.0 * math.pi,
+      child: child, // Reuses cached instance!
+    );
   },
 );
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="4--offloading-heavy-work-to-background-isolates" class="doc-h2"><a href="#4--offloading-heavy-work-to-background-isolates" class="heading-anchor">#</a> 4. Offloading Heavy Work to Background Isolates</h2>
-<p class="doc-p">Never perform blocking computations inside the UI thread or <code class="inline-code">build()</code>:</p>
+<h2 id="6--efficient-string-building-with--stringbuffer-" class="doc-h2"><a href="#6--efficient-string-building-with--stringbuffer-" class="heading-anchor">#</a> 6. Efficient String Building with <code class="inline-code">StringBuffer</code></h2>
+<p class="doc-p">Official Flutter Guideline: <a href="https://docs.flutter.dev/perf/best-practices#use-stringbuffer-for-efficient-string-building" class="doc-link">Use StringBuffer</a>.</p>
+<p class="doc-p">When building strings inside loops or complex formatting pipelines, avoid repeated string concatenation with <code class="inline-code">+</code> which creates intermediate objects in memory:</p>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -672,15 +689,27 @@ ListView.builder(
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">// ❌ BAD: Freezes the UI thread during heavy JSON parsing or sorting!
-final sortedList = heavySort(rawItems);
+  <pre><code class="language-dart">// ❌ BAD: Creates new String instances on every iteration
+String buildPayload(List&lt;Item&gt; items) {
+  String result = &#039;&#039;;
+  for (final item in items) {
+    result += &#039;${item.id}:${item.name},&#039;;
+  }
+  return result;
+}
 
-// ✅ GOOD: Dispatches heavy CPU task to a worker isolate
-final sortedList = await Isolate.run(() =&gt; heavySort(rawItems));
+// ✅ GOOD: Collects chunks efficiently in a single buffer
+String buildPayload(List&lt;Item&gt; items) {
+  final buffer = StringBuffer();
+  for (final item in items) {
+    buffer.write(&#039;${item.id}:${item.name},&#039;);
+  }
+  return buffer.toString();
+}
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="5--performance-anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#5--performance-anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 5. Performance Anti-Patterns (Strictly Prohibited)</h2>
+<h2 id="7--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#7--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 7. Anti-Patterns (Strictly Prohibited)</h2>
 <div class="table-responsive"><table class="doc-table">
 <thead><tr>
 <th>Anti-Pattern</th>
@@ -688,156 +717,75 @@ final sortedList = await Isolate.run(() =&gt; heavySort(rawItems));
 <th>Corrective Action</th>
 </tr></thead><tbody>
 <tr>
-<td>Heavy computations / parsing inside <code class="inline-code">build()</code></td>
+<td>Heavy sorting, filtering, or JSON decoding inside <code class="inline-code">build()</code></td>
 <td><strong>CRITICAL</strong></td>
-<td>Offload to <code class="inline-code">Isolate.run()</code> or UseCase in Domain/Data layer.</td>
+<td>Offload to background UseCase or <code class="inline-code">Isolate.run()</code>.</td>
 </tr>
 <tr>
-<td>Instantiating non-const widgets in hot build paths</td>
+<td>Using helper methods (<code class="inline-code">Widget _buildSection()</code>)</td>
 <td><strong>HIGH</strong></td>
-<td>Add <code class="inline-code">const</code> to all static widgets, EdgeInsets, and TextStyles.</td>
+<td>Extract into separate <code class="inline-code">StatelessWidget</code> classes.</td>
 </tr>
 <tr>
-<td>Using <code class="inline-code">BlocBuilder</code> for whole screens with fine-grained changes</td>
+<td>Rebuilding heavy static subtrees inside <code class="inline-code">AnimatedBuilder</code></td>
 <td><strong>HIGH</strong></td>
-<td>Decompose and use <code class="inline-code">BlocSelector</code> on targeted leaf widgets.</td>
+<td>Pass static subtrees to the <code class="inline-code">child</code> argument.</td>
 </tr>
 <tr>
-<td><code class="inline-code">SingleChildScrollView</code> + <code class="inline-code">Column</code> for large datasets</td>
+<td>Using root <code class="inline-code">BlocBuilder</code> for localized child changes</td>
 <td><strong>HIGH</strong></td>
-<td>Replace with <code class="inline-code">ListView.builder</code> or <code class="inline-code">SliverList.builder</code>.</td>
+<td>Use targeted <code class="inline-code">BlocSelector</code> on leaf widgets.</td>
 </tr>
 <tr>
-<td>Omitting <code class="inline-code">itemExtent</code> or <code class="inline-code">prototypeItem</code> on uniform lists</td>
+<td>Overriding <code class="inline-code">operator ==</code> on mutable or complex widgets</td>
 <td><strong>MEDIUM</strong></td>
-<td>Provide <code class="inline-code">itemExtent</code> to bypass per-item layout measurement.</td>
+<td>Let Flutter&#039;s Element tree diffing handle equality naturally.</td>
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="6--performance-audit-checklist" class="doc-h2"><a href="#6--performance-audit-checklist" class="heading-anchor">#</a> 6. Performance Audit Checklist</h2>
+<h2 id="8--verification-checklist" class="doc-h2"><a href="#8--verification-checklist" class="heading-anchor">#</a> 8. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">All eligible constructors, insets, and borders are annotated with <code class="inline-code">const</code>.</span>
+    <span class="check-text">Zero helper builder methods (<code class="inline-code">Widget _buildX()</code>) in widget files.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">BlocSelector</code> is used instead of broad <code class="inline-code">BlocBuilder</code> for leaf state updates.</span>
+    <span class="check-text">Leaf UI components use <code class="inline-code">BlocSelector</code> to isolate rebuilds.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Frequently repainting elements (animations/charts) are isolated with <code class="inline-code">RepaintBoundary</code>.</span>
+    <span class="check-text">All <code class="inline-code">AnimatedBuilder</code> instances pass static subtrees via the <code class="inline-code">child</code> parameter.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Long scrollable lists use lazy builders with known item heights.</span>
+    <span class="check-text"><code class="inline-code">const</code> constructors used across all static widgets and styles.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Heavy sorting or parsing operations run inside <code class="inline-code">Isolate.run()</code> or background UseCases.</span>
+    <span class="check-text">String concatenation in loops uses <code class="inline-code">StringBuffer</code>.</span>
   </label>
 </div>
 
     </article>
 
-<div class="related-skills-section" style="margin-top: 3rem;">
-<h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
-<a href="../../../performance/performance-rendering-build/performance-rendering-build.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    performance-rendering-build ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
-    General
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Deep-dive performance optimization for Flutter widget build() methods and widget tree evaluation. Covers build...
-  </div>
-</a>
-<a href="../../../performance/performance-hub/performance-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    performance-hub ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
-    General
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Primary coordinator and master guide for Flutter performance profiling, diagnostics, and optimization. Covers ...
-  </div>
-</a>
-<a href="../../../performance/performance-lists-slivers/performance-lists-slivers.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    performance-lists-slivers ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
-    General
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    High-performance scrollable lists and Slivers optimization skill. Covers lazy evaluation in ListView.builder/S...
-  </div>
-</a>
-<a href="../../../performance/performance-expensive-operations/performance-expensive-operations.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    performance-expensive-operations ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
-    General
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Deep-dive performance guide for eliminating expensive GPU and paint operations in Flutter. Covers the true cos...
-  </div>
-</a>
-<a href="../flutter-ui-slivers/flutter-ui-slivers.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-slivers ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
-    UI Віджети та Анімації
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Slivers-first scrolling architecture skill. Enforces CustomScrollView composition, collapsible SliverAppBars (...
-  </div>
-</a>
-<a href="../flutter-ui-hub/flutter-ui-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-hub ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
-    UI Віджети та Анімації
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Primary coordinator and architecture guide for Flutter UI development. Use when designing, creating, refactori...
-  </div>
-</a>
-<a href="../flutter-ui-animations/flutter-ui-animations.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-animations ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
-    UI Віджети та Анімації
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Multi-tier Flutter animation skill covering Tier 1 (Implicit animations like AnimatedContainer, AnimatedOpacit...
-  </div>
-</a>
-</div></div>
 
 
     <footer class="footer">
-      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../../../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
+      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
     </footer>
   </main>
 
