@@ -743,14 +743,22 @@ description: &gt;-
 <hr class="doc-divider">
 <h2 id="7--core-authoring-principles" class="doc-h2"><a href="#7--core-authoring-principles" class="heading-anchor">#</a> 7. Core Authoring Principles</h2>
 <ol class="doc-ordered-list">
-<li><strong>Progressive Disclosure:</strong></li>
-<li>Keep the root <code class="inline-code">SKILL.md</code> concise and high-signal (under 250–350 lines).</li>
-<li>Move large reference manuals, exhaustive API docs, or heavy schemas into <code class="inline-code">references/</code> and link to them using relative links (<code class="inline-code">./references/doc.md</code>).</li>
-<li>Move large multi-file boilerplate, full class implementations (&gt;50–100 lines), or complete architectural templates into <code class="inline-code">examples/</code> and link to them (<code class="inline-code">./examples/sample.dart</code>).</li>
+<li><strong>Progressive Disclosure &amp; The Router Pattern:</strong></li>
+<li>Keep the root <code class="inline-code">SKILL.md</code> concise and high-signal (target <strong>≤ 100–150 lines</strong>).</li>
+<li>When a skill grows &quot;thick&quot; (150+ lines or multiple sub-jobs mixed together), convert <code class="inline-code">SKILL.md</code> into a <strong>Job Router</strong>:</li>
+<li>YAML Frontmatter with exhaustive triggers and keywords.</li>
+<li>High-level architectural overview and non-negotiable constraints.</li>
+<li><strong>Job Routing Table</strong> mapping specific scenarios to targeted files in <code class="inline-code">references/</code>, <code class="inline-code">examples/</code>, or <code class="inline-code">resources/</code>.</li>
+<li>Explicit agent directive: <em>&quot;Read ONLY the referenced file matching your current task; do not load everything at once.&quot;</em></li>
+<li>Move large reference manuals or exhaustive API docs into <code class="inline-code">references/</code> (<code class="inline-code">./references/doc.md</code>).</li>
+<li>Move complete class implementations, multi-file boilerplates, or code templates (&gt;30–50 lines) into <code class="inline-code">examples/</code> (<code class="inline-code">./examples/sample.dart</code>).</li>
+<li>Move configuration templates into <code class="inline-code">resources/</code> (<code class="inline-code">./resources/config.json</code>).</li>
+<li><strong>Zero-Loss Rule for Refactoring:</strong></li>
+<li>When restructuring thick skills, NEVER change what the skill does or drop any triggers, rules, or architectural invariants. Change ONLY the physical organization.</li>
 <li><strong>Zero Redundant Boilerplate:</strong></li>
 <li>Focus strictly on project conventions, exact architecture patterns, constraints, and non-obvious nuances.</li>
 <li><strong>Actionable Code Examples:</strong></li>
-<li>Provide concrete, copy-paste-ready before/after code snippets reflecting production standards. Keep short snippets inline; offload extensive reference files to <code class="inline-code">examples/</code>.</li>
+<li>Provide concrete, copy-paste-ready before/after code snippets reflecting production standards. Keep short snippets inline (10–30 lines); offload extensive reference files to <code class="inline-code">examples/</code>.</li>
 <li><strong>Anti-Patterns &amp; Severity Matrix:</strong></li>
 <li>Include a dedicated table listing common mistakes, why they fail, their severity (<code class="inline-code">CRITICAL</code>, <code class="inline-code">HIGH</code>, <code class="inline-code">MEDIUM</code>), and the explicit remedy.</li>
 <li><strong>Domain-Agnostic &amp; Abstract Naming Rule (Universal Portability):</strong></li>

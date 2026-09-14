@@ -29,10 +29,7 @@ Use this skill whenever:
 
 ## 3. Platform Driver Setup (`test_driver/integration_test.dart`)
 
-For automated CI/CD runners and Web testing:
-
 ```dart
-// test_driver/integration_test.dart
 import 'package:integration_test/integration_test_driver.dart';
 
 Future<void> main() => integrationDriver();
@@ -40,220 +37,33 @@ Future<void> main() => integrationDriver();
 
 ---
 
-## 4. End-to-End Integration Test Implementation
+## 4. Reference Implementations (`examples/`)
 
-### 4.1 UI Kit Showcase Smoke Test (`integration_test/uikit_page_test.dart`)
-Mandatory integration test generated during project bootstrap:
-
-```dart
-// integration_test/uikit_page_test.dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
-import 'package:integration_test/integration_test.dart';
-
-import 'package:flutter_template/main.dart' as app;
-
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() async {
-    await GetIt.I.reset();
-  });
-
-  tearDown(() async {
-    await GetIt.I.reset();
-  });
-
-  group('UiKitPage Integration Smoke Test', () {
-    testWidgets('renders UiKitPage, switches theme modes, and validates UI sections', (tester) async {
-      // 1. Launch the actual application
-      app.main();
-      await tester.pumpAndSettle();
-
-      // 2. Verify UiKit landing is displayed
-      expect(find.text('UI Kit & Design System'), findsWidgets);
-
-      // 3. Toggle Theme Switcher (System -> Light -> Dark)
-      final darkThemeButton = find.text('Dark');
-      if (darkThemeButton.evaluate().isNotEmpty) {
-        await tester.tap(darkThemeButton);
-        await tester.pumpAndSettle();
-      }
-
-      final lightThemeButton = find.text('Light');
-      if (lightThemeButton.evaluate().isNotEmpty) {
-        await tester.tap(lightThemeButton);
-        await tester.pumpAndSettle();
-      }
-
-      // 4. Scroll through UI showcase sections smoothly without overflow
-      final scrollable = find.byType(Scrollable).first;
-      await tester.drag(scrollable, const Offset(0, -600));
-      await tester.pumpAndSettle();
-
-      // 5. Verify Buttons & Form Controls exist
-      expect(find.byType(FilledButton), findsWidgets);
-      expect(find.byType(OutlinedButton), findsWidgets);
-    });
-  });
-}
-```
+- **UiKit Showcase Smoke Test:** [examples/uikit_integration_test.dart](examples/uikit_integration_test.dart)
+  - Full smoke test verifying page rendering, theme toggle (Light/Dark), and scrolling.
+- **End-to-End User Journey:** [examples/item_journey_integration_test.dart](examples/item_journey_integration_test.dart)
+  - Full flow with `app.main()`, DI reset in `setUp`/`tearDown`, and `tester.scrollUntilVisible`.
 
 ---
 
-### 4.2 Feature User Journey Test (`integration_test/item_journey_test.dart`)
+## 5. Execution Commands Across Platforms
 
-```dart
-// integration_test/item_journey_test.dart
-import 'package:flutter/material.dart';
-import 'package:flutter_test/flutter_test.dart';
-import 'package:get_it/get_it.dart';
-import 'package:integration_test/integration_test.dart';
-
-import 'package:flutter_template/main.dart' as app;
-
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() async {
-    // Reset DI between tests to avoid container pollution
-    await GetIt.I.reset();
-  });
-
-  tearDown(() async {
-    await GetIt.I.reset();
-  });
-
-  group('End-to-End Item User Journey', () {
-    testWidgets('user can browse items, open details, and interact', (tester) async {
-      // 1. Launch the actual application
-      app.main();
-      await tester.pumpAndSettle();
-
-      // 2. Verify Home Screen is visible
-      final homeView = find.byKey(const ValueKey('home_page_view'));
-      expect(homeView, findsOneWidget);
-
-      // 3. Scroll to target item if off-screen (works across Mobile, Web, Desktop)
-      final targetItemKey = const ValueKey('item_card_item_1');
-      await tester.scrollUntilVisible(
-        find.byKey(targetItemKey),
-        300.0,
-        scrollable: find.byType(Scrollable).first,
-      );
-      await tester.pumpAndSettle();
-
-      // 4. Tap item card to navigate to Details
-      await tester.tap(find.byKey(targetItemKey));
-      await tester.pumpAndSettle();
-
-      // 5. Verify Details Screen navigation
-      final detailsView = find.byKey(const ValueKey('item_details_page_view'));
-      expect(detailsView, findsOneWidget);
-
-      // 6. Tap action button
-      final actionButton = find.byKey(const ValueKey('item_action_button'));
-      expect(actionButton, findsOneWidget);
-      await tester.tap(actionButton);
-      await tester.pumpAndSettle();
-
-      // 7. Verify confirmation SnackBar
-      expect(find.byKey(const ValueKey('action_success_snackbar')), findsOneWidget);
-    });
-  });
-}
-```
-
----
-
-## 5. Cross-Platform Viewport Configuration
-
-When testing Web and Desktop form factors, explicitly set the test surface size:
-
-```dart
-// Helper for responsive testing
-Future<void> setTestViewport(
-  WidgetTester tester, {
-  required double width,
-  required double height,
-}) async {
-  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  await binding.setSurfaceSize(Size(width, height));
-  tester.view.physicalSize = Size(width, height);
-  tester.view.devicePixelRatio = 1.0;
-  addTearDown(() {
-    tester.view.resetPhysicalSize();
-    tester.view.resetDevicePixelRatio();
-  });
-}
-
-// Usage in tests:
-testWidgets('renders desktop side navigation on wide screens', (tester) async {
-  await setTestViewport(tester, width: 1920, height: 1080); // Full HD Desktop / Web
-  app.main();
-  await tester.pumpAndSettle();
-
-  expect(find.byKey(const ValueKey('desktop_side_nav_rail')), findsOneWidget);
-});
-```
-
----
-
-## 6. CLI Execution Matrix Across Platforms
-
-### 📱 Mobile (Android / iOS)
 ```bash
-# Run on connected Android or iOS device / simulator
-flutter test integration_test/item_journey_test.dart -d <device_id>
+# Mobile (Android / iOS)
+flutter test integration_test/uikit_page_test.dart -d emulator-5554
+
+# Web (Headless Chrome)
+flutter drive --driver=test_driver/integration_test.dart --target=integration_test/uikit_page_test.dart -d chrome
+
+# Desktop (macOS, Windows, Linux)
+flutter test integration_test/uikit_page_test.dart -d macos
 ```
-
-### 🌐 Web (Headless Chrome)
-```bash
-# Run integration test on Web with ChromeDriver
-chromedriver --port=4444 &
-flutter drive \
-  --driver=test_driver/integration_test.dart \
-  --target=integration_test/item_journey_test.dart \
-  -d chrome
-```
-
-### 💻 Desktop (macOS, Windows, Linux)
-```bash
-# macOS Desktop
-flutter test integration_test/item_journey_test.dart -d macos
-
-# Windows Desktop
-flutter test integration_test/item_journey_test.dart -d windows
-
-# Linux Desktop
-flutter test integration_test/item_journey_test.dart -d linux
-```
-
-## 7. MCP Tooling & Driver Automation
-
-Antigravity IDE provides direct MCP integration with Dart VM and Flutter driver endpoints:
-- **Programmatic Driver Commands (`flutter_driver_command`):** Dispatch automated driver commands and UI gestures directly to running apps.
-- **VM Service Diagnostics (`vm_service`):** Capture VM timeline events, frame render benchmarks, and isolate states during end-to-end test execution.
-- **Tooling Guide:** See [mcp-tooling-hub](../../tooling/mcp-tooling-hub/SKILL.md).
 
 ---
 
-## 8. Anti-Patterns (Strictly Prohibited)
+## 6. Verification Checklist
 
-| Anti-Pattern | Severity | Corrective Action |
-| :--- | :--- | :--- |
-| Hardcoding platform-specific paths (e.g. `/sdcard/...`) | **CRITICAL** | Use `path_provider` or memory storage for cross-platform support. |
-| Forgetting `GetIt.I.reset()` between test cases | **CRITICAL** | Call `GetIt.I.reset()` in `setUp()` and `tearDown()`. |
-| Flaky timing using `Future.delayed(Duration(seconds: 5))` | **HIGH** | Always use `tester.pumpAndSettle()` with condition assertions. |
-| Relying on fixed mobile screen dimensions in desktop tests | **MEDIUM** | Use `setTestViewport(tester, width: 1440, height: 900)` for desktop. |
-
----
-
-## 9. Verification Checklist
-
-- [ ] `IntegrationTestWidgetsFlutterBinding.ensureInitialized()` is called at start of test.
-- [ ] Test executes end-to-end user flow without mocking presentation layer.
-- [ ] Targets are located via `ValueKey`.
-- [ ] Tested on Mobile, Web, and Desktop targets.
-- [ ] CI pipeline runs integration tests using `flutter drive` or `flutter test`.
+- [ ] `IntegrationTestWidgetsFlutterBinding.ensureInitialized()` called in `main()`.
+- [ ] `GetIt.I.reset()` called in `setUp()` and `tearDown()` to prevent state bleed.
+- [ ] Target elements located via unique `ValueKey` identifiers.
+- [ ] Tests execute cleanly on targeted platform drivers.

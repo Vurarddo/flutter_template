@@ -564,287 +564,48 @@ pre {
 </tbody></table></div>
 <hr class="doc-divider">
 <h2 id="3--technical-constraints---web-runner-limitations" class="doc-h2"><a href="#3--technical-constraints---web-runner-limitations" class="heading-anchor">#</a> 3. Technical Constraints &amp; Web-Runner Limitations</h2>
-<p class="doc-p">Because Flutter Widget Previewer executes preview functions inside a constrained web-based compilation environment:</p>
 <ol class="doc-ordered-list">
-<li><strong>Zero Native APIs (<code class="inline-code">dart:io</code> / <code class="inline-code">dart:ffi</code>):</strong></li>
-<li><strong>STRICTLY PROHIBITED:</strong> Invoking <code class="inline-code">dart:io</code> (<code class="inline-code">File</code>, <code class="inline-code">Directory</code>, <code class="inline-code">Platform</code>) or <code class="inline-code">dart:ffi</code> inside previewed code paths.</li>
-<li>If a widget depends on native plugins, isolate them behind abstract interfaces and pass mock implementations.</li>
-<li><strong>Zero Live Network Calls:</strong></li>
-<li>Do NOT execute active Dio/Retrofit requests inside previews. Always supply static mock entities (<code class="inline-code">*.mock()</code>) or static DTOs.</li>
-<li><strong>Asset Path Safety:</strong></li>
-<li>Use package-based asset resolvers (<code class="inline-code">packages/&lt;app_package_name&gt;/assets/...</code> or <code class="inline-code">package:your_app/assets/...</code>) where local relative paths fail under mock web servers.</li>
-<li><strong>Target Function Requirements:</strong></li>
-<li>Apply <code class="inline-code">@Preview</code> only to top-level functions, static methods within a class, or public constructors/factories that have no required parameters and return a <code class="inline-code">Widget</code> or <code class="inline-code">WidgetBuilder</code>. All callback arguments in annotations must be public and <code class="inline-code">const</code>.</li>
-<li><strong>Explicit Viewport Sizing:</strong></li>
-<li>Always supply explicit constraints (<code class="inline-code">size: Size(width, height)</code>) in <code class="inline-code">@Preview</code> for unconstrained widgets to prevent viewport explosion.</li>
+<li><strong>Zero Native APIs (<code class="inline-code">dart:io</code> / <code class="inline-code">dart:ffi</code>):</strong> Preview runs in a mock environment; isolate native dependencies behind interfaces.</li>
+<li><strong>Zero Live Network Calls:</strong> Pass static mock entities (<code class="inline-code">*.mock()</code>) or static DTOs.</li>
+<li><strong>Explicit Viewport Sizing:</strong> Always supply <code class="inline-code">size: Size(width, height)</code> in <code class="inline-code">@Preview</code> to prevent unconstrained viewport explosion.</li>
+<li><strong>Top-Level Function Requirement:</strong> Apply <code class="inline-code">@Preview</code> only to top-level functions or public static methods with no required parameters returning a <code class="inline-code">Widget</code>.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="4--standard-preview-wrapper-component" class="doc-h2"><a href="#4--standard-preview-wrapper-component" class="heading-anchor">#</a> 4. Standard Preview Wrapper Component</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_template/presentation/theme/app_theme.dart&#039;;
-
-/// Standard container providing MaterialApp context, theme, and scaffold for @Preview functions.
-class PreviewWrapper extends StatelessWidget {
-  final Widget child;
-  final Brightness brightness;
-  final String? title;
-
-  const PreviewWrapper({
-    super.key,
-    required this.child,
-    this.brightness = Brightness.light,
-    this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: brightness == Brightness.light ? AppTheme.light : AppTheme.dark,
-      home: Scaffold(
-        appBar: title != null ? AppBar(title: Text(title!)) : null,
-        body: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: child,
-          ),
-        ),
-      ),
-    );
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="5--implementation-patterns" class="doc-h2"><a href="#5--implementation-patterns" class="heading-anchor">#</a> 5. Implementation Patterns</h2>
-<h3 class="doc-h3">5.1 Atomic UI Kit Component Preview (Light &amp; Dark)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter/widget_previews.dart&#039;;
-
-// =============================================================================
-// PREVIEWS
-// =============================================================================
-
-@Preview(
-  name: &#039;Custom Badge - Light&#039;,
-  size: Size(200, 80),
-)
-Widget previewCustomBadgeLight() {
-  return const PreviewWrapper(
-    brightness: Brightness.light,
-    child: AppBadge(
-      label: &#039;Active Plan&#039;,
-      variant: AppBadgeVariant.success,
-    ),
-  );
-}
-
-@Preview(
-  name: &#039;Custom Badge - Dark&#039;,
-  size: Size(200, 80),
-)
-Widget previewCustomBadgeDark() {
-  return const PreviewWrapper(
-    brightness: Brightness.dark,
-    child: AppBadge(
-      label: &#039;Active Plan&#039;,
-      variant: AppBadgeVariant.success,
-    ),
-  );
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">5.2 State-Variant Matrix Preview</h3>
-<p class="doc-p">When previewing complex widgets, display all operational states (Content, Loading, Error) side-by-side in a single scrollable matrix:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">@Preview(
-  name: &#039;Feature States Matrix&#039;,
-  size: Size(400, 600),
-)
-Widget previewFeatureStatesMatrix() {
-  return PreviewWrapper(
-    brightness: Brightness.dark,
-    child: SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: const [
-          Text(&#039;CONTENT STATE:&#039;, style: TextStyle(color: Colors.grey)),
-          FeatureCard(title: &#039;Active Card&#039;, description: &#039;Content loaded successfully&#039;),
-          SizedBox(height: 16),
-          Text(&#039;LOADING STATE:&#039;, style: TextStyle(color: Colors.grey)),
-          FeatureCardShimmer(),
-          SizedBox(height: 16),
-          Text(&#039;ERROR STATE:&#039;, style: TextStyle(color: Colors.grey)),
-          FeatureCardError(message: &#039;Failed to sync data&#039;),
-        ],
-      ),
-    ),
-  );
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">5.3 Advanced: Custom MultiPreview Annotations</h3>
-<p class="doc-p">To automatically generate multi-configuration previews (e.g. Light + Dark modes) in a single annotation, extend <code class="inline-code">MultiPreview</code>:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter/widget_previews.dart&#039;;
-
-final class MultiBrightnessPreview extends MultiPreview {
-  const MultiBrightnessPreview({required this.name});
-
-  final String name;
-
-  @override
-  List&lt;Preview&gt; get previews =&gt; const [
-        Preview(brightness: Brightness.light),
-        Preview(brightness: Brightness.dark),
-      ];
-
-  @override
-  List&lt;Preview&gt; transform() {
-    final previews = super.transform();
-    return previews.map((preview) {
-      final builder = preview.toBuilder()
-        ..group = &#039;Brightness&#039;
-        ..name = &#039;$name - ${preview.brightness!.name}&#039;;
-      return builder.toPreview();
-    }).toList();
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="6--workflows--interacting-with-previews" class="doc-h2"><a href="#6--workflows--interacting-with-previews" class="heading-anchor">#</a> 6. Workflows: Interacting with Previews</h2>
-<h3 class="doc-h3">6.1 Launching Previews</h3>
+<h2 id="4--reference-implementations---examples---" class="doc-h2"><a href="#4--reference-implementations---examples---" class="heading-anchor">#</a> 4. Reference Implementations (<code class="inline-code">examples/</code>)</h2>
 <ul class="doc-list">
-<li><strong>Inside IDE (VS Code / Android Studio / IntelliJ with Flutter 3.38+):</strong></li>
-<li>Open the &quot;Flutter Widget Preview&quot; sidebar tab.</li>
-<li>Toggle &quot;Filter previews by selected file&quot; to focus on the active file.</li>
-<li><strong>Via Command Line:</strong></li>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">bash</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-bash">  flutter widget-preview start
-</code></pre>
-</div>
-</ul>
-<h3 class="doc-h3">6.2 Hot Reload Feedback Loop</h3>
-<ol class="doc-ordered-list">
-<li>Modify widget code or <code class="inline-code">@Preview</code> parameters.</li>
-<li>Changes hot reload automatically in the preview canvas.</li>
-<li>If global state was altered: trigger <strong>Global Hot Restart</strong>.</li>
+<li><strong>Standard <code class="inline-code">PreviewWrapper</code> Component:</strong> <a href="examples/preview_wrapper_sample.dart" class="doc-link">examples/preview_wrapper_sample.dart</a></li>
+<li>Provides theme (<code class="inline-code">AppTheme.lightTheme</code> / <code class="inline-code">darkTheme</code>), scaffold, padding, and centered layout.</li>
+<li><strong>Dual Light/Dark Component Preview:</strong> <a href="examples/component_preview_sample.dart" class="doc-link">examples/component_preview_sample.dart</a></li>
+<li>Demonstrates <code class="inline-code">@Preview(name: ..., size: ...)</code> decoration with <code class="inline-code">Brightness.light</code> and <code class="inline-code">Brightness.dark</code>.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="7--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#7--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 7. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Direct imports of <code class="inline-code">dart:io</code> or <code class="inline-code">dart:ffi</code> in previewed paths</td>
-<td><strong>CRITICAL</strong></td>
-<td>Abstract native calls behind interfaces; pass pure Dart mocks.</td>
-</tr>
-<tr>
-<td>Initializing Dio/Retrofit/BLoCs inside preview builder</td>
-<td><strong>CRITICAL</strong></td>
-<td>Pass static data props or mock BLoC states directly.</td>
-</tr>
-<tr>
-<td>Rendering <code class="inline-code">@Preview</code> without <code class="inline-code">PreviewWrapper</code> / <code class="inline-code">MaterialApp</code></td>
-<td><strong>HIGH</strong></td>
-<td>Wrap widget in <code class="inline-code">PreviewWrapper</code> to supply Theme/Scaffold bounds.</td>
-</tr>
-<tr>
-<td>Hardcoding hex colors (<code class="inline-code">Color(0xFF...)</code>) in preview code</td>
-<td><strong>HIGH</strong></td>
-<td>Test colors via <code class="inline-code">context.colorScheme</code> / <code class="inline-code">context.customColors</code> tokens.</td>
-</tr>
-<tr>
-<td>Missing Dark theme preview variant</td>
-<td><strong>MEDIUM</strong></td>
-<td>Provide dual light/dark preview functions or use <code class="inline-code">@MultiBrightnessPreview</code>.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="8--verification-checklist" class="doc-h2"><a href="#8--verification-checklist" class="heading-anchor">#</a> 8. Verification Checklist</h2>
+<h2 id="5--verification-checklist" class="doc-h2"><a href="#5--verification-checklist" class="heading-anchor">#</a> 5. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Import <code class="inline-code">package:flutter/widget_previews.dart</code> is present.</span>
+    <span class="check-text">Every preview function is wrapped in <code class="inline-code">PreviewWrapper</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">@Preview</code> is attached to a top-level, parameter-free builder function.</span>
+    <span class="check-text">Explicit viewport <code class="inline-code">size:</code> is defined in <code class="inline-code">@Preview</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Zero references to <code class="inline-code">dart:io</code>, <code class="inline-code">dart:ffi</code>, Dio, or Retrofit in preview execution paths.</span>
+    <span class="check-text">Dual previews created for both Light and Dark themes.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Both <code class="inline-code">Brightness.light</code> and <code class="inline-code">Brightness.dark</code> preview cases exist.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Previewed widgets are enclosed within <code class="inline-code">PreviewWrapper</code>.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Explicit viewport size (<code class="inline-code">size: Size(w, h)</code>) is specified for unconstrained widgets.</span>
+    <span class="check-text">Zero live network calls or unmocked native plugins in preview code paths.</span>
   </label>
 </div>
 

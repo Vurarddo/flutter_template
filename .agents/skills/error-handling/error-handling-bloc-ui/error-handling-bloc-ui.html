@@ -562,251 +562,51 @@ pre {
 <td><a href="../../l10n/l10n-presentation-integration/l10n-presentation-integration.html" class="skill-ref-link" title="Integration patterns for localized copy in the Presentation layer. Covers MaterialApp.router setup (localizationsDelegates, supportedLocales), BuildContext extensions (context.localization), DomainFailure to localized string mappers, dynamic locale switching via Cubit, and locale-aware DateFormat/NumberFormat.">l10n-presentation-integration <span class="ext-icon">↗</span></a></td>
 <td><code class="inline-code">context.localization</code> and ARB string access.</td>
 </tr>
-<tr>
-<td><strong>UI Utils Hub</strong></td>
-<td><a href="../../presentation/ui-utils/flutter-ui-utils-hub/flutter-ui-utils-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter UI Utilities (lib/presentation/ui_utils/). Enforces presentation helper boundaries, routing to specialized sub-skills for BuildContext extensions, TextInputFormatters, Reactive Forms accessors/adapters, and system UI helpers.">flutter-ui-utils-hub <span class="ext-icon">↗</span></a></td>
-<td>UI context extensions and helpers.</td>
-</tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="3--standard-bloc-event-handler-pattern" class="doc-h2"><a href="#3--standard-bloc-event-handler-pattern" class="heading-anchor">#</a> 3. Standard BLoC Event Handler Pattern</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// lib/presentation/state_management/item/item_bloc.dart
-import &#039;package:flutter_bloc/flutter_bloc.dart&#039;;
-import &#039;package:injectable/injectable.dart&#039;;
-
-import &#039;package:flutter_template/domain/core/failures/domain_failure.dart&#039;;
-import &#039;package:flutter_template/domain/item/entities/item_entity.dart&#039;;
-import &#039;package:flutter_template/domain/item/usecases/get_item_details_usecase.dart&#039;;
-
-part &#039;item_event.dart&#039;;
-part &#039;item_state.dart&#039;;
-
-@injectable
-class ItemBloc extends Bloc&lt;ItemEvent, ItemState&gt; {
-  final GetItemDetailsUseCase _getItemDetails;
-
-  ItemBloc(this._getItemDetails) : super(const ItemState.initial()) {
-    on&lt;ItemDetailsRequested&gt;(_onDetailsRequested);
-  }
-
-  Future&lt;void&gt; _onDetailsRequested(
-    ItemDetailsRequested event,
-    Emitter&lt;ItemState&gt; emit,
-  ) async {
-    emit(const ItemState.loading());
-
-    try {
-      final item = await _getItemDetails(event.itemId);
-      if (emit.isDone) return;
-      emit(ItemState.success(item));
-    } catch (error, stackTrace) {
-      // 1. Mandatory stack trace forwarding for Crashlytics / Sentry
-      addError(error, stackTrace);
-
-      if (emit.isDone) return;
-
-      // 2. Wrap into typed DomainFailure if not already typed
-      final failure = error is DomainFailure
-          ? error
-          : DomainFailure.unknown(
-              message: error.toString(),
-              stackTrace: stackTrace,
-            );
-
-      // 3. Emit explicit Failure state
-      emit(ItemState.failure(failure));
-    }
-  }
-}
-</code></pre>
-</div>
-<div class="alert-box alert-warning"><div class="alert-title">ВАЖЛИВО / IMPORTANT</div><div class="alert-content">
-<p><strong>No Auto-Reset Rule:</strong> DO NOT automatically clear or reset a <code class="inline-code">Failure</code> state back to <code class="inline-code">Initial</code> in the same handler. A Failure state must persist until the user explicitly triggers a retry action!</p>
+<h2 id="3--core-error-handling-rules" class="doc-h2"><a href="#3--core-error-handling-rules" class="heading-anchor">#</a> 3. Core Error Handling Rules</h2>
+<ol class="doc-ordered-list">
+<li><strong>Mandatory Stack Trace Forwarding:</strong> Always call <code class="inline-code">addError(error, stackTrace)</code> in catch blocks.</li>
+<li><strong>Typed Failure States:</strong> Wrap errors into <code class="inline-code">DomainFailure</code> variants before emitting UI states.</li>
+<li><strong>No Auto-Reset:</strong> Never reset a <code class="inline-code">Failure</code> state back to <code class="inline-code">Initial</code> in the same handler. Reset only via explicit user retry actions.</li>
+<li><strong>Localize in UI Layer:</strong> Map <code class="inline-code">DomainFailure</code> via <code class="inline-code">toLocalizedString(context)</code> in Presentation.</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="4--ui-localization-extension---domainfailurelocalizationx--" class="doc-h2"><a href="#4--ui-localization-extension---domainfailurelocalizationx--" class="heading-anchor">#</a> 4. UI Localization Extension (<code class="inline-code">DomainFailureLocalizationX</code>)</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// lib/presentation/ui_utils/extensions/domain_failure_localization_extension.dart
-import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_template/domain/core/failures/domain_failure.dart&#039;;
-import &#039;package:flutter_template/presentation/ui_utils/extensions/build_context_localization_extension.dart&#039;;
-
-extension DomainFailureLocalizationX on DomainFailure {
-  /// Converts a pure DomainFailure into a user-friendly localized string
-  String toLocalizedString(BuildContext context) {
-    return switch (this) {
-      NetworkFailure() =&gt; context.localization.errorNoInternet,
-      UnauthorizedFailure() =&gt; context.localization.errorSessionExpired,
-      NotFoundFailure() =&gt; context.localization.errorResourceNotFound,
-      ServerFailure() =&gt; context.localization.errorGenericServer,
-      TimeoutFailure() =&gt; context.localization.errorConnectionTimeout,
-      UnknownFailure() =&gt; context.localization.errorUnknown,
-    };
-  }
-}
-</code></pre>
-</div>
+<h2 id="4--reference-implementations---examples---" class="doc-h2"><a href="#4--reference-implementations---examples---" class="heading-anchor">#</a> 4. Reference Implementations (<code class="inline-code">examples/</code>)</h2>
+<ul class="doc-list">
+<li><strong>BLoC Try-Catch Handler:</strong> <a href="examples/error_bloc_handler_sample.dart" class="doc-link">examples/error_bloc_handler_sample.dart</a></li>
+<li>Full event handler showing <code class="inline-code">addError(error, stackTrace)</code>, async checks, and typed <code class="inline-code">DomainFailure</code> state emission.</li>
+<li><strong>Full-Screen Error View with Retry:</strong> <a href="examples/error_view_with_retry_sample.dart" class="doc-link">examples/error_view_with_retry_sample.dart</a></li>
+<li>UI component consuming <code class="inline-code">failure.toLocalizedString(context)</code> and triggering user retry.</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="5--ui-presentation-patterns" class="doc-h2"><a href="#5--ui-presentation-patterns" class="heading-anchor">#</a> 5. UI Presentation Patterns</h2>
-<h3 class="doc-h3">A. Full-Screen Error State with Retry</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class ItemErrorView extends StatelessWidget {
-  final DomainFailure failure;
-  final VoidCallback onRetry;
-
-  const ItemErrorView({
-    super.key,
-    required this.failure,
-    required this.onRetry,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.error_outline_rounded,
-              size: 64,
-              color: context.colorScheme.error,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              failure.toLocalizedString(context),
-              textAlign: TextAlign.center,
-              style: context.textTheme.titleMedium,
-            ),
-            const SizedBox(height: 24),
-            FilledButton.tonal(
-              onPressed: onRetry,
-              child: Text(context.localization.retryButtonLabel),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">B. One-Off Side-Effect Error via <code class="inline-code">BlocListener</code></h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">BlocListener&lt;ItemBloc, ItemState&gt;(
-  listenWhen: (previous, current) =&gt; current is ItemFailureState,
-  listener: (context, state) {
-    if (state is ItemFailureState) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(state.failure.toLocalizedString(context)),
-          backgroundColor: context.colorScheme.error,
-          action: SnackBarAction(
-            label: context.localization.retryButtonLabel,
-            textColor: context.colorScheme.onError,
-            onPressed: () =&gt; context.read&lt;ItemBloc&gt;().add(const ItemRetryRequested()),
-          ),
-        ),
-      );
-    }
-  },
-  child: const ItemContentView(),
-)
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="6--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#6--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 6. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Displaying <code class="inline-code">error.toString()</code> in UI</td>
-<td><strong>CRITICAL</strong></td>
-<td>Use <code class="inline-code">failure.toLocalizedString(context)</code> with <code class="inline-code">context.localization</code>.</td>
-</tr>
-<tr>
-<td>Omitting <code class="inline-code">addError(error, stackTrace)</code> in BLoC <code class="inline-code">catch</code></td>
-<td><strong>HIGH</strong></td>
-<td>Always call <code class="inline-code">addError()</code> before emitting failure state.</td>
-</tr>
-<tr>
-<td>Catching errors without checking <code class="inline-code">if (emit.isDone) return;</code></td>
-<td><strong>HIGH</strong></td>
-<td>Always guard against emitter cancellation after async calls.</td>
-</tr>
-<tr>
-<td>Auto-resetting Failure to Initial immediately</td>
-<td><strong>MEDIUM</strong></td>
-<td>Let the UI stay in Failure state until user explicitly retries.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="7--verification-checklist" class="doc-h2"><a href="#7--verification-checklist" class="heading-anchor">#</a> 7. Verification Checklist</h2>
+<h2 id="5--verification-checklist" class="doc-h2"><a href="#5--verification-checklist" class="heading-anchor">#</a> 5. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">BLoC catches errors and calls <code class="inline-code">addError(error, stackTrace)</code>.</span>
+    <span class="check-text"><code class="inline-code">addError(error, stackTrace)</code> called in all BLoC catch blocks.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Checked <code class="inline-code">if (emit.isDone) return;</code> after <code class="inline-code">await</code> and inside <code class="inline-code">catch</code>.</span>
+    <span class="check-text">Failure states emit typed <code class="inline-code">DomainFailure</code> objects.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">States use typed <code class="inline-code">DomainFailure</code> objects.</span>
+    <span class="check-text">No automatic state reset back to <code class="inline-code">Initial</code> without user action.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">UI resolves copy via <code class="inline-code">failure.toLocalizedString(context)</code>.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Zero <code class="inline-code">e.toString()</code> calls exist in UI layer.</span>
+    <span class="check-text">UI errors localized via <code class="inline-code">DomainFailureLocalizationX</code>.</span>
   </label>
 </div>
 
@@ -846,17 +646,6 @@ extension DomainFailureLocalizationX on DomainFailure {
   </div>
   <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
     Core architecture patterns and best practices for Flutter BLoC and Cubit. Use when creating BLoC or Cubit clas...
-  </div>
-</a>
-<a href="../../presentation/ui-utils/flutter-ui-utils-hub/flutter-ui-utils-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-utils-hub ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">
-    UI Утиліти та Розширення
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Primary coordinator and architecture guide for Flutter UI Utilities (lib/presentation/ui_utils/). Enforces pre...
   </div>
 </a>
 </div></div>

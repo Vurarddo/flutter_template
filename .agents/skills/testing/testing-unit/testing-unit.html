@@ -568,230 +568,48 @@ pre {
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="3--testing-usecases--domain-layer-" class="doc-h2"><a href="#3--testing-usecases--domain-layer-" class="heading-anchor">#</a> 3. Testing UseCases (Domain Layer)</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// test/domain/item/usecases/get_item_details_usecase_test.dart
-import &#039;package:flutter_test/flutter_test.dart&#039;;
-import &#039;package:mocktail/mocktail.dart&#039;;
-
-import &#039;package:flutter_template/domain/core/failures/domain_failure.dart&#039;;
-import &#039;package:flutter_template/domain/item/entities/item_entity.dart&#039;;
-import &#039;package:flutter_template/domain/item/repositories/i_item_repository.dart&#039;;
-import &#039;package:flutter_template/domain/item/usecases/get_item_details_usecase.dart&#039;;
-
-class MockItemRepository extends Mock implements IItemRepository {}
-
-void main() {
-  late MockItemRepository mockRepository;
-  late GetItemDetailsUseCase useCase;
-
-  const tItemId = &#039;item_123&#039;;
-  const tItem = ItemEntity(
-    id: tItemId,
-    title: &#039;Test Item&#039;,
-    description: &#039;Test Description&#039;,
-    isActive: true,
-  );
-
-  setUp(() {
-    mockRepository = MockItemRepository();
-    useCase = GetItemDetailsUseCase(mockRepository);
-  });
-
-  group(&#039;GetItemDetailsUseCase&#039;, () {
-    test(&#039;should return ItemEntity when repository call is successful&#039;, () async {
-      // Arrange
-      when(() =&gt; mockRepository.getItemDetails(tItemId))
-          .thenAnswer((_) async =&gt; tItem);
-
-      // Act
-      final result = await useCase(tItemId);
-
-      // Assert
-      expect(result, equals(tItem));
-      verify(() =&gt; mockRepository.getItemDetails(tItemId)).called(1);
-      verifyNoMoreInteractions(mockRepository);
-    });
-
-    test(&#039;should rethrow DomainFailure when repository throws&#039;, () async {
-      // Arrange
-      when(() =&gt; mockRepository.getItemDetails(tItemId))
-          .thenThrow(const NotFoundFailure(code: &#039;NOT_FOUND&#039;));
-
-      // Act &amp; Assert
-      expect(
-        () =&gt; useCase(tItemId),
-        throwsA(isA&lt;NotFoundFailure&gt;()),
-      );
-      verify(() =&gt; mockRepository.getItemDetails(tItemId)).called(1);
-    });
-  });
-}
-</code></pre>
-</div>
+<h2 id="3--pure-dart-testing-philosophy" class="doc-h2"><a href="#3--pure-dart-testing-philosophy" class="heading-anchor">#</a> 3. Pure Dart Testing Philosophy</h2>
+<ol class="doc-ordered-list">
+<li><strong>Zero UI Framework Dependencies:</strong> Run tests with pure <code class="inline-code">flutter_test</code> (or <code class="inline-code">test</code>) without rendering widgets.</li>
+<li><strong>Mocktail for External Dependencies:</strong> Mock interfaces cleanly with <code class="inline-code">when(() =&gt; ...).thenAnswer(...)</code>.</li>
+<li><strong>Verify Contract Invariants:</strong> Test both the happy path (returning Entity) and failure path (throwing typed Failure).</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="4--testing-dto-mappers--data-layer-" class="doc-h2"><a href="#4--testing-dto-mappers--data-layer-" class="heading-anchor">#</a> 4. Testing DTO Mappers (Data Layer)</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// test/data/item/dto/item_dto_test.dart
-import &#039;package:flutter_test/flutter_test.dart&#039;;
-import &#039;package:flutter_template/data/item/dto/item_dto.dart&#039;;
-import &#039;package:flutter_template/domain/item/entities/item_entity.dart&#039;;
-
-void main() {
-  group(&#039;ItemDto&#039;, () {
-    const tJson = {
-      &#039;id&#039;: &#039;item_123&#039;,
-      &#039;title&#039;: &#039;Test Item&#039;,
-      &#039;description&#039;: &#039;Test Description&#039;,
-      &#039;is_active&#039;: true,
-    };
-
-    test(&#039;fromJson should parse JSON into typed DTO correctly&#039;, () {
-      final dto = ItemDto.fromJson(tJson);
-
-      expect(dto.id, &#039;item_123&#039;);
-      expect(dto.title, &#039;Test Item&#039;);
-      expect(dto.isActive, isTrue);
-    });
-
-    test(&#039;toDomain should convert DTO into pure Domain Entity safely&#039;, () {
-      final dto = ItemDto.fromJson(tJson);
-      final entity = dto.toDomain();
-
-      expect(entity, isA&lt;ItemEntity&gt;());
-      expect(entity.id, dto.id);
-      expect(entity.title, dto.title);
-    });
-
-    test(&#039;toDomain should provide safe default fallbacks on missing nullable values&#039;, () {
-      const incompleteJson = {&#039;id&#039;: &#039;item_999&#039;};
-      final dto = ItemDto.fromJson(incompleteJson);
-      final entity = dto.toDomain();
-
-      expect(entity.title, &#039;&#039;);
-      expect(entity.isActive, isFalse);
-    });
-  });
-}
-</code></pre>
-</div>
+<h2 id="4--reference-implementations---examples---" class="doc-h2"><a href="#4--reference-implementations---examples---" class="heading-anchor">#</a> 4. Reference Implementations (<code class="inline-code">examples/</code>)</h2>
+<ul class="doc-list">
+<li><strong>Domain UseCase Unit Test:</strong> <a href="examples/usecase_unit_test.dart" class="doc-link">examples/usecase_unit_test.dart</a></li>
+<li>Unit test verifying repository invocation and exception propagation using Mocktail.</li>
+<li><strong>DTO JSON &amp; Mapper Unit Test:</strong> <a href="examples/dto_mapper_unit_test.dart" class="doc-link">examples/dto_mapper_unit_test.dart</a></li>
+<li>Testing <code class="inline-code">fromJson()</code> deserialization and defensive fallback mapping in <code class="inline-code">toDomain()</code>.</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="5--testing-repository-implementations--data-layer-" class="doc-h2"><a href="#5--testing-repository-implementations--data-layer-" class="heading-anchor">#</a> 5. Testing Repository Implementations (Data Layer)</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// test/data/item/repositories/item_repository_impl_test.dart
-import &#039;package:dio/dio.dart&#039;;
-import &#039;package:flutter_test/flutter_test.dart&#039;;
-import &#039;package:mocktail/mocktail.dart&#039;;
-
-import &#039;package:flutter_template/data/item/client/item_api_client.dart&#039;;
-import &#039;package:flutter_template/data/item/dto/item_dto.dart&#039;;
-import &#039;package:flutter_template/data/item/repositories/item_repository_impl.dart&#039;;
-import &#039;package:flutter_template/domain/core/failures/domain_failure.dart&#039;;
-
-class MockItemApiClient extends Mock implements ItemApiClient {}
-
-void main() {
-  late MockItemApiClient mockApiClient;
-  late ItemRepositoryImpl repository;
-
-  setUp(() {
-    mockApiClient = MockItemApiClient();
-    repository = ItemRepositoryImpl(mockApiClient);
-  });
-
-  group(&#039;ItemRepositoryImpl&#039;, () {
-    test(&#039;should map DioException to typed DomainFailure&#039;, () async {
-      // Arrange
-      when(() =&gt; mockApiClient.getItemDetails(&#039;invalid_id&#039;)).thenThrow(
-        DioException(
-          requestOptions: RequestOptions(path: &#039;/items/invalid_id&#039;),
-          type: DioExceptionType.connectionTimeout,
-        ),
-      );
-
-      // Act &amp; Assert
-      expect(
-        () =&gt; repository.getItemDetails(&#039;invalid_id&#039;),
-        throwsA(isA&lt;TimeoutFailure&gt;()),
-      );
-    });
-  });
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="6--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#6--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 6. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Instantiating real Dio or HTTP clients in unit tests</td>
-<td><strong>CRITICAL</strong></td>
-<td>Mock <code class="inline-code">ApiClient</code> or <code class="inline-code">Dio</code> using <code class="inline-code">Mocktail</code>.</td>
-</tr>
-<tr>
-<td>Testing UI rendering or widgets in pure unit test files</td>
-<td><strong>HIGH</strong></td>
-<td>Move widget tests to <code class="inline-code">test/presentation/</code> with <code class="inline-code">testWidgets</code>.</td>
-</tr>
-<tr>
-<td>Ignoring edge-case null values in DTO <code class="inline-code">toDomain()</code> tests</td>
-<td><strong>HIGH</strong></td>
-<td>Write tests for incomplete JSON maps to verify fallbacks.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="7--verification-checklist" class="doc-h2"><a href="#7--verification-checklist" class="heading-anchor">#</a> 7. Verification Checklist</h2>
+<h2 id="5--verification-checklist" class="doc-h2"><a href="#5--verification-checklist" class="heading-anchor">#</a> 5. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Unit tests execute with <code class="inline-code">flutter test test/domain/ test/data/ test/core/</code>.</span>
+    <span class="check-text">Tests execute under <code class="inline-code">flutter test test/domain/</code> and <code class="inline-code">flutter test test/data/</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Mocks use <code class="inline-code">mocktail</code> (<code class="inline-code">when(() =&gt; ...).thenAnswer(...)</code>).</span>
+    <span class="check-text">Mocks implement clean domain repository interfaces.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">verifyNoMoreInteractions()</code> ensures no unverified side effects.</span>
+    <span class="check-text"><code class="inline-code">verify(() =&gt; ...).called(1)</code> and <code class="inline-code">verifyNoMoreInteractions(...)</code> are asserted.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">100% of happy path and error branch mappings are asserted.</span>
+    <span class="check-text">Safe fallback values tested for missing/null API keys.</span>
   </label>
 </div>
 

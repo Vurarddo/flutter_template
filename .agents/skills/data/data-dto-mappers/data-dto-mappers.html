@@ -565,245 +565,45 @@ pre {
 <hr class="doc-divider">
 <h2 id="3--core-dto-design-rules" class="doc-h2"><a href="#3--core-dto-design-rules" class="heading-anchor">#</a> 3. Core DTO Design Rules</h2>
 <ol class="doc-ordered-list">
-<li><strong>Mirror Backend Contract 1-to-1:</strong> DTO field names and types should mirror the backend JSON API (e.g. <code class="inline-code">snake_case</code> mapped via <code class="inline-code">@JsonKey(name: &#039;...&#039;)</code>, nullable fields).</li>
-<li><strong>Inline Mappers Standard:</strong> Keep <code class="inline-code">toDomain()</code> mapping logic directly inside <code class="inline-code">&lt;feature&gt;_dto.dart</code> as a class method or extension. <strong>Do NOT create separate <code class="inline-code">mappers/</code> folders</strong> for simple 1-line mappings.</li>
-<li><strong>Defensive Parsing &amp; Fallbacks:</strong> Always guard against missing or malformed fields (<code class="inline-code">null</code>, empty strings, unexpected types) when mapping to non-nullable Domain fields.</li>
-<li><strong>Collection Immutability:</strong> Wrap mapped lists in <code class="inline-code">List.unmodifiable()</code> or defensive copies when passing into Domain Entities.</li>
+<li><strong>Mirror Backend Contract 1-to-1:</strong> Map JSON keys directly via <code class="inline-code">@JsonKey(name: &#039;...&#039;)</code>.</li>
+<li><strong>Inline Mappers Standard:</strong> Keep <code class="inline-code">toDomain()</code> mapping logic directly inside <code class="inline-code">&lt;feature&gt;_dto.dart</code> as a class method or extension.</li>
+<li><strong>Defensive Parsing &amp; Fallbacks:</strong> Always guard against missing or malformed fields with safe default fallbacks.</li>
+<li><strong>Strict Encapsulation:</strong> DTOs must never be imported or returned in Domain or Presentation layers.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="4--standard-implementation-patterns" class="doc-h2"><a href="#4--standard-implementation-patterns" class="heading-anchor">#</a> 4. Standard Implementation Patterns</h2>
-<h3 class="doc-h3">4.1 Response DTO with Inline <code class="inline-code">toDomain()</code> Method</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:json_annotation/json_annotation.dart&#039;;
-import &#039;package:flutter_template/domain/items/entities/item_entity.dart&#039;;
-
-part &#039;item_dto.g.dart&#039;;
-
-@JsonSerializable(createToJson: false)
-class ItemDto {
-  final int id;
-  final String? title;
-  final String? description;
-  @JsonKey(name: &#039;image_path&#039;)
-  final String? imagePath;
-  @JsonKey(name: &#039;rating_score&#039;)
-  final num? ratingScore;
-  @JsonKey(name: &#039;created_at&#039;)
-  final String? createdAt;
-  final List&lt;String&gt;? tags;
-
-  const ItemDto({
-    required this.id,
-    this.title,
-    this.description,
-    this.imagePath,
-    this.ratingScore,
-    this.createdAt,
-    this.tags,
-  });
-
-  factory ItemDto.fromJson(Map&lt;String, dynamic&gt; json) =&gt; _$ItemDtoFromJson(json);
-
-  /// Inline Mapper converting DTO to Domain Entity
-  ItemEntity toDomain({String imageBaseUrl = &#039;https://api.example.com/images&#039;}) {
-    final path = imagePath;
-    final fullImageUrl = (path != null &amp;&amp; path.isNotEmpty)
-        ? &#039;$imageBaseUrl$path&#039;
-        : null;
-
-    return ItemEntity(
-      id: id.toString(),
-      title: title ?? &#039;&#039;,
-      description: description ?? &#039;&#039;,
-      score: (ratingScore ?? 0.0).toDouble(),
-      createdAt: DateTime.tryParse(createdAt ?? &#039;&#039;) ?? DateTime.fromMillisecondsSinceEpoch(0),
-      tags: List.unmodifiable(tags ?? const []),
-      imageUrl: fullImageUrl,
-    );
-  }
-}
-</code></pre>
-</div>
+<h2 id="4--reference-implementation---examples---" class="doc-h2"><a href="#4--reference-implementation---examples---" class="heading-anchor">#</a> 4. Reference Implementation (<code class="inline-code">examples/</code>)</h2>
+<ul class="doc-list">
+<li><strong>DTO with Inline <code class="inline-code">toDomain()</code> Mapper:</strong> <a href="examples/sample_dto_and_mapper.dart" class="doc-link">examples/sample_dto_and_mapper.dart</a></li>
+<li>Demonstrates <code class="inline-code">@JsonSerializable(createToJson: false)</code>, nullable parsing fallbacks, immutable list wrapping, and list transformation (<code class="inline-code">toDomainList()</code>).</li>
+</ul>
 <hr class="doc-divider">
-<h3 class="doc-h3">4.2 Paginated List Response DTO</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:json_annotation/json_annotation.dart&#039;;
-import &#039;package:flutter_template/data/items/dto/item_dto.dart&#039;;
-import &#039;package:flutter_template/domain/items/entities/item_entity.dart&#039;;
-
-part &#039;item_response_dto.g.dart&#039;;
-
-@JsonSerializable(createToJson: false)
-class ItemResponseDto {
-  final int page;
-  final List&lt;ItemDto&gt;? results;
-  @JsonKey(name: &#039;total_pages&#039;)
-  final int? totalPages;
-  @JsonKey(name: &#039;total_results&#039;)
-  final int? totalResults;
-
-  const ItemResponseDto({
-    required this.page,
-    this.results,
-    this.totalPages,
-    this.totalResults,
-  });
-
-  factory ItemResponseDto.fromJson(Map&lt;String, dynamic&gt; json) =&gt;
-      _$ItemResponseDtoFromJson(json);
-
-  List&lt;ItemEntity&gt; toDomainList() {
-    return results?.map((dto) =&gt; dto.toDomain()).toList(growable: false) ?? const [];
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h3 class="doc-h3">4.3 Request Payload DTO (with <code class="inline-code">toJson()</code>)</h3>
-<p class="doc-p">For POST/PUT request bodies sent to API endpoints:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:json_annotation/json_annotation.dart&#039;;
-import &#039;package:flutter_template/domain/items/entities/update_item_params.dart&#039;;
-
-part &#039;update_item_request_dto.g.dart&#039;;
-
-@JsonSerializable(createFactory: false)
-class UpdateItemRequestDto {
-  final double score;
-  final String? comment;
-
-  const UpdateItemRequestDto({
-    required this.score,
-    this.comment,
-  });
-
-  Map&lt;String, dynamic&gt; toJson() =&gt; _$UpdateItemRequestDtoToJson(this);
-
-  /// Factory creating DTO from Domain parameters
-  factory UpdateItemRequestDto.fromDomain(UpdateItemParams params) {
-    return UpdateItemRequestDto(
-      score: params.score,
-      comment: params.comment,
-    );
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h3 class="doc-h3">4.4 Complex Enum Mapping Pattern</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">enum ApiItemStatus {
-  @JsonValue(&#039;published&#039;)
-  published,
-  @JsonValue(&#039;in_draft&#039;)
-  inDraft,
-  @JsonValue(&#039;archived&#039;)
-  archived;
-}
-
-// In DTO toDomain() mapping:
-ItemStatus _mapStatus(ApiItemStatus? status) {
-  return switch (status) {
-    ApiItemStatus.published =&gt; ItemStatus.published,
-    ApiItemStatus.inDraft =&gt; ItemStatus.inDraft,
-    ApiItemStatus.archived =&gt; ItemStatus.archived,
-    _ =&gt; ItemStatus.unknown,
-  };
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="5--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#5--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 5. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Exposing DTO classes directly to Domain Entities or BLoCs</td>
-<td><strong>CRITICAL</strong></td>
-<td>Convert DTOs to Domain Entities via <code class="inline-code">toDomain()</code> inside Repository.</td>
-</tr>
-<tr>
-<td>Creating redundant <code class="inline-code">lib/data/mappers/</code> folders with empty wrapper classes</td>
-<td><strong>LOW</strong></td>
-<td>Place <code class="inline-code">toDomain()</code> directly inside <code class="inline-code">&lt;feature&gt;_dto.dart</code>.</td>
-</tr>
-<tr>
-<td>Ingesting raw JSON Maps directly inside Repositories without typed DTOs</td>
-<td><strong>HIGH</strong></td>
-<td>Always use typed <code class="inline-code">@JsonSerializable</code> DTOs with <code class="inline-code">fromJson</code>.</td>
-</tr>
-<tr>
-<td>Crashing on unexpected <code class="inline-code">null</code> or type drift in JSON fields</td>
-<td><strong>HIGH</strong></td>
-<td>Provide safe default fallbacks in <code class="inline-code">toDomain()</code> (e.g. <code class="inline-code">voteAverage ?? 0.0</code>).</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="6--verification-checklist" class="doc-h2"><a href="#6--verification-checklist" class="heading-anchor">#</a> 6. Verification Checklist</h2>
+<h2 id="5--verification-checklist" class="doc-h2"><a href="#5--verification-checklist" class="heading-anchor">#</a> 5. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">DTO file is placed in <code class="inline-code">lib/data/&lt;feature&gt;/dto/</code>.</span>
+    <span class="check-text">DTO annotated with <code class="inline-code">@JsonSerializable</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Contains <code class="inline-code">part &#039;&lt;name&gt;.g.dart&#039;;</code> and generates cleanly via <code class="inline-code">build_runner</code>.</span>
+    <span class="check-text">Inline <code class="inline-code">toDomain()</code> mapper converts DTO to pure Domain Entity.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Method <code class="inline-code">toDomain()</code> maps all technical fields safely to Domain Entity.</span>
+    <span class="check-text">Defensive fallbacks provided for nullable API fields.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Collections are made immutable (<code class="inline-code">List.unmodifiable</code>).</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">DTO is never imported in <code class="inline-code">lib/domain/</code> or <code class="inline-code">lib/presentation/</code>.</span>
+    <span class="check-text">No DTO imports exist in Domain or Presentation layers.</span>
   </label>
 </div>
 

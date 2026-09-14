@@ -164,20 +164,28 @@ To enable seamless navigation across trees and meshes:
 
 ## 7. Core Authoring Principles
 
-1. **Progressive Disclosure:**
-   - Keep the root `SKILL.md` concise and high-signal (under 250–350 lines).
-   - Move large reference manuals, exhaustive API docs, or heavy schemas into `references/` and link to them using relative links (`./references/doc.md`).
-   - Move large multi-file boilerplate, full class implementations (>50–100 lines), or complete architectural templates into `examples/` and link to them (`./examples/sample.dart`).
-2. **Zero Redundant Boilerplate:**
+1. **Progressive Disclosure & The Router Pattern:**
+   - Keep the root `SKILL.md` concise and high-signal (target **≤ 100–150 lines**).
+   - When a skill grows "thick" (150+ lines or multiple sub-jobs mixed together), convert `SKILL.md` into a **Job Router**:
+     * YAML Frontmatter with exhaustive triggers and keywords.
+     * High-level architectural overview and non-negotiable constraints.
+     * **Job Routing Table** mapping specific scenarios to targeted files in `references/`, `examples/`, or `resources/`.
+     * Explicit agent directive: *"Read ONLY the referenced file matching your current task; do not load everything at once."*
+   - Move large reference manuals or exhaustive API docs into `references/` (`./references/doc.md`).
+   - Move complete class implementations, multi-file boilerplates, or code templates (>30–50 lines) into `examples/` (`./examples/sample.dart`).
+   - Move configuration templates into `resources/` (`./resources/config.json`).
+2. **Zero-Loss Rule for Refactoring:**
+   - When restructuring thick skills, NEVER change what the skill does or drop any triggers, rules, or architectural invariants. Change ONLY the physical organization.
+3. **Zero Redundant Boilerplate:**
    - Focus strictly on project conventions, exact architecture patterns, constraints, and non-obvious nuances.
-3. **Actionable Code Examples:**
-   - Provide concrete, copy-paste-ready before/after code snippets reflecting production standards. Keep short snippets inline; offload extensive reference files to `examples/`.
-4. **Anti-Patterns & Severity Matrix:**
+4. **Actionable Code Examples:**
+   - Provide concrete, copy-paste-ready before/after code snippets reflecting production standards. Keep short snippets inline (10–30 lines); offload extensive reference files to `examples/`.
+5. **Anti-Patterns & Severity Matrix:**
    - Include a dedicated table listing common mistakes, why they fail, their severity (`CRITICAL`, `HIGH`, `MEDIUM`), and the explicit remedy.
-5. **Domain-Agnostic & Abstract Naming Rule (Universal Portability):**
+6. **Domain-Agnostic & Abstract Naming Rule (Universal Portability):**
    - ALL code snippets, class names, functions, variables, DTOs, entities, and use cases inside skills MUST use **abstract, domain-agnostic identifiers** (e.g., `[Feature]`, `Item`, `ItemDto`, `ItemEntity`, `User`, `Account`, `Product`, `Resource`, `ExampleItem`) instead of project-specific domain names (e.g., `Movie`, `TMDB`, `CryptoTrade`).
    - This ensures skills remain 100% portable, reusable, and copy-paste ready across any Flutter codebase without domain residue.
-6. **Holistic Tree Audit & De-duplication Rule (Trash & Bloat Pruning):**
+7. **Holistic Tree Audit & De-duplication Rule (Trash & Bloat Pruning):**
    - Whenever this skill is invoked to create or modify skills, the AI MUST actively audit the entire `.agents/skills/` tree, verify cross-link integrity, and eliminate redundant or duplicate files.
    - **Single Source of Truth:** Never duplicate the same concept across multiple skill folders (e.g., domain failure definitions belong strictly in `domain-failures`, not duplicated in error handling).
    - **Active Pruning:** Do NOT hesitate to delete obsolete, duplicate, or stale skills (`rm -rf`) to prevent folder bloat and keep the skill repository compact, high-signal, and clean.

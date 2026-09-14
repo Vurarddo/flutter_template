@@ -561,306 +561,50 @@ pre {
 <td><a href="../../presentation/state-management/flutter-bloc-hub/flutter-bloc-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter BLoC &amp; Cubit state management. Use when designing, organizing, refactoring, or auditing presentation state management. Serves as the central entry point and routes to specialized sub-skills for BLoC core patterns, UI widgets &amp; scoping, and HydratedBloc persistence.">flutter-bloc-hub <span class="ext-icon">↗</span></a></td>
 <td>BLoC/Cubit state management for runtime settings.</td>
 </tr>
-<tr>
-<td><strong>Storage</strong></td>
-<td><a href="../../infrastructure/infrastructure-storage/infrastructure-storage.html" class="skill-ref-link" title="Standards and patterns for storage interactors in lib/infrastructure/storage/ (or lib/infrastructure/utils/storage/). Covers SecureStoreInteractor (flutter_secure_storage) for tokens/PII, StoreInteractor (shared_preferences) for UI preferences, and reactive storage streams.">infrastructure-storage <span class="ext-icon">↗</span></a></td>
-<td>Persisting user&#039;s selected locale to disk.</td>
-</tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="3---materialapp-router--setup---lib-application-dart--" class="doc-h2"><a href="#3---materialapp-router--setup---lib-application-dart--" class="heading-anchor">#</a> 3. <code class="inline-code">MaterialApp.router</code> Setup (<code class="inline-code">lib/application.dart</code>)</h2>
-<p class="doc-p">Configure <code class="inline-code">localizationsDelegates</code> and <code class="inline-code">supportedLocales</code> in <code class="inline-code">Application</code>:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_bloc/flutter_bloc.dart&#039;;
-import &#039;package:flutter_localizations/flutter_localizations.dart&#039;;
-
-import &#039;package:flutter_template/infrastructure/di/injection.dart&#039;;
-import &#039;package:flutter_template/l10n/generated/l10n.dart&#039;;
-import &#039;package:flutter_template/presentation/navigation/app_router.dart&#039;;
-import &#039;package:flutter_template/presentation/state_management/locale/locale_cubit.dart&#039;;
-import &#039;package:flutter_template/presentation/state_management/locale/locale_state.dart&#039;;
-import &#039;package:flutter_template/presentation/theme/app_theme.dart&#039;;
-
-class Application extends StatelessWidget {
-  const Application({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final appRouter = getIt&lt;AppRouter&gt;();
-
-    return BlocProvider(
-      create: (context) =&gt; getIt&lt;LocaleCubit&gt;(),
-      child: BlocBuilder&lt;LocaleCubit, LocaleState&gt;(
-        builder: (context, state) {
-          return MaterialApp.router(
-            title: &#039;Flutter Template&#039;,
-            debugShowCheckedModeBanner: false,
-            theme: AppTheme.light,
-            darkTheme: AppTheme.dark,
-            themeMode: ThemeMode.system,
-            routerConfig: appRouter.config(),
-            locale: state.locale,
-            localizationsDelegates: const [
-              S.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: S.delegate.supportedLocales,
-          );
-        },
-      ),
-    );
-  }
-}
-</code></pre>
-</div>
+<h2 id="3--core-localization-architecture-rules" class="doc-h2"><a href="#3--core-localization-architecture-rules" class="heading-anchor">#</a> 3. Core Localization Architecture Rules</h2>
+<ol class="doc-ordered-list">
+<li><strong>Pure Presentation Layer Resolution:</strong> Never pass <code class="inline-code">BuildContext</code> into Domain UseCases or Data layer models.</li>
+<li><strong>Access via Extension:</strong> Always use <code class="inline-code">context.localization</code> rather than verbose <code class="inline-code">S.of(context)</code>.</li>
+<li><strong>Map Failures in UI:</strong> Map typed <code class="inline-code">DomainFailure</code> variants to localized error strings via <code class="inline-code">DomainFailureLocalizationX.toLocalizedString(context)</code>.</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="4---buildcontext--extension---context-localization--" class="doc-h2"><a href="#4---buildcontext--extension---context-localization--" class="heading-anchor">#</a> 4. <code class="inline-code">BuildContext</code> Extension (<code class="inline-code">context.localization</code>)</h2>
-<p class="doc-p">To avoid verbose <code class="inline-code">S.of(context)</code> calls across widgets, use a dedicated extension:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// lib/presentation/ui_utils/extensions/build_context_localization_extension.dart
-import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_template/l10n/generated/l10n.dart&#039;;
-
-extension BuildContextLocalizationX on BuildContext {
-  /// Shorthand accessor for generated localization strings
-  S get localization =&gt; S.of(this);
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">Usage in UI Widgets:</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class WelcomeHeader extends StatelessWidget {
-  final String userName;
-  final int unreadCount;
-
-  const WelcomeHeader({
-    super.key,
-    required this.userName,
-    required this.unreadCount,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          context.localization.welcomeUser(userName),
-          style: context.textTheme.titleLarge,
-        ),
-        Text(
-          context.localization.itemsCount(unreadCount),
-          style: context.textTheme.bodyMedium?.copyWith(
-            color: context.colorScheme.onSurfaceVariant,
-          ),
-        ),
-      ],
-    );
-  }
-}
-</code></pre>
-</div>
+<h2 id="4--reference-implementations---examples---" class="doc-h2"><a href="#4--reference-implementations---examples---" class="heading-anchor">#</a> 4. Reference Implementations (<code class="inline-code">examples/</code>)</h2>
+<ul class="doc-list">
+<li><strong>Context Localization Shorthand (<code class="inline-code">BuildContextLocalizationX</code>):</strong> <a href="examples/l10n_context_extension.dart" class="doc-link">examples/l10n_context_extension.dart</a></li>
+<li>Clean accessor <code class="inline-code">context.localization</code> for all generated strings.</li>
+<li><strong>Domain Failure Localization Mapper:</strong> <a href="examples/failure_localization_extension.dart" class="doc-link">examples/failure_localization_extension.dart</a></li>
+<li>Maps <code class="inline-code">NetworkFailure</code>, <code class="inline-code">UnauthorizedFailure</code>, <code class="inline-code">ServerFailure</code>, etc., to localized strings.</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="5--domain-failure-to-localized-string-mapping" class="doc-h2"><a href="#5--domain-failure-to-localized-string-mapping" class="heading-anchor">#</a> 5. Domain Failure to Localized String Mapping</h2>
-<p class="doc-p">Domain layers return typed <code class="inline-code">DomainFailure</code> sealed classes. Presentation layer resolves them to user-friendly copy via an extension:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// lib/presentation/ui_utils/extensions/domain_failure_localization_extension.dart
-import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_template/domain/core/failures/domain_failure.dart&#039;;
-import &#039;package:flutter_template/presentation/ui_utils/extensions/build_context_localization_extension.dart&#039;;
-
-extension DomainFailureLocalizationX on DomainFailure {
-  String toLocalizedString(BuildContext context) {
-    return switch (this) {
-      NetworkFailure() =&gt; context.localization.errorNoInternet,
-      UnauthorizedFailure() =&gt; context.localization.errorSessionExpired,
-      NotFoundFailure() =&gt; context.localization.errorResourceNotFound,
-      ServerFailure() =&gt; context.localization.errorGenericServer,
-      TimeoutFailure() =&gt; context.localization.errorConnectionTimeout,
-      UnknownFailure() =&gt; context.localization.errorUnknown,
-    };
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="6--dynamic-runtime-locale-switching" class="doc-h2"><a href="#6--dynamic-runtime-locale-switching" class="heading-anchor">#</a> 6. Dynamic Runtime Locale Switching</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// lib/presentation/state_management/locale/locale_cubit.dart
-import &#039;dart:ui&#039;;
-import &#039;package:equatable/equatable.dart&#039;;
-import &#039;package:flutter_bloc/flutter_bloc.dart&#039;;
-import &#039;package:injectable/injectable.dart&#039;;
-import &#039;package:flutter_template/infrastructure/storage/local_store_interactor.dart&#039;;
-
-part &#039;locale_state.dart&#039;;
-
-@injectable
-class LocaleCubit extends Cubit&lt;LocaleState&gt; {
-  final LocalStoreInteractor _store;
-  static const String _localeKey = &#039;app_locale&#039;;
-
-  LocaleCubit(this._store) : super(const LocaleState(Locale(&#039;en&#039;))) {
-    _loadSavedLocale();
-  }
-
-  Future&lt;void&gt; _loadSavedLocale() async {
-    final languageCode = await _store.getString(_localeKey);
-    if (languageCode != null) {
-      emit(LocaleState(Locale(languageCode)));
-    }
-  }
-
-  Future&lt;void&gt; setLocale(Locale newLocale) async {
-    await _store.setString(_localeKey, newLocale.languageCode);
-    emit(LocaleState(newLocale));
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="7--locale-aware-date---number-formatting" class="doc-h2"><a href="#7--locale-aware-date---number-formatting" class="heading-anchor">#</a> 7. Locale-Aware Date &amp; Number Formatting</h2>
-<p class="doc-p">Always pass the active locale to <code class="inline-code">intl</code> formatters:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:intl/intl.dart&#039;;
-
-class OrderSummaryTile extends StatelessWidget {
-  final DateTime orderDate;
-  final double totalPrice;
-
-  const OrderSummaryTile({
-    super.key,
-    required this.orderDate,
-    required this.totalPrice,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final String currentLocale = Localizations.localeOf(context).toString();
-
-    final formattedDate = DateFormat.yMMMMd(currentLocale).format(orderDate);
-    final formattedPrice = NumberFormat.simpleCurrency(
-      locale: currentLocale,
-    ).format(totalPrice);
-
-    return ListTile(
-      title: Text(formattedPrice),
-      subtitle: Text(formattedDate),
-    );
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="8--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#8--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 8. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Hardcoding text in widgets (<code class="inline-code">Text(&#039;Save Changes&#039;)</code>)</td>
-<td><strong>CRITICAL</strong></td>
-<td>Use <code class="inline-code">Text(context.localization.saveButtonLabel)</code>.</td>
-</tr>
-<tr>
-<td>Importing <code class="inline-code">package:flutter_template/l10n/...</code> in Domain or Data</td>
-<td><strong>CRITICAL</strong></td>
-<td>Keep Domain/Data 100% agnostic of localization.</td>
-</tr>
-<tr>
-<td>Constructing formatters without <code class="inline-code">locale: Localizations.localeOf(context)</code></td>
-<td><strong>MEDIUM</strong></td>
-<td>Always pass active locale to <code class="inline-code">DateFormat</code> and <code class="inline-code">NumberFormat</code>.</td>
-</tr>
-<tr>
-<td>Calling <code class="inline-code">S.current</code> inside build methods when <code class="inline-code">context</code> is available</td>
-<td><strong>HIGH</strong></td>
-<td>Use <code class="inline-code">context.localization</code> so widget rebuilds when locale changes.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="9--verification-checklist" class="doc-h2"><a href="#9--verification-checklist" class="heading-anchor">#</a> 9. Verification Checklist</h2>
+<h2 id="5--verification-checklist" class="doc-h2"><a href="#5--verification-checklist" class="heading-anchor">#</a> 5. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">MaterialApp.router</code> delegates include <code class="inline-code">S.delegate</code> and supported locales.</span>
+    <span class="check-text"><code class="inline-code">localizationsDelegates</code> and <code class="inline-code">supportedLocales</code> configured in <code class="inline-code">MaterialApp.router</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">context.localization</code> extension is used across UI widgets.</span>
+    <span class="check-text">UI widgets consume strings strictly via <code class="inline-code">context.localization</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">UI failures are mapped via <code class="inline-code">DomainFailureLocalizationX</code>.</span>
+    <span class="check-text">Failures mapped to user copy in Presentation via extension.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Language switching triggers dynamic UI rebuilds without restarting the app.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Date and currency formats adapt cleanly when switching from <code class="inline-code">en</code> to <code class="inline-code">uk</code>.</span>
+    <span class="check-text">Date, number, and currency formatters consume active <code class="inline-code">Locale</code>.</span>
   </label>
 </div>
 
@@ -878,17 +622,6 @@ class OrderSummaryTile extends StatelessWidget {
   </div>
   <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
     Primary coordinator and architecture guide for Internationalization (i18n) and Localization (l10n) in lib/l10n...
-  </div>
-</a>
-<a href="../../infrastructure/infrastructure-storage/infrastructure-storage.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    infrastructure-storage ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
-    Інфраструктура та Сервіси
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Standards and patterns for storage interactors in lib/infrastructure/storage/ (or lib/infrastructure/utils/sto...
   </div>
 </a>
 <a href="../../presentation/state-management/flutter-bloc-hub/flutter-bloc-hub.html" class="checklist-item" style="text-decoration: none; display: block;">

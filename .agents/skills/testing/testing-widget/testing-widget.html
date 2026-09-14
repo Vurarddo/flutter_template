@@ -568,55 +568,7 @@ pre {
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="3--shared--widgettestwrapper--standard" class="doc-h2"><a href="#3--shared--widgettestwrapper--standard" class="heading-anchor">#</a> 3. Shared <code class="inline-code">WidgetTestWrapper</code> Standard</h2>
-<p class="doc-p">Every widget test must wrap the target widget in a clean wrapper that provides Material 3 theme, localization delegates, and navigation context:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// test/test_utils/widget_test_wrapper.dart
-import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_localizations/flutter_localizations.dart&#039;;
-import &#039;package:flutter_template/l10n/generated/l10n.dart&#039;;
-import &#039;package:flutter_template/presentation/theme/app_theme.dart&#039;;
-
-class WidgetTestWrapper extends StatelessWidget {
-  final Widget child;
-  final Brightness brightness;
-  final Locale locale;
-
-  const WidgetTestWrapper({
-    super.key,
-    required this.child,
-    this.brightness = Brightness.light,
-    this.locale = const Locale(&#039;en&#039;),
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: brightness == Brightness.dark ? AppTheme.dark : AppTheme.light,
-      locale: locale,
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      home: Scaffold(body: child),
-    );
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="4--async-frame-pumping---spinner-safety" class="doc-h2"><a href="#4--async-frame-pumping---spinner-safety" class="heading-anchor">#</a> 4. Async Frame Pumping &amp; Spinner Safety</h2>
+<h2 id="3--async-frame-pumping---spinner-safety" class="doc-h2"><a href="#3--async-frame-pumping---spinner-safety" class="heading-anchor">#</a> 3. Async Frame Pumping &amp; Spinner Safety</h2>
 <div class="table-responsive"><table class="doc-table">
 <thead><tr>
 <th>Method</th>
@@ -640,192 +592,43 @@ class WidgetTestWrapper extends StatelessWidget {
 </tr>
 </tbody></table></div>
 <p>[!CAUTION]</p>
-<p><strong>CRITICAL RULE:</strong> NEVER call <code class="inline-code">pumpAndSettle()</code> when an infinite animation (e.g. <code class="inline-code">CircularProgressIndicator</code>, looping shimmer) is on screen. It will trigger a <code class="inline-code">TimeoutException</code>. Use <code class="inline-code">tester.pump(const Duration(milliseconds: 300))</code> instead!</p>
+<p><strong>CRITICAL RULE:</strong> NEVER call <code class="inline-code">pumpAndSettle()</code> when an infinite animation (e.g. <code class="inline-code">CircularProgressIndicator</code>, looping shimmer) is on screen. Use <code class="inline-code">tester.pump(const Duration(milliseconds: 100))</code> instead.</p>
 <hr class="doc-divider">
-<h2 id="5--complete-widget-test-with-mocked-bloc" class="doc-h2"><a href="#5--complete-widget-test-with-mocked-bloc" class="heading-anchor">#</a> 5. Complete Widget Test with Mocked BLoC</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// test/presentation/pages/item/widgets/item_card_test.dart
-import &#039;package:bloc_test/bloc_test.dart&#039;;
-import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_bloc/flutter_bloc.dart&#039;;
-import &#039;package:flutter_test/flutter_test.dart&#039;;
-import &#039;package:mocktail/mocktail.dart&#039;;
-
-import &#039;package:flutter_template/domain/core/failures/domain_failure.dart&#039;;
-import &#039;package:flutter_template/domain/item/entities/item_entity.dart&#039;;
-import &#039;package:flutter_template/presentation/state_management/item/item_bloc.dart&#039;;
-import &#039;package:flutter_template/presentation/pages/item/item_page.dart&#039;;
-import &#039;../../../test_utils/widget_test_wrapper.dart&#039;;
-
-class MockItemBloc extends MockBloc&lt;ItemEvent, ItemState&gt; implements ItemBloc {}
-
-void main() {
-  late MockItemBloc mockItemBloc;
-
-  const tItem = ItemEntity(
-    id: &#039;item_123&#039;,
-    title: &#039;Awesome Item&#039;,
-    description: &#039;Detailed description&#039;,
-    isActive: true,
-  );
-
-  setUp(() {
-    mockItemBloc = MockItemBloc();
-  });
-
-  tearDown(() {
-    mockItemBloc.close();
-  });
-
-  testWidgets(&#039;renders CircularProgressIndicator when state is loading&#039;, (tester) async {
-    when(() =&gt; mockItemBloc.state).thenReturn(const ItemState.loading());
-
-    await tester.pumpWidget(
-      WidgetTestWrapper(
-        child: BlocProvider&lt;ItemBloc&gt;.value(
-          value: mockItemBloc,
-          child: const ItemPage(itemId: &#039;item_123&#039;),
-        ),
-      ),
-    );
-
-    // Pump a single frame without pumpAndSettle (spinner is infinite)
-    await tester.pump(const Duration(milliseconds: 100));
-
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
-  });
-
-  testWidgets(&#039;renders item content when state is success&#039;, (tester) async {
-    when(() =&gt; mockItemBloc.state).thenReturn(const ItemState.success(tItem));
-
-    await tester.pumpWidget(
-      WidgetTestWrapper(
-        child: BlocProvider&lt;ItemBloc&gt;.value(
-          value: mockItemBloc,
-          child: const ItemPage(itemId: &#039;item_123&#039;),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
-    expect(find.byKey(const ValueKey(&#039;item_title_text&#039;)), findsOneWidget);
-    expect(find.text(&#039;Awesome Item&#039;), findsOneWidget);
-  });
-
-  testWidgets(&#039;dispatches RetryRequested when retry button is tapped in error view&#039;, (tester) async {
-    when(() =&gt; mockItemBloc.state).thenReturn(
-      const ItemState.failure(NetworkFailure()),
-    );
-
-    await tester.pumpWidget(
-      WidgetTestWrapper(
-        child: BlocProvider&lt;ItemBloc&gt;.value(
-          value: mockItemBloc,
-          child: const ItemPage(itemId: &#039;item_123&#039;),
-        ),
-      ),
-    );
-
-    await tester.pumpAndSettle();
-
-    final retryButton = find.byKey(const ValueKey(&#039;retry_button&#039;));
-    expect(retryButton, findsOneWidget);
-
-    await tester.tap(retryButton);
-    await tester.pump();
-
-    verify(() =&gt; mockItemBloc.add(const ItemDetailsRequested(&#039;item_123&#039;))).called(1);
-  });
-}
-</code></pre>
-</div>
+<h2 id="4--reference-implementations---examples---" class="doc-h2"><a href="#4--reference-implementations---examples---" class="heading-anchor">#</a> 4. Reference Implementations (<code class="inline-code">examples/</code>)</h2>
+<ul class="doc-list">
+<li><strong>Standard <code class="inline-code">WidgetTestWrapper</code>:</strong> <a href="examples/widget_test_wrapper_sample.dart" class="doc-link">examples/widget_test_wrapper_sample.dart</a></li>
+<li>Encapsulates <code class="inline-code">MaterialApp</code>, <code class="inline-code">ThemeData</code>, <code class="inline-code">Scaffold</code>, and localization delegates (<code class="inline-code">S.delegate</code>).</li>
+<li><strong>Widget Test with Mocked BLoC:</strong> <a href="examples/widget_test_with_mock_bloc.dart" class="doc-link">examples/widget_test_with_mock_bloc.dart</a></li>
+<li>Mocktail BLoC mocking, state stubbing (<code class="inline-code">when(() =&gt; bloc.state)</code>), and spinner verification.</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="6--lazy-scrolling-in-long-lists---scrolluntilvisible--" class="doc-h2"><a href="#6--lazy-scrolling-in-long-lists---scrolluntilvisible--" class="heading-anchor">#</a> 6. Lazy Scrolling in Long Lists (<code class="inline-code">scrollUntilVisible</code>)</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">testWidgets(&#039;scrolls and finds offscreen item in long list&#039;, (tester) async {
-  await tester.pumpWidget(WidgetTestWrapper(child: const LongItemListView()));
-  await tester.pumpAndSettle();
-
-  final targetItemKey = const ValueKey(&#039;item_row_50&#039;);
-
-  await tester.scrollUntilVisible(
-    find.byKey(targetItemKey),
-    300.0, // scroll step in pixels
-    scrollable: find.byType(Scrollable).first,
-  );
-  await tester.pumpAndSettle();
-
-  expect(find.byKey(targetItemKey), findsOneWidget);
-});
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="7--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#7--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 7. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td><code class="inline-code">pumpAndSettle()</code> while <code class="inline-code">CircularProgressIndicator</code> is on screen</td>
-<td><strong>CRITICAL</strong></td>
-<td>Use <code class="inline-code">tester.pump(Duration(milliseconds: 300))</code>.</td>
-</tr>
-<tr>
-<td>Finding target elements by raw text instead of <code class="inline-code">ValueKey</code></td>
-<td><strong>HIGH</strong></td>
-<td>Add <code class="inline-code">key: const ValueKey(&#039;id&#039;)</code> to widgets.</td>
-</tr>
-<tr>
-<td>Injecting real UseCases or APIs in widget tests</td>
-<td><strong>HIGH</strong></td>
-<td>Mock BLoC states via <code class="inline-code">MockBloc</code> or <code class="inline-code">Mocktail</code>.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="8--verification-checklist" class="doc-h2"><a href="#8--verification-checklist" class="heading-anchor">#</a> 8. Verification Checklist</h2>
+<h2 id="5--verification-checklist" class="doc-h2"><a href="#5--verification-checklist" class="heading-anchor">#</a> 5. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">All widget tests wrap target components in <code class="inline-code">WidgetTestWrapper</code>.</span>
+    <span class="check-text">Target widget wrapped in <code class="inline-code">WidgetTestWrapper</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Interactive elements are located using <code class="inline-code">ValueKey</code>.</span>
+    <span class="check-text">No <code class="inline-code">pumpAndSettle()</code> called on infinite spinners.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Spinners are pumped with fixed duration (no infinite timeouts).</span>
+    <span class="check-text">Finders target explicit <code class="inline-code">ValueKey</code> or typed widgets.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">flutter test test/presentation/</code> passes cleanly.</span>
+    <span class="check-text">Mocked BLoCs properly closed in <code class="inline-code">tearDown()</code>.</span>
   </label>
 </div>
 

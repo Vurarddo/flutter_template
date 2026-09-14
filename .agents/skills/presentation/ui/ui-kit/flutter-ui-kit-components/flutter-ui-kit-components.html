@@ -568,243 +568,50 @@ pre {
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="3--standard-implementation-recipes" class="doc-h2"><a href="#3--standard-implementation-recipes" class="heading-anchor">#</a> 3. Standard Implementation Recipes</h2>
-<h3 class="doc-h3">3.1 AppBadge Component Recipe</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_template/presentation/ui_utils/extensions/context_extensions.dart&#039;;
-
-enum AppBadgeVariant { neutral, success, warning, error, primary }
-
-class AppBadge extends StatelessWidget {
-  final String label;
-  final AppBadgeVariant variant;
-  final Widget? icon;
-
-  const AppBadge({
-    super.key,
-    required this.label,
-    this.variant = AppBadgeVariant.neutral,
-    this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-    final textTheme = context.textTheme;
-
-    final (backgroundColor, foregroundColor) = switch (variant) {
-      AppBadgeVariant.primary =&gt; (colorScheme.primaryContainer, colorScheme.onPrimaryContainer),
-      AppBadgeVariant.success =&gt; (colorScheme.tertiaryContainer, colorScheme.onTertiaryContainer),
-      AppBadgeVariant.warning =&gt; (colorScheme.errorContainer.withValues(alpha: 0.3), colorScheme.onErrorContainer),
-      AppBadgeVariant.error   =&gt; (colorScheme.errorContainer, colorScheme.onErrorContainer),
-      AppBadgeVariant.neutral =&gt; (colorScheme.surfaceContainerHighest, colorScheme.onSurfaceVariant),
-    };
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 4.0),
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (icon != null) ...[
-            IconTheme(
-              data: IconThemeData(size: 14, color: foregroundColor),
-              child: icon!,
-            ),
-            const SizedBox(width: 4),
-          ],
-          Text(
-            label,
-            style: textTheme.labelSmall?.copyWith(
-              color: foregroundColor,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">3.2 AppCard Component Recipe</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-
-import &#039;package:flutter_template/presentation/ui_utils/extensions/context_extensions.dart&#039;;
-
-class AppCard extends StatelessWidget {
-  final Widget child;
-  final EdgeInsetsGeometry padding;
-  final VoidCallback? onTap;
-  final bool isSelected;
-
-  const AppCard({
-    super.key,
-    required this.child,
-    this.padding = const EdgeInsets.all(16.0),
-    this.onTap,
-    this.isSelected = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-
-    final borderSide = isSelected
-        ? BorderSide(color: colorScheme.primary, width: 2)
-        : BorderSide(color: colorScheme.outlineVariant);
-
-    return Card(
-      elevation: 0,
-      color: isSelected ? colorScheme.primaryContainer.withValues(alpha: 0.15) : colorScheme.surfaceContainerLow,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: borderSide,
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: padding,
-          child: child,
-        ),
-      ),
-    );
-  }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">3.3 AppDialog &amp; Bottom Sheet Utilities</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-
-import &#039;package:flutter_template/presentation/ui_utils/extensions/context_extensions.dart&#039;;
-
-abstract class AppModals {
-  static Future&lt;bool?&gt; showConfirmationDialog(
-    BuildContext context, {
-    required String title,
-    required String message,
-    String confirmLabel = &#039;Confirm&#039;,
-    String cancelLabel = &#039;Cancel&#039;,
-    bool isDestructive = false,
-  }) {
-    final colorScheme = context.colorScheme;
-
-    return showDialog&lt;bool&gt;(
-      context: context,
-      builder: (context) =&gt; AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () =&gt; Navigator.pop(context, false),
-            child: Text(cancelLabel),
-          ),
-          FilledButton(
-            style: isDestructive
-                ? FilledButton.styleFrom(backgroundColor: colorScheme.error, foregroundColor: colorScheme.onError)
-                : null,
-            onPressed: () =&gt; Navigator.pop(context, true),
-            child: Text(confirmLabel),
-          ),
-        ],
-      ),
-    );
-  }
-}
-</code></pre>
-</div>
+<h2 id="3--reference-implementation-recipes---examples---" class="doc-h2"><a href="#3--reference-implementation-recipes---examples---" class="heading-anchor">#</a> 3. Reference Implementation Recipes (<code class="inline-code">examples/</code>)</h2>
+<ul class="doc-list">
+<li><strong>Status &amp; Category Badge (<code class="inline-code">AppBadge</code>):</strong> <a href="examples/app_badge_sample.dart" class="doc-link">examples/app_badge_sample.dart</a></li>
+<li>Pure stateless badge with typed <code class="inline-code">AppBadgeVariant</code> (<code class="inline-code">primary</code>, <code class="inline-code">success</code>, <code class="inline-code">warning</code>, <code class="inline-code">error</code>, <code class="inline-code">neutral</code>).</li>
+<li><strong>Interactive Card (<code class="inline-code">AppCard</code>):</strong> <a href="examples/app_card_sample.dart" class="doc-link">examples/app_card_sample.dart</a></li>
+<li>Supports selection borders, surface tint, and <code class="inline-code">InkWell</code> tap callbacks.</li>
+<li><strong>Confirmation Modals (<code class="inline-code">AppModals</code>):</strong> <a href="examples/app_modals_sample.dart" class="doc-link">examples/app_modals_sample.dart</a></li>
+<li>Type-safe <code class="inline-code">showConfirmationDialog</code> helper honoring M3 design tokens.</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="4--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#4--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 4. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Hardcoding raw colors (<code class="inline-code">Color(0xFF...)</code>) in UI Kit widgets</td>
-<td><strong>CRITICAL</strong></td>
-<td>Derive colors dynamically from <code class="inline-code">context.colorScheme</code> or <code class="inline-code">context.customColors</code>.</td>
-</tr>
-<tr>
-<td>Importing BLoC/Cubit or UseCases inside UI Kit files</td>
-<td><strong>CRITICAL</strong></td>
-<td>UI Kit components must only accept pure data props and callbacks.</td>
-</tr>
-<tr>
-<td>Missing <code class="inline-code">@Preview</code> definitions on UI Kit files</td>
-<td><strong>HIGH</strong></td>
-<td>Add <code class="inline-code">@Preview</code> functions for both Light and Dark themes.</td>
-</tr>
-<tr>
-<td>Inconsistent spacing/padding not matching design tokens</td>
-<td><strong>MEDIUM</strong></td>
-<td>Use standard multiples of 4dp/8dp for insets and radii.</td>
-</tr>
-</tbody></table></div>
+<h2 id="4--strict-ui-kit-architecture-rules" class="doc-h2"><a href="#4--strict-ui-kit-architecture-rules" class="heading-anchor">#</a> 4. Strict UI Kit Architecture Rules</h2>
+<ol class="doc-ordered-list">
+<li><strong>100% Stateless &amp; Pure:</strong> Reusable UI Kit widgets must never inject BLoCs, Cubits, or Repositories directly.</li>
+<li><strong>Zero Hardcoded Colors:</strong> All colors must resolve from <code class="inline-code">context.colorScheme</code> or custom <code class="inline-code">ThemeExtension</code>.</li>
+<li><strong>Mandatory <code class="inline-code">@Preview</code> Decoration:</strong> Every component file in <code class="inline-code">lib/presentation/ui_kit/</code> must include <code class="inline-code">@Preview</code> tests.</li>
+</ul>
 <hr class="doc-divider">
 <h2 id="5--verification-checklist" class="doc-h2"><a href="#5--verification-checklist" class="heading-anchor">#</a> 5. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Component is decoupled from business logic and receives only primitive/UI models.</span>
+    <span class="check-text">Widget is pure and stateless with explicit typed properties.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Visual variants are modeled via strongly-typed enums.</span>
+    <span class="check-text">Colors and styles derived strictly from <code class="inline-code">context.colorScheme</code>, <code class="inline-code">context.textTheme</code>, and <code class="inline-code">context.customColors</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">ColorScheme tokens adapt seamlessly to Light and Dark modes.</span>
+    <span class="check-text">Component is decoupled from domain logic and view models.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Hover and pressed states are handled for desktop and touch targets.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Component is paired with a corresponding <code class="inline-code">@Preview</code> in the same file or preview directory.</span>
+    <span class="check-text"><code class="inline-code">@Preview</code> function provided for isolated IDE rendering.</span>
   </label>
 </div>
 

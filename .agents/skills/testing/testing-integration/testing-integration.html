@@ -569,7 +569,6 @@ pre {
 </tbody></table></div>
 <hr class="doc-divider">
 <h2 id="3--platform-driver-setup---test_driver-integration_test-dart--" class="doc-h2"><a href="#3--platform-driver-setup---test_driver-integration_test-dart--" class="heading-anchor">#</a> 3. Platform Driver Setup (<code class="inline-code">test_driver/integration_test.dart</code>)</h2>
-<p class="doc-p">For automated CI/CD runners and Web testing:</p>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -578,307 +577,67 @@ pre {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">// test_driver/integration_test.dart
-import &#039;package:integration_test/integration_test_driver.dart&#039;;
+  <pre><code class="language-dart">import &#039;package:integration_test/integration_test_driver.dart&#039;;
 
 Future&lt;void&gt; main() =&gt; integrationDriver();
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="4--end-to-end-integration-test-implementation" class="doc-h2"><a href="#4--end-to-end-integration-test-implementation" class="heading-anchor">#</a> 4. End-to-End Integration Test Implementation</h2>
-<h3 class="doc-h3">4.1 UI Kit Showcase Smoke Test (<code class="inline-code">integration_test/uikit_page_test.dart</code>)</h3>
-<p class="doc-p">Mandatory integration test generated during project bootstrap:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// integration_test/uikit_page_test.dart
-import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_test/flutter_test.dart&#039;;
-import &#039;package:get_it/get_it.dart&#039;;
-import &#039;package:integration_test/integration_test.dart&#039;;
-
-import &#039;package:flutter_template/main.dart&#039; as app;
-
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() async {
-    await GetIt.I.reset();
-  });
-
-  tearDown(() async {
-    await GetIt.I.reset();
-  });
-
-  group(&#039;UiKitPage Integration Smoke Test&#039;, () {
-    testWidgets(&#039;renders UiKitPage, switches theme modes, and validates UI sections&#039;, (tester) async {
-      // 1. Launch the actual application
-      app.main();
-      await tester.pumpAndSettle();
-
-      // 2. Verify UiKit landing is displayed
-      expect(find.text(&#039;UI Kit &amp; Design System&#039;), findsWidgets);
-
-      // 3. Toggle Theme Switcher (System -&gt; Light -&gt; Dark)
-      final darkThemeButton = find.text(&#039;Dark&#039;);
-      if (darkThemeButton.evaluate().isNotEmpty) {
-        await tester.tap(darkThemeButton);
-        await tester.pumpAndSettle();
-      }
-
-      final lightThemeButton = find.text(&#039;Light&#039;);
-      if (lightThemeButton.evaluate().isNotEmpty) {
-        await tester.tap(lightThemeButton);
-        await tester.pumpAndSettle();
-      }
-
-      // 4. Scroll through UI showcase sections smoothly without overflow
-      final scrollable = find.byType(Scrollable).first;
-      await tester.drag(scrollable, const Offset(0, -600));
-      await tester.pumpAndSettle();
-
-      // 5. Verify Buttons &amp; Form Controls exist
-      expect(find.byType(FilledButton), findsWidgets);
-      expect(find.byType(OutlinedButton), findsWidgets);
-    });
-  });
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h3 class="doc-h3">4.2 Feature User Journey Test (<code class="inline-code">integration_test/item_journey_test.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// integration_test/item_journey_test.dart
-import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_test/flutter_test.dart&#039;;
-import &#039;package:get_it/get_it.dart&#039;;
-import &#039;package:integration_test/integration_test.dart&#039;;
-
-import &#039;package:flutter_template/main.dart&#039; as app;
-
-void main() {
-  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  setUp(() async {
-    // Reset DI between tests to avoid container pollution
-    await GetIt.I.reset();
-  });
-
-  tearDown(() async {
-    await GetIt.I.reset();
-  });
-
-  group(&#039;End-to-End Item User Journey&#039;, () {
-    testWidgets(&#039;user can browse items, open details, and interact&#039;, (tester) async {
-      // 1. Launch the actual application
-      app.main();
-      await tester.pumpAndSettle();
-
-      // 2. Verify Home Screen is visible
-      final homeView = find.byKey(const ValueKey(&#039;home_page_view&#039;));
-      expect(homeView, findsOneWidget);
-
-      // 3. Scroll to target item if off-screen (works across Mobile, Web, Desktop)
-      final targetItemKey = const ValueKey(&#039;item_card_item_1&#039;);
-      await tester.scrollUntilVisible(
-        find.byKey(targetItemKey),
-        300.0,
-        scrollable: find.byType(Scrollable).first,
-      );
-      await tester.pumpAndSettle();
-
-      // 4. Tap item card to navigate to Details
-      await tester.tap(find.byKey(targetItemKey));
-      await tester.pumpAndSettle();
-
-      // 5. Verify Details Screen navigation
-      final detailsView = find.byKey(const ValueKey(&#039;item_details_page_view&#039;));
-      expect(detailsView, findsOneWidget);
-
-      // 6. Tap action button
-      final actionButton = find.byKey(const ValueKey(&#039;item_action_button&#039;));
-      expect(actionButton, findsOneWidget);
-      await tester.tap(actionButton);
-      await tester.pumpAndSettle();
-
-      // 7. Verify confirmation SnackBar
-      expect(find.byKey(const ValueKey(&#039;action_success_snackbar&#039;)), findsOneWidget);
-    });
-  });
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="5--cross-platform-viewport-configuration" class="doc-h2"><a href="#5--cross-platform-viewport-configuration" class="heading-anchor">#</a> 5. Cross-Platform Viewport Configuration</h2>
-<p class="doc-p">When testing Web and Desktop form factors, explicitly set the test surface size:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// Helper for responsive testing
-Future&lt;void&gt; setTestViewport(
-  WidgetTester tester, {
-  required double width,
-  required double height,
-}) async {
-  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  await binding.setSurfaceSize(Size(width, height));
-  tester.view.physicalSize = Size(width, height);
-  tester.view.devicePixelRatio = 1.0;
-  addTearDown(() {
-    tester.view.resetPhysicalSize();
-    tester.view.resetDevicePixelRatio();
-  });
-}
-
-// Usage in tests:
-testWidgets(&#039;renders desktop side navigation on wide screens&#039;, (tester) async {
-  await setTestViewport(tester, width: 1920, height: 1080); // Full HD Desktop / Web
-  app.main();
-  await tester.pumpAndSettle();
-
-  expect(find.byKey(const ValueKey(&#039;desktop_side_nav_rail&#039;)), findsOneWidget);
-});
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="6--cli-execution-matrix-across-platforms" class="doc-h2"><a href="#6--cli-execution-matrix-across-platforms" class="heading-anchor">#</a> 6. CLI Execution Matrix Across Platforms</h2>
-<h3 class="doc-h3">📱 Mobile (Android / iOS)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">bash</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-bash"># Run on connected Android or iOS device / simulator
-flutter test integration_test/item_journey_test.dart -d &lt;device_id&gt;
-</code></pre>
-</div>
-<h3 class="doc-h3">🌐 Web (Headless Chrome)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">bash</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-bash"># Run integration test on Web with ChromeDriver
-chromedriver --port=4444 &amp;
-flutter drive \
-  --driver=test_driver/integration_test.dart \
-  --target=integration_test/item_journey_test.dart \
-  -d chrome
-</code></pre>
-</div>
-<h3 class="doc-h3">💻 Desktop (macOS, Windows, Linux)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">bash</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-bash"># macOS Desktop
-flutter test integration_test/item_journey_test.dart -d macos
-
-# Windows Desktop
-flutter test integration_test/item_journey_test.dart -d windows
-
-# Linux Desktop
-flutter test integration_test/item_journey_test.dart -d linux
-</code></pre>
-</div>
-<h2 id="7--mcp-tooling---driver-automation" class="doc-h2"><a href="#7--mcp-tooling---driver-automation" class="heading-anchor">#</a> 7. MCP Tooling &amp; Driver Automation</h2>
-<p class="doc-p">Antigravity IDE provides direct MCP integration with Dart VM and Flutter driver endpoints:</p>
+<h2 id="4--reference-implementations---examples---" class="doc-h2"><a href="#4--reference-implementations---examples---" class="heading-anchor">#</a> 4. Reference Implementations (<code class="inline-code">examples/</code>)</h2>
 <ul class="doc-list">
-<li><strong>Programmatic Driver Commands (<code class="inline-code">flutter_driver_command</code>):</strong> Dispatch automated driver commands and UI gestures directly to running apps.</li>
-<li><strong>VM Service Diagnostics (<code class="inline-code">vm_service</code>):</strong> Capture VM timeline events, frame render benchmarks, and isolate states during end-to-end test execution.</li>
-<li><strong>Tooling Guide:</strong> See <a href="../../tooling/mcp-tooling-hub/mcp-tooling-hub.html" class="skill-ref-link" title="Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (hot_reload, hot_restart, widget_inspector, get_runtime_errors, analyze_files, lsp, pub_dev_search, rip_grep_packages, vm_service), firebase-mcp-server, and android-management-api. Use when choosing between MCP-accelerated IDE actions and CLI commands.">mcp-tooling-hub <span class="ext-icon">↗</span></a>.</li>
+<li><strong>UiKit Showcase Smoke Test:</strong> <a href="examples/uikit_integration_test.dart" class="doc-link">examples/uikit_integration_test.dart</a></li>
+<li>Full smoke test verifying page rendering, theme toggle (Light/Dark), and scrolling.</li>
+<li><strong>End-to-End User Journey:</strong> <a href="examples/item_journey_integration_test.dart" class="doc-link">examples/item_journey_integration_test.dart</a></li>
+<li>Full flow with <code class="inline-code">app.main()</code>, DI reset in <code class="inline-code">setUp</code>/<code class="inline-code">tearDown</code>, and <code class="inline-code">tester.scrollUntilVisible</code>.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="8--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#8--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 8. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Hardcoding platform-specific paths (e.g. <code class="inline-code">/sdcard/...</code>)</td>
-<td><strong>CRITICAL</strong></td>
-<td>Use <code class="inline-code">path_provider</code> or memory storage for cross-platform support.</td>
-</tr>
-<tr>
-<td>Forgetting <code class="inline-code">GetIt.I.reset()</code> between test cases</td>
-<td><strong>CRITICAL</strong></td>
-<td>Call <code class="inline-code">GetIt.I.reset()</code> in <code class="inline-code">setUp()</code> and <code class="inline-code">tearDown()</code>.</td>
-</tr>
-<tr>
-<td>Flaky timing using <code class="inline-code">Future.delayed(Duration(seconds: 5))</code></td>
-<td><strong>HIGH</strong></td>
-<td>Always use <code class="inline-code">tester.pumpAndSettle()</code> with condition assertions.</td>
-</tr>
-<tr>
-<td>Relying on fixed mobile screen dimensions in desktop tests</td>
-<td><strong>MEDIUM</strong></td>
-<td>Use <code class="inline-code">setTestViewport(tester, width: 1440, height: 900)</code> for desktop.</td>
-</tr>
-</tbody></table></div>
+<h2 id="5--execution-commands-across-platforms" class="doc-h2"><a href="#5--execution-commands-across-platforms" class="heading-anchor">#</a> 5. Execution Commands Across Platforms</h2>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">bash</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-bash"># Mobile (Android / iOS)
+flutter test integration_test/uikit_page_test.dart -d emulator-5554
+
+# Web (Headless Chrome)
+flutter drive --driver=test_driver/integration_test.dart --target=integration_test/uikit_page_test.dart -d chrome
+
+# Desktop (macOS, Windows, Linux)
+flutter test integration_test/uikit_page_test.dart -d macos
+</code></pre>
+</div>
 <hr class="doc-divider">
-<h2 id="9--verification-checklist" class="doc-h2"><a href="#9--verification-checklist" class="heading-anchor">#</a> 9. Verification Checklist</h2>
+<h2 id="6--verification-checklist" class="doc-h2"><a href="#6--verification-checklist" class="heading-anchor">#</a> 6. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">IntegrationTestWidgetsFlutterBinding.ensureInitialized()</code> is called at start of test.</span>
+    <span class="check-text"><code class="inline-code">IntegrationTestWidgetsFlutterBinding.ensureInitialized()</code> called in <code class="inline-code">main()</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Test executes end-to-end user flow without mocking presentation layer.</span>
+    <span class="check-text"><code class="inline-code">GetIt.I.reset()</code> called in <code class="inline-code">setUp()</code> and <code class="inline-code">tearDown()</code> to prevent state bleed.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Targets are located via <code class="inline-code">ValueKey</code>.</span>
+    <span class="check-text">Target elements located via unique <code class="inline-code">ValueKey</code> identifiers.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Tested on Mobile, Web, and Desktop targets.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">CI pipeline runs integration tests using <code class="inline-code">flutter drive</code> or <code class="inline-code">flutter test</code>.</span>
+    <span class="check-text">Tests execute cleanly on targeted platform drivers.</span>
   </label>
 </div>
 
@@ -887,17 +646,6 @@ flutter test integration_test/item_journey_test.dart -d linux
 <div class="related-skills-section" style="margin-top: 3rem;">
 <h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
-<a href="../../tooling/mcp-tooling-hub/mcp-tooling-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    mcp-tooling-hub ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
-    General
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (...
-  </div>
-</a>
 <a href="../testing-hub/testing-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
   <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
     testing-hub ↗

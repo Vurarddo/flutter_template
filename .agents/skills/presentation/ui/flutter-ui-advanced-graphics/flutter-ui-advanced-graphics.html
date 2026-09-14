@@ -528,7 +528,7 @@ pre {
     </div>
 
     <article class="doc-content">
-<h1 class="doc-h1">Flutter Advanced Graphics, CustomPainter &amp; Physics Motion Guide (Tiers 3 &amp; 4)</h1>
+<h1 class="doc-h1">Flutter Advanced Graphics, CustomPainter &amp; Physics Motion Guide</h1>
 <h2 id="1--overview---when-to-apply" class="doc-h2"><a href="#1--overview---when-to-apply" class="heading-anchor">#</a> 1. Overview &amp; When to Apply</h2>
 <p class="doc-p">Use this skill whenever:</p>
 <ul class="doc-list">
@@ -564,254 +564,47 @@ pre {
 </tbody></table></div>
 <hr class="doc-divider">
 <h2 id="3--high-performance-custompainter-architecture" class="doc-h2"><a href="#3--high-performance-custompainter-architecture" class="heading-anchor">#</a> 3. High-Performance CustomPainter Architecture</h2>
-<h3 class="doc-h3">Critical Performance Rules for Canvas Drawing:</h3>
 <ol class="doc-ordered-list">
 <li><strong>Always wrap in <code class="inline-code">RepaintBoundary</code>:</strong> Prevents custom canvas draws from invalidating adjacent widget render layers.</li>
 <li><strong>Implement <code class="inline-code">shouldRepaint</code> accurately:</strong> Never return <code class="inline-code">true</code> blindly. Compare input fields to avoid repainting unchanged frames.</li>
 <li><strong>Avoid object allocations inside <code class="inline-code">paint()</code>:</strong> Allocate <code class="inline-code">Paint</code>, <code class="inline-code">Path</code>, and <code class="inline-code">TextStyle</code> objects outside or reuse fields.</li>
 </ul>
-<h3 class="doc-h3">3.1 Custom Circular Progress Gauge Example</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class CircularGaugePainter extends CustomPainter {
-  final double progress; // 0.0 to 1.0
-  final Color trackColor;
-  final Color progressColor;
-  final double strokeWidth;
-
-  const CircularGaugePainter({
-    required this.progress,
-    required this.trackColor,
-    required this.progressColor,
-    this.strokeWidth = 10.0,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - strokeWidth) / 2;
-
-    // 1. Draw background track
-    final trackPaint = Paint()
-      ..color = trackColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    canvas.drawCircle(center, radius, trackPaint);
-
-    // 2. Draw active progress arc
-    final progressPaint = Paint()
-      ..color = progressColor
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = strokeWidth
-      ..strokeCap = StrokeCap.round;
-
-    const startAngle = -math.pi / 2;
-    final sweepAngle = 2 * math.pi * progress.clamp(0.0, 1.0);
-
-    canvas.drawArc(
-      Rect.fromCircle(center: center, radius: radius),
-      startAngle,
-      sweepAngle,
-      false,
-      progressPaint,
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CircularGaugePainter oldDelegate) {
-    return oldDelegate.progress != progress ||
-        oldDelegate.progressColor != progressColor ||
-        oldDelegate.trackColor != trackColor ||
-        oldDelegate.strokeWidth != strokeWidth;
-  }
-}
-
-// Widget integration with RepaintBoundary:
-class CircularProgressGauge extends StatelessWidget {
-  final double progress;
-
-  const CircularProgressGauge({super.key, required this.progress});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-
-    return RepaintBoundary(
-      child: CustomPaint(
-        size: const Size(120, 120),
-        painter: CircularGaugePainter(
-          progress: progress,
-          trackColor: colorScheme.surfaceContainerHighest,
-          progressColor: colorScheme.primary,
-        ),
-      ),
-    );
-  }
-}
-</code></pre>
-</div>
 <hr class="doc-divider">
-<h2 id="4--physics-based-motion--springsimulation-" class="doc-h2"><a href="#4--physics-based-motion--springsimulation-" class="heading-anchor">#</a> 4. Physics-Based Motion (SpringSimulation)</h2>
-<p class="doc-p">For natural gesture interactions, use physics simulations instead of fixed-duration duration curves:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class PhysicsSpringDraggable extends StatefulWidget {
-  final Widget child;
-
-  const PhysicsSpringDraggable({super.key, required this.child});
-
-  @override
-  State&lt;PhysicsSpringDraggable&gt; createState() =&gt; _PhysicsSpringDraggableState();
-}
-
-class _PhysicsSpringDraggableState extends State&lt;PhysicsSpringDraggable&gt;
-    with SingleTickerProviderStateMixin {
-  late final AnimationController _controller;
-  Alignment _dragAlignment = Alignment.center;
-  late Animation&lt;Alignment&gt; _animation;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this);
-    _controller.addListener(() {
-      setState(() {
-        _dragAlignment = _animation.value;
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _runSpringAnimation(Offset pixelsPerSecond, Size size) {
-    _animation = _controller.drive(
-      AlignmentTween(begin: _dragAlignment, end: Alignment.center),
-    );
-
-    // Calculate spring physics parameters
-    final unitsPerSecondX = pixelsPerSecond.dx / size.width;
-    final unitsPerSecondY = pixelsPerSecond.dy / size.height;
-    final unitsPerSecond = Offset(unitsPerSecondX, unitsPerSecondY);
-    final unitVelocity = unitsPerSecond.distance;
-
-    const spring = SpringDescription(
-      mass: 30,
-      stiffness: 1,
-      damping: 1,
-    );
-
-    final simulation = SpringSimulation(spring, 0, 1, -unitVelocity);
-    _controller.animateWith(simulation);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-
-    return GestureDetector(
-      onPanDown: (details) =&gt; _controller.stop(),
-      onPanUpdate: (details) {
-        setState(() {
-          _dragAlignment += Alignment(
-            details.delta.dx / (size.width / 2),
-            details.delta.dy / (size.height / 2),
-          );
-        });
-      },
-      onPanEnd: (details) {
-        _runSpringAnimation(details.velocity.pixelsPerSecond, size);
-      },
-      child: Align(
-        alignment: _dragAlignment,
-        child: widget.child,
-      ),
-    );
-  }
-}
-</code></pre>
-</div>
+<h2 id="4--reference-implementations---examples---" class="doc-h2"><a href="#4--reference-implementations---examples---" class="heading-anchor">#</a> 4. Reference Implementations (<code class="inline-code">examples/</code>)</h2>
+<ul class="doc-list">
+<li><strong>Custom Circular Gauge Painter:</strong> <a href="examples/circular_gauge_painter.dart" class="doc-link">examples/circular_gauge_painter.dart</a></li>
+<li>Custom canvas drawing with <code class="inline-code">drawCircle</code>, <code class="inline-code">drawArc</code>, and <code class="inline-code">RepaintBoundary</code> encapsulation.</li>
+<li><strong>Physics Spring Simulation (<code class="inline-code">SpringSimulation</code>):</strong> <a href="examples/physics_spring_draggable.dart" class="doc-link">examples/physics_spring_draggable.dart</a></li>
+<li>Natural gesture-driven spring motion using <code class="inline-code">SpringSimulation</code> and <code class="inline-code">AnimationController</code>.</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="5--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#5--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 5. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Returning <code class="inline-code">true</code> unconditionally inside <code class="inline-code">shouldRepaint</code></td>
-<td><strong>CRITICAL</strong></td>
-<td>Compare all drawing parameters (<code class="inline-code">oldDelegate.prop != prop</code>).</td>
-</tr>
-<tr>
-<td>Allocating heavy resources (images, shaders, paths) inside <code class="inline-code">paint()</code> loop</td>
-<td><strong>HIGH</strong></td>
-<td>Precompute or allocate paths outside the paint callback.</td>
-</tr>
-<tr>
-<td>Missing <code class="inline-code">RepaintBoundary</code> on animated or complex <code class="inline-code">CustomPainter</code> widgets</td>
-<td><strong>HIGH</strong></td>
-<td>Wrap the <code class="inline-code">CustomPaint</code> in <code class="inline-code">RepaintBoundary</code>.</td>
-</tr>
-<tr>
-<td>Hardcoding canvas colors rather than receiving them from Theme tokens</td>
-<td><strong>MEDIUM</strong></td>
-<td>Pass <code class="inline-code">context.colorScheme</code> colors to the painter constructor.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="6--verification-checklist" class="doc-h2"><a href="#6--verification-checklist" class="heading-anchor">#</a> 6. Verification Checklist</h2>
+<h2 id="5--verification-checklist" class="doc-h2"><a href="#5--verification-checklist" class="heading-anchor">#</a> 5. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">CustomPainter class implements an accurate <code class="inline-code">shouldRepaint</code> condition.</span>
+    <span class="check-text">Canvas drawing wrapped inside <code class="inline-code">RepaintBoundary</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">No allocations of heavy objects occur inside <code class="inline-code">paint(Canvas canvas, Size size)</code>.</span>
+    <span class="check-text"><code class="inline-code">shouldRepaint</code> accurately compares old and new delegate properties.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Complex or animated custom paintings are enclosed in <code class="inline-code">RepaintBoundary</code>.</span>
+    <span class="check-text">Zero object allocations (<code class="inline-code">Paint()</code>, <code class="inline-code">Path()</code>) inside <code class="inline-code">paint()</code> loop.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Physics simulations (<code class="inline-code">SpringSimulation</code>) correctly dispose of controller tickers.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Canvas colors are derived dynamically from Material 3 <code class="inline-code">ColorScheme</code> tokens.</span>
+    <span class="check-text">Gesture springs use <code class="inline-code">SpringSimulation</code> for natural velocity-based snapback.</span>
   </label>
 </div>
 

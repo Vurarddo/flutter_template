@@ -564,256 +564,51 @@ pre {
 <tr>
 <td><strong>BLoC UI Widgets</strong></td>
 <td><a href="../../../state-management/flutter-bloc-widgets/flutter-bloc-widgets.html" class="skill-ref-link" title="Complete Flutter UI widgets and scoping guide for flutter_bloc. Use when building UI with BlocBuilder, BlocListener, BlocConsumer, BlocSelector, MultiBlocProvider, MultiBlocListener, deciding between context.read vs watch vs select, or configuring BlocProvider vs BlocProvider.value for bottom sheets, dialogs, and navigation routes.">flutter-bloc-widgets <span class="ext-icon">↗</span></a></td>
-<td>Dispatching form events (<code class="inline-code">context.read&lt;Bloc&gt;().add</code>) and handling submit states.</td>
+<td>Dispatching form events and handling submit states.</td>
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
 <h2 id="3--core-architectural-boundaries---rules" class="doc-h2"><a href="#3--core-architectural-boundaries---rules" class="heading-anchor">#</a> 3. Core Architectural Boundaries &amp; Rules</h2>
 <ol class="doc-ordered-list">
-<li><strong>Clean Architecture Boundary (Strict Separation):</strong></li>
-<li><strong>PROHIBITED:</strong> Importing <code class="inline-code">reactive_forms</code> inside <code class="inline-code">Domain</code> or <code class="inline-code">Data</code> layers.</li>
-<li><code class="inline-code">FormGroup</code>, <code class="inline-code">FormControl</code>, and <code class="inline-code">FormArray</code> belong EXCLUSIVELY to <code class="inline-code">Presentation</code>.</li>
-<li>Forms map to/from strongly-typed DTOs before communicating with BLoCs or UseCases.</li>
-<li><strong>Single Source of Truth:</strong></li>
-<li><strong>STRICTLY PROHIBITED:</strong> Mixing <code class="inline-code">TextEditingController</code> state and <code class="inline-code">FormControl</code> state.</li>
-<li>NEVER instantiate a new <code class="inline-code">FormGroup</code> directly inside a <code class="inline-code">build()</code> method. Store it in state, view controller, or manage it via <code class="inline-code">ReactiveFormBuilder</code>.</li>
-<li><strong>Strong Typing Mandatory:</strong></li>
-<li>Always specify explicit generic types (e.g. <code class="inline-code">FormControl&lt;String&gt;</code>, <code class="inline-code">FormControl&lt;int&gt;</code>, <code class="inline-code">FormArray&lt;FormGroup&gt;</code>). Avoid untyped <code class="inline-code">FormControl&lt;dynamic&gt;</code>.</li>
+<li><strong>Clean Architecture Boundary:</strong> <code class="inline-code">reactive_forms</code> belongs strictly to <code class="inline-code">Presentation</code>. Map form values to/from Domain DTOs/Entities before reaching UseCases.</li>
+<li><strong>Single Source of Truth:</strong> Never mix <code class="inline-code">TextEditingController</code> with <code class="inline-code">FormControl</code>.</li>
+<li><strong>No Instantiation in <code class="inline-code">build()</code>:</strong> Build <code class="inline-code">FormGroup</code> outside of render methods or use <code class="inline-code">ReactiveFormBuilder</code>.</li>
+<li><strong>Always Strongly Typed:</strong> Specify generic types (e.g. <code class="inline-code">FormControl&lt;String&gt;</code>) rather than untyped <code class="inline-code">dynamic</code>.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="4--strongly-typed-form---cross-field-validation-standard" class="doc-h2"><a href="#4--strongly-typed-form---cross-field-validation-standard" class="heading-anchor">#</a> 4. Strongly Typed Form &amp; Cross-Field Validation Standard</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:reactive_forms/reactive_forms.dart&#039;;
-
-abstract class RegisterForm {
-  static const String emailControl = &#039;email&#039;;
-  static const String passwordControl = &#039;password&#039;;
-  static const String confirmPasswordControl = &#039;confirmPassword&#039;;
-
-  static FormGroup build() {
-    return FormGroup(
-      {
-        emailControl: FormControl&lt;String&gt;(
-          validators: [Validators.required, Validators.email],
-        ),
-        passwordControl: FormControl&lt;String&gt;(
-          validators: [Validators.required, Validators.minLength(8)],
-        ),
-        confirmPasswordControl: FormControl&lt;String&gt;(
-          validators: [Validators.required],
-        ),
-      },
-      validators: [Validators.mustMatch(passwordControl, confirmPasswordControl)],
-    );
-  }
-}
-
-extension RegisterFormX on FormGroup {
-  FormControl&lt;String&gt; get emailControl =&gt;
-      control(RegisterForm.emailControl) as FormControl&lt;String&gt;;
-
-  FormControl&lt;String&gt; get passwordControl =&gt;
-      control(RegisterForm.passwordControl) as FormControl&lt;String&gt;;
-
-  FormControl&lt;String&gt; get confirmPasswordControl =&gt;
-      control(RegisterForm.confirmPasswordControl) as FormControl&lt;String&gt;;
-}
-</code></pre>
-</div>
+<h2 id="4--reference-implementations---examples---" class="doc-h2"><a href="#4--reference-implementations---examples---" class="heading-anchor">#</a> 4. Reference Implementations (<code class="inline-code">examples/</code>)</h2>
+<ul class="doc-list">
+<li><strong>Strongly Typed Form &amp; Screen Bundle:</strong> <a href="examples/register_form_bundle.dart" class="doc-link">examples/register_form_bundle.dart</a></li>
+<li>Full <code class="inline-code">FormGroup</code> factory, typed extension accessors (<code class="inline-code">RegisterFormX</code>), cross-field password matching, and <code class="inline-code">ReactiveFormBuilder</code> layout.</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="5--async-validation---debouncing-standard" class="doc-h2"><a href="#5--async-validation---debouncing-standard" class="heading-anchor">#</a> 5. Async Validation &amp; Debouncing Standard</h2>
-<p class="doc-p">Async validators MUST have a debounce duration configured on the control to prevent backend spamming:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class UsernameAsyncValidator extends AsyncValidator&lt;String&gt; {
-  final CheckUsernameUseCase _useCase;
-
-  UsernameAsyncValidator(this._useCase);
-
-  @override
-  Future&lt;Map&lt;String, dynamic&gt;?&gt; validate(AbstractControl&lt;String&gt; control) async {
-    final username = control.value;
-    if (username == null || username.isEmpty) return null;
-
-    final isAvailable = await _useCase(username);
-    return isAvailable ? null : {&#039;usernameTaken&#039;: true};
-  }
-}
-
-// Control definition with Debounce
-final usernameControl = FormControl&lt;String&gt;(
-  asyncValidators: [UsernameAsyncValidator(getIt())],
-  asyncValidatorsDebounceTime: 500, // 500ms debounce
-);
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="6--ui-binding--keyboard-ux---bloc-integration" class="doc-h2"><a href="#6--ui-binding--keyboard-ux---bloc-integration" class="heading-anchor">#</a> 6. UI Binding, Keyboard UX &amp; BLoC Integration</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text(&#039;Register&#039;)),
-      body: ReactiveFormBuilder(
-        form: () =&gt; RegisterForm.build(),
-        builder: (context, form, child) {
-          return Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                ReactiveTextField&lt;String&gt;(
-                  formControlName: RegisterForm.emailControl,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(labelText: &#039;Email&#039;),
-                ),
-                const SizedBox(height: 16),
-                ReactiveTextField&lt;String&gt;(
-                  formControlName: RegisterForm.passwordControl,
-                  obscureText: true,
-                  textInputAction: TextInputAction.next,
-                  decoration: const InputDecoration(labelText: &#039;Password&#039;),
-                ),
-                const SizedBox(height: 16),
-                ReactiveTextField&lt;String&gt;(
-                  formControlName: RegisterForm.confirmPasswordControl,
-                  obscureText: true,
-                  textInputAction: TextInputAction.done,
-                  decoration: const InputDecoration(labelText: &#039;Confirm Password&#039;),
-                  validationMessages: {
-                    ValidationMessage.mustMatch: (error) =&gt; &#039;Passwords do not match&#039;,
-                  },
-                ),
-                const SizedBox(height: 24),
-                ReactiveFormConsumer(
-                  builder: (context, form, child) {
-                    return ElevatedButton(
-                      onPressed: form.valid ? () =&gt; _onSubmit(context, form) : null,
-                      child: const Text(&#039;Submit&#039;),
-                    );
-                  },
-                ),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-
-  void _onSubmit(BuildContext context, FormGroup form) {
-    if (form.valid) {
-      final dto = RegisterRequestDto(
-        email: form.emailControl.value!,
-        password: form.passwordControl.value!,
-      );
-      context.read&lt;AuthBloc&gt;().add(AuthEvent.registerRequested(dto));
-    } else {
-      form.markAllAsTouched();
-    }
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="7--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#7--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 7. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Mixing <code class="inline-code">TextEditingController</code> with <code class="inline-code">FormControl</code></td>
-<td><strong>CRITICAL</strong></td>
-<td>Use <code class="inline-code">FormControl</code> as the sole source of truth.</td>
-</tr>
-<tr>
-<td>Re-instantiating <code class="inline-code">FormGroup</code> inside <code class="inline-code">build()</code></td>
-<td><strong>CRITICAL</strong></td>
-<td>Use <code class="inline-code">ReactiveFormBuilder</code> or manage state in controller/State.</td>
-</tr>
-<tr>
-<td>Async validators without <code class="inline-code">asyncValidatorsDebounceTime</code></td>
-<td><strong>HIGH</strong></td>
-<td>Set explicit debounce delay to prevent spamming backend APIs.</td>
-</tr>
-<tr>
-<td>Sending raw <code class="inline-code">form.value</code> map directly to Domain UseCases</td>
-<td><strong>HIGH</strong></td>
-<td>Map form output into a strongly-typed DTO/Model first.</td>
-</tr>
-<tr>
-<td>Rebuilding full screen on single field keystroke</td>
-<td><strong>MEDIUM</strong></td>
-<td>Isolate rebuilds with <code class="inline-code">ReactiveFormConsumer</code> or <code class="inline-code">ReactiveValueListenableBuilder</code>.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="8--verification-checklist" class="doc-h2"><a href="#8--verification-checklist" class="heading-anchor">#</a> 8. Verification Checklist</h2>
+<h2 id="5--verification-checklist" class="doc-h2"><a href="#5--verification-checklist" class="heading-anchor">#</a> 5. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">All controls use explicit generic parameters (<code class="inline-code">FormControl&lt;T&gt;</code>).</span>
+    <span class="check-text"><code class="inline-code">FormGroup</code> and <code class="inline-code">FormControl&lt;T&gt;</code> are strongly typed.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">reactive_forms</code> imports are strictly inside <code class="inline-code">lib/presentation/</code>.</span>
+    <span class="check-text">No <code class="inline-code">TextEditingController</code> instances mixed with reactive controls.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">ReactiveFormConsumer</code> wraps ONLY widgets depending on dynamic form state (like submit buttons).</span>
+    <span class="check-text">Forms mapped to typed DTOs before dispatching BLoC events.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Fields configure <code class="inline-code">textInputAction: TextInputAction.next</code> or <code class="inline-code">.done</code>.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Async validators specify a debounce time and UI accounts for pending status.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Submissions check <code class="inline-code">form.valid</code> and call <code class="inline-code">form.markAllAsTouched()</code> when invalid.</span>
+    <span class="check-text">Async validators include explicit <code class="inline-code">asyncValidatorsDebounceTime</code>.</span>
   </label>
 </div>
 

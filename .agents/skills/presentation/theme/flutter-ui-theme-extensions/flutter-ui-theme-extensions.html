@@ -533,7 +533,7 @@ pre {
 <p class="doc-p">Use this skill whenever:</p>
 <ul class="doc-list">
 <li>Creating or extending <code class="inline-code">AppCustomColors</code> in <code class="inline-code">lib/presentation/theme/app_custom_colors.dart</code>.</li>
-<li>Defining domain-specific or UI-specific design tokens not covered by standard <code class="inline-code">ColorScheme</code> (e.g. <code class="inline-code">cardBorder</code>, <code class="inline-code">secondaryText</code>, <code class="inline-code">shimmerBase</code>, <code class="inline-code">surfaceElevated</code>, <code class="inline-code">ratingBackground</code>, <code class="inline-code">ratingGold</code>, <code class="inline-code">success</code>, <code class="inline-code">warning</code>, <code class="inline-code">info</code>).</li>
+<li>Defining domain-specific or UI-specific design tokens not covered by standard <code class="inline-code">ColorScheme</code> (e.g. <code class="inline-code">cardBorder</code>, <code class="inline-code">secondaryText</code>, <code class="inline-code">shimmerBase</code>, <code class="inline-code">surfaceElevated</code>, <code class="inline-code">success</code>, <code class="inline-code">warning</code>, <code class="inline-code">info</code>).</li>
 <li>Implementing <code class="inline-code">ThemeExtension&lt;T&gt;</code> with immutable fields, <code class="inline-code">copyWith</code>, and proper linear interpolation (<code class="inline-code">lerp</code>).</li>
 <li>Accessing custom tokens in widgets via <code class="inline-code">context.customColors</code>.</li>
 </ul>
@@ -562,227 +562,47 @@ pre {
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="3--standard-implementation-pattern---app_custom_colors-dart--" class="doc-h2"><a href="#3--standard-implementation-pattern---app_custom_colors-dart--" class="heading-anchor">#</a> 3. Standard Implementation Pattern (<code class="inline-code">app_custom_colors.dart</code>)</h2>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-
-class AppCustomColors extends ThemeExtension&lt;AppCustomColors&gt; {
-  final Color cardBorder;
-  final Color secondaryText;
-  final Color shimmerBase;
-  final Color surfaceElevated;
-  final Color ratingBackground;
-  final Color ratingGold;
-  final Color success;
-  final Color onSuccess;
-  final Color warning;
-  final Color onWarning;
-  final Color info;
-  final Color onInfo;
-
-  const AppCustomColors({
-    required this.cardBorder,
-    required this.secondaryText,
-    required this.shimmerBase,
-    required this.surfaceElevated,
-    required this.ratingBackground,
-    required this.ratingGold,
-    required this.success,
-    required this.onSuccess,
-    required this.warning,
-    required this.onWarning,
-    required this.info,
-    required this.onInfo,
-  });
-
-  static const AppCustomColors light = AppCustomColors(
-    cardBorder: Color(0xffbec8c8),
-    secondaryText: Color(0xff3f4949),
-    shimmerBase: Color(0xffe3e9e9),
-    surfaceElevated: Color(0xffffffff),
-    ratingBackground: Color(0xff213a3b),
-    ratingGold: Color(0xffffb703),
-    success: Color(0xff2e7d32),
-    onSuccess: Color(0xffffffff),
-    warning: Color(0xffed6c02),
-    onWarning: Color(0xffffffff),
-    info: Color(0xff0288d1),
-    onInfo: Color(0xffffffff),
-  );
-
-  static const AppCustomColors dark = AppCustomColors(
-    cardBorder: Color(0xff2d3434),
-    secondaryText: Color(0xffaab4b4),
-    shimmerBase: Color(0xff232929),
-    surfaceElevated: Color(0xff181f1f),
-    ratingBackground: Color(0xff10292a),
-    ratingGold: Color(0xffffc107),
-    success: Color(0xff66bb6a),
-    onSuccess: Color(0xff003300),
-    warning: Color(0xffffffa726),
-    onWarning: Color(0xff3e2723),
-    info: Color(0xff29b6f6),
-    onInfo: Color(0xff001e3c),
-  );
-
-  @override
-  AppCustomColors copyWith({
-    Color? cardBorder,
-    Color? secondaryText,
-    Color? shimmerBase,
-    Color? surfaceElevated,
-    Color? ratingBackground,
-    Color? ratingGold,
-    Color? success,
-    Color? onSuccess,
-    Color? warning,
-    Color? onWarning,
-    Color? info,
-    Color? onInfo,
-  }) {
-    return AppCustomColors(
-      cardBorder: cardBorder ?? this.cardBorder,
-      secondaryText: secondaryText ?? this.secondaryText,
-      shimmerBase: shimmerBase ?? this.shimmerBase,
-      surfaceElevated: surfaceElevated ?? this.surfaceElevated,
-      ratingBackground: ratingBackground ?? this.ratingBackground,
-      ratingGold: ratingGold ?? this.ratingGold,
-      success: success ?? this.success,
-      onSuccess: onSuccess ?? this.onSuccess,
-      warning: warning ?? this.warning,
-      onWarning: onWarning ?? this.onWarning,
-      info: info ?? this.info,
-      onInfo: onInfo ?? this.onInfo,
-    );
-  }
-
-  @override
-  AppCustomColors lerp(ThemeExtension&lt;AppCustomColors&gt;? other, double t) {
-    if (other is! AppCustomColors) {
-      return this;
-    }
-    return AppCustomColors(
-      cardBorder: Color.lerp(cardBorder, other.cardBorder, t) ?? cardBorder,
-      secondaryText: Color.lerp(secondaryText, other.secondaryText, t) ?? secondaryText,
-      shimmerBase: Color.lerp(shimmerBase, other.shimmerBase, t) ?? shimmerBase,
-      surfaceElevated: Color.lerp(surfaceElevated, other.surfaceElevated, t) ?? surfaceElevated,
-      ratingBackground: Color.lerp(ratingBackground, other.ratingBackground, t) ?? ratingBackground,
-      ratingGold: Color.lerp(ratingGold, other.ratingGold, t) ?? ratingGold,
-      success: Color.lerp(success, other.success, t) ?? success,
-      onSuccess: Color.lerp(onSuccess, other.onSuccess, t) ?? onSuccess,
-      warning: Color.lerp(warning, other.warning, t) ?? warning,
-      onWarning: Color.lerp(onWarning, other.onWarning, t) ?? onWarning,
-      info: Color.lerp(info, other.info, t) ?? info,
-      onInfo: Color.lerp(onInfo, other.onInfo, t) ?? onInfo,
-    );
-  }
-}
-</code></pre>
-</div>
+<h2 id="3--core-themeextension-rules" class="doc-h2"><a href="#3--core-themeextension-rules" class="heading-anchor">#</a> 3. Core ThemeExtension Rules</h2>
+<ol class="doc-ordered-list">
+<li><strong>Immutable Fields:</strong> All token properties must be <code class="inline-code">final Color</code>.</li>
+<li><strong>Dual Palettes:</strong> Define <code class="inline-code">static const AppCustomColors light</code> and <code class="inline-code">dark</code> instances.</li>
+<li><strong>Accurate <code class="inline-code">lerp()</code>:</strong> Implement <code class="inline-code">Color.lerp()</code> for smooth animated theme transitions.</li>
+<li><strong>Context Accessor:</strong> Access tokens strictly via <code class="inline-code">context.customColors</code> (never <code class="inline-code">Theme.of(context).extension&lt;AppCustomColors&gt;()!</code> directly).</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="4--ui-usage-standard" class="doc-h2"><a href="#4--ui-usage-standard" class="heading-anchor">#</a> 4. UI Usage Standard</h2>
-<p class="doc-p">Always access custom tokens via <code class="inline-code">context.customColors</code>:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class RatingBadge extends StatelessWidget {
-  final double rating;
-
-  const RatingBadge({super.key, required this.rating});
-
-  @override
-  Widget build(BuildContext context) {
-    final customColors = context.customColors;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: customColors.ratingBackground,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(Icons.star_rounded, size: 16, color: customColors.ratingGold),
-          const SizedBox(width: 4),
-          Text(
-            rating.toStringAsFixed(1),
-            style: context.textTheme.labelMedium?.copyWith(
-              color: customColors.ratingGold,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-</code></pre>
-</div>
+<h2 id="4--reference-implementation---examples---" class="doc-h2"><a href="#4--reference-implementation---examples---" class="heading-anchor">#</a> 4. Reference Implementation (<code class="inline-code">examples/</code>)</h2>
+<ul class="doc-list">
+<li><strong>Standard <code class="inline-code">AppCustomColors</code> Extension:</strong> <a href="examples/custom_theme_extension.dart" class="doc-link">examples/custom_theme_extension.dart</a></li>
+<li>Full template with light/dark values, <code class="inline-code">copyWith</code>, and <code class="inline-code">lerp</code>.</li>
+</ul>
 <hr class="doc-divider">
-<h2 id="5--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#5--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 5. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Nullable fields in <code class="inline-code">ThemeExtension</code> causing UI null checks</td>
-<td><strong>HIGH</strong></td>
-<td>Use non-nullable <code class="inline-code">final Color</code> fields with fallback in <code class="inline-code">lerp</code>.</td>
-</tr>
-<tr>
-<td>Omitting <code class="inline-code">lerp</code> or <code class="inline-code">copyWith</code> overrides</td>
-<td><strong>HIGH</strong></td>
-<td>Always implement smooth color interpolation in <code class="inline-code">lerp</code>.</td>
-</tr>
-<tr>
-<td>Missing fallback in <code class="inline-code">context_extensions.dart</code></td>
-<td><strong>MEDIUM</strong></td>
-<td>Provide <code class="inline-code">theme.extension&lt;AppCustomColors&gt;() ?? AppCustomColors.light</code>.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="6--verification-checklist" class="doc-h2"><a href="#6--verification-checklist" class="heading-anchor">#</a> 6. Verification Checklist</h2>
+<h2 id="5--verification-checklist" class="doc-h2"><a href="#5--verification-checklist" class="heading-anchor">#</a> 5. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">All custom tokens are defined for both <code class="inline-code">AppCustomColors.light</code> and <code class="inline-code">AppCustomColors.dark</code>.</span>
+    <span class="check-text"><code class="inline-code">AppCustomColors</code> extends <code class="inline-code">ThemeExtension&lt;AppCustomColors&gt;</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Fields are non-nullable and immutable.</span>
+    <span class="check-text">Both <code class="inline-code">light</code> and <code class="inline-code">dark</code> palettes are provided.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">copyWith</code> and <code class="inline-code">lerp</code> correctly handle all tokens.</span>
+    <span class="check-text"><code class="inline-code">copyWith()</code> and <code class="inline-code">lerp()</code> properly handle all fields.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Registered in <code class="inline-code">AppTheme.light</code> and <code class="inline-code">AppTheme.dark</code> under <code class="inline-code">extensions: [...]</code>.</span>
+    <span class="check-text">Registered in <code class="inline-code">ThemeData.extensions</code> in <code class="inline-code">AppTheme</code>.</span>
   </label>
 </div>
 

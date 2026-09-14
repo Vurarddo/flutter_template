@@ -567,11 +567,6 @@ pre {
 <td><a href="../../ui/flutter-ui-hub/flutter-ui-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter UI development. Use when designing, creating, refactoring, or auditing UI widgets, pages, layouts, and animations. Serves as the central entry point and routes to specialized sub-skills for widgets, performance, theming, slivers, responsiveness, and motion design.">flutter-ui-hub <span class="ext-icon">↗</span></a></td>
 <td>General UI structure, page rules, and decomposition.</td>
 </tr>
-<tr>
-<td><strong>Forms Integration</strong></td>
-<td><a href="../../ui/forms/flutter-ui-forms-reactive/flutter-ui-forms-reactive.html" class="skill-ref-link" title="Enforces strict architecture, strong typing, custom validation, cross-field checks, dynamic FormArrays, and BLoC integration standards for reactive_forms in Flutter. Guarantees zero mixing of TextEditingController with FormControl, clear boundaries between Presentation forms and Domain DTOs, debounced async validation, and optimal UI rebuilds. Use when creating form controls, dynamic inputs, or complex field validation.">flutter-ui-forms-reactive <span class="ext-icon">↗</span></a></td>
-<td>Connecting reactive forms to BLoC.</td>
-</tr>
 </tbody></table></div>
 <hr class="doc-divider">
 <h2 id="3--ui-component-responsibility-matrix" class="doc-h2"><a href="#3--ui-component-responsibility-matrix" class="heading-anchor">#</a> 3. UI Component Responsibility Matrix</h2>
@@ -615,7 +610,6 @@ pre {
 </tbody></table></div>
 <hr class="doc-divider">
 <h2 id="4---blocprovider--vs--blocprovider-value--scoping-rules" class="doc-h2"><a href="#4---blocprovider--vs--blocprovider-value--scoping-rules" class="heading-anchor">#</a> 4. <code class="inline-code">BlocProvider</code> vs <code class="inline-code">BlocProvider.value</code> Scoping Rules</h2>
-<p class="doc-p">Understanding BLoC ownership and disposal is critical to prevent memory leaks or crashes (<code class="inline-code">Bad state: Cannot emit new states after calling close</code>):</p>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">text</span>
@@ -637,74 +631,20 @@ pre {
 └────────────────────────────────────────────────────────────────────────┘
 </code></pre>
 </div>
-<h3 class="doc-h3">4.1 When to use <code class="inline-code">BlocProvider(create: ...)</code></h3>
 <ul class="doc-list">
-<li>In the root of a feature page (e.g., in <code class="inline-code">&lt;Feature&gt;Page</code>).</li>
-<li>When a new BLoC instance must be instantiated, scoped strictly to the page, and <strong>disposed automatically</strong> when the user leaves the page:</li>
+<li><strong>Root Page Scoping:</strong> Always use <code class="inline-code">BlocProvider(create: ...)</code> to bind BLoC lifecycle to the route.</li>
+<li><strong>Modal &amp; Dialog Sharing:</strong> Always use <code class="inline-code">BlocProvider.value(value: ...)</code> to prevent premature <code class="inline-code">.close()</code>.</li>
 </ul>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">@RoutePage()
-class FeaturePage extends StatelessWidget {
-  final String featureId;
-
-  const FeaturePage({super.key, required this.featureId});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =&gt; getIt&lt;FeatureBloc&gt;()..add(FeatureFetchRequested(id: featureId)),
-      child: const FeatureView(),
-    );
-  }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">4.2 When to use <code class="inline-code">BlocProvider.value(...)</code></h3>
-<ul class="doc-list">
-<li>When opening a <strong>ModalBottomSheet</strong>, <strong>Dialog</strong>, or <strong>New Navigator Route</strong> that needs to share the parent page&#039;s BLoC instance.</li>
-<li>Because modals and dialogs live in a separate <code class="inline-code">Navigator</code> overlay tree, they cannot access the parent page&#039;s <code class="inline-code">BuildContext</code> directly.</li>
-<li><code class="inline-code">BlocProvider.value</code> provides the existing instance <strong>WITHOUT</strong> calling <code class="inline-code">close()</code> when the dialog or sheet is dismissed:</li>
-</ul>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// Opening a BottomSheet with existing BLoC
-void _showFilterModal(BuildContext context) {
-  final featureBloc = context.read&lt;FeatureBloc&gt;();
-
-  showModalBottomSheet&lt;void&gt;(
-    context: context,
-    isScrollControlled: true,
-    builder: (modalContext) {
-      // ✅ CORRECT: Reuses existing bloc without disposing it on modal dismiss
-      return BlocProvider.value(
-        value: featureBloc,
-        child: const FeatureFilterSheet(),
-      );
-    },
-  );
-}
-
-// ❌ ANTI-PATTERN: DO NOT use create in modals for existing bloc instances!
-// showModalBottomSheet(
-//   builder: (ctx) =&gt; BlocProvider(create: (_) =&gt; featureBloc, child: ...) // Will close() prematurely!
-// );
-</code></pre>
-</div>
 <hr class="doc-divider">
-<h2 id="5--context-extensions---read--vs--watch--vs--select-" class="doc-h2"><a href="#5--context-extensions---read--vs--watch--vs--select-" class="heading-anchor">#</a> 5. Context Extensions: <code class="inline-code">read</code> vs <code class="inline-code">watch</code> vs <code class="inline-code">select</code></h2>
+<h2 id="5--reference-implementations---examples---" class="doc-h2"><a href="#5--reference-implementations---examples---" class="heading-anchor">#</a> 5. Reference Implementations (<code class="inline-code">examples/</code>)</h2>
+<ul class="doc-list">
+<li><strong>Feature View with <code class="inline-code">BlocConsumer</code>:</strong> <a href="examples/feature_page_bloc_consumer.dart" class="doc-link">examples/feature_page_bloc_consumer.dart</a></li>
+<li>Demonstrates isolated <code class="inline-code">listenWhen</code> / <code class="inline-code">listener</code> (for snackbars) and <code class="inline-code">buildWhen</code> / <code class="inline-code">builder</code> (for rendering).</li>
+<li><strong>Modal &amp; BottomSheet Scoping:</strong> <a href="examples/modal_bloc_scoping_sample.dart" class="doc-link">examples/modal_bloc_scoping_sample.dart</a></li>
+<li>Demonstrates passing existing BLoC instances to <code class="inline-code">showModalBottomSheet</code> via <code class="inline-code">BlocProvider.value</code>.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="6--context-extensions---read--vs--watch--vs--select-" class="doc-h2"><a href="#6--context-extensions---read--vs--watch--vs--select-" class="heading-anchor">#</a> 6. Context Extensions: <code class="inline-code">read</code> vs <code class="inline-code">watch</code> vs <code class="inline-code">select</code></h2>
 <div class="table-responsive"><table class="doc-table">
 <thead><tr>
 <th>Method</th>
@@ -722,205 +662,43 @@ void _showFilterModal(BuildContext context) {
 <td><strong><code class="inline-code">context.watch&lt;T&gt;()</code></strong></td>
 <td>Subscribes current widget to ALL state changes of BLoC.</td>
 <td>Small isolated leaf widgets requiring full state.</td>
-<td><strong>DO NOT</strong> use at the top level of large build methods (causes full screen rebuilds).</td>
+<td><strong>DO NOT</strong> use at top level of large build methods (causes full screen rebuilds).</td>
 </tr>
 <tr>
 <td><strong><code class="inline-code">context.select&lt;T, R&gt;()</code></strong></td>
 <td>Subscribes current widget ONLY to specific property <code class="inline-code">R</code>.</td>
-<td>Leaf widgets needing a single field (e.g. <code class="inline-code">final count = context.select&lt;CartBloc, int&gt;((b) =&gt; b.state.itemCount);</code>).</td>
+<td>Leaf widgets needing a single field.</td>
 <td>Prefer <code class="inline-code">BlocSelector</code> for explicit readability in complex trees.</td>
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="6--comprehensive-code-examples" class="doc-h2"><a href="#6--comprehensive-code-examples" class="heading-anchor">#</a> 6. Comprehensive Code Examples</h2>
-<h3 class="doc-h3">6.1 Feature Page with <code class="inline-code">BlocConsumer</code> &amp; Decomposed Widgets</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class FeatureView extends StatelessWidget {
-  const FeatureView({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer&lt;FeatureBloc, FeatureState&gt;(
-      listenWhen: (previous, current) =&gt; current is FeatureFailure,
-      listener: (context, state) {
-        if (state is FeatureFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
-        }
-      },
-      buildWhen: (previous, current) =&gt; current is! FeatureFailure,
-      builder: (context, state) {
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text(&#039;Feature Details&#039;),
-            actions: const [_FilterActionButton()],
-          ),
-          body: switch (state) {
-            FeatureInitial() || FeatureLoadInProgress() =&gt; const Center(
-                child: CircularProgressIndicator(),
-              ),
-            FeatureLoadSuccess(:final items, :final isRefreshing) =&gt; _FeatureContent(
-                items: items,
-                isRefreshing: isRefreshing,
-              ),
-            FeatureFailure() =&gt; const SizedBox.shrink(),
-          },
-        );
-      },
-    );
-  }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">6.2 Granular Rebuilding with <code class="inline-code">BlocSelector</code></h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class _BadgeCountWidget extends StatelessWidget {
-  const _BadgeCountWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    // Rebuilds ONLY when unreadCount changes, ignoring all other state updates
-    return BlocSelector&lt;NotificationBloc, NotificationState, int&gt;(
-      selector: (state) =&gt; state.unreadCount,
-      builder: (context, unreadCount) {
-        if (unreadCount == 0) return const SizedBox.shrink();
-        return Badge(label: Text(&#039;$unreadCount&#039;));
-      },
-    );
-  }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">6.3 Multi-Bloc Setup for Complex Pages</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">class MultiBlocFeaturePage extends StatelessWidget {
-  const MultiBlocFeaturePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) =&gt; getIt&lt;FeatureBloc&gt;()..add(const FeatureStarted())),
-        BlocProvider(create: (_) =&gt; getIt&lt;FilterCubit&gt;()),
-      ],
-      child: const MultiBlocListener(
-        listeners: [
-          BlocListener&lt;FeatureBloc, FeatureState&gt;(listener: _handleFeatureEffects),
-          BlocListener&lt;AuthBloc, AuthState&gt;(listener: _handleAuthEffects),
-        ],
-        child: FeatureBodyWidget(),
-      ),
-    );
-  }
-
-  static void _handleFeatureEffects(BuildContext context, FeatureState state) {
-    // Handle feature side-effects
-  }
-
-  static void _handleAuthEffects(BuildContext context, AuthState state) {
-    // Handle auth redirection side-effects
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="7--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#7--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 7. Anti-Patterns (Strictly Prohibited)</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Anti-Pattern</th>
-<th>Severity</th>
-<th>Corrective Action</th>
-</tr></thead><tbody>
-<tr>
-<td>Passing BLoC to BottomSheet/Dialog using <code class="inline-code">BlocProvider(create: ...)</code> with existing instance</td>
-<td><strong>CRITICAL</strong></td>
-<td>Use <code class="inline-code">BlocProvider.value(value: existingBloc)</code> so it doesn&#039;t get closed on pop.</td>
-</tr>
-<tr>
-<td>Calling <code class="inline-code">Navigator.push()</code> or showing dialogs inside <code class="inline-code">BlocBuilder</code></td>
-<td><strong>CRITICAL</strong></td>
-<td>Move side effects to <code class="inline-code">BlocListener</code> / <code class="inline-code">BlocConsumer.listener</code>.</td>
-</tr>
-<tr>
-<td>Using <code class="inline-code">context.read&lt;Bloc&gt;()</code> inside <code class="inline-code">build()</code> to render changing state</td>
-<td><strong>HIGH</strong></td>
-<td>Use <code class="inline-code">BlocBuilder</code>, <code class="inline-code">BlocSelector</code>, or <code class="inline-code">context.select</code>.</td>
-</tr>
-<tr>
-<td>Wrapping the entire <code class="inline-code">Scaffold</code> in a single unoptimized <code class="inline-code">BlocBuilder</code></td>
-<td><strong>HIGH</strong></td>
-<td>Decompose UI and wrap only specific leaf widgets requiring rebuilds.</td>
-</tr>
-<tr>
-<td>Deeply nested chains of individual <code class="inline-code">BlocListener</code> widgets</td>
-<td><strong>MEDIUM</strong></td>
-<td>Use <code class="inline-code">MultiBlocListener</code> to flatten the widget tree.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="8--verification-checklist" class="doc-h2"><a href="#8--verification-checklist" class="heading-anchor">#</a> 8. Verification Checklist</h2>
+<h2 id="7--verification-checklist" class="doc-h2"><a href="#7--verification-checklist" class="heading-anchor">#</a> 7. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">New BLoC instances use <code class="inline-code">BlocProvider(create: (ctx) =&gt; getIt&lt;...&gt;())</code> at the feature root.</span>
+    <span class="check-text">Side effects (navigation, snackbars) are strictly isolated in <code class="inline-code">BlocListener</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Existing BLoC instances passed to modals, dialogs, or sub-routes strictly use <code class="inline-code">BlocProvider.value(value: ...)</code>.</span>
+    <span class="check-text">Visual widgets are rendered via <code class="inline-code">BlocBuilder</code> with <code class="inline-code">buildWhen</code> or <code class="inline-code">BlocSelector</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Visual UI layout is inside <code class="inline-code">BlocBuilder</code> / <code class="inline-code">BlocSelector</code>; side effects are inside <code class="inline-code">BlocListener</code>.</span>
+    <span class="check-text"><code class="inline-code">BlocProvider.value</code> is used when passing BLoCs to BottomSheets or Dialogs.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">buildWhen</code> and <code class="inline-code">listenWhen</code> are utilized to prevent unnecessary rebuilds/triggers.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Widgets dispatch events via <code class="inline-code">context.read&lt;Bloc&gt;().add(Event())</code>.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">Sub-widgets are extracted into separate files within <code class="inline-code">widgets/</code> (under 150 lines each).</span>
+    <span class="check-text">No <code class="inline-code">context.watch()</code> calls at the root of large screen widget trees.</span>
   </label>
 </div>
 
@@ -929,17 +707,6 @@ void _showFilterModal(BuildContext context) {
 <div class="related-skills-section" style="margin-top: 3rem;">
 <h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
-<a href="../../ui/forms/flutter-ui-forms-reactive/flutter-ui-forms-reactive.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-forms-reactive ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Форми (Reactive Forms)" data-cat-en="Forms">
-    Форми (Reactive Forms)
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Enforces strict architecture, strong typing, custom validation, cross-field checks, dynamic FormArrays, and BL...
-  </div>
-</a>
 <a href="../../ui/flutter-ui-hub/flutter-ui-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
   <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
     flutter-ui-hub ↗
