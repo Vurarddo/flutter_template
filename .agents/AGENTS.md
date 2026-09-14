@@ -48,6 +48,10 @@ Use this quick-routing index to locate target codebase paths and activate releva
   - **Target Paths:** `lib/presentation/pages/<feature>/`, `lib/presentation/ui_kit/`, `lib/presentation/theme/`, `lib/presentation/ui_utils/extensions/`
   - **Skills to Activate:** [`flutter-bloc-widgets`](skills/presentation/state-management/flutter-bloc-widgets/SKILL.md), [`flutter-ui-kit-components`](skills/presentation/ui/ui-kit/flutter-ui-kit-components/SKILL.md), [`flutter-ui-utils-extensions`](skills/presentation/ui-utils/flutter-ui-utils-extensions/SKILL.md), [`flutter-ui-theme-extensions`](skills/presentation/theme/flutter-ui-theme-extensions/SKILL.md)
 
+- **Project Scaffolding & Bootstrap (Initial setup, new project creation, architecture backbone):**
+  - **Target Paths:** `lib/`, `config/`, `android/`, `ios/`, `.vscode/`
+  - **Skills to Activate:** [`project-bootstrap-hub`](skills/bootstrap/project-bootstrap-hub/SKILL.md), [`bootstrap-architecture-scaffold`](skills/bootstrap/bootstrap-architecture-scaffold/SKILL.md)
+
 - **Flavors & Environments (Env configs, Android Gradle, iOS xcconfig, AppConfig):**
   - **Target Paths:** `config/env_*.json`, `lib/core/config/`, `android/app/`, `ios/Runner/`
   - **Skills to Activate:** [`native-flavors-environments`](skills/native/native-flavors-environments/SKILL.md), [`bootstrap-architecture-scaffold`](skills/bootstrap/bootstrap-architecture-scaffold/SKILL.md)

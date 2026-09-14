@@ -533,14 +533,15 @@ pre {
 <p class="doc-p">This skill coordinates the end-to-end initialization and scaffolding of a brand new, production-ready Flutter application adhering strictly to Clean Architecture, Material 3, multi-environment Flavors, and full testability.</p>
 <p class="doc-p">To prevent misconfigurations and ensure 100% alignment, the bootstrapping process operates in <strong>two strict phases</strong>:</p>
 <div class="mermaid-container"><div class="mermaid">graph TD
-    subgraph "Phase 1: Interactive Grill-Me Interview & Planning"
-        Q1["1. SDK Upgrade & Version Check"] --> Q2["2. Project Identity (Name, Org) & Purpose"]
-        Q2 --> Q3["3. Target Platforms"]
-        Q3 --> Q4["4. Domain & Data Layers Selection"]
-        Q4 --> Q5["5. Theme Brand Color (#FFDE3F) & Modes"]
-        Q5 --> Q6["6. Flavors & Environment Endpoints"]
-        Q6 --> Q7["7. Additional Wishes & Custom Requirements"]
-        Q7 --> Plan["8. Generate Detailed implementation_plan.md<br/>(Request User Approval)"]
+    subgraph "Phase 1: Mandatory Interactive Grill-Me Interview & Planning"
+        Q1["1. SDK Upgrade & Version Check"] --> Q2["2. Project Name & Org Identifier"]
+        Q2 --> Q3["3. Project Purpose & Domain Description"]
+        Q3 --> Q4["4. Target Platforms"]
+        Q4 --> Q5["5. Domain & Data Layers Selection"]
+        Q5 --> Q6["6. Theme Brand Color (#FFDE3F / Custom)"]
+        Q6 --> Q7["7. Flavors & Environment Endpoints"]
+        Q7 --> Q8["8. Additional Wishes & Custom Requirements"]
+        Q8 --> Plan["9. Generate Detailed implementation_plan.md<br/>(Request User Approval)"]
     end
 
     subgraph "Phase 2: Approved Autonomous Execution"
@@ -553,34 +554,142 @@ pre {
     end
 </div></div>
 <hr class="doc-divider">
-<h2 id="2--phase-1--interactive-discovery-interview---grill-me--protocol-" class="doc-h2"><a href="#2--phase-1--interactive-discovery-interview---grill-me--protocol-" class="heading-anchor">#</a> 2. Phase 1: Interactive Discovery Interview (<code class="inline-code">grill-me</code> Protocol)</h2>
-<p class="doc-p">When the user asks to create/bootstrap a new project (e.g. <em>&quot;створи новий проект&quot;</em>, <em>&quot;bootstrap new flutter app&quot;</em>, <em>&quot;ініціалізуй проект з шаблону&quot;</em>):</p>
-<p class="doc-p">The agent <strong>MUST NOT</strong> immediately run modifying commands. Instead, the agent conducts a structured interview using the <code class="inline-code">ask_question</code> tool covering the following 7 discovery areas:</p>
+<h2 id="2--phase-1--mandatory-interactive-discovery-interview---grill-me--protocol-" class="doc-h2"><a href="#2--phase-1--mandatory-interactive-discovery-interview---grill-me--protocol-" class="heading-anchor">#</a> 2. Phase 1: Mandatory Interactive Discovery Interview (<code class="inline-code">grill-me</code> Protocol)</h2>
+<p class="doc-p">When the user asks to create/bootstrap a new project (e.g. <em>&quot;створи новий проект&quot;</em>, <em>&quot;bootstrap new flutter app&quot;</em>, <em>&quot;ініціалізуй проект з шаблону&quot;</em>, <em>&quot;виконай bootstrap&quot;</em>):</p>
+<p>[!CRITICAL]</p>
+<p><strong>MANDATORY INTERVIEW RULE:</strong></p>
+<p>The agent <strong>MUST NOT</strong> immediately run modifying commands or jump into scaffolding. The agent <strong>MUST UNCONDITIONALLY</strong> invoke the <code class="inline-code">ask_question</code> tool presenting <strong>ALL 8 DISCOVERY QUESTIONS</strong> to the user in a single interactive prompt. Do NOT skip or omit any question.</p>
+<h3 class="doc-h3">The 8 Mandatory Discovery Questions:</h3>
 <ol class="doc-ordered-list">
 <li><strong>Flutter SDK Upgrade:</strong></li>
-<li>Check current Flutter SDK version and ask if the user wishes to upgrade to the latest <code class="inline-code">stable</code> channel.</li>
-<li><strong>Project Identity &amp; Domain Purpose (Optional):</strong></li>
-<li><strong>Project Name:</strong> Lowercase <code class="inline-code">snake_case</code> Dart identifier (e.g. <code class="inline-code">cinema_app</code>, <code class="inline-code">habit_tracker</code>).</li>
-<li><strong>Organization Reverse-Domain:</strong> <code class="inline-code">--org &lt;org&gt;</code> identifier (e.g. <code class="inline-code">com.company</code>, <code class="inline-code">com.example</code>).</li>
-<li><strong>Project Purpose / Description (Optional):</strong> Brief or detailed summary of the application&#039;s domain (e.g. <em>&quot;A movie discovery app with trailers and favorites&quot;</em> or <em>&quot;Fintech budget manager&quot;</em>). This helps the agent tailor initial models, entity names, and UI copy to the app&#039;s real domain instead of generic placeholders.</li>
-<li><strong>Target Platforms:</strong></li>
-<li>Select deployment targets: <code class="inline-code">android</code>, <code class="inline-code">ios</code>, <code class="inline-code">web</code>, <code class="inline-code">macos</code>, <code class="inline-code">windows</code>, <code class="inline-code">linux</code>.</li>
-<li><strong>Domain &amp; Data Layers Generation Decision:</strong></li>
-<li>Ask if the user wants to generate the initial <strong>Domain &amp; Data layers</strong> with a working sample feature (<code class="inline-code">ExampleItem</code> / <code class="inline-code">&lt;Domain&gt;Item</code> with <code class="inline-code">@freezed</code>, <code class="inline-code">Failure</code> sealed hierarchy, <code class="inline-code">IRepository</code>, <code class="inline-code">UseCase</code>, <code class="inline-code">@JsonSerializable</code> DTO with <code class="inline-code">toDomain()</code>, Retrofit <code class="inline-code">@RestApi</code> client, and Repository Implementation), OR keep the initial scaffold lightweight (Presentation + Infrastructure/Core only).</li>
-<li><strong>Primary Brand Theme:</strong></li>
-<li>Confirm default brand color <code class="inline-code">#FFDE3F</code> (Warm Gold / Yellow) or provide a custom primary seed hex color.</li>
-<li><strong>Flavors &amp; Environments:</strong></li>
-<li>Confirm standard environments (<code class="inline-code">dev</code>, <code class="inline-code">stage</code>, <code class="inline-code">prod</code>) and custom API Base URLs.</li>
-<li><strong>Additional Wishes &amp; Custom Requirements (Optional):</strong></li>
-<li>Open question for any custom packages, backend integrations (Firebase, Supabase, GraphQL), navigation nuances, specific hardware permissions, or architectural preferences before generation starts.</li>
+<li><em>Question:</em> &quot;Чи бажаєте оновити Flutter SDK до останньої стабільної версії (<code class="inline-code">flutter channel stable &amp;&amp; flutter upgrade</code>)?&quot;</li>
+<li><em>Options:</em></li>
+<li>&quot;Так, оновити Flutter SDK до latest stable&quot;</li>
+<li>&quot;Ні, продовжити з поточною встановленою версією SDK&quot;</li>
+<li><strong>Project Name &amp; Organization:</strong></li>
+<li><em>Question:</em> &quot;Вкажіть назву проєкту (snake_case) та Organization reverse-domain identifier (<code class="inline-code">--org</code>):&quot;</li>
+<li><em>Options:</em></li>
+<li>&quot;my_app (org: com.example)&quot;</li>
+<li>&quot;Вказати власну назву та org&quot;</li>
+<li><strong>Project Purpose &amp; Domain Description:</strong></li>
+<li><em>Question:</em> &quot;Опишіть призначення проєкту (про що проєкт, який основний функціонал / домен?):&quot;</li>
+<li><em>Options:</em></li>
+<li>&quot;Універсальний стартовий шаблон (Production Flutter Template)&quot;</li>
+<li>&quot;Вказати опис проєкту (наприклад: інтернет-магазин, фінансовий трекер, соцмережа тощо)&quot;</li>
+<li><strong>Target Deployment Platforms:</strong></li>
+<li><em>Question:</em> &quot;Оберіть цільові платформи для розгортання проєкту (multi-select):&quot;</li>
+<li><em>IsMultiSelect:</em> <code class="inline-code">true</code></li>
+<li><em>Options:</em></li>
+<li>&quot;Android та iOS (Mobile Only)&quot;</li>
+<li>&quot;Web (Браузер)&quot;</li>
+<li>&quot;macOS, Windows, Linux (Desktop)&quot;</li>
+<li>&quot;Усі платформи (Android, iOS, Web, macOS, Windows, Linux)&quot;</li>
+<li><strong>Domain &amp; Data Layers Selection:</strong></li>
+<li><em>Question:</em> &quot;Чи створювати початкові шари Domain та Data з робочим прикладом Clean Architecture фічі?&quot;</li>
+<li><em>Options:</em></li>
+<li>&quot;Так, створити повну Clean Architecture структуру (Domain + Data + Presentation) з прикладом сутності, UseCase, DTO, Retrofit клієнта та репозиторію&quot;</li>
+<li>&quot;Ні, створити тільки легкий каркас (Presentation + Core/Infrastructure)&quot;</li>
+<li><strong>Primary Brand Theme Color:</strong></li>
+<li><em>Question:</em> &quot;Оберіть основний колір бренду / теми Material 3:&quot;</li>
+<li><em>Options:</em></li>
+<li>&quot;Стандартний #FFDE3F (Warm Gold / Vibrant Yellow) з темною та світлою темами&quot;</li>
+<li>&quot;Вказати власний primary seed HEX-колір&quot;</li>
+<li><strong>Flavors &amp; API Endpoints:</strong></li>
+<li><em>Question:</em> &quot;Підтвердіть конфігурацію Multi-Environment Flavors (dev, stage, prod):&quot;</li>
+<li><em>Options:</em></li>
+<li>&quot;Стандартні 3 оточення (dev, stage, prod) з шаблонами config/env_*.json&quot;</li>
+<li>&quot;Вказати власні базові URL-адреси для API&quot;</li>
+<li><strong>Additional Wishes &amp; Custom Requirements:</strong></li>
+<li><em>Question:</em> &quot;Чи є у вас додаткові побажання перед початком генерації (додаткові пакети, Firebase/Supabase, специфічні налаштування)?:&quot;</li>
+<li><em>Options:</em></li>
+<li>&quot;Немає додаткових побажань, генерувати за стандартом&quot;</li>
+<li>&quot;Вказати додаткові побажання / пакети&quot;</li>
 </ul>
+<hr class="doc-divider">
+<h3 class="doc-h3">Concrete <code class="inline-code">ask_question</code> Tool Invocation Pattern</h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">json</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-json">{
+  &quot;questions&quot;: [
+    {
+      &quot;question&quot;: &quot;Чи бажаєте оновити Flutter SDK до останньої стабільної версії?&quot;,
+      &quot;options&quot;: [
+        &quot;Так, оновити Flutter SDK до latest stable&quot;,
+        &quot;Ні, продовжити з поточною встановленою версією SDK&quot;
+      ]
+    },
+    {
+      &quot;question&quot;: &quot;Вкажіть назву проєкту (snake_case) та Organization reverse-domain identifier (--org):&quot;,
+      &quot;options&quot;: [
+        &quot;my_app (org: com.example)&quot;,
+        &quot;Вказати власну назву та org&quot;
+      ]
+    },
+    {
+      &quot;question&quot;: &quot;Опишіть призначення проєкту (про що проєкт, який основний функціонал / домен?):&quot;,
+      &quot;options&quot;: [
+        &quot;Універсальний стартовий шаблон (Production Flutter Template)&quot;,
+        &quot;Вказати опис проєкту (наприклад: інтернет-магазин, фінансовий трекер, соцмережа тощо)&quot;
+      ]
+    },
+    {
+      &quot;question&quot;: &quot;Оберіть цільові платформи для розгортання проєкту:&quot;,
+      &quot;is_multi_select&quot;: true,
+      &quot;options&quot;: [
+        &quot;Android та iOS (Mobile Only)&quot;,
+        &quot;Web (Браузер)&quot;,
+        &quot;macOS, Windows, Linux (Desktop)&quot;,
+        &quot;Усі платформи (Android, iOS, Web, macOS, Windows, Linux)&quot;
+      ]
+    },
+    {
+      &quot;question&quot;: &quot;Чи створювати початкові шари Domain та Data з робочим прикладом Clean Architecture фічі?&quot;,
+      &quot;options&quot;: [
+        &quot;Так, створити повну Clean Architecture структуру (Domain + Data + Presentation) з прикладом сутності, UseCase, DTO, Retrofit клієнта та репозиторію&quot;,
+        &quot;Ні, створити тільки легкий каркас (Presentation + Core/Infrastructure)&quot;
+      ]
+    },
+    {
+      &quot;question&quot;: &quot;Оберіть основний колір бренду / теми Material 3:&quot;,
+      &quot;options&quot;: [
+        &quot;Стандартний #FFDE3F (Warm Gold / Vibrant Yellow) з темною та світлою темами&quot;,
+        &quot;Вказати власний primary seed HEX-колір&quot;
+      ]
+    },
+    {
+      &quot;question&quot;: &quot;Підтвердіть конфігурацію Multi-Environment Flavors (dev, stage, prod):&quot;,
+      &quot;options&quot;: [
+        &quot;Стандартні 3 оточення (dev, stage, prod) з шаблонами config/env_*.json&quot;,
+        &quot;Вказати власні базові URL-адреси для API&quot;
+      ]
+    },
+    {
+      &quot;question&quot;: &quot;Чи є у вас додаткові побажання перед початком генерації (додаткові пакети, Firebase/Supabase, специфічні налаштування)?:&quot;,
+      &quot;options&quot;: [
+        &quot;Немає додаткових побажань, генерувати за стандартом&quot;,
+        &quot;Вказати додаткові побажання / пакети&quot;
+      ]
+    }
+  ],
+  &quot;toolSummary&quot;: &quot;Bootstrap discovery interview&quot;,
+  &quot;toolAction&quot;: &quot;Conducting project discovery interview&quot;
+}
+</code></pre>
+</div>
+<hr class="doc-divider">
 <h3 class="doc-h3">Bootstrap Manifest &amp; Implementation Plan Generation</h3>
-<p class="doc-p">Once all questions are answered, the agent compiles a comprehensive <code class="inline-code">implementation_plan.md</code> artifact containing:</p>
+<p class="doc-p">Once all 8 questions are answered, the agent compiles a comprehensive <code class="inline-code">implementation_plan.md</code> artifact containing:</p>
 <ul class="doc-list">
 <li>Selected project metadata, domain purpose, and exact CLI command to be executed.</li>
 <li>Dependencies list with version locks (including any user-requested extra packages).</li>
 <li>Layer directory map reflecting the chosen architecture configuration (with explicit <code class="inline-code">lib/presentation/pages/</code>, <code class="inline-code">lib/presentation/state_management/</code>, <code class="inline-code">lib/presentation/ui_kit/</code>, <code class="inline-code">lib/presentation/ui_utils/</code>).</li>
-<li>Initial domain/data feature plan (if enabled).</li>
+<li>Initial domain/data feature plan (if enabled, tailored to project domain purpose).</li>
 <li>Complete <code class="inline-code">.gitignore</code> template protecting secret environment credentials and ignoring generated code.</li>
 <li>ColorScheme tokens and <code class="inline-code">UiKitPage</code> showcase outline.</li>
 <li>Test and verification plan.</li>
@@ -630,7 +739,7 @@ pre {
 <hr class="doc-divider">
 <h2 id="4--global-bootstrapping-laws" class="doc-h2"><a href="#4--global-bootstrapping-laws" class="heading-anchor">#</a> 4. Global Bootstrapping Laws</h2>
 <ol class="doc-ordered-list">
-<li><strong>User Discovery Alignment:</strong> The agent MUST strictly honor user decisions from the Phase 1 interview regarding project purpose, layer choices (Domain/Data inclusion), custom packages, and brand colors.</li>
+<li><strong>Mandatory 8-Question Discovery:</strong> The agent MUST strictly present all 8 discovery questions via <code class="inline-code">ask_question</code> and incorporate all user responses into <code class="inline-code">implementation_plan.md</code>.</li>
 <li><strong>Initial Domain &amp; Data Feature:</strong> When Domain &amp; Data layers are requested, scaffold a clean initial sample feature (<code class="inline-code">domain/&lt;feature&gt;/</code> and <code class="inline-code">data/&lt;feature&gt;/</code>) tailored to the project purpose (or generic <code class="inline-code">example/</code>) with an Entity (<code class="inline-code">@freezed</code>), Failure hierarchy, Repository contract, UseCase (<code class="inline-code">@injectable</code>), DTO (<code class="inline-code">@JsonSerializable</code> + <code class="inline-code">toDomain()</code>), Retrofit client, and Repository Implementation (<code class="inline-code">@LazySingleton</code>).</li>
 <li><strong>Strict Clean Architecture:</strong> Domain contains pure Dart only. Data maps DTOs to Entities. BLoC/Cubit communicates exclusively with Use Cases.</li>
 <li><strong>Strict Presentation Paths:</strong> Pages and screens MUST reside in <code class="inline-code">lib/presentation/pages/&lt;feature&gt;/</code> (never <code class="inline-code">lib/presentation/ui/&lt;feature&gt;/</code>). State management in <code class="inline-code">lib/presentation/state_management/</code>, UI Kit in <code class="inline-code">lib/presentation/ui_kit/</code>, UI utilities in <code class="inline-code">lib/presentation/ui_utils/</code>.</li>
@@ -648,7 +757,7 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Interactive Grill-Me interview conducted with user (all 7 discovery areas covered).</span>
+    <span class="check-text">Interactive Grill-Me interview conducted with user (all 8 discovery questions presented via <code class="inline-code">ask_question</code>).</span>
   </label>
 </div>
 <div class="checklist-item">

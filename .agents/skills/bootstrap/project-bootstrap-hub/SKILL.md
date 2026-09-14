@@ -13,14 +13,15 @@ To prevent misconfigurations and ensure 100% alignment, the bootstrapping proces
 
 ```mermaid
 graph TD
-    subgraph "Phase 1: Interactive Grill-Me Interview & Planning"
-        Q1["1. SDK Upgrade & Version Check"] --> Q2["2. Project Identity (Name, Org) & Purpose"]
-        Q2 --> Q3["3. Target Platforms"]
-        Q3 --> Q4["4. Domain & Data Layers Selection"]
-        Q4 --> Q5["5. Theme Brand Color (#FFDE3F) & Modes"]
-        Q5 --> Q6["6. Flavors & Environment Endpoints"]
-        Q6 --> Q7["7. Additional Wishes & Custom Requirements"]
-        Q7 --> Plan["8. Generate Detailed implementation_plan.md<br/>(Request User Approval)"]
+    subgraph "Phase 1: Mandatory Interactive Grill-Me Interview & Planning"
+        Q1["1. SDK Upgrade & Version Check"] --> Q2["2. Project Name & Org Identifier"]
+        Q2 --> Q3["3. Project Purpose & Domain Description"]
+        Q3 --> Q4["4. Target Platforms"]
+        Q4 --> Q5["5. Domain & Data Layers Selection"]
+        Q5 --> Q6["6. Theme Brand Color (#FFDE3F / Custom)"]
+        Q6 --> Q7["7. Flavors & Environment Endpoints"]
+        Q7 --> Q8["8. Additional Wishes & Custom Requirements"]
+        Q8 --> Plan["9. Generate Detailed implementation_plan.md<br/>(Request User Approval)"]
     end
 
     subgraph "Phase 2: Approved Autonomous Execution"
@@ -35,35 +36,140 @@ graph TD
 
 ---
 
-## 2. Phase 1: Interactive Discovery Interview (`grill-me` Protocol)
+## 2. Phase 1: Mandatory Interactive Discovery Interview (`grill-me` Protocol)
 
-When the user asks to create/bootstrap a new project (e.g. *"створи новий проект"*, *"bootstrap new flutter app"*, *"ініціалізуй проект з шаблону"*):
+When the user asks to create/bootstrap a new project (e.g. *"створи новий проект"*, *"bootstrap new flutter app"*, *"ініціалізуй проект з шаблону"*, *"виконай bootstrap"*):
 
-The agent **MUST NOT** immediately run modifying commands. Instead, the agent conducts a structured interview using the `ask_question` tool covering the following 7 discovery areas:
+> [!CRITICAL]
+> **MANDATORY INTERVIEW RULE:**
+> The agent **MUST NOT** immediately run modifying commands or jump into scaffolding. The agent **MUST UNCONDITIONALLY** invoke the `ask_question` tool presenting **ALL 8 DISCOVERY QUESTIONS** to the user in a single interactive prompt. Do NOT skip or omit any question.
+
+### The 8 Mandatory Discovery Questions:
 
 1. **Flutter SDK Upgrade:**
-   - Check current Flutter SDK version and ask if the user wishes to upgrade to the latest `stable` channel.
-2. **Project Identity & Domain Purpose (Optional):**
-   - **Project Name:** Lowercase `snake_case` Dart identifier (e.g. `cinema_app`, `habit_tracker`).
-   - **Organization Reverse-Domain:** `--org <org>` identifier (e.g. `com.company`, `com.example`).
-   - **Project Purpose / Description (Optional):** Brief or detailed summary of the application's domain (e.g. *"A movie discovery app with trailers and favorites"* or *"Fintech budget manager"*). This helps the agent tailor initial models, entity names, and UI copy to the app's real domain instead of generic placeholders.
-3. **Target Platforms:**
-   - Select deployment targets: `android`, `ios`, `web`, `macos`, `windows`, `linux`.
-4. **Domain & Data Layers Generation Decision:**
-   - Ask if the user wants to generate the initial **Domain & Data layers** with a working sample feature (`ExampleItem` / `<Domain>Item` with `@freezed`, `Failure` sealed hierarchy, `IRepository`, `UseCase`, `@JsonSerializable` DTO with `toDomain()`, Retrofit `@RestApi` client, and Repository Implementation), OR keep the initial scaffold lightweight (Presentation + Infrastructure/Core only).
-5. **Primary Brand Theme:**
-   - Confirm default brand color `#FFDE3F` (Warm Gold / Yellow) or provide a custom primary seed hex color.
-6. **Flavors & Environments:**
-   - Confirm standard environments (`dev`, `stage`, `prod`) and custom API Base URLs.
-7. **Additional Wishes & Custom Requirements (Optional):**
-   - Open question for any custom packages, backend integrations (Firebase, Supabase, GraphQL), navigation nuances, specific hardware permissions, or architectural preferences before generation starts.
+   - *Question:* "Чи бажаєте оновити Flutter SDK до останньої стабільної версії (`flutter channel stable && flutter upgrade`)?"
+   - *Options:*
+     - "Так, оновити Flutter SDK до latest stable"
+     - "Ні, продовжити з поточною встановленою версією SDK"
+2. **Project Name & Organization:**
+   - *Question:* "Вкажіть назву проєкту (snake_case) та Organization reverse-domain identifier (`--org`):"
+   - *Options:*
+     - "my_app (org: com.example)"
+     - "Вказати власну назву та org"
+3. **Project Purpose & Domain Description:**
+   - *Question:* "Опишіть призначення проєкту (про що проєкт, який основний функціонал / домен?):"
+   - *Options:*
+     - "Універсальний стартовий шаблон (Production Flutter Template)"
+     - "Вказати опис проєкту (наприклад: інтернет-магазин, фінансовий трекер, соцмережа тощо)"
+4. **Target Deployment Platforms:**
+   - *Question:* "Оберіть цільові платформи для розгортання проєкту (multi-select):"
+   - *IsMultiSelect:* `true`
+   - *Options:*
+     - "Android та iOS (Mobile Only)"
+     - "Web (Браузер)"
+     - "macOS, Windows, Linux (Desktop)"
+     - "Усі платформи (Android, iOS, Web, macOS, Windows, Linux)"
+5. **Domain & Data Layers Selection:**
+   - *Question:* "Чи створювати початкові шари Domain та Data з робочим прикладом Clean Architecture фічі?"
+   - *Options:*
+     - "Так, створити повну Clean Architecture структуру (Domain + Data + Presentation) з прикладом сутності, UseCase, DTO, Retrofit клієнта та репозиторію"
+     - "Ні, створити тільки легкий каркас (Presentation + Core/Infrastructure)"
+6. **Primary Brand Theme Color:**
+   - *Question:* "Оберіть основний колір бренду / теми Material 3:"
+   - *Options:*
+     - "Стандартний #FFDE3F (Warm Gold / Vibrant Yellow) з темною та світлою темами"
+     - "Вказати власний primary seed HEX-колір"
+7. **Flavors & API Endpoints:**
+   - *Question:* "Підтвердіть конфігурацію Multi-Environment Flavors (dev, stage, prod):"
+   - *Options:*
+     - "Стандартні 3 оточення (dev, stage, prod) з шаблонами config/env_*.json"
+     - "Вказати власні базові URL-адреси для API"
+8. **Additional Wishes & Custom Requirements:**
+   - *Question:* "Чи є у вас додаткові побажання перед початком генерації (додаткові пакети, Firebase/Supabase, специфічні налаштування)?:"
+   - *Options:*
+     - "Немає додаткових побажань, генерувати за стандартом"
+     - "Вказати додаткові побажання / пакети"
+
+---
+
+### Concrete `ask_question` Tool Invocation Pattern
+
+```json
+{
+  "questions": [
+    {
+      "question": "Чи бажаєте оновити Flutter SDK до останньої стабільної версії?",
+      "options": [
+        "Так, оновити Flutter SDK до latest stable",
+        "Ні, продовжити з поточною встановленою версією SDK"
+      ]
+    },
+    {
+      "question": "Вкажіть назву проєкту (snake_case) та Organization reverse-domain identifier (--org):",
+      "options": [
+        "my_app (org: com.example)",
+        "Вказати власну назву та org"
+      ]
+    },
+    {
+      "question": "Опишіть призначення проєкту (про що проєкт, який основний функціонал / домен?):",
+      "options": [
+        "Універсальний стартовий шаблон (Production Flutter Template)",
+        "Вказати опис проєкту (наприклад: інтернет-магазин, фінансовий трекер, соцмережа тощо)"
+      ]
+    },
+    {
+      "question": "Оберіть цільові платформи для розгортання проєкту:",
+      "is_multi_select": true,
+      "options": [
+        "Android та iOS (Mobile Only)",
+        "Web (Браузер)",
+        "macOS, Windows, Linux (Desktop)",
+        "Усі платформи (Android, iOS, Web, macOS, Windows, Linux)"
+      ]
+    },
+    {
+      "question": "Чи створювати початкові шари Domain та Data з робочим прикладом Clean Architecture фічі?",
+      "options": [
+        "Так, створити повну Clean Architecture структуру (Domain + Data + Presentation) з прикладом сутності, UseCase, DTO, Retrofit клієнта та репозиторію",
+        "Ні, створити тільки легкий каркас (Presentation + Core/Infrastructure)"
+      ]
+    },
+    {
+      "question": "Оберіть основний колір бренду / теми Material 3:",
+      "options": [
+        "Стандартний #FFDE3F (Warm Gold / Vibrant Yellow) з темною та світлою темами",
+        "Вказати власний primary seed HEX-колір"
+      ]
+    },
+    {
+      "question": "Підтвердіть конфігурацію Multi-Environment Flavors (dev, stage, prod):",
+      "options": [
+        "Стандартні 3 оточення (dev, stage, prod) з шаблонами config/env_*.json",
+        "Вказати власні базові URL-адреси для API"
+      ]
+    },
+    {
+      "question": "Чи є у вас додаткові побажання перед початком генерації (додаткові пакети, Firebase/Supabase, специфічні налаштування)?:",
+      "options": [
+        "Немає додаткових побажань, генерувати за стандартом",
+        "Вказати додаткові побажання / пакети"
+      ]
+    }
+  ],
+  "toolSummary": "Bootstrap discovery interview",
+  "toolAction": "Conducting project discovery interview"
+}
+```
+
+---
 
 ### Bootstrap Manifest & Implementation Plan Generation
-Once all questions are answered, the agent compiles a comprehensive `implementation_plan.md` artifact containing:
+Once all 8 questions are answered, the agent compiles a comprehensive `implementation_plan.md` artifact containing:
 - Selected project metadata, domain purpose, and exact CLI command to be executed.
 - Dependencies list with version locks (including any user-requested extra packages).
 - Layer directory map reflecting the chosen architecture configuration (with explicit `lib/presentation/pages/`, `lib/presentation/state_management/`, `lib/presentation/ui_kit/`, `lib/presentation/ui_utils/`).
-- Initial domain/data feature plan (if enabled).
+- Initial domain/data feature plan (if enabled, tailored to project domain purpose).
 - Complete `.gitignore` template protecting secret environment credentials and ignoring generated code.
 - ColorScheme tokens and `UiKitPage` showcase outline.
 - Test and verification plan.
@@ -90,7 +196,7 @@ Once the user approves the plan, execute the following sub-skills sequentially:
 
 ## 4. Global Bootstrapping Laws
 
-1. **User Discovery Alignment:** The agent MUST strictly honor user decisions from the Phase 1 interview regarding project purpose, layer choices (Domain/Data inclusion), custom packages, and brand colors.
+1. **Mandatory 8-Question Discovery:** The agent MUST strictly present all 8 discovery questions via `ask_question` and incorporate all user responses into `implementation_plan.md`.
 2. **Initial Domain & Data Feature:** When Domain & Data layers are requested, scaffold a clean initial sample feature (`domain/<feature>/` and `data/<feature>/`) tailored to the project purpose (or generic `example/`) with an Entity (`@freezed`), Failure hierarchy, Repository contract, UseCase (`@injectable`), DTO (`@JsonSerializable` + `toDomain()`), Retrofit client, and Repository Implementation (`@LazySingleton`).
 3. **Strict Clean Architecture:** Domain contains pure Dart only. Data maps DTOs to Entities. BLoC/Cubit communicates exclusively with Use Cases.
 4. **Strict Presentation Paths:** Pages and screens MUST reside in `lib/presentation/pages/<feature>/` (never `lib/presentation/ui/<feature>/`). State management in `lib/presentation/state_management/`, UI Kit in `lib/presentation/ui_kit/`, UI utilities in `lib/presentation/ui_utils/`.
@@ -106,7 +212,7 @@ Once the user approves the plan, execute the following sub-skills sequentially:
 
 ## 5. Master Bootstrapping Checklist
 
-- [ ] Interactive Grill-Me interview conducted with user (all 7 discovery areas covered).
+- [ ] Interactive Grill-Me interview conducted with user (all 8 discovery questions presented via `ask_question`).
 - [ ] `implementation_plan.md` created with project purpose, selected layers, and custom requirements, and approved by user.
 - [ ] Flutter SDK upgraded to latest stable (if requested).
 - [ ] `flutter create` executed with explicit `--org`, `--project-name`, `--description`, and `--platforms`.
