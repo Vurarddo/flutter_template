@@ -70,12 +70,24 @@ Presentation → Domain ← Data
   - `ui_kit/`: Pure, reusable, stateless widgets annotated with `@Preview` (consult [flutter-ui-kit-hub](presentation/ui/ui_kit/flutter-ui-kit-hub/SKILL.md)).
   - `ui_utils/`: UI formatters, extensions, forms accessors, and helpers (consult [flutter-ui-utils-hub](presentation/ui_utils/flutter-ui-utils-hub/SKILL.md)).
 
-### 4. Infrastructure Layer (`lib/infrastructure/`)
+### 4. Core Layer (`lib/core/`)
+- Consult [core-hub](core/core-hub/SKILL.md).
+- **Pure Dart Only:** 100% framework-agnostic, zero `package:flutter/*` imports.
+- **`constants/`:** Global regex patterns, time durations, pagination limits (consult [core-constants](core/core-constants/SKILL.md)).
+- **`extensions/`:** Pure Dart extensions on `DateTime`, `String`, `num`, `Iterable` (consult [core-extensions](core/core-extensions/SKILL.md)).
+- **`utils/`:** Algorithmic helpers, currency precision math, pure debouncers (consult [core-utils](core/core-utils/SKILL.md)).
 
-- **`config/`:** Environment settings, feature flags, API base URLs.
-- **`di/`:** GetIt + Injectable setup.
-- **`network/`:** Dio client setup, base interceptors, client headers.
-- **`utils/`:** System utilities (Loggers, SecureStorage, SharedPreferences wrappers).
+### 5. Infrastructure Layer (`lib/infrastructure/`)
+- Consult [infrastructure-hub](infrastructure/infrastructure-hub/SKILL.md).
+- **`config/`:** Environment settings via `--dart-define`, `AppConfig`, `AppEnvironment` (consult [infrastructure-config](infrastructure/infrastructure-config/SKILL.md)).
+- **`di/`:** Dependency Injection setup via `get_it` + `injectable` with `@module` (consult [infrastructure-di](infrastructure/infrastructure-di/SKILL.md)).
+- **`network/`:** Production `Dio` singleton, `BackgroundTransformer` (isolates), 401 `QueuedInterceptor` (consult [infrastructure-network-dio](infrastructure/infrastructure-network-dio/SKILL.md)).
+- **`storage/`:** `SecureStoreInteractor` for tokens & `StoreInteractor` for preferences (consult [infrastructure-storage](infrastructure/infrastructure-storage/SKILL.md)).
+- **`services/`:** External SDK wrappers and platform services:
+  - `firebase/`: Crashlytics, FCM notifications, RemoteConfig (consult [infrastructure-services-firebase](infrastructure/infrastructure-services-firebase/SKILL.md)).
+  - `deep_link/`: App Links / Universal Links listeners (consult [infrastructure-services-deep-link](infrastructure/infrastructure-services-deep-link/SKILL.md)).
+  - `purchase/`: In-App Purchases & RevenueCat billing adapters (consult [infrastructure-services-purchase](infrastructure/infrastructure-services-purchase/SKILL.md)).
+- **`logging/`:** Centralized `AppLogger` with PII sanitization (consult [infrastructure-logging](infrastructure/infrastructure-logging/SKILL.md)).
 
 ---
 
@@ -83,6 +95,11 @@ Presentation → Domain ← Data
 
 ```text
 lib/
+├── core/                               # Pure Dart (Zero Flutter SDK)
+│   ├── constants/
+│   ├── extensions/
+│   └── utils/
+│
 ├── domain/<feature>/
 │   ├── entities/<feature>_entity.dart
 │   ├── failures/<feature>_failure.dart
@@ -111,10 +128,12 @@ lib/
 │   └── ui_utils/                       # extensions, formatters, forms, helpers, assets
 │
 └── infrastructure/
-    ├── config/
-    ├── di/
-    ├── network/                        # Dio setup & interceptors
-    └── utils/                          # Loggers, SecureStorage, etc.
+    ├── config/                         # AppConfig, AppEnvironment, --dart-define
+    ├── di/                             # GetIt + Injectable modules
+    ├── network/                        # Dio setup, BackgroundTransformer, QueuedInterceptor
+    ├── storage/                        # SecureStoreInteractor, StoreInteractor
+    ├── services/                       # Firebase, DeepLink, Purchase, Connectivity
+    └── logging/                        # AppLogger, PII redaction
 ```
 
 ---

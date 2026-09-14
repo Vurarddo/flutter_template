@@ -22,6 +22,8 @@ This skill serves as the central root coordinator for all UI development within 
 
 Use this matrix to navigate to the specialized sub-skill matching your specific UI task:
 
+| **Core Hub** | [core-hub](../../../core/core-hub/SKILL.md) | Central coordinator for pure Dart foundations, extensions, and utilities. |
+| **Infrastructure Hub** | [infrastructure-hub](../../../infrastructure/infrastructure-hub/SKILL.md) | Central coordinator for external SDKs, network, storage, DI, and platform services. |
 | **Navigation Hub** | [flutter-auto-route-hub](../../navigation/flutter-auto-route-hub/SKILL.md) | Central coordinator for AutoRoute type-safe navigation and deep links. |
 | **AutoRoute Core** | [flutter-auto-route-core](../../navigation/flutter-auto-route-core/SKILL.md) | `@AutoRouterConfig`, `@RoutePage`, `push`/`replace`/`pop`, `@pathParam`, parameters. |
 | **Nested Tabs & Shells** | [flutter-auto-route-nested-tabs](../../navigation/flutter-auto-route-nested-tabs/SKILL.md) | `AutoTabsRouter`, `AutoTabsScaffold`, persistent tabs, `popUntilRoot`. |
