@@ -23,6 +23,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [flutter-bloc-hub](../flutter-bloc-hub/SKILL.md) | Domain architecture and overall routing. |
 | **Core BLoC Logic** | [flutter-bloc-core](../flutter-bloc-core/SKILL.md) | Designing states, events, and async safety. |
+| **Navigation** | [flutter-auto-route-core](../../navigation/flutter-auto-route-core/SKILL.md) | Type-safe navigation triggered from `BlocListener`. |
 | **UI Hub** | [flutter-ui-hub](../../ui/flutter-ui-hub/SKILL.md) | General UI structure, page rules, and decomposition. |
 | **Forms Integration** | [flutter-ui-forms-reactive](../../ui/forms/flutter-ui-forms-reactive/SKILL.md) | Connecting reactive forms to BLoC. |
 

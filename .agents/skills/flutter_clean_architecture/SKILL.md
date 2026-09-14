@@ -65,10 +65,10 @@ Presentation → Domain ← Data
 - Theme access: Use `context.colorScheme` or `context.customColors` (`ThemeExtension`). **NO hardcoded `Color(0x...)**`.
 
 - **Global Presentation Modules:**
-- `navigation/`: `app_router.dart` (`auto_route`) & `guards/`.
-- `theme/`: Theme definitions & `ThemeExtension` implementations.
-- `ui_kit/`: Pure, reusable, stateless widgets annotated with `@Preview`.
-- `ui_utils/`: UI formatters, extensions (`BuildContext` wrappers).
+  - `navigation/`: `app_router.dart` (`auto_route`) & `guards/` (consult [flutter-auto-route-hub](presentation/navigation/flutter-auto-route-hub/SKILL.md)).
+  - `theme/`: Theme definitions & `ThemeExtension` implementations (consult [flutter-ui-theme-hub](presentation/theme/flutter-ui-theme-hub/SKILL.md)).
+  - `ui_kit/`: Pure, reusable, stateless widgets annotated with `@Preview` (consult [flutter-ui-kit-hub](presentation/ui/ui_kit/flutter-ui-kit-hub/SKILL.md)).
+  - `ui_utils/`: UI formatters, extensions, forms accessors, and helpers (consult [flutter-ui-utils-hub](presentation/ui_utils/flutter-ui-utils-hub/SKILL.md)).
 
 ### 4. Infrastructure Layer (`lib/infrastructure/`)
 
@@ -108,13 +108,13 @@ lib/
 │   │   └── guards/
 │   ├── theme/
 │   ├── ui_kit/
-│   └── ui_utils/ # Formatters, UI extensions
+│   └── ui_utils/                       # extensions, formatters, forms, helpers, assets
 │
 └── infrastructure/
     ├── config/
     ├── di/
-    ├── network/ # Dio setup & interceptors
-    └── utils/ # Loggers, SecureStorage, etc.
+    ├── network/                        # Dio setup & interceptors
+    └── utils/                          # Loggers, SecureStorage, etc.
 ```
 
 ---
