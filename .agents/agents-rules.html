@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGENTS.md — Правила та Стандарти Проєкту</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.75);
+  --bg-card-hover: rgba(31, 41, 55, 0.9);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(255, 222, 63, 0.35);
+  
+  --brand-primary: #FFDE3F;
+  --brand-primary-hover: #FACC15;
+  --brand-glow: rgba(255, 222, 63, 0.18);
+  
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.12);
+  --error: #EF4444;
+  --error-bg: rgba(239, 68, 68, 0.12);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --info: #3B82F6;
+  --info-bg: rgba(59, 130, 246, 0.12);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+[data-theme="light"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: #FFFFFF;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(217, 119, 6, 0.35);
+  
+  --brand-primary: #D97706;
+  --brand-primary-hover: #B45309;
+  --brand-glow: rgba(217, 119, 6, 0.12);
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Header */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(11, 15, 25, 0.8);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+[data-theme="light"] .top-nav {
+  background: rgba(248, 250, 252, 0.85);
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.brand-logo {
+  background: linear-gradient(135deg, var(--brand-primary), #FB923C);
+  color: #000;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 1rem;
+}
+.nav-breadcrumbs {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-breadcrumbs a:hover {
+  color: var(--brand-primary);
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.btn-icon {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-icon:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  color: var(--brand-primary);
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--brand-primary), #38BDF8, #A855F7);
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-category {
+  background: var(--brand-glow);
+  color: var(--brand-primary);
+  border: 1px solid var(--border-accent);
+}
+.badge-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Section Headings */
+.doc-h1 { font-family: var(--font-heading); font-size: 2rem; margin: 2rem 0 1rem; color: var(--text-primary); }
+.doc-h2 { font-family: var(--font-heading); font-size: 1.45rem; margin: 2.25rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); position: relative; }
+.heading-anchor { color: var(--text-muted); text-decoration: none; margin-right: 0.25rem; opacity: 0; transition: opacity 0.2s; }
+.doc-h2:hover .heading-anchor { opacity: 1; }
+.doc-h3 { font-family: var(--font-heading); font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--brand-primary); }
+.doc-h4 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; color: var(--text-primary); }
+.doc-p { margin-bottom: 1rem; color: var(--text-primary); }
+.doc-divider { border: none; height: 1px; background: var(--border-color); margin: 2.5rem 0; }
+
+/* Lists */
+.doc-list, .doc-ordered-list {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.doc-list li, .doc-ordered-list li {
+  margin-bottom: 0.4rem;
+}
+
+/* Links & Badges */
+.doc-link {
+  color: var(--brand-primary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--brand-primary);
+}
+.doc-link:hover {
+  border-bottom-style: solid;
+}
+.skill-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin: 0 0.2rem;
+}
+.skill-ref-badge:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #60A5FA;
+  transform: translateY(-1px);
+}
+.skill-ref-link {
+  color: #38BDF8;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.skill-ref-link:hover {
+  color: var(--brand-primary);
+  text-decoration: underline;
+}
+.ext-icon { font-size: 0.75rem; }
+
+/* Code Blocks */
+.inline-code {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--brand-primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+[data-theme="light"] .inline-code {
+  background: rgba(0, 0, 0, 0.06);
+}
+.code-block-wrapper {
+  background: #090d16;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 1.25rem 0;
+  overflow: hidden;
+}
+[data-theme="light"] .code-block-wrapper {
+  background: #F1F5F9;
+}
+.code-header {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.45rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+.code-lang {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s;
+}
+.copy-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--brand-primary);
+}
+pre {
+  padding: 1.2rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Tables */
+.table-responsive {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.doc-table th, .doc-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+.doc-table th {
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+[data-theme="light"] .doc-table th {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Mermaid Diagrams */
+.mermaid-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+}
+.mermaid-header {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+.mermaid-container .mermaid {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  min-height: 240px;
+}
+.mermaid-container .mermaid svg {
+  width: 100% !important;
+  max-width: 950px !important;
+  height: auto !important;
+  font-family: var(--font-body) !important;
+}
+
+/* Checklist */
+.checklist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+.checklist-item:hover {
+  border-color: var(--border-accent);
+}
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+.checkbox-container input {
+  margin-top: 0.3rem;
+  cursor: pointer;
+}
+.progress-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.progress-bar-bg {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-primary), var(--success));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Alerts */
+.alert-box {
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  margin: 1.25rem 0;
+  border-left: 4px solid;
+}
+.alert-info { background: var(--info-bg); border-left-color: var(--info); }
+.alert-warning { background: var(--warning-bg); border-left-color: var(--warning); }
+.alert-error { background: var(--error-bg); border-left-color: var(--error); }
+.alert-success { background: var(--success-bg); border-left-color: var(--success); }
+.alert-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; text-transform: uppercase; }
+
+/* Footer */
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+  </style>
+</head>
+<body>
+  <header class="top-nav">
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="index.html" class="nav-brand">
+        <div class="brand-logo">AG</div>
+        <span>Antigravity Docs</span>
+      </a>
+      <div class="nav-breadcrumbs">
+        <a href="index.html" data-i18n="portal_title">Центр Документації</a>
+        <span>/</span>
+        <span style="color: var(--text-primary); font-weight: 600;">AGENTS.md Rules</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="index.html" class="btn-icon">
+        <span data-i18n="back_to_portal">← До Порталу</span>
+      </a>
+      <button class="btn-icon" onclick="toggleLanguage()">
+        <span id="lang-text">🇺🇦 UA</span>
+      </button>
+      <button class="btn-icon" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text" data-i18n="dark_theme">Темна</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-badges">
+        <span class="badge badge-category">ARCHITECTURE CORE</span>
+        <span class="badge badge-tag">RULES</span>
+        <span class="badge badge-tag">#clean-architecture</span>
+        <span class="badge badge-tag">#bloc</span>
+        <span class="badge badge-tag">#linters</span>
+      </div>
+      <h1 class="hero-title">AGENTS.md — Архітектурний Кодекс Проєкту</h1>
+      <p class="hero-description" data-i18n="rules_overview">
+        Офіційні правила, обмеження шарів Clean Architecture, вимоги до стану BLoC, правила лінтингу та політика безпеки для ШІ-агентів та розробників.
+      </p>
+    </section>
+
+    <article class="doc-content">
+<h1 class="doc-h1">Antigravity IDE Rules — Flutter Project Configuration</h1>
+<h2 id="1--general-communication---language-configuration-protocol" class="doc-h2"><a href="#1--general-communication---language-configuration-protocol" class="heading-anchor">#</a> 1. General Communication &amp; Language Configuration Protocol</h2>
+<ul class="doc-list">
+<li><strong>Language Resolution Hierarchy:</strong></li>
+<li><strong>Local Override (Git-Ignored):</strong> If a local rule file exists at <code class="inline-code">.agents/rules/local_language.md</code> (or <code class="inline-code">.agents/local.json</code>), use the language defined there.</li>
+<li><strong>Workspace Rule:</strong> If <strong>Configured Communication Language</strong> below is explicitly defined (and not <code class="inline-code">[NOT_CONFIGURED]</code>), use that language.</li>
+<li><strong>First-Run Protocol (Template Default):</strong> If set to <code class="inline-code">[NOT_CONFIGURED]</code> and no local override exists:</li>
+<li>Agent defaults to English on the initial turn.</li>
+<li>Agent asks the user for their preferred communication language.</li>
+<li>Upon confirmation, agent creates <code class="inline-code">.agents/rules/local_language.md</code> (which is listed in <code class="inline-code">.gitignore</code>) containing <code class="inline-code">- <strong>Configured Communication Language:</strong> &lt;Chosen Language&gt;</code>. This preserves <code class="inline-code">[NOT_CONFIGURED]</code> in <code class="inline-code">.agents/AGENTS.md</code> for clean version control in template repositories.</li>
+<li><strong>Configured Communication Language:</strong> [NOT_CONFIGURED]</li>
+<li><strong>Language Separation Guidelines:</strong></li>
+<li><strong>User Chat &amp; Direct Responses:</strong> ALWAYS communicate with the user in the resolved <strong>Configured Communication Language</strong> (e.g., Ukrainian).</li>
+<li><strong>Internal Reasoning &amp; Artifacts:</strong> Internal reasoning, system drafts, implementation plans (<code class="inline-code">implementation_plan.md</code>), and technical walkthroughs are written in <strong>English</strong> for maximum technical precision and model reasoning performance.</li>
+<li><strong>Source Code &amp; Identifiers:</strong> All code, filenames, architecture layers, variables, tests, inline doc-comments (<code class="inline-code">///</code>), and git commits MUST strictly remain in <strong>English</strong>.</li>
+<li><strong>Senior Mobile Architect Role:</strong> Write clean, maintainable, testable, and production-ready code. Avoid over-engineering, &quot;magic&quot; code, and redundant abstractions. Prioritize efficiency, high performance, and long-term support.</li>
+<li><strong>Concise Architectural Rationale:</strong> Do NOT write lengthy explanations for standard boilerplate code. Provide brief, highly concentrated architectural rationales ONLY for complex, non-obvious design choices or critical state management patterns.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="2--project-architecture---layer-separation--strict-clean-architecture-" class="doc-h2"><a href="#2--project-architecture---layer-separation--strict-clean-architecture-" class="heading-anchor">#</a> 2. Project Architecture &amp; Layer Separation (Strict Clean Architecture)</h2>
+<p class="doc-p">Strictly adhere to the following layer boundaries and dependency rules without exceptions:</p>
+<ul class="doc-list">
+<li><strong>Domain Layer:</strong> Contains pure business entities, repository interfaces, and Use Cases. Must be 100% framework-agnostic (pure Dart only; strictly NO Flutter, Dio, Retrofit, SharedPreferences, or UI imports).</li>
+<li><strong>Data Layer:</strong> Contains repository implementations, data sources (Retrofit API, local storage), DTOs (Data Transfer Objects with <code class="inline-code">json_serializable</code>), and explicit Mappers (converting DTOs &lt;-&gt; Domain Entities).</li>
+<li><strong>Presentation Layer:</strong> UI Screens, modular Widgets, UI Kit, Theme, and State Management (BLoC/Cubit). Must ONLY depend on Domain Entities and Use Cases.</li>
+<li><strong>Core / Infrastructure Layer:</strong> Dependency Injection setup (<code class="inline-code">injectable</code>), network configurations (<code class="inline-code">Dio</code>), loggers, global extensions, and constants/utilities.</li>
+</ul>
+<h3 class="doc-h3">Strict Inter-Layer Interaction Rules:</h3>
+<ol class="doc-ordered-list">
+<li><strong>Mandatory Use Cases:</strong> BLoCs/Cubits MUST ONLY interact with <strong>Use Cases</strong>. Direct interaction between BLoC/Cubit and Repositories or Data Sources is STRICTLY PROHIBITED.</li>
+<li><strong>Data Model Encapsulation:</strong> DTOs and raw API responses must NEVER cross into the Presentation layer. All data must be mapped to Domain Entities before reaching BLoC/Cubit or UI.</li>
+<li><strong>Strict One-Way Dependency Flow:</strong></li>
+</ul>
+<p class="doc-p">   <code class="inline-code">UI -&gt; BLoC/Cubit -&gt; UseCase -&gt; Repository Interface (Domain) &lt;- Repository Implementation (Data) -&gt; Data Source</code>.</p>
+<hr class="doc-divider">
+<h2 id="3--tech-stack---environment" class="doc-h2"><a href="#3--tech-stack---environment" class="heading-anchor">#</a> 3. Tech Stack &amp; Environment</h2>
+<ul class="doc-list">
+<li><strong>Framework:</strong> Flutter (SDK ^3.12.2)</li>
+<li><strong>State Management:</strong> BLoC / Cubit (<code class="inline-code">bloc</code>, <code class="inline-code">flutter_bloc</code>, <code class="inline-code">hydrated_bloc</code>, <code class="inline-code">bloc_concurrency</code>)</li>
+<li><strong>Dependency Injection:</strong> <code class="inline-code">injectable</code> + <code class="inline-code">get_it</code></li>
+<li><strong>Routing:</strong> <code class="inline-code">auto_route</code></li>
+<li><strong>Networking:</strong> <code class="inline-code">dio</code> + <code class="inline-code">retrofit</code></li>
+<li><strong>Forms:</strong> <code class="inline-code">reactive_forms</code></li>
+<li><strong>Data Models &amp; Immutability:</strong> <code class="inline-code">freezed</code> + <code class="inline-code">json_annotation</code> / <code class="inline-code">equatable</code></li>
+<li><strong>Storage:</strong> <code class="inline-code">shared_preferences</code>, <code class="inline-code">flutter_secure_storage</code>, <code class="inline-code">path_provider</code></li>
+</ul>
+<hr class="doc-divider">
+<h2 id="4--ui-guidelines--extensions--theme---ui-kit-standards" class="doc-h2"><a href="#4--ui-guidelines--extensions--theme---ui-kit-standards" class="heading-anchor">#</a> 4. UI Guidelines, Extensions, Theme &amp; UI Kit Standards</h2>
+<ul class="doc-list">
+<li><strong>Max File Size:</strong> Keep screen/widget files strictly within <strong>150–200 lines</strong>.</li>
+<li><strong>Widget Decomposition:</strong></li>
+<li>DO NOT write large, deeply nested widget trees in a single file.</li>
+<li>Split the UI into small, focused sub-widgets inside <code class="inline-code">lib/presentation/pages/&lt;feature&gt;/widgets/</code>.</li>
+<li>Strictly DISALLOW helper builder methods (e.g., <code class="inline-code">Widget _buildHeader()</code>) inside widget classes. Always extract them into separate <code class="inline-code">StatelessWidget</code> classes to optimize render tree performance.</li>
+<li><strong>Theme &amp; Color Management Standards:</strong></li>
+<li>Strictly PROHIBIT hardcoding raw <code class="inline-code">Color(0x...)</code> values or utilizing static color classes (e.g., <code class="inline-code">AppColors.call</code>) directly inside UI widgets.</li>
+<li>ALL UI colors MUST be accessed strictly through <code class="inline-code">context.colorScheme</code> (Material 3 standard) or custom <code class="inline-code">ThemeExtension</code> classes.</li>
+<li>The application MUST fully support both <strong>Light</strong> and <strong>Dark</strong> themes. <code class="inline-code">ThemeData</code> setup must be dynamic and driven by <code class="inline-code">ColorScheme</code> (Light vs Dark).</li>
+<li>Domain-specific or custom design tokens (e.g., trading <code class="inline-code">call</code>/<code class="inline-code">put</code>, status badges, custom gradients) MUST be defined via <code class="inline-code">ThemeExtension</code> (e.g., <code class="inline-code">AppCustomColors</code>), maintaining distinct values for Light and Dark modes.</li>
+<li><strong>Extensions Usage Standard:</strong></li>
+<li>ALWAYS use <code class="inline-code">context.theme</code>, <code class="inline-code">context.textTheme</code>, <code class="inline-code">context.colorScheme</code>, and <code class="inline-code">context.customColors</code> instead of verbose <code class="inline-code">Theme.of(context)</code> calls.</li>
+<li><strong>Extensions Location Strategy:</strong></li>
+<li>Flutter &amp; UI-specific extensions (<code class="inline-code">BuildContext</code>, UI string formatting, UI context wrappers): <code class="inline-code">lib/presentation/ui_utils/extensions/</code>.</li>
+<li>Pure Dart extensions (<code class="inline-code">DateTime</code>, <code class="inline-code">num</code>, <code class="inline-code">String</code> logic without Flutter SDK dependencies): <code class="inline-code">lib/core/extensions/</code>.</li>
+<li><strong>UI Kit Standards (<code class="inline-code">lib/presentation/ui_kit/</code>):</strong></li>
+<li>All reusable UI Kit widgets MUST be stateless, pure, and completely decoupled from BLoC/domain logic.</li>
+<li>EVERY UI Kit component MUST include a <code class="inline-code">@Preview</code> decorator and a preview function for isolated IDE rendering.</li>
+<li><strong>Fluent UI Composition:</strong> Chained extension wrappers (e.g., <code class="inline-code">child.unfocusWrapper()</code>) are allowed ONLY if the corresponding extension functions exist in <code class="inline-code">lib/presentation/ui_utils/extensions/</code>. Otherwise, use standard Flutter widget wrappers.</li>
+<li><strong>Sliver Architecture:</strong> Use a sliver-first approach (<code class="inline-code">CustomScrollView</code> + <code class="inline-code">SliverAppBar</code> + <code class="inline-code">SliverList</code>/<code class="inline-code">SliverGrid</code>) for complex scrollable screens.</li>
+<li><strong>Animations:</strong> Isolate animation logic from business logic and layout. Always properly dispose of <code class="inline-code">AnimationController</code> resources.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="5--state-management-standards--bloc---cubit-" class="doc-h2"><a href="#5--state-management-standards--bloc---cubit-" class="heading-anchor">#</a> 5. State Management Standards (BLoC / Cubit)</h2>
+<ul class="doc-list">
+<li><strong>File Structure:</strong> Feature BLoCs must be split into three files using <code class="inline-code">part</code> and <code class="inline-code">part of</code>:</li>
+</ul>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">text</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-plaintext">lib/presentation/state_management//
+_event.dart
+_state.dart
+_bloc.dart (or _cubit.dart)
+</code></pre>
+</div>
+<ul class="doc-list">
+<li><strong>State &amp; Event Modeling:</strong></li>
+<li>Use <code class="inline-code">sealed class</code> for the base state/event and <code class="inline-code">final class</code> for concrete variants (Dart 3+ pattern).</li>
+<li>Avoid a single state class with multiple nullable flags. Model explicit lifecycle states instead: <code class="inline-code">Initial</code>, <code class="inline-code">InProgress</code>, <code class="inline-code">Success</code>, <code class="inline-code">Failure</code>.</li>
+<li>Extend <code class="inline-code">Equatable</code> for state comparison. To generate <code class="inline-code">copyWith</code> automatically for state classes that require state modifications, annotate the target state class with <code class="inline-code">@CopyWith()</code> from <code class="inline-code">package:copy_with_extension/copy_with_extension.dart</code> instead of writing <code class="inline-code">copyWith</code> manually.</li>
+<li><strong>Dependency Injection:</strong> Annotate all Blocs/Cubits with <code class="inline-code">@injectable</code> for DI registration via <code class="inline-code">injectable</code> + <code class="inline-code">get_it</code>.</li>
+<li><strong>UI &amp; BLoC Interaction:</strong></li>
+<li>UI MUST ONLY send events via dispatching: <code class="inline-code">context.read&lt;FeatureBloc&gt;().add(Event())</code>. Never expose or call public methods on BLoC classes.</li>
+<li>Use <code class="inline-code">BlocListener</code> for one-off side-effects (navigation, dialogs, SnackBars) and <code class="inline-code">BlocBuilder</code>/<code class="inline-code">BlocSelector</code> for visual rendering.</li>
+<li><strong>Asynchrony &amp; Safety:</strong></li>
+<li>After ANY <code class="inline-code">await</code> operation inside a BLoC event handler, ALWAYS check the emitter status: <code class="inline-code">if (emit.isDone) return;</code>.</li>
+<li><strong>Error Handling in BLoC:</strong></li>
+<li>Catch exceptions, log them via <code class="inline-code">addError(error, stackTrace)</code>, and map them to typed Domain failure states.</li>
+<li>DO NOT automatically clear or reset a <code class="inline-code">Failure</code> state back to <code class="inline-code">Initial</code> within the same event handler to prevent UI flickering. Reset states ONLY via explicit user retry actions.</li>
+<li><strong>Hydrated BLoC (Strict Local Persistence Standard):</strong></li>
+<li>Use <code class="inline-code">hydrated_bloc</code> strictly for non-sensitive UI preferences (e.g., filters, active tab index). NEVER persist tokens, passwords, or PII.</li>
+<li><strong>Mandatory Serialization Separation:</strong> ALL Hydrated BLoCs MUST extract <code class="inline-code">fromJson</code>/<code class="inline-code">toJson</code> and <code class="inline-code">storagePrefix</code> logic into a separate mixin file: <code class="inline-code">hydrated_&lt;feature&gt;_bloc.mixin.dart</code> implementing <code class="inline-code">mixin Hydrated&lt;Feature&gt;BlocMixin on HydratedMixin&lt;FeatureState&gt;</code>. This keeps the main BLoC file clean of serialization boilerplate.</li>
+<li>Always handle parsing failures safely by returning a fallback default state in <code class="inline-code">fromJson</code>.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="6--network--data---event-concurrency" class="doc-h2"><a href="#6--network--data---event-concurrency" class="heading-anchor">#</a> 6. Network, Data &amp; Event Concurrency</h2>
+<ul class="doc-list">
+<li>Implement API clients using Retrofit (<code class="inline-code">@RestApi</code>) and Dio in the Data layer.</li>
+<li>Handle network errors at the Data Source / Repository level, mapping raw Dio exceptions to typed Domain exceptions (<code class="inline-code">ApiException</code>).</li>
+<li>Apply explicit BLoC Event Transformers using <code class="inline-code">bloc_concurrency</code> to control execution flow:</li>
+<li><code class="inline-code">restartable()</code> for search, filtering, and autocomplete inputs.</li>
+<li><code class="inline-code">droppable()</code> for action buttons (e.g., submit/payment clicks) to prevent double-submit spam.</li>
+<li><code class="inline-code">sequential()</code> for ordered queue operations.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="7--code-generation---data-models-constraints" class="doc-h2"><a href="#7--code-generation---data-models-constraints" class="heading-anchor">#</a> 7. Code Generation &amp; Data Models Constraints</h2>
+<ul class="doc-list">
+<li><strong>Build Runner:</strong> Code generation is executed via <code class="inline-code">flutter pub run build_runner build --delete-conflicting-outputs</code>.</li>
+<li><strong>Freezed Constraints &amp; Syntax (per <code class="inline-code">build.yaml</code> &amp; Freezed 3+):</strong></li>
+<li><strong>Syntax Standard:</strong> Freezed classes MUST be declared as regular classes with field definitions in the class body and a <code class="inline-code">const ClassName({required this.field, ...});</code> constructor with <code class="inline-code">with _$ClassName</code>.</li>
+</ul>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">    @freezed
+    class ExampleItem with _$ExampleItem {
+      final String id;
+      final String title;
+      final String description;
+      final bool isActive;
+      final List&lt;String&gt; tags;
+
+      const ExampleItem({
+        required this.id,
+        required this.title,
+        required this.description,
+        required this.isActive,
+        required this.tags,
+      });
+    }
+</code></pre>
+</div>
+<ul class="doc-list">
+<li>Custom build configuration disables <code class="inline-code">map</code>, <code class="inline-code">when</code>, <code class="inline-code">fromJson</code>, and <code class="inline-code">toJson</code> code generation.</li>
+<li>Do NOT generate, call, or expect <code class="inline-code">map</code>, <code class="inline-code">when</code>, <code class="inline-code">fromJson</code>, or <code class="inline-code">toJson</code> methods on <code class="inline-code">@freezed</code> models.</li>
+<li>Use <code class="inline-code">@freezed</code> strictly for immutable data classes, <code class="inline-code">copyWith</code>, <code class="inline-code">toString</code>, <code class="inline-code">equals</code>, and <code class="inline-code">hashCode</code>.</li>
+<li>For JSON serialization, use explicit DTOs with <code class="inline-code">json_serializable</code> in the Data layer.</li>
+</ul>
+<ul class="doc-list">
+<li><strong>Retrofit Constraints:</strong> API services must be defined as abstract classes annotated with <code class="inline-code">@RestApi()</code> and use a <code class="inline-code">Dio</code> instance injected via <code class="inline-code">GetIt</code>.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="8--linting--formatting--imports---bloc-strict-rules--per--analysis_options-yaml--" class="doc-h2"><a href="#8--linting--formatting--imports---bloc-strict-rules--per--analysis_options-yaml--" class="heading-anchor">#</a> 8. Linting, Formatting, Imports &amp; BLoC Strict Rules (per <code class="inline-code">analysis_options.yaml</code>)</h2>
+<ul class="doc-list">
+<li><strong>Imports Standard:</strong></li>
+<li>ALWAYS use package imports (<code class="inline-code">import &#039;package:flutter_template/...&#039;;</code>) for all project files across all layers.</li>
+<li>Relative imports (e.g. <code class="inline-code">import &#039;../...&#039;;</code> or <code class="inline-code">import &#039;movie.dart&#039;;</code>) are strictly prohibited. The only exception is <code class="inline-code">part</code> / <code class="inline-code">part of</code> compiler directives.</li>
+<li><strong>Formatting:</strong></li>
+<li>Page width: 100 characters.</li>
+<li>Trailing commas: MUST be preserved.</li>
+<li><strong>Linter Rules Overrides:</strong></li>
+<li><code class="inline-code">prefer_const_constructors</code>: true</li>
+<li><code class="inline-code">annotate_overrides</code>: false</li>
+<li><code class="inline-code">constant_identifier_names</code>: false</li>
+<li><code class="inline-code">no_leading_underscores_for_library_prefixes</code>: false</li>
+<li><strong>Strict BLoC Rules:</strong></li>
+<li><code class="inline-code">avoid_flutter_imports</code>: true (BLoCs/Cubits must NEVER import <code class="inline-code">package:flutter/material.dart</code> or any UI-related imports)</li>
+<li><code class="inline-code">avoid_public_bloc_methods</code>: true (BLoC methods must be private; state changes must be triggered strictly via Events)</li>
+<li><code class="inline-code">avoid_public_fields</code>: true (Keep all fields in BLoC/Cubit private)</li>
+<li><code class="inline-code">prefer_void_public_cubit_methods</code>: true (Cubit public methods must return <code class="inline-code">void</code>)</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="9--resources---asset-management" class="doc-h2"><a href="#9--resources---asset-management" class="heading-anchor">#</a> 9. Resources &amp; Asset Management</h2>
+<ul class="doc-list">
+<li><strong>Localization:</strong> Managed via <code class="inline-code">flutter_intl</code> / <code class="inline-code">intl</code>. Output directory: <code class="inline-code">lib/l10n/generated</code>.</li>
+<li><strong>Assets:</strong> Assets and SVGs managed via <code class="inline-code">flutter_gen</code>. Generated path: <code class="inline-code">lib/presentation/ui_utils/assets</code>.</li>
+<li><strong>Excluded Files from AI Edits:</strong> Do NOT manually modify or review generated files (<code class="inline-code"><em>.g.dart</code>, <code class="inline-code"></em>.gr.dart</code>, <code class="inline-code">*.freezed.dart</code>, <code class="inline-code">lib/l10n/generated/<strong></code>, <code class="inline-code">build/</strong></code>).</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="10--environment-configuration---secrets-management" class="doc-h2"><a href="#10--environment-configuration---secrets-management" class="heading-anchor">#</a> 10. Environment Configuration &amp; Secrets Management</h2>
+<ul class="doc-list">
+<li><strong>Configuration Injection:</strong> Environment settings (e.g. <code class="inline-code">BASE_URL</code>, <code class="inline-code">API_KEY</code>, <code class="inline-code">APP_ENV</code>) MUST be passed using <code class="inline-code">--dart-define-from-file=config/env_dev.json</code> or <code class="inline-code">--dart-define</code>.</li>
+<li><strong>Git Hygiene:</strong> Local configuration files containing real environment credentials (<code class="inline-code">config/env_*.json</code>) MUST be listed in <code class="inline-code">.gitignore</code> and NEVER committed to repository. Provide <code class="inline-code">config/env_template.json</code> as a template.</li>
+<li><strong>Environment Abstraction:</strong> Access values via a centralized, strongly-typed <code class="inline-code">AppConfig</code> class in <code class="inline-code">lib/core/config/app_config.dart</code> using <code class="inline-code">String.fromEnvironment</code>.</li>
+<li><strong>Client Security Rule:</strong> Never store true private server keys (e.g., payment secret keys, private backend signing tokens) inside the mobile client code. All sensitive actions must be authorized via backend APIs.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="11--analytics---event-tracking-architecture--analyticsrepository-" class="doc-h2"><a href="#11--analytics---event-tracking-architecture--analyticsrepository-" class="heading-anchor">#</a> 11. Analytics &amp; Event Tracking Architecture (AnalyticsRepository)</h2>
+<ul class="doc-list">
+<li><strong>Domain Abstraction:</strong> All analytics and event tracking MUST be abstracted through an <code class="inline-code">AnalyticsRepository</code> interface in <code class="inline-code">lib/domain/repositories/analytics_repository.dart</code>.</li>
+<li><strong>Clean Architecture Boundaries:</strong> UI Widgets MUST NEVER invoke analytics SDKs (Firebase Analytics, Mixpanel, Amplitude, AppsFlyer) directly.</li>
+<li><strong>Tracking Invocation:</strong> Analytics events MUST be triggered strictly via UseCases or inside BLoC/Cubit event handlers (or specialized <code class="inline-code">BlocListener</code> wrappers for UI session tracking).</li>
+<li><strong>Multiple Providers Composite:</strong> Implement <code class="inline-code">AnalyticsRepositoryImpl</code> in <code class="inline-code">lib/data/repositories/</code> using a composite pattern if multiple analytics services are used simultaneously.</li>
+<li><strong>Typed Events &amp; PII Redaction:</strong> Event names and parameters MUST use strongly-typed enums or value objects. NEVER pass PII (user passwords, auth tokens, full credit card numbers) in analytics payloads.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="12--ai-execution-guidelines" class="doc-h2"><a href="#12--ai-execution-guidelines" class="heading-anchor">#</a> 12. AI Execution Guidelines</h2>
+<ul class="doc-list">
+<li><strong>Git Push Policy (Strict):</strong> AI agents MUST NEVER automatically execute <code class="inline-code">git push</code> to remote repositories unless the user gives direct, explicit instruction (e.g., &quot;запуш&quot;, &quot;push&quot;, &quot;запуш зміни&quot;). Staging and creating local commits (<code class="inline-code">git add</code>, <code class="inline-code">git commit</code>) can be done as requested, but pushing to the remote repository is strictly forbidden without explicit permission.</li>
+<li>Do NOT introduce any unrequested third-party packages or alternative state management solutions (e.g., Riverpod, Provider).</li>
+<li>Always ensure generated code strictly complies with <code class="inline-code">injectable</code>, <code class="inline-code">auto_route</code>, and <code class="inline-code">reactive_forms</code> patterns used in the project.</li>
+<li>Maintain trailing commas in all Dart code snippets to prevent formatting churn.</li>
+</ul>
+
+    </article>
+
+    <footer class="footer">
+      <p>© 2026 Antigravity Flutter Architecture • Project Rules & Governance</p>
+    </footer>
+  </main>
+
+  <script>
+// Theme Management
+function initTheme() {
+  const saved = localStorage.getItem('agent_doc_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeButton(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('agent_doc_theme', next);
+  updateThemeButton(next);
+}
+
+function updateThemeButton(theme) {
+  const icon = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-text');
+  if (icon && label) {
+    if (theme === 'dark') {
+      icon.textContent = '🌙';
+      label.setAttribute('data-i18n', 'dark_theme');
+      if (currentLang === 'ua') label.textContent = 'Темна';
+      else label.textContent = 'Dark';
+    } else {
+      icon.textContent = '☀️';
+      label.setAttribute('data-i18n', 'light_theme');
+      if (currentLang === 'ua') label.textContent = 'Світла';
+      else label.textContent = 'Light';
+    }
+  }
+}
+
+// Language Management (UA / EN)
+let currentLang = localStorage.getItem('agent_doc_lang') || 'ua';
+
+const translations = {
+  ua: {
+    portal_title: "Центр Документації Агентів",
+    all_skills: "Всі скіли",
+    project_rules: "Правила Проєкту (AGENTS.md)",
+    search_placeholder: "Пошук скілів за назвою, категорією або тригерами...",
+    stats_total_skills: "Всього Скілів",
+    stats_categories: "Категорій / Шарів",
+    stats_rules: "Правил Архітектури",
+    stats_connected: "100% Взаємозв'язані",
+    filter_all: "Всі",
+    copy: "Копіювати",
+    copied: "Скопійовано!",
+    progress: "Прогрес виконання",
+    checklist_title: "Чекліст верифікації та виконання",
+    sub_skills_title: "Пов'язані та рекомендовані скіли",
+    dark_theme: "Темна",
+    light_theme: "Світла",
+    lang_btn: "UA 🇺🇦",
+    back_to_portal: "← До Порталу",
+    view_docs: "Читати",
+    rules_overview: "Огляд архітектурних правил та контрактів"
+  },
+  en: {
+    portal_title: "Agent Documentation Hub",
+    all_skills: "All Skills",
+    project_rules: "Project Rules (AGENTS.md)",
+    search_placeholder: "Search skills by name, layer, or triggers...",
+    stats_total_skills: "Total Skills",
+    stats_categories: "Categories / Layers",
+    stats_rules: "Architectural Rules",
+    stats_connected: "100% Interconnected",
+    filter_all: "All",
+    copy: "Copy",
+    copied: "Copied!",
+    progress: "Execution Progress",
+    checklist_title: "Verification & Quality Checklist",
+    sub_skills_title: "Related & Referenced Skills",
+    dark_theme: "Dark",
+    light_theme: "Light",
+    lang_btn: "EN 🇬🇧",
+    back_to_portal: "← Back to Portal",
+    view_docs: "Explore",
+    rules_overview: "Architectural rules & layer interaction contracts"
+  }
+};
+
+function initLanguage() {
+  setLanguage(currentLang);
+}
+
+function toggleLanguage() {
+  const next = currentLang === 'ua' ? 'en' : 'ua';
+  setLanguage(next);
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('agent_doc_lang', lang);
+  
+  const dict = translations[lang] || translations.ua;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      if (el.tagName === 'INPUT' && el.getAttribute('placeholder')) {
+        el.setAttribute('placeholder', dict[key]);
+      } else {
+        el.textContent = dict[key];
+      }
+    }
+  });
+
+  const langBtn = document.getElementById('lang-text');
+  if (langBtn) {
+    langBtn.textContent = lang === 'ua' ? '🇺🇦 UA' : '🇬🇧 EN';
+  }
+
+  // Update category texts if available
+  document.querySelectorAll('[data-cat-ua]').forEach(el => {
+    if (lang === 'ua') {
+      el.textContent = el.getAttribute('data-cat-ua');
+    } else {
+      el.textContent = el.getAttribute('data-cat-en');
+    }
+  });
+
+  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
+}
+
+// Copy Code
+function copyCode(button) {
+  const wrapper = button.closest('.code-block-wrapper');
+  const code = wrapper.querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    const btnText = button.querySelector('.btn-text');
+    const original = btnText.innerText;
+    btnText.innerText = currentLang === 'ua' ? 'Скопійовано!' : 'Copied!';
+    button.style.borderColor = 'var(--success)';
+    button.style.color = 'var(--success)';
+    setTimeout(() => {
+      btnText.innerText = original;
+      button.style.borderColor = '';
+      button.style.color = '';
+    }, 2000);
+  });
+}
+
+// Checklist Progress
+function updateChecklistProgress() {
+  const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+  const checked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked');
+  if (!checkboxes.length) return;
+
+  const percent = Math.round((checked.length / checkboxes.length) * 100);
+  const fill = document.getElementById('checklist-progress-fill');
+  const text = document.getElementById('checklist-progress-text');
+  if (fill) fill.style.width = percent + '%';
+  if (text) text.textContent = percent + '% (' + checked.length + '/' + checkboxes.length + ')';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initLanguage();
+  updateChecklistProgress();
+  if (typeof mermaid !== 'undefined') {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isLight ? 'default' : 'dark',
+      themeVariables: {
+        fontSize: '14px',
+        fontFamily: 'Inter, Outfit, sans-serif',
+        primaryColor: isLight ? '#f1f5f9' : '#1e293b',
+        primaryTextColor: isLight ? '#0f172a' : '#f8fafc',
+        primaryBorderColor: isLight ? '#d97706' : '#FFDE3F',
+        lineColor: isLight ? '#2563eb' : '#60a5fa',
+        secondaryColor: isLight ? '#ffffff' : '#111827',
+        tertiaryColor: isLight ? '#f8fafc' : '#0b0f19'
+      },
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis',
+        nodeSpacing: 40,
+        rankSpacing: 45
+      },
+      securityLevel: 'loose'
+    });
+  }
+});
+
+    hljs.highlightAll();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>flutter-ui-hub — Agent Skill Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.75);
+  --bg-card-hover: rgba(31, 41, 55, 0.9);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(255, 222, 63, 0.35);
+  
+  --brand-primary: #FFDE3F;
+  --brand-primary-hover: #FACC15;
+  --brand-glow: rgba(255, 222, 63, 0.18);
+  
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.12);
+  --error: #EF4444;
+  --error-bg: rgba(239, 68, 68, 0.12);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --info: #3B82F6;
+  --info-bg: rgba(59, 130, 246, 0.12);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+[data-theme="light"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: #FFFFFF;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(217, 119, 6, 0.35);
+  
+  --brand-primary: #D97706;
+  --brand-primary-hover: #B45309;
+  --brand-glow: rgba(217, 119, 6, 0.12);
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Header */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(11, 15, 25, 0.8);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+[data-theme="light"] .top-nav {
+  background: rgba(248, 250, 252, 0.85);
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.brand-logo {
+  background: linear-gradient(135deg, var(--brand-primary), #FB923C);
+  color: #000;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 1rem;
+}
+.nav-breadcrumbs {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-breadcrumbs a:hover {
+  color: var(--brand-primary);
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.btn-icon {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-icon:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  color: var(--brand-primary);
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--brand-primary), #38BDF8, #A855F7);
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-category {
+  background: var(--brand-glow);
+  color: var(--brand-primary);
+  border: 1px solid var(--border-accent);
+}
+.badge-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Section Headings */
+.doc-h1 { font-family: var(--font-heading); font-size: 2rem; margin: 2rem 0 1rem; color: var(--text-primary); }
+.doc-h2 { font-family: var(--font-heading); font-size: 1.45rem; margin: 2.25rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); position: relative; }
+.heading-anchor { color: var(--text-muted); text-decoration: none; margin-right: 0.25rem; opacity: 0; transition: opacity 0.2s; }
+.doc-h2:hover .heading-anchor { opacity: 1; }
+.doc-h3 { font-family: var(--font-heading); font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--brand-primary); }
+.doc-h4 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; color: var(--text-primary); }
+.doc-p { margin-bottom: 1rem; color: var(--text-primary); }
+.doc-divider { border: none; height: 1px; background: var(--border-color); margin: 2.5rem 0; }
+
+/* Lists */
+.doc-list, .doc-ordered-list {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.doc-list li, .doc-ordered-list li {
+  margin-bottom: 0.4rem;
+}
+
+/* Links & Badges */
+.doc-link {
+  color: var(--brand-primary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--brand-primary);
+}
+.doc-link:hover {
+  border-bottom-style: solid;
+}
+.skill-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin: 0 0.2rem;
+}
+.skill-ref-badge:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #60A5FA;
+  transform: translateY(-1px);
+}
+.skill-ref-link {
+  color: #38BDF8;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.skill-ref-link:hover {
+  color: var(--brand-primary);
+  text-decoration: underline;
+}
+.ext-icon { font-size: 0.75rem; }
+
+/* Code Blocks */
+.inline-code {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--brand-primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+[data-theme="light"] .inline-code {
+  background: rgba(0, 0, 0, 0.06);
+}
+.code-block-wrapper {
+  background: #090d16;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 1.25rem 0;
+  overflow: hidden;
+}
+[data-theme="light"] .code-block-wrapper {
+  background: #F1F5F9;
+}
+.code-header {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.45rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+.code-lang {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s;
+}
+.copy-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--brand-primary);
+}
+pre {
+  padding: 1.2rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Tables */
+.table-responsive {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.doc-table th, .doc-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+.doc-table th {
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+[data-theme="light"] .doc-table th {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Mermaid Diagrams */
+.mermaid-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+}
+.mermaid-header {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+.mermaid-container .mermaid {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  min-height: 240px;
+}
+.mermaid-container .mermaid svg {
+  width: 100% !important;
+  max-width: 950px !important;
+  height: auto !important;
+  font-family: var(--font-body) !important;
+}
+
+/* Checklist */
+.checklist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+.checklist-item:hover {
+  border-color: var(--border-accent);
+}
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+.checkbox-container input {
+  margin-top: 0.3rem;
+  cursor: pointer;
+}
+.progress-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.progress-bar-bg {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-primary), var(--success));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Alerts */
+.alert-box {
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  margin: 1.25rem 0;
+  border-left: 4px solid;
+}
+.alert-info { background: var(--info-bg); border-left-color: var(--info); }
+.alert-warning { background: var(--warning-bg); border-left-color: var(--warning); }
+.alert-error { background: var(--error-bg); border-left-color: var(--error); }
+.alert-success { background: var(--success-bg); border-left-color: var(--success); }
+.alert-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; text-transform: uppercase; }
+
+/* Footer */
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+  </style>
+</head>
+<body>
+  <header class="top-nav">
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="../../../../index.html" class="nav-brand">
+        <div class="brand-logo">AG</div>
+        <span>Antigravity Docs</span>
+      </a>
+      <div class="nav-breadcrumbs">
+        <a href="../../../../index.html" data-i18n="portal_title">Центр Документації</a>
+        <span>/</span>
+        <span data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">UI Віджети та Анімації</span>
+        <span>/</span>
+        <span style="color: var(--text-primary); font-weight: 600;">flutter-ui-hub</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="../../../../agents-rules.html" class="btn-icon">
+        <span>📜</span>
+        <span data-i18n="project_rules">Правила AGENTS.md</span>
+      </a>
+      <button class="btn-icon" onclick="toggleLanguage()">
+        <span id="lang-text">🇺🇦 UA</span>
+      </button>
+      <button class="btn-icon" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text" data-i18n="dark_theme">Темна</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-badges">
+        <span class="badge badge-category" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">UI Віджети та Анімації</span>
+        <span class="badge badge-tag">SKILL</span>
+        <span class="badge badge-tag">#primary</span>
+<span class="badge badge-tag">#coordinator</span>
+<span class="badge badge-tag">#architecture</span>
+<span class="badge badge-tag">#guide</span>
+<span class="badge badge-tag">#flutter</span>
+<span class="badge badge-tag">#development</span>
+<span class="badge badge-tag">#designing</span>
+<span class="badge badge-tag">#creating</span>
+      </div>
+      <h1 class="hero-title">flutter-ui-hub</h1>
+      <p class="hero-description">Primary coordinator and architecture guide for Flutter UI development. Use when designing, creating, refactoring, or auditing UI widgets, pages, layouts, and animations. Serves as the central entry point and routes to specialized sub-skills for widgets, performance, theming, slivers, responsiveness, and motion design.</p>
+    </section>
+
+    <div class="progress-card">
+      <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600;">
+        <span data-i18n="progress">Прогрес виконання</span>
+        <span id="checklist-progress-text">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="checklist-progress-fill"></div>
+      </div>
+    </div>
+
+    <article class="doc-content">
+<h1 class="doc-h1">Flutter UI Coordinator &amp; Architecture Hub</h1>
+<h2 id="1--overview---presentation-layer-laws" class="doc-h2"><a href="#1--overview---presentation-layer-laws" class="heading-anchor">#</a> 1. Overview &amp; Presentation Layer Laws</h2>
+<p class="doc-p">This skill serves as the central root coordinator for all UI development within the project. It enforces Clean Architecture presentation boundaries, component decomposition rules, and routes tasks to specialized UI sub-skills.</p>
+<h3 class="doc-h3">Core Presentation Rules (per <code class="inline-code">AGENTS.md</code>):</h3>
+<ol class="doc-ordered-list">
+<li><strong>Strict Line Limits:</strong> Keep widget and screen files strictly within <strong>150–200 lines</strong>.</li>
+<li><strong>Zero Helper Builder Methods:</strong> Strictly <strong>DISALLOW</strong> helper builder methods (e.g., <code class="inline-code">Widget _buildHeader()</code>). Always extract subtrees into standalone <code class="inline-code">StatelessWidget</code> classes inside <code class="inline-code">widgets/</code> or <code class="inline-code">parts/</code> to preserve element tree diffing efficiency.</li>
+<li><strong>No Direct Hardcoded Values:</strong> Strictly <strong>NO</strong> raw <code class="inline-code">Color(0x...)</code> or static <code class="inline-code">AppColors</code> directly in widgets. ALL colors must come from <code class="inline-code">context.colorScheme</code> or <code class="inline-code">context.customColors</code> (<code class="inline-code">ThemeExtension</code>).</li>
+<li><strong>Clean Architecture Boundary:</strong> UI Widgets MUST ONLY interact with BLoCs/Cubits via Events (<code class="inline-code">context.read&lt;Bloc&gt;().add(Event())</code>). UI must never call Repositories, Data Sources, or Analytics SDKs directly.</li>
+<li><strong>Stateful vs Stateless:</strong> Prefer <code class="inline-code">StatelessWidget</code> wherever possible. Use <code class="inline-code">StatefulWidget</code> strictly for local ephemeral UI state (e.g., <code class="inline-code">AnimationController</code>, <code class="inline-code">FocusNode</code>, <code class="inline-code">ScrollController</code>, <code class="inline-code">TextEditingController</code>).</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="2--ui-skill-tree---routing-matrix" class="doc-h2"><a href="#2--ui-skill-tree---routing-matrix" class="heading-anchor">#</a> 2. UI Skill Tree &amp; Routing Matrix</h2>
+<p class="doc-p">Use this matrix to navigate to the specialized sub-skill matching your specific UI task:</p>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th><strong>Core Hub</strong></th>
+<th><a href="../../../core/core-hub/core-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for the Core layer (lib/core/). Enforces Pure Dart boundaries (strictly zero Flutter SDK imports), routing to specialized sub-skills for global extensions, algorithmic utilities, constants, and data transformers.">core-hub <span class="ext-icon">↗</span></a></th>
+<th>Central coordinator for pure Dart foundations, extensions, and utilities.</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Domain Hub</strong></td>
+<td><a href="../../../domain/domain-hub/domain-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for the Domain layer (lib/domain/). Enforces Clean Architecture DDD principles, 100% pure Dart boundaries (zero Flutter/Dio/Storage imports), Single Responsibility UseCases, Freezed 3+ immutable entities, abstract repository interfaces, and Dart 3 sealed failures.">domain-hub <span class="ext-icon">↗</span></a></td>
+<td>Central coordinator for business entities, UseCases, repository contracts, and failures.</td>
+</tr>
+<tr>
+<td><strong>Data Hub</strong></td>
+<td><a href="../../../data/data-hub/data-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for the Data layer (lib/data/). Enforces Clean Architecture data provider boundaries, DTO encapsulation, inline toDomain() mapping standards, Retrofit API clients, and repository implementations.">data-hub <span class="ext-icon">↗</span></a></td>
+<td>Central coordinator for DTOs, inline toDomain() mappers, Retrofit clients, and repositories.</td>
+</tr>
+<tr>
+<td><strong>Infrastructure Hub</strong></td>
+<td><a href="../../../infrastructure/infrastructure-hub/infrastructure-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for the Infrastructure layer (lib/infrastructure/). Enforces Clean Architecture adapter boundaries, preventing utils junk drawers, and routing to specialized sub-skills for Dio networking, DI (injectable), storage interactors, Firebase, deep links, in-app purchases, environment configuration, and logging.">infrastructure-hub <span class="ext-icon">↗</span></a></td>
+<td>Central coordinator for external SDKs, network, storage, DI, and platform services.</td>
+</tr>
+<tr>
+<td><strong>Navigation Hub</strong></td>
+<td><a href="../../navigation/flutter-auto-route-hub/flutter-auto-route-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for AutoRoute navigation in Flutter. Use when designing, organizing, refactoring, or auditing application routing, page definitions, route guards, nested tab navigation, and deep linking. Serves as the central entry point and routes to specialized navigation sub-skills.">flutter-auto-route-hub <span class="ext-icon">↗</span></a></td>
+<td>Central coordinator for AutoRoute type-safe navigation and deep links.</td>
+</tr>
+<tr>
+<td><strong>AutoRoute Core</strong></td>
+<td><a href="../../navigation/flutter-auto-route-core/flutter-auto-route-core.html" class="skill-ref-link" title="Core routing configuration, page definitions, parameters, and type-safe navigation with AutoRoute. Use when configuring AppRouter, annotating @RoutePage screens, passing @pathParam or @queryParam arguments, executing push/replace/pop operations, or configuring custom route transitions.">flutter-auto-route-core <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">@AutoRouterConfig</code>, <code class="inline-code">@RoutePage</code>, <code class="inline-code">push</code>/<code class="inline-code">replace</code>/<code class="inline-code">pop</code>, <code class="inline-code">@pathParam</code>, parameters.</td>
+</tr>
+<tr>
+<td><strong>Nested Tabs &amp; Shells</strong></td>
+<td><a href="../../navigation/flutter-auto-route-nested-tabs/flutter-auto-route-nested-tabs.html" class="skill-ref-link" title="Best practices for nested navigation, tab bars, shells, and multi-stack routers with AutoRoute. Use when implementing bottom navigation bars, tabs routers (AutoTabsRouter, AutoTabsScaffold), preserving tab history, popping nested stacks to root on re-tap, or scoping child StackRouters.">flutter-auto-route-nested-tabs <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">AutoTabsRouter</code>, <code class="inline-code">AutoTabsScaffold</code>, persistent tabs, <code class="inline-code">popUntilRoot</code>.</td>
+</tr>
+<tr>
+<td><strong>State Management Hub</strong></td>
+<td><a href="../../state-management/flutter-bloc-hub/flutter-bloc-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter BLoC &amp; Cubit state management. Use when designing, organizing, refactoring, or auditing presentation state management. Serves as the central entry point and routes to specialized sub-skills for BLoC core patterns, UI widgets &amp; scoping, and HydratedBloc persistence.">flutter-bloc-hub <span class="ext-icon">↗</span></a></td>
+<td>Central coordinator for BLoC/Cubit state management architecture.</td>
+</tr>
+<tr>
+<td><strong>BLoC UI Widgets &amp; Scoping</strong></td>
+<td><a href="../../state-management/flutter-bloc-widgets/flutter-bloc-widgets.html" class="skill-ref-link" title="Complete Flutter UI widgets and scoping guide for flutter_bloc. Use when building UI with BlocBuilder, BlocListener, BlocConsumer, BlocSelector, MultiBlocProvider, MultiBlocListener, deciding between context.read vs watch vs select, or configuring BlocProvider vs BlocProvider.value for bottom sheets, dialogs, and navigation routes.">flutter-bloc-widgets <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">BlocBuilder</code>, <code class="inline-code">BlocListener</code>, <code class="inline-code">BlocConsumer</code>, <code class="inline-code">BlocSelector</code>, <code class="inline-code">BlocProvider</code> vs <code class="inline-code">BlocProvider.value</code>.</td>
+</tr>
+<tr>
+<td><strong>BLoC &amp; Cubit Core Logic</strong></td>
+<td><a href="../../state-management/flutter-bloc-core/flutter-bloc-core.html" class="skill-ref-link" title="Core architecture patterns and best practices for Flutter BLoC and Cubit. Use when creating BLoC or Cubit classes, designing sealed states and events, configuring event transformers (bloc_concurrency), handling async guards (emit.isDone), implementing error handling, or deciding between BLoC and Cubit.">flutter-bloc-core <span class="ext-icon">↗</span></a></td>
+<td>BLoC vs Cubit decision, sealed events/states, <code class="inline-code">bloc_concurrency</code>, async safety.</td>
+</tr>
+<tr>
+<td><strong>UI Utils Hub</strong></td>
+<td><a href="../../ui-utils/flutter-ui-utils-hub/flutter-ui-utils-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter UI Utilities (lib/presentation/ui_utils/). Enforces presentation helper boundaries, routing to specialized sub-skills for BuildContext extensions, TextInputFormatters, Reactive Forms accessors/adapters, and system UI helpers.">flutter-ui-utils-hub <span class="ext-icon">↗</span></a></td>
+<td>Central coordinator for UI extensions, formatters, reactive form accessors, and helpers in <code class="inline-code">lib/presentation/ui_utils/</code>.</td>
+</tr>
+<tr>
+<td><strong>UI Context Extensions</strong></td>
+<td><a href="../../ui-utils/flutter-ui-utils-extensions/flutter-ui-utils-extensions.html" class="skill-ref-link" title="Standards and patterns for Flutter and BuildContext UI extensions in lib/presentation/ui_utils/extensions/. Covers context.colorScheme, context.textTheme, context.customColors, media query helpers, safe area insets, and fluent UI widget wrappers.">flutter-ui-utils-extensions <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">BuildContext</code> helpers (<code class="inline-code">context.colorScheme</code>, <code class="inline-code">context.textTheme</code>, <code class="inline-code">context.customColors</code>, <code class="inline-code">isDark</code>, media queries).</td>
+</tr>
+<tr>
+<td><strong>Input Formatters</strong></td>
+<td><a href="../../ui-utils/flutter-ui-utils-formatters/flutter-ui-utils-formatters.html" class="skill-ref-link" title="Standards and implementation patterns for custom TextInputFormatter classes in lib/presentation/ui_utils/formatters/. Covers phone masking, payment card formatting, currency/number inputs, uppercase transforms, and text replacement filters.">flutter-ui-utils-formatters <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">TextInputFormatter</code> classes (card numbers, phone masks, currency, uppercase transform).</td>
+</tr>
+<tr>
+<td><strong>Reactive Form Accessors</strong></td>
+<td><a href="../../ui-utils/flutter-ui-utils-forms/flutter-ui-utils-forms.html" class="skill-ref-link" title="Standards for Reactive Forms UI adapters, custom ControlValueAccessor implementations, and form UI utilities in lib/presentation/ui_utils/forms/. Covers bidirectional type conversion between form controls and UI widgets.">flutter-ui-utils-forms <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">ControlValueAccessor</code> implementations and UI form scroll/focus helpers.</td>
+</tr>
+<tr>
+<td><strong>System UI Helpers</strong></td>
+<td><a href="../../ui-utils/flutter-ui-utils-helpers/flutter-ui-utils-helpers.html" class="skill-ref-link" title="Standards for system UI and presentation helper utilities in lib/presentation/ui_utils/helpers/. Covers HapticFeedbackHelper, SystemUiOverlayHelper, soft keyboard dismissers, and clipboard helpers.">flutter-ui-utils-helpers <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">HapticFeedbackHelper</code>, <code class="inline-code">SystemUiOverlayHelper</code>, keyboard unfocusing, and clipboard tools.</td>
+</tr>
+<tr>
+<td><strong>UI Kit Architecture</strong></td>
+<td><a href="../ui-kit/flutter-ui-kit-hub/flutter-ui-kit-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for authoring pure UI Kit components in lib/presentation/ui_kit/. Enforces atomic design, 100% pure stateless widgets, zero BLoC/Domain dependencies, design token access, and mandatory dual-theme @Preview coverage. Use when designing, creating, refactoring, or auditing reusable UI components.">flutter-ui-kit-hub <span class="ext-icon">↗</span></a></td>
+<td>Pure decoupled components in <code class="inline-code">lib/presentation/ui_kit/</code>, buttons, cards, modals, badges.</td>
+</tr>
+<tr>
+<td><strong>Widget Previews</strong></td>
+<td><a href="../ui-kit/flutter-ui-kit-preview/flutter-ui-kit-preview.html" class="skill-ref-link" title="Implements real-time widget previews for UI Kit components using package:flutter/widget_previews.dart and @Preview annotation. Enforces zero side-effects (no native APIs, no network), mandatory Light/Dark dual testing, PreviewWrapper encapsulation, explicit viewport sizing, MultiPreview transformations, and state-matrix preview patterns. Use when creating UI Kit components, building isolated feature widgets, or setting up visual preview decorators.">flutter-ui-kit-preview <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">@Preview</code> decorators, <code class="inline-code">PreviewWrapper</code>, isolated component verification in IDE/web-runner.</td>
+</tr>
+<tr>
+<td><strong>Reactive Forms Core</strong></td>
+<td><a href="../forms/flutter-ui-forms-reactive/flutter-ui-forms-reactive.html" class="skill-ref-link" title="Enforces strict architecture, strong typing, custom validation, cross-field checks, dynamic FormArrays, and BLoC integration standards for reactive_forms in Flutter. Guarantees zero mixing of TextEditingController with FormControl, clear boundaries between Presentation forms and Domain DTOs, debounced async validation, and optimal UI rebuilds. Use when creating form controls, dynamic inputs, or complex field validation.">flutter-ui-forms-reactive <span class="ext-icon">↗</span></a></td>
+<td>Strongly-typed <code class="inline-code">reactive_forms</code>, <code class="inline-code">FormGroup</code>, <code class="inline-code">FormControl</code>, cross-field validation, async debounce.</td>
+</tr>
+<tr>
+<td><strong>Custom Form Controls</strong></td>
+<td><a href="../forms/flutter-ui-forms-custom-controls/flutter-ui-forms-custom-controls.html" class="skill-ref-link" title="Standards and patterns for creating custom reactive form components using ControlValueAccessor, ReactiveFormField, custom chip selectors, date pickers, range sliders, and stylized validation messages in Flutter. Use when building custom UI Kit inputs or binding non-standard widgets to reactive_forms.">flutter-ui-forms-custom-controls <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">ControlValueAccessor</code>, custom chips, date pickers, masks, and stylized reactive inputs.</td>
+</tr>
+<tr>
+<td><strong>Theming System</strong></td>
+<td><a href="../../theme/flutter-ui-theme-hub/flutter-ui-theme-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter Material 3 theming system. Use when configuring app themes, splitting theme files (AppTheme, AppColorScheme, AppTextTheme, AppCustomColors), setting up Light/Dark modes, or managing theme extensions. Routes to specialized sub-skills for colors, typography, and theme extensions.">flutter-ui-theme-hub <span class="ext-icon">↗</span></a></td>
+<td>Modular theme architecture (<code class="inline-code">app_theme.dart</code>, <code class="inline-code">app_color_scheme.dart</code>, <code class="inline-code">app_text_theme.dart</code>, <code class="inline-code">app_custom_colors.dart</code>).</td>
+</tr>
+<tr>
+<td><strong>Material 3 Components</strong></td>
+<td><a href="../flutter-ui-material/flutter-ui-material.html" class="skill-ref-link" title="Material 3 Design System implementation skill enforcing ColorScheme dynamic generation, ThemeData (Light and Dark), component themes (InputDecorationTheme, CardTheme, FilledButtonTheme), and custom ThemeExtensions for domain tokens. Use when building M3 UI widgets, configuring themes, or styling components.">flutter-ui-material <span class="ext-icon">↗</span></a></td>
+<td>Material 3 components (<code class="inline-code">FilledButton</code>, <code class="inline-code">Card</code>, <code class="inline-code">SegmentedButton</code>, <code class="inline-code">NavigationBar</code>, <code class="inline-code">InputDecoration</code>).</td>
+</tr>
+<tr>
+<td><strong>Widget Architecture</strong></td>
+<td><a href="../flutter-ui-stateless-stateful/flutter-ui-stateless-stateful.html" class="skill-ref-link" title="Comprehensive guide on StatelessWidget vs StatefulWidget selection, element tree diffing optimization, widget lifecycle management (initState, didUpdateWidget, dispose), and separating local UI state from BLoC. Use when decomposing UI trees, managing local controllers/focus, or optimizing widget rebuilds.">flutter-ui-stateless-stateful <span class="ext-icon">↗</span></a></td>
+<td>Choosing between Stateless/Stateful, element tree diffing, local state vs BLoC, lifecycle (<code class="inline-code">initState</code>, <code class="inline-code">dispose</code>).</td>
+</tr>
+<tr>
+<td><strong>Rendering Performance</strong></td>
+<td><a href="../flutter-ui-performance/flutter-ui-performance.html" class="skill-ref-link" title="High-performance Flutter rendering skill enforcing 60/120 FPS frame rates, const constructor optimization, RepaintBoundary layer isolation, selective rebuilds via BlocSelector and ListenableBuilder, raster cache tuning, and off-main-thread compute/isolates. Use when diagnosing jank, optimizing heavy lists, animations, or custom rendering.">flutter-ui-performance <span class="ext-icon">↗</span></a></td>
+<td>Optimizing 60/120 FPS, <code class="inline-code">const</code> constructors, <code class="inline-code">RepaintBoundary</code>, avoiding rebuild churn, <code class="inline-code">BlocSelector</code>.</td>
+</tr>
+<tr>
+<td><strong>Responsive &amp; Desktop</strong></td>
+<td><a href="../flutter-ui-responsive-adaptive/flutter-ui-responsive-adaptive.html" class="skill-ref-link" title="Implements 3-tier responsive breakpoints (Mobile &lt;600, Tablet 600-1024, Desktop/Web &gt;=1024), adaptive navigation shells, efficient space measurement (MediaQuery.sizeOf, LayoutBuilder), and Desktop/Web input ergonomics (hover states, mouse cursors, keyboard shortcuts, explicit scrollbars). Use when building multi-platform adaptive layouts or resolving responsive bugs.">flutter-ui-responsive-adaptive <span class="ext-icon">↗</span></a></td>
+<td>Breakpoints (Mobile <code class="inline-code">&lt;600</code>, Tablet <code class="inline-code">600-1024</code>, Desktop <code class="inline-code">&gt;=1024</code>), <code class="inline-code">MediaQuery.sizeOf</code>, hover, keyboard shortcuts, scrollbars.</td>
+</tr>
+<tr>
+<td><strong>iOS / Cupertino UX</strong></td>
+<td><a href="../flutter-ui-cupertino/flutter-ui-cupertino.html" class="skill-ref-link" title="iOS Human Interface Guidelines &amp; Cupertino widget implementation skill. Enforces native iOS design patterns, CupertinoActionSheet, CupertinoNavigationBar, CupertinoPicker, HapticFeedback integration, smooth modal presentation, swipe-to-back gestures, and adaptive platform widgets. Use when building iOS-specific or platform-adaptive UI features.">flutter-ui-cupertino <span class="ext-icon">↗</span></a></td>
+<td>iOS design conventions, <code class="inline-code">CupertinoNavigationBar</code>, <code class="inline-code">CupertinoActionSheet</code>, haptics, swipe-to-dismiss, adaptive widgets.</td>
+</tr>
+<tr>
+<td><strong>Slivers &amp; Scrolling</strong></td>
+<td><a href="../flutter-ui-slivers/flutter-ui-slivers.html" class="skill-ref-link" title="Slivers-first scrolling architecture skill. Enforces CustomScrollView composition, collapsible SliverAppBars (pinned/floating/stretch), SliverList.builder, SliverGrid, custom SliverPersistentHeaders with persistent tabs, and lazy viewport building. Use when creating complex scrollable views, dashboards, or parallax headers.">flutter-ui-slivers <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">CustomScrollView</code>, <code class="inline-code">SliverAppBar</code>, <code class="inline-code">SliverList.builder</code>, <code class="inline-code">SliverGrid</code>, lazy building, nested scrolling.</td>
+</tr>
+<tr>
+<td><strong>Animations (Tiers 1 &amp; 2)</strong></td>
+<td><a href="../flutter-ui-animations/flutter-ui-animations.html" class="skill-ref-link" title="Multi-tier Flutter animation skill covering Tier 1 (Implicit animations like AnimatedContainer, AnimatedOpacity, AnimatedSwitcher) and Tier 2 (Explicit choreography with AnimationController, CurvedAnimation, TweenSequence, Staggered transitions, and static child parameter reuse). Use when building smooth 60/120 FPS UI transitions, micro-interactions, or complex choreographies.">flutter-ui-animations <span class="ext-icon">↗</span></a></td>
+<td>Implicit animations (<code class="inline-code">AnimatedContainer</code>, <code class="inline-code">AnimatedSwitcher</code>), explicit controllers (<code class="inline-code">CurvedAnimation</code>, staggered motion).</td>
+</tr>
+<tr>
+<td><strong>Advanced Graphics (Tiers 3 &amp; 4)</strong></td>
+<td><a href="../flutter-ui-advanced-graphics/flutter-ui-advanced-graphics.html" class="skill-ref-link" title="Advanced graphics, CustomPainter, Canvas drawing, ShaderMasks, physics-based motion (SpringSimulation), and Rive/Lottie runtime integration skill. Use when creating custom charts, procedural graphics, canvas particle effects, shader animations, or complex physics-driven gestures.">flutter-ui-advanced-graphics <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">CustomPainter</code>, <code class="inline-code">Canvas</code>/<code class="inline-code">Path</code> drawing, shader masks, physics spring simulations, Rive/Lottie integration.</td>
+</tr>
+</tbody></table></div>
+<hr class="doc-divider">
+<h2 id="3--presentation-architecture-directory-standard" class="doc-h2"><a href="#3--presentation-architecture-directory-standard" class="heading-anchor">#</a> 3. Presentation Architecture Directory Standard</h2>
+<p class="doc-p">Structure feature UI directories strictly following this layout:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">text</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-text">lib/presentation/
+├── pages/
+│   └── &lt;feature&gt;/
+│       ├── &lt;feature&gt;_page.dart         # Main entry page with Scaffold / BlocProvider (&lt;200 lines)
+│       └── widgets/                    # Decomposed sub-widgets (&lt;150 lines each)
+│           ├── &lt;feature&gt;_header.dart
+│           ├── &lt;feature&gt;_content_body.dart
+│           └── &lt;feature&gt;_action_bar.dart
+├── ui_kit/                             # Pure, reusable design system components
+│   ├── buttons/
+│   ├── cards/
+│   └── inputs/
+└── ui_utils/
+    ├── assets/                         # Generated assets via flutter_gen
+    ├── extensions/                     # UI BuildContext &amp; Widget extensions (context.colorScheme, unfocusWrapper, etc.)
+    ├── formatters/                     # TextInputFormatters (card, phone, currency)
+    ├── forms/                          # Reactive Forms UI adapters &amp; ControlValueAccessors
+    └── helpers/                        # System UI helpers (haptics, overlays, keyboard)
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="4--ui-advisor-guidelines---project-advisor-----feature-enhancement-advisor--" class="doc-h2"><a href="#4--ui-advisor-guidelines---project-advisor-----feature-enhancement-advisor--" class="heading-anchor">#</a> 4. UI Advisor Guidelines (<code class="inline-code"><a href="../../../project-advisor/project-advisor.html" class="skill-ref-badge" title="Скіл: project-advisor (General)">project-advisor</a></code> &amp; <code class="inline-code">feature-enhancement-advisor</code>)</h2>
+<p class="doc-p">Every completed screen or widget must adhere to these product &amp; completeness standards:</p>
+<ol class="doc-ordered-list">
+<li><strong>Standard 4-State UI Contract:</strong></li>
+<li><strong>Loading:</strong> Skeleton shimmer or adaptive spinner.</li>
+<li><strong>Empty:</strong> Clear graphic, explanatory text, and primary CTA button.</li>
+<li><strong>Error:</strong> User-friendly message, no raw stack traces, and a retry button.</li>
+<li><strong>Content:</strong> Main populated data state with pull-to-refresh where applicable.</li>
+<li><strong>Keyboard Ergonomics:</strong> Forms must support automatic dismiss on tap outside (<code class="inline-code">unfocusWrapper()</code>) and submit via keyboard actions.</li>
+<li><strong>Sensory &amp; Visual Polish:</strong> Trigger subtle haptics (<code class="inline-code">HapticFeedback.lightImpact()</code>) on primary user actions and provide smooth state transitions.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="5--master-ui-verification-checklist" class="doc-h2"><a href="#5--master-ui-verification-checklist" class="heading-anchor">#</a> 5. Master UI Verification Checklist</h2>
+<p class="doc-p">Before completing any UI task:</p>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">File size is strictly under 150–200 lines.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">No private helper methods returning <code class="inline-code">Widget</code> exist (<code class="inline-code">Widget _buildX()</code>).</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Colors and styles are strictly retrieved via <code class="inline-code">context.colorScheme</code>, <code class="inline-code">context.textTheme</code>, or <code class="inline-code">context.customColors</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Component adapts cleanly across Mobile, Tablet, and Desktop breakpoints.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Reusable UI Kit components are covered by <code class="inline-code">@Preview</code> annotations (Light &amp; Dark).</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Animations cleanly dispose <code class="inline-code">AnimationController</code> resources without frame drops.</span>
+  </label>
+</div>
+
+    </article>
+
+<div class="related-skills-section" style="margin-top: 3rem;">
+<h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+<a href="../../../core/core-hub/core-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    core-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Core Утиліти та Розширення" data-cat-en="Core Utilities">
+    Core Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for the Core layer (lib/core/). Enforces Pure Dart boundaries (stri...
+  </div>
+</a>
+<a href="../../../project-advisor/project-advisor.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    project-advisor ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
+    General
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    &gt;-
+  </div>
+</a>
+<a href="../../../infrastructure/infrastructure-hub/infrastructure-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    infrastructure-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
+    Інфраструктура та Сервіси
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for the Infrastructure layer (lib/infrastructure/). Enforces Clean ...
+  </div>
+</a>
+<a href="../../../data/data-hub/data-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    data-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Data (Дані та API)" data-cat-en="Data Layer">
+    Шар Data (Дані та API)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for the Data layer (lib/data/). Enforces Clean Architecture data pr...
+  </div>
+</a>
+<a href="../../../domain/domain-hub/domain-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    domain-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Domain (Бізнес-логіка)" data-cat-en="Domain Layer">
+    Шар Domain (Бізнес-логіка)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for the Domain layer (lib/domain/). Enforces Clean Architecture DDD...
+  </div>
+</a>
+<a href="../flutter-ui-slivers/flutter-ui-slivers.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-slivers ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
+    UI Віджети та Анімації
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Slivers-first scrolling architecture skill. Enforces CustomScrollView composition, collapsible SliverAppBars (...
+  </div>
+</a>
+<a href="../flutter-ui-material/flutter-ui-material.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-material ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
+    UI Віджети та Анімації
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Material 3 Design System implementation skill enforcing ColorScheme dynamic generation, ThemeData (Light and D...
+  </div>
+</a>
+<a href="../ui-kit/flutter-ui-kit-hub/flutter-ui-kit-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-kit-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Kit Компоненти" data-cat-en="UI Kit">
+    UI Kit Компоненти
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for authoring pure UI Kit components in lib/presentation/ui_kit/. E...
+  </div>
+</a>
+<a href="../ui-kit/flutter-ui-kit-preview/flutter-ui-kit-preview.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-kit-preview ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Kit Компоненти" data-cat-en="UI Kit">
+    UI Kit Компоненти
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Implements real-time widget previews for UI Kit components using package:flutter/widget_previews.dart and @Pre...
+  </div>
+</a>
+<a href="../forms/flutter-ui-forms-reactive/flutter-ui-forms-reactive.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-forms-reactive ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Форми (Reactive Forms)" data-cat-en="Forms">
+    Форми (Reactive Forms)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Enforces strict architecture, strong typing, custom validation, cross-field checks, dynamic FormArrays, and BL...
+  </div>
+</a>
+<a href="../forms/flutter-ui-forms-custom-controls/flutter-ui-forms-custom-controls.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-forms-custom-controls ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Форми (Reactive Forms)" data-cat-en="Forms">
+    Форми (Reactive Forms)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for creating custom reactive form components using ControlValueAccessor, ReactiveFormFi...
+  </div>
+</a>
+<a href="../flutter-ui-performance/flutter-ui-performance.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-performance ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
+    UI Віджети та Анімації
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    High-performance Flutter rendering skill enforcing 60/120 FPS frame rates, const constructor optimization, Rep...
+  </div>
+</a>
+<a href="../flutter-ui-advanced-graphics/flutter-ui-advanced-graphics.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-advanced-graphics ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
+    UI Віджети та Анімації
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Advanced graphics, CustomPainter, Canvas drawing, ShaderMasks, physics-based motion (SpringSimulation), and Ri...
+  </div>
+</a>
+<a href="../flutter-ui-cupertino/flutter-ui-cupertino.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-cupertino ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
+    UI Віджети та Анімації
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    iOS Human Interface Guidelines &amp; Cupertino widget implementation skill. Enforces native iOS design patterns, C...
+  </div>
+</a>
+<a href="../flutter-ui-responsive-adaptive/flutter-ui-responsive-adaptive.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-responsive-adaptive ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
+    UI Віджети та Анімації
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Implements 3-tier responsive breakpoints (Mobile &lt;600, Tablet 600-1024, Desktop/Web &gt;=1024), adaptive navigati...
+  </div>
+</a>
+<a href="../flutter-ui-animations/flutter-ui-animations.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-animations ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
+    UI Віджети та Анімації
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Multi-tier Flutter animation skill covering Tier 1 (Implicit animations like AnimatedContainer, AnimatedOpacit...
+  </div>
+</a>
+<a href="../flutter-ui-stateless-stateful/flutter-ui-stateless-stateful.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-stateless-stateful ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
+    UI Віджети та Анімації
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Comprehensive guide on StatelessWidget vs StatefulWidget selection, element tree diffing optimization, widget ...
+  </div>
+</a>
+<a href="../../navigation/flutter-auto-route-core/flutter-auto-route-core.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-auto-route-core ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Навігація (AutoRoute)" data-cat-en="Navigation">
+    Навігація (AutoRoute)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Core routing configuration, page definitions, parameters, and type-safe navigation with AutoRoute. Use when co...
+  </div>
+</a>
+<a href="../../navigation/flutter-auto-route-nested-tabs/flutter-auto-route-nested-tabs.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-auto-route-nested-tabs ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Навігація (AutoRoute)" data-cat-en="Navigation">
+    Навігація (AutoRoute)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Best practices for nested navigation, tab bars, shells, and multi-stack routers with AutoRoute. Use when imple...
+  </div>
+</a>
+<a href="../../navigation/flutter-auto-route-hub/flutter-auto-route-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-auto-route-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Навігація (AutoRoute)" data-cat-en="Navigation">
+    Навігація (AutoRoute)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for AutoRoute navigation in Flutter. Use when designing, organizing...
+  </div>
+</a>
+<a href="../../state-management/flutter-bloc-core/flutter-bloc-core.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-bloc-core ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Керування станом (BLoC)" data-cat-en="State Management">
+    Керування станом (BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Core architecture patterns and best practices for Flutter BLoC and Cubit. Use when creating BLoC or Cubit clas...
+  </div>
+</a>
+<a href="../../state-management/flutter-bloc-widgets/flutter-bloc-widgets.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-bloc-widgets ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Керування станом (BLoC)" data-cat-en="State Management">
+    Керування станом (BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Complete Flutter UI widgets and scoping guide for flutter_bloc. Use when building UI with BlocBuilder, BlocLis...
+  </div>
+</a>
+<a href="../../state-management/flutter-bloc-hub/flutter-bloc-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-bloc-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Керування станом (BLoC)" data-cat-en="State Management">
+    Керування станом (BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for Flutter BLoC &amp; Cubit state management. Use when designing, orga...
+  </div>
+</a>
+<a href="../../theme/flutter-ui-theme-hub/flutter-ui-theme-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-theme-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Теми та Стилі" data-cat-en="Theme & Styling">
+    Теми та Стилі
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for Flutter Material 3 theming system. Use when configuring app the...
+  </div>
+</a>
+<a href="../../ui-utils/flutter-ui-utils-extensions/flutter-ui-utils-extensions.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-utils-extensions ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">
+    UI Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for Flutter and BuildContext UI extensions in lib/presentation/ui_utils/extensions/. Co...
+  </div>
+</a>
+<a href="../../ui-utils/flutter-ui-utils-helpers/flutter-ui-utils-helpers.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-utils-helpers ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">
+    UI Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards for system UI and presentation helper utilities in lib/presentation/ui_utils/helpers/. Covers Haptic...
+  </div>
+</a>
+<a href="../../ui-utils/flutter-ui-utils-forms/flutter-ui-utils-forms.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-utils-forms ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">
+    UI Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards for Reactive Forms UI adapters, custom ControlValueAccessor implementations, and form UI utilities i...
+  </div>
+</a>
+<a href="../../ui-utils/flutter-ui-utils-formatters/flutter-ui-utils-formatters.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-utils-formatters ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">
+    UI Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and implementation patterns for custom TextInputFormatter classes in lib/presentation/ui_utils/forma...
+  </div>
+</a>
+<a href="../../ui-utils/flutter-ui-utils-hub/flutter-ui-utils-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-utils-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">
+    UI Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for Flutter UI Utilities (lib/presentation/ui_utils/). Enforces pre...
+  </div>
+</a>
+</div></div>
+
+
+    <footer class="footer">
+      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../../../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
+    </footer>
+  </main>
+
+  <script>
+// Theme Management
+function initTheme() {
+  const saved = localStorage.getItem('agent_doc_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeButton(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('agent_doc_theme', next);
+  updateThemeButton(next);
+}
+
+function updateThemeButton(theme) {
+  const icon = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-text');
+  if (icon && label) {
+    if (theme === 'dark') {
+      icon.textContent = '🌙';
+      label.setAttribute('data-i18n', 'dark_theme');
+      if (currentLang === 'ua') label.textContent = 'Темна';
+      else label.textContent = 'Dark';
+    } else {
+      icon.textContent = '☀️';
+      label.setAttribute('data-i18n', 'light_theme');
+      if (currentLang === 'ua') label.textContent = 'Світла';
+      else label.textContent = 'Light';
+    }
+  }
+}
+
+// Language Management (UA / EN)
+let currentLang = localStorage.getItem('agent_doc_lang') || 'ua';
+
+const translations = {
+  ua: {
+    portal_title: "Центр Документації Агентів",
+    all_skills: "Всі скіли",
+    project_rules: "Правила Проєкту (AGENTS.md)",
+    search_placeholder: "Пошук скілів за назвою, категорією або тригерами...",
+    stats_total_skills: "Всього Скілів",
+    stats_categories: "Категорій / Шарів",
+    stats_rules: "Правил Архітектури",
+    stats_connected: "100% Взаємозв'язані",
+    filter_all: "Всі",
+    copy: "Копіювати",
+    copied: "Скопійовано!",
+    progress: "Прогрес виконання",
+    checklist_title: "Чекліст верифікації та виконання",
+    sub_skills_title: "Пов'язані та рекомендовані скіли",
+    dark_theme: "Темна",
+    light_theme: "Світла",
+    lang_btn: "UA 🇺🇦",
+    back_to_portal: "← До Порталу",
+    view_docs: "Читати",
+    rules_overview: "Огляд архітектурних правил та контрактів"
+  },
+  en: {
+    portal_title: "Agent Documentation Hub",
+    all_skills: "All Skills",
+    project_rules: "Project Rules (AGENTS.md)",
+    search_placeholder: "Search skills by name, layer, or triggers...",
+    stats_total_skills: "Total Skills",
+    stats_categories: "Categories / Layers",
+    stats_rules: "Architectural Rules",
+    stats_connected: "100% Interconnected",
+    filter_all: "All",
+    copy: "Copy",
+    copied: "Copied!",
+    progress: "Execution Progress",
+    checklist_title: "Verification & Quality Checklist",
+    sub_skills_title: "Related & Referenced Skills",
+    dark_theme: "Dark",
+    light_theme: "Light",
+    lang_btn: "EN 🇬🇧",
+    back_to_portal: "← Back to Portal",
+    view_docs: "Explore",
+    rules_overview: "Architectural rules & layer interaction contracts"
+  }
+};
+
+function initLanguage() {
+  setLanguage(currentLang);
+}
+
+function toggleLanguage() {
+  const next = currentLang === 'ua' ? 'en' : 'ua';
+  setLanguage(next);
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('agent_doc_lang', lang);
+  
+  const dict = translations[lang] || translations.ua;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      if (el.tagName === 'INPUT' && el.getAttribute('placeholder')) {
+        el.setAttribute('placeholder', dict[key]);
+      } else {
+        el.textContent = dict[key];
+      }
+    }
+  });
+
+  const langBtn = document.getElementById('lang-text');
+  if (langBtn) {
+    langBtn.textContent = lang === 'ua' ? '🇺🇦 UA' : '🇬🇧 EN';
+  }
+
+  // Update category texts if available
+  document.querySelectorAll('[data-cat-ua]').forEach(el => {
+    if (lang === 'ua') {
+      el.textContent = el.getAttribute('data-cat-ua');
+    } else {
+      el.textContent = el.getAttribute('data-cat-en');
+    }
+  });
+
+  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
+}
+
+// Copy Code
+function copyCode(button) {
+  const wrapper = button.closest('.code-block-wrapper');
+  const code = wrapper.querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    const btnText = button.querySelector('.btn-text');
+    const original = btnText.innerText;
+    btnText.innerText = currentLang === 'ua' ? 'Скопійовано!' : 'Copied!';
+    button.style.borderColor = 'var(--success)';
+    button.style.color = 'var(--success)';
+    setTimeout(() => {
+      btnText.innerText = original;
+      button.style.borderColor = '';
+      button.style.color = '';
+    }, 2000);
+  });
+}
+
+// Checklist Progress
+function updateChecklistProgress() {
+  const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+  const checked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked');
+  if (!checkboxes.length) return;
+
+  const percent = Math.round((checked.length / checkboxes.length) * 100);
+  const fill = document.getElementById('checklist-progress-fill');
+  const text = document.getElementById('checklist-progress-text');
+  if (fill) fill.style.width = percent + '%';
+  if (text) text.textContent = percent + '% (' + checked.length + '/' + checkboxes.length + ')';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initLanguage();
+  updateChecklistProgress();
+  if (typeof mermaid !== 'undefined') {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isLight ? 'default' : 'dark',
+      themeVariables: {
+        fontSize: '14px',
+        fontFamily: 'Inter, Outfit, sans-serif',
+        primaryColor: isLight ? '#f1f5f9' : '#1e293b',
+        primaryTextColor: isLight ? '#0f172a' : '#f8fafc',
+        primaryBorderColor: isLight ? '#d97706' : '#FFDE3F',
+        lineColor: isLight ? '#2563eb' : '#60a5fa',
+        secondaryColor: isLight ? '#ffffff' : '#111827',
+        tertiaryColor: isLight ? '#f8fafc' : '#0b0f19'
+      },
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis',
+        nodeSpacing: 40,
+        rankSpacing: 45
+      },
+      securityLevel: 'loose'
+    });
+  }
+});
+
+    hljs.highlightAll();
+  </script>
+</body>
+</html>

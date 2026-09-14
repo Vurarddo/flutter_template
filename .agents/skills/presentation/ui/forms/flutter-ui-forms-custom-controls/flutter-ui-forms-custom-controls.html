@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>flutter-ui-forms-custom-controls — Agent Skill Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.75);
+  --bg-card-hover: rgba(31, 41, 55, 0.9);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(255, 222, 63, 0.35);
+  
+  --brand-primary: #FFDE3F;
+  --brand-primary-hover: #FACC15;
+  --brand-glow: rgba(255, 222, 63, 0.18);
+  
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.12);
+  --error: #EF4444;
+  --error-bg: rgba(239, 68, 68, 0.12);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --info: #3B82F6;
+  --info-bg: rgba(59, 130, 246, 0.12);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+[data-theme="light"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: #FFFFFF;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(217, 119, 6, 0.35);
+  
+  --brand-primary: #D97706;
+  --brand-primary-hover: #B45309;
+  --brand-glow: rgba(217, 119, 6, 0.12);
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Header */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(11, 15, 25, 0.8);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+[data-theme="light"] .top-nav {
+  background: rgba(248, 250, 252, 0.85);
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.brand-logo {
+  background: linear-gradient(135deg, var(--brand-primary), #FB923C);
+  color: #000;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 1rem;
+}
+.nav-breadcrumbs {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-breadcrumbs a:hover {
+  color: var(--brand-primary);
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.btn-icon {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-icon:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  color: var(--brand-primary);
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--brand-primary), #38BDF8, #A855F7);
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-category {
+  background: var(--brand-glow);
+  color: var(--brand-primary);
+  border: 1px solid var(--border-accent);
+}
+.badge-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Section Headings */
+.doc-h1 { font-family: var(--font-heading); font-size: 2rem; margin: 2rem 0 1rem; color: var(--text-primary); }
+.doc-h2 { font-family: var(--font-heading); font-size: 1.45rem; margin: 2.25rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); position: relative; }
+.heading-anchor { color: var(--text-muted); text-decoration: none; margin-right: 0.25rem; opacity: 0; transition: opacity 0.2s; }
+.doc-h2:hover .heading-anchor { opacity: 1; }
+.doc-h3 { font-family: var(--font-heading); font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--brand-primary); }
+.doc-h4 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; color: var(--text-primary); }
+.doc-p { margin-bottom: 1rem; color: var(--text-primary); }
+.doc-divider { border: none; height: 1px; background: var(--border-color); margin: 2.5rem 0; }
+
+/* Lists */
+.doc-list, .doc-ordered-list {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.doc-list li, .doc-ordered-list li {
+  margin-bottom: 0.4rem;
+}
+
+/* Links & Badges */
+.doc-link {
+  color: var(--brand-primary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--brand-primary);
+}
+.doc-link:hover {
+  border-bottom-style: solid;
+}
+.skill-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin: 0 0.2rem;
+}
+.skill-ref-badge:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #60A5FA;
+  transform: translateY(-1px);
+}
+.skill-ref-link {
+  color: #38BDF8;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.skill-ref-link:hover {
+  color: var(--brand-primary);
+  text-decoration: underline;
+}
+.ext-icon { font-size: 0.75rem; }
+
+/* Code Blocks */
+.inline-code {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--brand-primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+[data-theme="light"] .inline-code {
+  background: rgba(0, 0, 0, 0.06);
+}
+.code-block-wrapper {
+  background: #090d16;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 1.25rem 0;
+  overflow: hidden;
+}
+[data-theme="light"] .code-block-wrapper {
+  background: #F1F5F9;
+}
+.code-header {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.45rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+.code-lang {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s;
+}
+.copy-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--brand-primary);
+}
+pre {
+  padding: 1.2rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Tables */
+.table-responsive {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.doc-table th, .doc-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+.doc-table th {
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+[data-theme="light"] .doc-table th {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Mermaid Diagrams */
+.mermaid-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+}
+.mermaid-header {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+.mermaid-container .mermaid {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  min-height: 240px;
+}
+.mermaid-container .mermaid svg {
+  width: 100% !important;
+  max-width: 950px !important;
+  height: auto !important;
+  font-family: var(--font-body) !important;
+}
+
+/* Checklist */
+.checklist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+.checklist-item:hover {
+  border-color: var(--border-accent);
+}
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+.checkbox-container input {
+  margin-top: 0.3rem;
+  cursor: pointer;
+}
+.progress-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.progress-bar-bg {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-primary), var(--success));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Alerts */
+.alert-box {
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  margin: 1.25rem 0;
+  border-left: 4px solid;
+}
+.alert-info { background: var(--info-bg); border-left-color: var(--info); }
+.alert-warning { background: var(--warning-bg); border-left-color: var(--warning); }
+.alert-error { background: var(--error-bg); border-left-color: var(--error); }
+.alert-success { background: var(--success-bg); border-left-color: var(--success); }
+.alert-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; text-transform: uppercase; }
+
+/* Footer */
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+  </style>
+</head>
+<body>
+  <header class="top-nav">
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="../../../../../index.html" class="nav-brand">
+        <div class="brand-logo">AG</div>
+        <span>Antigravity Docs</span>
+      </a>
+      <div class="nav-breadcrumbs">
+        <a href="../../../../../index.html" data-i18n="portal_title">Центр Документації</a>
+        <span>/</span>
+        <span data-cat-ua="Форми (Reactive Forms)" data-cat-en="Forms">Форми (Reactive Forms)</span>
+        <span>/</span>
+        <span style="color: var(--text-primary); font-weight: 600;">flutter-ui-forms-custom-controls</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="../../../../../agents-rules.html" class="btn-icon">
+        <span>📜</span>
+        <span data-i18n="project_rules">Правила AGENTS.md</span>
+      </a>
+      <button class="btn-icon" onclick="toggleLanguage()">
+        <span id="lang-text">🇺🇦 UA</span>
+      </button>
+      <button class="btn-icon" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text" data-i18n="dark_theme">Темна</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-badges">
+        <span class="badge badge-category" data-cat-ua="Форми (Reactive Forms)" data-cat-en="Forms">Форми (Reactive Forms)</span>
+        <span class="badge badge-tag">SKILL</span>
+        <span class="badge badge-tag">#standards</span>
+<span class="badge badge-tag">#patterns</span>
+<span class="badge badge-tag">#creating</span>
+<span class="badge badge-tag">#custom</span>
+<span class="badge badge-tag">#reactive</span>
+<span class="badge badge-tag">#form</span>
+<span class="badge badge-tag">#components</span>
+<span class="badge badge-tag">#controlvalueaccessor</span>
+      </div>
+      <h1 class="hero-title">flutter-ui-forms-custom-controls</h1>
+      <p class="hero-description">Standards and patterns for creating custom reactive form components using ControlValueAccessor, ReactiveFormField, custom chip selectors, date pickers, range sliders, and stylized validation messages in Flutter. Use when building custom UI Kit inputs or binding non-standard widgets to reactive_forms.</p>
+    </section>
+
+    <div class="progress-card">
+      <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600;">
+        <span data-i18n="progress">Прогрес виконання</span>
+        <span id="checklist-progress-text">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="checklist-progress-fill"></div>
+      </div>
+    </div>
+
+    <article class="doc-content">
+<h1 class="doc-h1">Flutter Custom Reactive Form Controls &amp; Accessors</h1>
+<h2 id="1--overview---when-to-apply" class="doc-h2"><a href="#1--overview---when-to-apply" class="heading-anchor">#</a> 1. Overview &amp; When to Apply</h2>
+<p class="doc-p">Use this skill whenever:</p>
+<ul class="doc-list">
+<li>Binding custom UI Kit widgets (e.g., choice chips, segmented controls, rating stars, custom toggle switches) to <code class="inline-code">reactive_forms</code>.</li>
+<li>Implementing the <code class="inline-code">ControlValueAccessor&lt;TModel, TView&gt;</code> interface to convert model data types to view representations.</li>
+<li>Creating reusable <code class="inline-code">ReactiveFormField&lt;T, V&gt;</code> wrapper widgets.</li>
+<li>Building custom validation feedback, animated error labels, and field focus indicators.</li>
+<li>Formatting input masks for phone numbers, currency, or credit cards inside reactive fields.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="2--prerequisites---related-skills" class="doc-h2"><a href="#2--prerequisites---related-skills" class="heading-anchor">#</a> 2. Prerequisites &amp; Related Skills</h2>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Relation</th>
+<th>Skill</th>
+<th>Purpose</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Reactive Forms Core</strong></td>
+<td><a href="../flutter-ui-forms-reactive/flutter-ui-forms-reactive.html" class="skill-ref-link" title="Enforces strict architecture, strong typing, custom validation, cross-field checks, dynamic FormArrays, and BLoC integration standards for reactive_forms in Flutter. Guarantees zero mixing of TextEditingController with FormControl, clear boundaries between Presentation forms and Domain DTOs, debounced async validation, and optimal UI rebuilds. Use when creating form controls, dynamic inputs, or complex field validation.">flutter-ui-forms-reactive <span class="ext-icon">↗</span></a></td>
+<td>FormGroup/FormControl models &amp; validation rules.</td>
+</tr>
+<tr>
+<td><strong>UI Forms &amp; Accessors</strong></td>
+<td><a href="../../../ui-utils/flutter-ui-utils-forms/flutter-ui-utils-forms.html" class="skill-ref-link" title="Standards for Reactive Forms UI adapters, custom ControlValueAccessor implementations, and form UI utilities in lib/presentation/ui_utils/forms/. Covers bidirectional type conversion between form controls and UI widgets.">flutter-ui-utils-forms <span class="ext-icon">↗</span></a></td>
+<td>Centralized <code class="inline-code">ControlValueAccessor</code> implementations in <code class="inline-code">lib/presentation/ui_utils/forms/</code>.</td>
+</tr>
+<tr>
+<td><strong>Input Formatters</strong></td>
+<td><a href="../../../ui-utils/flutter-ui-utils-formatters/flutter-ui-utils-formatters.html" class="skill-ref-link" title="Standards and implementation patterns for custom TextInputFormatter classes in lib/presentation/ui_utils/formatters/. Covers phone masking, payment card formatting, currency/number inputs, uppercase transforms, and text replacement filters.">flutter-ui-utils-formatters <span class="ext-icon">↗</span></a></td>
+<td><code class="inline-code">TextInputFormatter</code> classes for phone/card/currency formatting.</td>
+</tr>
+<tr>
+<td><strong>UI Kit Components</strong></td>
+<td><a href="../../ui-kit/flutter-ui-kit-components/flutter-ui-kit-components.html" class="skill-ref-link" title="Authoring standards and implementation recipes for pure UI Kit components in Flutter. Covers design tokens consumption, buttons, cards, status badges, modal dialogs, bottom sheets, snackbars, and typed variant APIs. Use when creating or updating reusable UI Kit widgets.">flutter-ui-kit-components <span class="ext-icon">↗</span></a></td>
+<td>Base visual widgets and badges.</td>
+</tr>
+<tr>
+<td><strong>Theming System</strong></td>
+<td><a href="../../../theme/flutter-ui-theme-hub/flutter-ui-theme-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter Material 3 theming system. Use when configuring app themes, splitting theme files (AppTheme, AppColorScheme, AppTextTheme, AppCustomColors), setting up Light/Dark modes, or managing theme extensions. Routes to specialized sub-skills for colors, typography, and theme extensions.">flutter-ui-theme-hub <span class="ext-icon">↗</span></a></td>
+<td>Error colors and input decoration styles.</td>
+</tr>
+</tbody></table></div>
+<hr class="doc-divider">
+<h2 id="3--creating-custom-reactive-controls-via--reactiveformfield-" class="doc-h2"><a href="#3--creating-custom-reactive-controls-via--reactiveformfield-" class="heading-anchor">#</a> 3. Creating Custom Reactive Controls via <code class="inline-code">ReactiveFormField</code></h2>
+<h3 class="doc-h3">3.1 Custom Reactive Segmented Choice Chips Example</h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
+import &#039;package:reactive_forms/reactive_forms.dart&#039;;
+
+import &#039;package:flutter_template/presentation/ui_utils/extensions/context_extensions.dart&#039;;
+
+class ReactiveChoiceChips&lt;T&gt; extends ReactiveFormField&lt;T, T&gt; {
+  ReactiveChoiceChips({
+    super.key,
+    super.formControlName,
+    super.formControl,
+    required List&lt;T&gt; options,
+    required String Function(T) labelBuilder,
+    super.validationMessages,
+    super.showErrors,
+  }) : super(
+          builder: (ReactiveFormFieldState&lt;T, T&gt; field) {
+            final colorScheme = field.context.colorScheme;
+            final textTheme = field.context.textTheme;
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Wrap(
+                  spacing: 8.0,
+                  runSpacing: 4.0,
+                  children: options.map((option) {
+                    final isSelected = field.value == option;
+                    return ChoiceChip(
+                      label: Text(labelBuilder(option)),
+                      selected: isSelected,
+                      onSelected: field.control.enabled
+                          ? (selected) {
+                              field.didChange(selected ? option : null);
+                            }
+                          : null,
+                    );
+                  }).toList(),
+                ),
+                if (field.errorText != null) ...[
+                  const SizedBox(height: 6),
+                  Text(
+                    field.errorText!,
+                    style: textTheme.bodySmall?.copyWith(color: colorScheme.error),
+                  ),
+                ],
+              ],
+            );
+          },
+        );
+}
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="4--converting-complex-values-via--controlvalueaccessor-" class="doc-h2"><a href="#4--converting-complex-values-via--controlvalueaccessor-" class="heading-anchor">#</a> 4. Converting Complex Values via <code class="inline-code">ControlValueAccessor</code></h2>
+<p class="doc-p">When the model value differs in type or shape from what the UI widget requires, use a <code class="inline-code">ControlValueAccessor</code>:</p>
+<h3 class="doc-h3">4.1 DateTime to Formatted String Accessor</h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">import &#039;package:intl/intl.dart&#039;;
+import &#039;package:reactive_forms/reactive_forms.dart&#039;;
+
+class DateTimeValueAccessor extends ControlValueAccessor&lt;DateTime, String&gt; {
+  final DateFormat format;
+
+  DateTimeValueAccessor({DateFormat? format})
+      : format = format ?? DateFormat(&#039;yyyy-MM-dd&#039;);
+
+  @override
+  String? modelToViewValue(DateTime? modelValue) {
+    return modelValue == null ? null : format.format(modelValue);
+  }
+
+  @override
+  DateTime? viewToModelValue(String? viewValue) {
+    if (viewValue == null || viewValue.trim().isEmpty) return null;
+    try {
+      return format.parseStrict(viewValue);
+    } catch (_) {
+      return null;
+    }
+  }
+}
+
+// Usage in ReactiveTextField:
+ReactiveTextField&lt;DateTime&gt;(
+  formControlName: &#039;birthDate&#039;,
+  valueAccessor: DateTimeValueAccessor(),
+  decoration: const InputDecoration(labelText: &#039;Birth Date (YYYY-MM-DD)&#039;),
+)
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="5--custom-validation-error-messages-standard" class="doc-h2"><a href="#5--custom-validation-error-messages-standard" class="heading-anchor">#</a> 5. Custom Validation Error Messages Standard</h2>
+<p class="doc-p">Centralize error message formatters matching project localization:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">Map&lt;String, ValidationMessageFunction&gt; customValidationMessages = {
+  ValidationMessage.required: (error) =&gt; &#039;This field is required&#039;,
+  ValidationMessage.email: (error) =&gt; &#039;Please enter a valid email address&#039;,
+  ValidationMessage.minLength: (error) =&gt;
+      &#039;Must be at least ${(error as Map)[&#039;requiredLength&#039;]} characters&#039;,
+  &#039;usernameTaken&#039;: (error) =&gt; &#039;This username is already registered&#039;,
+};
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="6--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#6--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 6. Anti-Patterns (Strictly Prohibited)</h2>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Anti-Pattern</th>
+<th>Severity</th>
+<th>Corrective Action</th>
+</tr></thead><tbody>
+<tr>
+<td>Directly mutating <code class="inline-code">field.control.value</code> bypassing <code class="inline-code">field.didChange</code></td>
+<td><strong>HIGH</strong></td>
+<td>Always call <code class="inline-code">field.didChange(value)</code> to trigger form validation.</td>
+</tr>
+<tr>
+<td>Hardcoding error text colors instead of <code class="inline-code">colorScheme.error</code></td>
+<td><strong>HIGH</strong></td>
+<td>Use <code class="inline-code">context.colorScheme.error</code>.</td>
+</tr>
+<tr>
+<td>Omitting disabled state handling when <code class="inline-code">field.control.enabled</code> is false</td>
+<td><strong>MEDIUM</strong></td>
+<td>Disable chip/button interactions when the form control is disabled.</td>
+</tr>
+</tbody></table></div>
+<hr class="doc-divider">
+<h2 id="7--custom-controls-verification-checklist" class="doc-h2"><a href="#7--custom-controls-verification-checklist" class="heading-anchor">#</a> 7. Custom Controls Verification Checklist</h2>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Custom widget extends <code class="inline-code">ReactiveFormField&lt;TModel, TView&gt;</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">UI changes call <code class="inline-code">field.didChange(...)</code> properly.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Disabled states (<code class="inline-code">field.control.enabled == false</code>) are visually reflected and non-interactive.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Validation errors are displayed using <code class="inline-code">field.errorText</code> and <code class="inline-code">colorScheme.error</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text"><code class="inline-code">ControlValueAccessor</code> is used for type transformations (e.g. String &lt;-&gt; DateTime / num).</span>
+  </label>
+</div>
+
+    </article>
+
+<div class="related-skills-section" style="margin-top: 3rem;">
+<h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+<a href="../../ui-kit/flutter-ui-kit-components/flutter-ui-kit-components.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-kit-components ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Kit Компоненти" data-cat-en="UI Kit">
+    UI Kit Компоненти
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Authoring standards and implementation recipes for pure UI Kit components in Flutter. Covers design tokens con...
+  </div>
+</a>
+<a href="../flutter-ui-forms-reactive/flutter-ui-forms-reactive.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-forms-reactive ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Форми (Reactive Forms)" data-cat-en="Forms">
+    Форми (Reactive Forms)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Enforces strict architecture, strong typing, custom validation, cross-field checks, dynamic FormArrays, and BL...
+  </div>
+</a>
+<a href="../../../theme/flutter-ui-theme-hub/flutter-ui-theme-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-theme-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Теми та Стилі" data-cat-en="Theme & Styling">
+    Теми та Стилі
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for Flutter Material 3 theming system. Use when configuring app the...
+  </div>
+</a>
+<a href="../../../ui-utils/flutter-ui-utils-forms/flutter-ui-utils-forms.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-utils-forms ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">
+    UI Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards for Reactive Forms UI adapters, custom ControlValueAccessor implementations, and form UI utilities i...
+  </div>
+</a>
+<a href="../../../ui-utils/flutter-ui-utils-formatters/flutter-ui-utils-formatters.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-utils-formatters ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">
+    UI Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and implementation patterns for custom TextInputFormatter classes in lib/presentation/ui_utils/forma...
+  </div>
+</a>
+</div></div>
+
+
+    <footer class="footer">
+      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../../../../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
+    </footer>
+  </main>
+
+  <script>
+// Theme Management
+function initTheme() {
+  const saved = localStorage.getItem('agent_doc_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeButton(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('agent_doc_theme', next);
+  updateThemeButton(next);
+}
+
+function updateThemeButton(theme) {
+  const icon = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-text');
+  if (icon && label) {
+    if (theme === 'dark') {
+      icon.textContent = '🌙';
+      label.setAttribute('data-i18n', 'dark_theme');
+      if (currentLang === 'ua') label.textContent = 'Темна';
+      else label.textContent = 'Dark';
+    } else {
+      icon.textContent = '☀️';
+      label.setAttribute('data-i18n', 'light_theme');
+      if (currentLang === 'ua') label.textContent = 'Світла';
+      else label.textContent = 'Light';
+    }
+  }
+}
+
+// Language Management (UA / EN)
+let currentLang = localStorage.getItem('agent_doc_lang') || 'ua';
+
+const translations = {
+  ua: {
+    portal_title: "Центр Документації Агентів",
+    all_skills: "Всі скіли",
+    project_rules: "Правила Проєкту (AGENTS.md)",
+    search_placeholder: "Пошук скілів за назвою, категорією або тригерами...",
+    stats_total_skills: "Всього Скілів",
+    stats_categories: "Категорій / Шарів",
+    stats_rules: "Правил Архітектури",
+    stats_connected: "100% Взаємозв'язані",
+    filter_all: "Всі",
+    copy: "Копіювати",
+    copied: "Скопійовано!",
+    progress: "Прогрес виконання",
+    checklist_title: "Чекліст верифікації та виконання",
+    sub_skills_title: "Пов'язані та рекомендовані скіли",
+    dark_theme: "Темна",
+    light_theme: "Світла",
+    lang_btn: "UA 🇺🇦",
+    back_to_portal: "← До Порталу",
+    view_docs: "Читати",
+    rules_overview: "Огляд архітектурних правил та контрактів"
+  },
+  en: {
+    portal_title: "Agent Documentation Hub",
+    all_skills: "All Skills",
+    project_rules: "Project Rules (AGENTS.md)",
+    search_placeholder: "Search skills by name, layer, or triggers...",
+    stats_total_skills: "Total Skills",
+    stats_categories: "Categories / Layers",
+    stats_rules: "Architectural Rules",
+    stats_connected: "100% Interconnected",
+    filter_all: "All",
+    copy: "Copy",
+    copied: "Copied!",
+    progress: "Execution Progress",
+    checklist_title: "Verification & Quality Checklist",
+    sub_skills_title: "Related & Referenced Skills",
+    dark_theme: "Dark",
+    light_theme: "Light",
+    lang_btn: "EN 🇬🇧",
+    back_to_portal: "← Back to Portal",
+    view_docs: "Explore",
+    rules_overview: "Architectural rules & layer interaction contracts"
+  }
+};
+
+function initLanguage() {
+  setLanguage(currentLang);
+}
+
+function toggleLanguage() {
+  const next = currentLang === 'ua' ? 'en' : 'ua';
+  setLanguage(next);
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('agent_doc_lang', lang);
+  
+  const dict = translations[lang] || translations.ua;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      if (el.tagName === 'INPUT' && el.getAttribute('placeholder')) {
+        el.setAttribute('placeholder', dict[key]);
+      } else {
+        el.textContent = dict[key];
+      }
+    }
+  });
+
+  const langBtn = document.getElementById('lang-text');
+  if (langBtn) {
+    langBtn.textContent = lang === 'ua' ? '🇺🇦 UA' : '🇬🇧 EN';
+  }
+
+  // Update category texts if available
+  document.querySelectorAll('[data-cat-ua]').forEach(el => {
+    if (lang === 'ua') {
+      el.textContent = el.getAttribute('data-cat-ua');
+    } else {
+      el.textContent = el.getAttribute('data-cat-en');
+    }
+  });
+
+  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
+}
+
+// Copy Code
+function copyCode(button) {
+  const wrapper = button.closest('.code-block-wrapper');
+  const code = wrapper.querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    const btnText = button.querySelector('.btn-text');
+    const original = btnText.innerText;
+    btnText.innerText = currentLang === 'ua' ? 'Скопійовано!' : 'Copied!';
+    button.style.borderColor = 'var(--success)';
+    button.style.color = 'var(--success)';
+    setTimeout(() => {
+      btnText.innerText = original;
+      button.style.borderColor = '';
+      button.style.color = '';
+    }, 2000);
+  });
+}
+
+// Checklist Progress
+function updateChecklistProgress() {
+  const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+  const checked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked');
+  if (!checkboxes.length) return;
+
+  const percent = Math.round((checked.length / checkboxes.length) * 100);
+  const fill = document.getElementById('checklist-progress-fill');
+  const text = document.getElementById('checklist-progress-text');
+  if (fill) fill.style.width = percent + '%';
+  if (text) text.textContent = percent + '% (' + checked.length + '/' + checkboxes.length + ')';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initLanguage();
+  updateChecklistProgress();
+  if (typeof mermaid !== 'undefined') {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isLight ? 'default' : 'dark',
+      themeVariables: {
+        fontSize: '14px',
+        fontFamily: 'Inter, Outfit, sans-serif',
+        primaryColor: isLight ? '#f1f5f9' : '#1e293b',
+        primaryTextColor: isLight ? '#0f172a' : '#f8fafc',
+        primaryBorderColor: isLight ? '#d97706' : '#FFDE3F',
+        lineColor: isLight ? '#2563eb' : '#60a5fa',
+        secondaryColor: isLight ? '#ffffff' : '#111827',
+        tertiaryColor: isLight ? '#f8fafc' : '#0b0f19'
+      },
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis',
+        nodeSpacing: 40,
+        rankSpacing: 45
+      },
+      securityLevel: 'loose'
+    });
+  }
+});
+
+    hljs.highlightAll();
+  </script>
+</body>
+</html>

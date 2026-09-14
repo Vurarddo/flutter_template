@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>dart-use-primary-constructors — Agent Skill Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.75);
+  --bg-card-hover: rgba(31, 41, 55, 0.9);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(255, 222, 63, 0.35);
+  
+  --brand-primary: #FFDE3F;
+  --brand-primary-hover: #FACC15;
+  --brand-glow: rgba(255, 222, 63, 0.18);
+  
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.12);
+  --error: #EF4444;
+  --error-bg: rgba(239, 68, 68, 0.12);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --info: #3B82F6;
+  --info-bg: rgba(59, 130, 246, 0.12);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+[data-theme="light"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: #FFFFFF;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(217, 119, 6, 0.35);
+  
+  --brand-primary: #D97706;
+  --brand-primary-hover: #B45309;
+  --brand-glow: rgba(217, 119, 6, 0.12);
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Header */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(11, 15, 25, 0.8);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+[data-theme="light"] .top-nav {
+  background: rgba(248, 250, 252, 0.85);
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.brand-logo {
+  background: linear-gradient(135deg, var(--brand-primary), #FB923C);
+  color: #000;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 1rem;
+}
+.nav-breadcrumbs {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-breadcrumbs a:hover {
+  color: var(--brand-primary);
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.btn-icon {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-icon:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  color: var(--brand-primary);
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--brand-primary), #38BDF8, #A855F7);
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-category {
+  background: var(--brand-glow);
+  color: var(--brand-primary);
+  border: 1px solid var(--border-accent);
+}
+.badge-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Section Headings */
+.doc-h1 { font-family: var(--font-heading); font-size: 2rem; margin: 2rem 0 1rem; color: var(--text-primary); }
+.doc-h2 { font-family: var(--font-heading); font-size: 1.45rem; margin: 2.25rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); position: relative; }
+.heading-anchor { color: var(--text-muted); text-decoration: none; margin-right: 0.25rem; opacity: 0; transition: opacity 0.2s; }
+.doc-h2:hover .heading-anchor { opacity: 1; }
+.doc-h3 { font-family: var(--font-heading); font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--brand-primary); }
+.doc-h4 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; color: var(--text-primary); }
+.doc-p { margin-bottom: 1rem; color: var(--text-primary); }
+.doc-divider { border: none; height: 1px; background: var(--border-color); margin: 2.5rem 0; }
+
+/* Lists */
+.doc-list, .doc-ordered-list {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.doc-list li, .doc-ordered-list li {
+  margin-bottom: 0.4rem;
+}
+
+/* Links & Badges */
+.doc-link {
+  color: var(--brand-primary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--brand-primary);
+}
+.doc-link:hover {
+  border-bottom-style: solid;
+}
+.skill-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin: 0 0.2rem;
+}
+.skill-ref-badge:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #60A5FA;
+  transform: translateY(-1px);
+}
+.skill-ref-link {
+  color: #38BDF8;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.skill-ref-link:hover {
+  color: var(--brand-primary);
+  text-decoration: underline;
+}
+.ext-icon { font-size: 0.75rem; }
+
+/* Code Blocks */
+.inline-code {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--brand-primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+[data-theme="light"] .inline-code {
+  background: rgba(0, 0, 0, 0.06);
+}
+.code-block-wrapper {
+  background: #090d16;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 1.25rem 0;
+  overflow: hidden;
+}
+[data-theme="light"] .code-block-wrapper {
+  background: #F1F5F9;
+}
+.code-header {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.45rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+.code-lang {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s;
+}
+.copy-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--brand-primary);
+}
+pre {
+  padding: 1.2rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Tables */
+.table-responsive {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.doc-table th, .doc-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+.doc-table th {
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+[data-theme="light"] .doc-table th {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Mermaid Diagrams */
+.mermaid-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+}
+.mermaid-header {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+.mermaid-container .mermaid {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  min-height: 240px;
+}
+.mermaid-container .mermaid svg {
+  width: 100% !important;
+  max-width: 950px !important;
+  height: auto !important;
+  font-family: var(--font-body) !important;
+}
+
+/* Checklist */
+.checklist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+.checklist-item:hover {
+  border-color: var(--border-accent);
+}
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+.checkbox-container input {
+  margin-top: 0.3rem;
+  cursor: pointer;
+}
+.progress-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.progress-bar-bg {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-primary), var(--success));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Alerts */
+.alert-box {
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  margin: 1.25rem 0;
+  border-left: 4px solid;
+}
+.alert-info { background: var(--info-bg); border-left-color: var(--info); }
+.alert-warning { background: var(--warning-bg); border-left-color: var(--warning); }
+.alert-error { background: var(--error-bg); border-left-color: var(--error); }
+.alert-success { background: var(--success-bg); border-left-color: var(--success); }
+.alert-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; text-transform: uppercase; }
+
+/* Footer */
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+  </style>
+</head>
+<body>
+  <header class="top-nav">
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="../../index.html" class="nav-brand">
+        <div class="brand-logo">AG</div>
+        <span>Antigravity Docs</span>
+      </a>
+      <div class="nav-breadcrumbs">
+        <a href="../../index.html" data-i18n="portal_title">Центр Документації</a>
+        <span>/</span>
+        <span data-cat-ua="Стандарти Dart" data-cat-en="Dart Best Practices">Стандарти Dart</span>
+        <span>/</span>
+        <span style="color: var(--text-primary); font-weight: 600;">dart-use-primary-constructors</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="../../agents-rules.html" class="btn-icon">
+        <span>📜</span>
+        <span data-i18n="project_rules">Правила AGENTS.md</span>
+      </a>
+      <button class="btn-icon" onclick="toggleLanguage()">
+        <span id="lang-text">🇺🇦 UA</span>
+      </button>
+      <button class="btn-icon" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text" data-i18n="dark_theme">Темна</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-badges">
+        <span class="badge badge-category" data-cat-ua="Стандарти Dart" data-cat-en="Dart Best Practices">Стандарти Dart</span>
+        <span class="badge badge-tag">SKILL</span>
+        
+      </div>
+      <h1 class="hero-title">dart-use-primary-constructors</h1>
+      <p class="hero-description">&gt;</p>
+    </section>
+
+    <div class="progress-card">
+      <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600;">
+        <span data-i18n="progress">Прогрес виконання</span>
+        <span id="checklist-progress-text">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="checklist-progress-fill"></div>
+      </div>
+    </div>
+
+    <article class="doc-content">
+<h1 class="doc-h1">Dart Primary Constructors &amp; New Constructor Syntax Skill</h1>
+<p class="doc-p">Use this skill when helping users write, refactor, or debug code using Dart&#039;s <strong>Primary Constructors</strong> feature.</p>
+<h3 class="doc-h3">Dart Version Requirements</h3>
+<ul class="doc-list">
+<li>  <strong>Dart 3.13 and above</strong>: Primary constructors are enabled by default.</li>
+<li>  <strong>Dart 3.12</strong>: The feature is available but experimental. Users must explicitly enable the experiment flag <code class="inline-code">primary-constructors</code> via <code class="inline-code">--enable-experiment=primary-constructors</code> or in <code class="inline-code">analysis_options.yaml</code>:</li>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">yaml</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-yaml">analyzer:
+  enable-experiment:
+    - primary-constructors
+</code></pre>
+</div>
+<li>  <strong>Dart 3.11 and earlier</strong>: Primary constructors are not supported.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="1--overview" class="doc-h2"><a href="#1--overview" class="heading-anchor">#</a> 1. Overview</h2>
+<p class="doc-p">Primary Constructors allow developers to declare a non-redirecting generative constructor as well as a set of instance variables directly in the class header. This significantly reduces boilerplate and improves code readability.</p>
+<h3 class="doc-h3">Key Benefits</h3>
+<ul class="doc-list">
+<li>Combines field declaration, parameter declaration, and initialization into a single declaration known as a declaring parameter declaration.</li>
+<li>Enables safe reference to constructor parameters in non-late field initializers (Primary Initializer Scope).</li>
+<li>Allows empty declaration bodies to be represented concisely with a semicolon (<code class="inline-code">;</code>).</li>
+<li>Introduces abbreviated concise syntax for in-body constructors.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="2--syntax-reference" class="doc-h2"><a href="#2--syntax-reference" class="heading-anchor">#</a> 2. Syntax Reference</h2>
+<h3 class="doc-h3">2.1 Basic Class Header Syntax</h3>
+<p class="doc-p">To declare a primary constructor, place a parameter list immediately after the type name (and optional type parameters):</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">// Declares fields x and y, and a generative constructor Point(this.x, this.y)
+class Point(var int x, var int y);
+
+// Declares final fields
+class PointFinal(final int x, final int y);
+</code></pre>
+</div>
+<h3 class="doc-h3">2.2 Declaring, Initializing, and Plain Parameters</h3>
+<p class="doc-p">A primary constructor parameter list distinguishes between three types of parameters:</p>
+<ol class="doc-ordered-list">
+<li><strong>Declaring Parameters</strong>: Indicated by the <code class="inline-code">var</code> or <code class="inline-code">final</code> modifier (e.g., <code class="inline-code">final int x</code>). They implicitly create a corresponding instance field in the class.</li>
+<li><strong>Initializing Parameters</strong>: Indicated by the <code class="inline-code">this.</code> or <code class="inline-code">super.</code> prefix (e.g., <code class="inline-code">this.x</code> or <code class="inline-code">super.x</code>). They initialize an existing field or a super constructor parameter, respectively.</li>
+<li><strong>Regular Parameters</strong>: Declared without modifiers (e.g., <code class="inline-code">int y</code>). They do not become fields and are only available during initialization (e.g., in field initializers or the <code class="inline-code">this :</code> initializer list in the class body).</li>
+</ul>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">// `x` is a field and a parameter because it has the keyword `final`. In particular, we can use the name `x` in the initializer list in the in-body part of the primary constructor. &#039;y&#039; is a only parameter because it has neither of the keywords `final` or `var`, but `y` is passed to the super constructor via the `this :` initializer list.
+class C(final int x, int y) extends Base {
+  this : super(y);
+}
+</code></pre>
+</div>
+<p class="doc-p">Declaring parameters and initializing parameters are two ways of achieving the same goal: declaring a class with instance fields which are set in the constructor. Regular parameters are different in that their values are not automatically routed to an instance field.</p>
+<h3 class="doc-h3">2.3 Constant Primary Constructors</h3>
+<p class="doc-p">To make a primary constructor <code class="inline-code">const</code>, place the <code class="inline-code">const</code> keyword before the class/type name in the declaration header:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">class const Point(final int x, final int y);
+extension type const Ext(int x);
+enum const MyEnum(final int x) {
+  entry(1);
+}
+</code></pre>
+</div>
+<h3 class="doc-h3">2.4 Extension Types</h3>
+<p class="doc-p">Extension types <strong>must</strong> use primary constructors.</p>
+<ul class="doc-list">
+<li>The single parameter in the header is the representation field.</li>
+<li>The representation variable cannot use the <code class="inline-code">var</code> modifier (using <code class="inline-code">var</code> triggers the <code class="inline-code">representation_field_modifier</code> error).</li>
+<li>The representation variable can optionally use the <code class="inline-code">final</code> modifier. If <code class="inline-code">final</code> is not present then it is inferred; that is, the parameter is declaring whether or not it&#039;s explicitly <code class="inline-code">final</code>.</li>
+</ul>
+<h3 class="doc-h3">2.5 Empty Body Semicolon Shorthand (<code class="inline-code">;</code>)</h3>
+<p class="doc-p">When a class, mixin class, mixin, extension or extension type has an empty body, the <code class="inline-code">{}</code> braces can be replaced by a semicolon (<code class="inline-code">;</code>):</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">class C(int x);
+mixin class MC;
+extension type ET(int x);
+mixin M;
+extension Ext on C;
+</code></pre>
+</div>
+<h3 class="doc-h3">2.6 The In-Body Part of a Primary Constructor (<code class="inline-code">this ...</code>)</h3>
+<p class="doc-p">If a primary constructor requires assertions or custom field initializations, they can be declared in the body using the <code class="inline-code">this :</code> syntax:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">class Point(var int x, var int y) {
+  // Initializer list in class body
+  this : assert(x &gt;= 0), y = y * 2;
+}
+</code></pre>
+</div>
+<p class="doc-p">You can also write a constructor body with this syntax (<code class="inline-code">this {...}</code>).</p>
+<h3 class="doc-h3">2.7 Abbreviated Concise Constructor Syntax</h3>
+<p class="doc-p">For constructors declared within the class body, the class name can be omitted and replaced with the <code class="inline-code">new</code> or <code class="inline-code">factory</code> keywords:</p>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Traditional Syntax</th>
+<th>Abbreviated Concise Syntax</th>
+</tr></thead><tbody>
+<tr>
+<td><code class="inline-code">MyClass() {}</code></td>
+<td><code class="inline-code">new() {}</code></td>
+</tr>
+<tr>
+<td><code class="inline-code">MyClass.name() {}</code></td>
+<td><code class="inline-code">new name() {}</code></td>
+</tr>
+<tr>
+<td><code class="inline-code">const MyClass();</code></td>
+<td><code class="inline-code">const new();</code></td>
+</tr>
+<tr>
+<td><code class="inline-code">const MyClass.name();</code></td>
+<td><code class="inline-code">const new name();</code></td>
+</tr>
+<tr>
+<td><code class="inline-code">factory MyClass() =&gt; ...</code></td>
+<td><code class="inline-code">factory() =&gt; ...</code></td>
+</tr>
+<tr>
+<td><code class="inline-code">factory MyClass.name() =&gt; ...</code></td>
+<td><code class="inline-code">factory name() =&gt; ...</code></td>
+</tr>
+</tbody></table></div>
+<hr class="doc-divider">
+<h2 id="3--semantics---scoping-rules" class="doc-h2"><a href="#3--semantics---scoping-rules" class="heading-anchor">#</a> 3. Semantics &amp; Scoping Rules</h2>
+<h3 class="doc-h3">3.1 Primary Initializer Scope</h3>
+<p class="doc-p">When a primary constructor is declared, its formal parameters are introduced into the <strong>Primary Initializer Scope</strong>. This scope is the current scope for non-late field initializers in the class body and the primary constructor&#039;s initializer list (after <code class="inline-code">this :</code>).</p>
+<p class="doc-p">This allows non-late fields to reference constructor parameters directly during declaration:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">  class DeltaPoint(final int x, int delta) {
+    // &#039;x&#039; and &#039;delta&#039; are in scope here
+    final int y = x + delta;
+  }
+</code></pre>
+</div>
+<h3 class="doc-h3">3.2 Late Instance Variables Restriction</h3>
+<p class="doc-p">The primary initializer scope is <strong>not</strong> active for <code class="inline-code">late</code> instance variable initializers.</p>
+<ul class="doc-list">
+<li>Since <code class="inline-code">late</code> variables can be evaluated after construction has completed, their initializers cannot safely access constructor parameters.</li>
+<li>Attempting to access a primary constructor parameter in a <code class="inline-code">late</code> field initializer results in a compile-time error.</li>
+</ul>
+<h3 class="doc-h3">3.3 Shadowing</h3>
+<p class="doc-p">Primary constructor parameters shadow class members (fields) of the same name within the primary initializer scope:</p>
+<ul class="doc-list">
+<li>In a non-late initializer: <code class="inline-code">int y = x</code> refers to parameter <code class="inline-code">x</code>.</li>
+<li>In a <code class="inline-code">late</code> initializer: <code class="inline-code">late int y = x</code> refers to field <code class="inline-code">x</code> (if it exists) because the parameter <code class="inline-code">x</code> is out of scope.</li>
+</ul>
+<h3 class="doc-h3">3.4 Generative Constructor Restrictions</h3>
+<p class="doc-p">To guarantee that the primary constructor (and the associated initializer scope) always executes:</p>
+<ul class="doc-list">
+<li>A class, mixin class, or enum declaration with a primary constructor <strong>cannot</strong> declare any other non-redirecting generative constructors (except extension types).</li>
+<li>All other generative constructors declared in the body <strong>must</strong> redirect (directly or indirectly) to the primary constructor.</li>
+</ul>
+<h3 class="doc-h3">3.5 Parameter Mutation Errors</h3>
+<p class="doc-p">Primary constructor parameters are non-assignable inside the initialization phase.</p>
+<ul class="doc-list">
+<li>Any assignment to a parameter (e.g., <code class="inline-code">p = value</code>, <code class="inline-code">p++</code>) inside field initializers or the <code class="inline-code">this :</code> initializer list is a compile-time error.</li>
+</ul>
+<h3 class="doc-h3">3.6 Double Initialization Errors</h3>
+<p class="doc-p">Initializing a field twice (e.g., once in the field declaration/initializer and once in the <code class="inline-code">this :</code> initializer list or as an initializing formal) is a compile-time error.</p>
+<hr class="doc-divider">
+<h2 id="4--diagnostics---troubleshooting" class="doc-h2"><a href="#4--diagnostics---troubleshooting" class="heading-anchor">#</a> 4. Diagnostics &amp; Troubleshooting</h2>
+<p class="doc-p">Most errors and lints have quick-fixes, run <code class="inline-code">dart fix</code> to fix those violations. For other common errors, fix them using the following table:</p>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Error / Lint Code</th>
+<th>Common Cause</th>
+<th>Resolution</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>Invalid Late Access</strong></td>
+<td>Referencing a primary constructor parameter inside a <code class="inline-code">late</code> field initializer.</td>
+<td>Make the field non-late, or pass the value through another non-late field.</td>
+</tr>
+<tr>
+<td><code class="inline-code">fieldInitializedInInitializerAndDeclaration</code></td>
+<td>Initializing a variable both in its declaration and in the <code class="inline-code">this :</code> list.</td>
+<td>Remove one of the initializations.</td>
+</tr>
+<tr>
+<td><code class="inline-code">nonRedirectingGenerativeConstructorWithPrimary</code></td>
+<td>Declaring a in-body generative constructor in the body without redirecting to the primary.</td>
+<td>Change the in-body constructor such that it is redirecting (e.g. <code class="inline-code">this(...)</code>) or remove the in-body constructor.</td>
+</tr>
+</tbody></table></div>
+<hr class="doc-divider">
+<h2 id="5--step-by-step-refactoring-workflows" class="doc-h2"><a href="#5--step-by-step-refactoring-workflows" class="heading-anchor">#</a> 5. Step-by-Step Refactoring Workflows</h2>
+<h3 class="doc-h3">Workflow 5.1: Migrating a Class to a Primary Constructor</h3>
+<p class="doc-p">Follow these steps to migrate a verbose class to the new primary constructor syntax:</p>
+<ol class="doc-ordered-list">
+<li><strong>Identify Candidate Fields and Constructor</strong>:</li>
+</ul>
+<p class="doc-p">   Locate generative constructors and the fields they initialize. In this case, this would be the <code class="inline-code">name</code> and <code class="inline-code">age</code> fields.</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   // Before
+   class User {
+     final String name;
+     final int age;
+     User(this.name, this.age);
+   }
+</code></pre>
+</div>
+<ol class="doc-ordered-list">
+<li><strong>Move Fields to the Header</strong>:</li>
+</ul>
+<p class="doc-p">   Place fields in the header with <code class="inline-code">final</code> or <code class="inline-code">var</code> modifiers and append a semicolon (<code class="inline-code">;</code>) if the body is empty. The <code class="inline-code">name</code> and <code class="inline-code">age</code> fields are now written the primary constructor as declaring parameters <code class="inline-code">final String name</code> and <code class="inline-code">final int age</code>, respectively.</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   // After
+   class User(final String name, final int age);
+</code></pre>
+</div>
+<ol class="doc-ordered-list">
+<li><strong>Handle Custom Initializers and Assertions</strong>:</li>
+</ul>
+<p class="doc-p">   If there is an initializer list or assert block, move it to a <code class="inline-code">this</code> block inside the body:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   // Before
+   class Point {
+     final int x;
+     final int y;
+     Point(this.x, this.y) : assert(x &gt;= 0);
+   }
+
+   // After
+   class Point(final int x, final int y) {
+     this : assert(x &gt;= 0);
+   }
+</code></pre>
+</div>
+<ol class="doc-ordered-list">
+<li><strong>Leverage Primary Initializer Scope for Calculations</strong>:</li>
+</ul>
+<p class="doc-p">   If a field value is calculated from parameters, declare it inside the body and assign it directly using the parameters:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   // Before
+   class Rect {
+     final double width;
+     final double height;
+     final double area;
+     Rect(this.width, this.height) : area = width * height;
+   }
+
+   // After
+   class Rect(final double width, final double height) {
+     // &#039;width&#039; and &#039;height&#039; are in scope here
+     final double area = width * height;
+   }
+</code></pre>
+</div>
+<ol class="doc-ordered-list">
+<li><strong>Convert In-Body Constructors to Redirecting</strong>:</li>
+</ul>
+<p class="doc-p">   Ensure all in-body generative constructors redirect to the primary constructor:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">   // Before
+   class Point {
+     final int x;
+     final int y;
+     Point(this.x, this.y);
+     Point.zero() : x = 0, y = 0;
+   }
+
+   // After
+   class Point(final int x, final int y) {
+     new zero() : this(0, 0); // Redirects to primary
+   }
+</code></pre>
+</div>
+<h3 class="doc-h3">Workflow 5.2: Applying Abbreviated (Concise) In-Body Constructors</h3>
+<p class="doc-p">When the user prefers to keep the constructor in the class body but wants to reduce verbosity, suggest the abbreviated constructor syntax:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">// Before
+class DatabaseService {
+  final String url;
+  DatabaseService(this.url);
+  DatabaseService.local() : url = &#039;localhost&#039;;
+  factory DatabaseService.create() =&gt; DatabaseService(&#039;default&#039;);
+}
+
+// After
+class DatabaseService {
+  final String url;
+  new(this.url); // Omit class name, use &#039;new&#039;
+  new local() : url = &#039;localhost&#039;; // Use &#039;new local&#039; for named constructors
+  factory create() =&gt; DatabaseService(&#039;default&#039;); // Omit class name from factory
+}
+</code></pre>
+</div>
+
+    </article>
+
+
+
+    <footer class="footer">
+      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
+    </footer>
+  </main>
+
+  <script>
+// Theme Management
+function initTheme() {
+  const saved = localStorage.getItem('agent_doc_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeButton(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('agent_doc_theme', next);
+  updateThemeButton(next);
+}
+
+function updateThemeButton(theme) {
+  const icon = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-text');
+  if (icon && label) {
+    if (theme === 'dark') {
+      icon.textContent = '🌙';
+      label.setAttribute('data-i18n', 'dark_theme');
+      if (currentLang === 'ua') label.textContent = 'Темна';
+      else label.textContent = 'Dark';
+    } else {
+      icon.textContent = '☀️';
+      label.setAttribute('data-i18n', 'light_theme');
+      if (currentLang === 'ua') label.textContent = 'Світла';
+      else label.textContent = 'Light';
+    }
+  }
+}
+
+// Language Management (UA / EN)
+let currentLang = localStorage.getItem('agent_doc_lang') || 'ua';
+
+const translations = {
+  ua: {
+    portal_title: "Центр Документації Агентів",
+    all_skills: "Всі скіли",
+    project_rules: "Правила Проєкту (AGENTS.md)",
+    search_placeholder: "Пошук скілів за назвою, категорією або тригерами...",
+    stats_total_skills: "Всього Скілів",
+    stats_categories: "Категорій / Шарів",
+    stats_rules: "Правил Архітектури",
+    stats_connected: "100% Взаємозв'язані",
+    filter_all: "Всі",
+    copy: "Копіювати",
+    copied: "Скопійовано!",
+    progress: "Прогрес виконання",
+    checklist_title: "Чекліст верифікації та виконання",
+    sub_skills_title: "Пов'язані та рекомендовані скіли",
+    dark_theme: "Темна",
+    light_theme: "Світла",
+    lang_btn: "UA 🇺🇦",
+    back_to_portal: "← До Порталу",
+    view_docs: "Читати",
+    rules_overview: "Огляд архітектурних правил та контрактів"
+  },
+  en: {
+    portal_title: "Agent Documentation Hub",
+    all_skills: "All Skills",
+    project_rules: "Project Rules (AGENTS.md)",
+    search_placeholder: "Search skills by name, layer, or triggers...",
+    stats_total_skills: "Total Skills",
+    stats_categories: "Categories / Layers",
+    stats_rules: "Architectural Rules",
+    stats_connected: "100% Interconnected",
+    filter_all: "All",
+    copy: "Copy",
+    copied: "Copied!",
+    progress: "Execution Progress",
+    checklist_title: "Verification & Quality Checklist",
+    sub_skills_title: "Related & Referenced Skills",
+    dark_theme: "Dark",
+    light_theme: "Light",
+    lang_btn: "EN 🇬🇧",
+    back_to_portal: "← Back to Portal",
+    view_docs: "Explore",
+    rules_overview: "Architectural rules & layer interaction contracts"
+  }
+};
+
+function initLanguage() {
+  setLanguage(currentLang);
+}
+
+function toggleLanguage() {
+  const next = currentLang === 'ua' ? 'en' : 'ua';
+  setLanguage(next);
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('agent_doc_lang', lang);
+  
+  const dict = translations[lang] || translations.ua;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      if (el.tagName === 'INPUT' && el.getAttribute('placeholder')) {
+        el.setAttribute('placeholder', dict[key]);
+      } else {
+        el.textContent = dict[key];
+      }
+    }
+  });
+
+  const langBtn = document.getElementById('lang-text');
+  if (langBtn) {
+    langBtn.textContent = lang === 'ua' ? '🇺🇦 UA' : '🇬🇧 EN';
+  }
+
+  // Update category texts if available
+  document.querySelectorAll('[data-cat-ua]').forEach(el => {
+    if (lang === 'ua') {
+      el.textContent = el.getAttribute('data-cat-ua');
+    } else {
+      el.textContent = el.getAttribute('data-cat-en');
+    }
+  });
+
+  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
+}
+
+// Copy Code
+function copyCode(button) {
+  const wrapper = button.closest('.code-block-wrapper');
+  const code = wrapper.querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    const btnText = button.querySelector('.btn-text');
+    const original = btnText.innerText;
+    btnText.innerText = currentLang === 'ua' ? 'Скопійовано!' : 'Copied!';
+    button.style.borderColor = 'var(--success)';
+    button.style.color = 'var(--success)';
+    setTimeout(() => {
+      btnText.innerText = original;
+      button.style.borderColor = '';
+      button.style.color = '';
+    }, 2000);
+  });
+}
+
+// Checklist Progress
+function updateChecklistProgress() {
+  const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+  const checked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked');
+  if (!checkboxes.length) return;
+
+  const percent = Math.round((checked.length / checkboxes.length) * 100);
+  const fill = document.getElementById('checklist-progress-fill');
+  const text = document.getElementById('checklist-progress-text');
+  if (fill) fill.style.width = percent + '%';
+  if (text) text.textContent = percent + '% (' + checked.length + '/' + checkboxes.length + ')';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initLanguage();
+  updateChecklistProgress();
+  if (typeof mermaid !== 'undefined') {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isLight ? 'default' : 'dark',
+      themeVariables: {
+        fontSize: '14px',
+        fontFamily: 'Inter, Outfit, sans-serif',
+        primaryColor: isLight ? '#f1f5f9' : '#1e293b',
+        primaryTextColor: isLight ? '#0f172a' : '#f8fafc',
+        primaryBorderColor: isLight ? '#d97706' : '#FFDE3F',
+        lineColor: isLight ? '#2563eb' : '#60a5fa',
+        secondaryColor: isLight ? '#ffffff' : '#111827',
+        tertiaryColor: isLight ? '#f8fafc' : '#0b0f19'
+      },
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis',
+        nodeSpacing: 40,
+        rankSpacing: 45
+      },
+      securityLevel: 'loose'
+    });
+  }
+});
+
+    hljs.highlightAll();
+  </script>
+</body>
+</html>

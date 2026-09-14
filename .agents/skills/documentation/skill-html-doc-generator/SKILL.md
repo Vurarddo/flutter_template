@@ -163,9 +163,29 @@ function updateProgress() {
 
 ---
 
-## 6. Verification & Quality Gates
+## 6. Automated Repository-Wide Generator Script
+
+To generate or regenerate the entire documentation portal, `AGENTS.md` rules, and all 100+ skill landing pages with interconnected hyperlinks and bilingual support:
+
+```bash
+dart run .agents/skills/documentation/skill-html-doc-generator/scripts/doc_generator.dart
+```
+
+This script automatically:
+1. Recursively scans `.agents/skills/` for all `SKILL.md` files and `.agents/AGENTS.md`.
+2. Computes the complete cross-reference matrix across all skills.
+3. Automatically converts all markdown skill links and bare identifiers into relative hyperlinks.
+4. Generates individual `<skill-name>.html` files inside each skill folder.
+5. Generates the central search & discovery portal at `.agents/index.html`.
+6. Generates `.agents/agents-rules.html` for project architecture rules.
+
+---
+
+## 7. Verification & Quality Gates
 
 Before concluding documentation generation:
 - Ensure the page renders without horizontal overflow on both desktop and mobile viewports.
 - Validate that all Mermaid syntax parses cleanly.
 - Verify that dark/light theme toggle transitions smoothly.
+- Verify Ukrainian (🇺🇦 UA) / English (🇬🇧 EN) language toggle functionality.
+

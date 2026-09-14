@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>skill-html-doc-generator — Agent Skill Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.75);
+  --bg-card-hover: rgba(31, 41, 55, 0.9);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(255, 222, 63, 0.35);
+  
+  --brand-primary: #FFDE3F;
+  --brand-primary-hover: #FACC15;
+  --brand-glow: rgba(255, 222, 63, 0.18);
+  
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.12);
+  --error: #EF4444;
+  --error-bg: rgba(239, 68, 68, 0.12);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --info: #3B82F6;
+  --info-bg: rgba(59, 130, 246, 0.12);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+[data-theme="light"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: #FFFFFF;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(217, 119, 6, 0.35);
+  
+  --brand-primary: #D97706;
+  --brand-primary-hover: #B45309;
+  --brand-glow: rgba(217, 119, 6, 0.12);
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Header */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(11, 15, 25, 0.8);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+[data-theme="light"] .top-nav {
+  background: rgba(248, 250, 252, 0.85);
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.brand-logo {
+  background: linear-gradient(135deg, var(--brand-primary), #FB923C);
+  color: #000;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 1rem;
+}
+.nav-breadcrumbs {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-breadcrumbs a:hover {
+  color: var(--brand-primary);
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.btn-icon {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-icon:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  color: var(--brand-primary);
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--brand-primary), #38BDF8, #A855F7);
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-category {
+  background: var(--brand-glow);
+  color: var(--brand-primary);
+  border: 1px solid var(--border-accent);
+}
+.badge-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Section Headings */
+.doc-h1 { font-family: var(--font-heading); font-size: 2rem; margin: 2rem 0 1rem; color: var(--text-primary); }
+.doc-h2 { font-family: var(--font-heading); font-size: 1.45rem; margin: 2.25rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); position: relative; }
+.heading-anchor { color: var(--text-muted); text-decoration: none; margin-right: 0.25rem; opacity: 0; transition: opacity 0.2s; }
+.doc-h2:hover .heading-anchor { opacity: 1; }
+.doc-h3 { font-family: var(--font-heading); font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--brand-primary); }
+.doc-h4 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; color: var(--text-primary); }
+.doc-p { margin-bottom: 1rem; color: var(--text-primary); }
+.doc-divider { border: none; height: 1px; background: var(--border-color); margin: 2.5rem 0; }
+
+/* Lists */
+.doc-list, .doc-ordered-list {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.doc-list li, .doc-ordered-list li {
+  margin-bottom: 0.4rem;
+}
+
+/* Links & Badges */
+.doc-link {
+  color: var(--brand-primary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--brand-primary);
+}
+.doc-link:hover {
+  border-bottom-style: solid;
+}
+.skill-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin: 0 0.2rem;
+}
+.skill-ref-badge:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #60A5FA;
+  transform: translateY(-1px);
+}
+.skill-ref-link {
+  color: #38BDF8;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.skill-ref-link:hover {
+  color: var(--brand-primary);
+  text-decoration: underline;
+}
+.ext-icon { font-size: 0.75rem; }
+
+/* Code Blocks */
+.inline-code {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--brand-primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+[data-theme="light"] .inline-code {
+  background: rgba(0, 0, 0, 0.06);
+}
+.code-block-wrapper {
+  background: #090d16;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 1.25rem 0;
+  overflow: hidden;
+}
+[data-theme="light"] .code-block-wrapper {
+  background: #F1F5F9;
+}
+.code-header {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.45rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+.code-lang {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s;
+}
+.copy-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--brand-primary);
+}
+pre {
+  padding: 1.2rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Tables */
+.table-responsive {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.doc-table th, .doc-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+.doc-table th {
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+[data-theme="light"] .doc-table th {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Mermaid Diagrams */
+.mermaid-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+}
+.mermaid-header {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+.mermaid-container .mermaid {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  min-height: 240px;
+}
+.mermaid-container .mermaid svg {
+  width: 100% !important;
+  max-width: 950px !important;
+  height: auto !important;
+  font-family: var(--font-body) !important;
+}
+
+/* Checklist */
+.checklist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+.checklist-item:hover {
+  border-color: var(--border-accent);
+}
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+.checkbox-container input {
+  margin-top: 0.3rem;
+  cursor: pointer;
+}
+.progress-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.progress-bar-bg {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-primary), var(--success));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Alerts */
+.alert-box {
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  margin: 1.25rem 0;
+  border-left: 4px solid;
+}
+.alert-info { background: var(--info-bg); border-left-color: var(--info); }
+.alert-warning { background: var(--warning-bg); border-left-color: var(--warning); }
+.alert-error { background: var(--error-bg); border-left-color: var(--error); }
+.alert-success { background: var(--success-bg); border-left-color: var(--success); }
+.alert-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; text-transform: uppercase; }
+
+/* Footer */
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+  </style>
+</head>
+<body>
+  <header class="top-nav">
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="../../../index.html" class="nav-brand">
+        <div class="brand-logo">AG</div>
+        <span>Antigravity Docs</span>
+      </a>
+      <div class="nav-breadcrumbs">
+        <a href="../../../index.html" data-i18n="portal_title">Центр Документації</a>
+        <span>/</span>
+        <span data-cat-ua="Документація" data-cat-en="Documentation">Документація</span>
+        <span>/</span>
+        <span style="color: var(--text-primary); font-weight: 600;">skill-html-doc-generator</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="../../../agents-rules.html" class="btn-icon">
+        <span>📜</span>
+        <span data-i18n="project_rules">Правила AGENTS.md</span>
+      </a>
+      <button class="btn-icon" onclick="toggleLanguage()">
+        <span id="lang-text">🇺🇦 UA</span>
+      </button>
+      <button class="btn-icon" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text" data-i18n="dark_theme">Темна</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-badges">
+        <span class="badge badge-category" data-cat-ua="Документація" data-cat-en="Documentation">Документація</span>
+        <span class="badge badge-tag">SKILL</span>
+        <span class="badge badge-tag">#generates</span>
+<span class="badge badge-tag">#unified</span>
+<span class="badge badge-tag">#interactive</span>
+<span class="badge badge-tag">#self-contained</span>
+<span class="badge badge-tag">#single-page</span>
+<span class="badge badge-tag">#html</span>
+<span class="badge badge-tag">#documentation</span>
+<span class="badge badge-tag">#landing</span>
+      </div>
+      <h1 class="hero-title">skill-html-doc-generator</h1>
+      <p class="hero-description">Generates unified, interactive, self-contained single-page HTML documentation landing pages for agent skills. Adheres to a strict design system with dark/light themes, Hero with trigger keyword badges, embedded Mermaid.js architecture and relationship graphs, syntax-highlighted code snippets with copy buttons, DOs and DONTs rule cards, and interactive verification checklists. Saves index.html directly alongside the target skill.</p>
+    </section>
+
+    <div class="progress-card">
+      <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600;">
+        <span data-i18n="progress">Прогрес виконання</span>
+        <span id="checklist-progress-text">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="checklist-progress-fill"></div>
+      </div>
+    </div>
+
+    <article class="doc-content">
+<h1 class="doc-h1">Skill HTML Documentation Landing Generator</h1>
+<h2 id="1--overview---purpose" class="doc-h2"><a href="#1--overview---purpose" class="heading-anchor">#</a> 1. Overview &amp; Purpose</h2>
+<p class="doc-p">This skill standardizes the automated generation of premium, interactive, single-page HTML documentation landing pages for any agent skill within the repository.</p>
+<p class="doc-p">Every generated HTML page is saved directly alongside the target skill file as:</p>
+<p class="doc-p"><code class="inline-code">.agents/skills/.../&lt;skill-name&gt;/&lt;skill-name&gt;.html</code></p>
+<h3 class="doc-h3">Key Architectural Characteristics:</h3>
+<ul class="doc-list">
+<li><strong>100% Self-Contained:</strong> Zero local web server dependencies. Opens directly in any browser (<code class="inline-code">file://</code>). Uses lightweight CDN assets (Google Fonts, Mermaid.js, Highlight.js).</li>
+<li><strong>Consistent Design System:</strong> Standardized typography (Outfit &amp; Inter), dynamic Dark/Light theme toggle with <code class="inline-code">localStorage</code> persistence, glassmorphism cards, and accent colors.</li>
+<li><strong>Interactive Visual Mesh:</strong> Renders architecture and dependency graphs dynamically using Mermaid.js.</li>
+<li><strong>Developer Experience:</strong> One-click copy buttons for code snippets, interactive verification checklists with dynamic progress bars, and collapsible deep-dive sections.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="2--universal-html-landing-architecture---section-structure" class="doc-h2"><a href="#2--universal-html-landing-architecture---section-structure" class="heading-anchor">#</a> 2. Universal HTML Landing Architecture &amp; Section Structure</h2>
+<p class="doc-p">Every generated <code class="inline-code">&lt;skill-name&gt;.html</code> MUST include the following 7 core sections in order:</p>
+<div class="mermaid-container"><div class="mermaid">graph TD
+    A["1. Navigation & Theme Toggle (Sticky Header)"] --> B["2. Hero Section (Title, Badges, Description, Triggers)"]
+    B --> C["3. Interactive Architecture & Relationship Graph (Mermaid.js)"]
+    C --> D["4. Layer Responsibilities & Protocol Specs"]
+    D --> E["5. Code Patterns & Production Snippets (with Copy)"]
+    E --> F["6. Rules & Laws Matrix (DOs vs DONTs Cards)"]
+    F --> G["7. Interactive Verification Checklist & Sub-Skill Links"]
+</div></div>
+<hr class="doc-divider">
+<h2 id="3--unified-design-system---styling-tokens" class="doc-h2"><a href="#3--unified-design-system---styling-tokens" class="heading-anchor">#</a> 3. Unified Design System &amp; Styling Tokens</h2>
+<h3 class="doc-h3">Color Palette &amp; CSS Variables</h3>
+<p class="doc-p">All generated HTML pages must embed the following standardized CSS variable palette:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">css</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-css">:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.7);
+  --bg-card-hover: rgba(31, 41, 55, 0.8);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --border-accent: rgba(255, 222, 63, 0.3);
+  
+  --brand-primary: #FFDE3F;
+  --brand-primary-hover: #FACC15;
+  --brand-glow: rgba(255, 222, 63, 0.15);
+  
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.1);
+  --error: #EF4444;
+  --error-bg: rgba(239, 68, 68, 0.1);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.1);
+  --info: #3B82F6;
+  --info-bg: rgba(59, 130, 246, 0.1);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --font-heading: &#039;Outfit&#039;, sans-serif;
+  --font-body: &#039;Inter&#039;, sans-serif;
+  --font-mono: &#039;JetBrains Mono&#039;, &#039;Fira Code&#039;, monospace;
+}
+
+[data-theme=&quot;light&quot;] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.85);
+  --bg-card-hover: #FFFFFF;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(217, 119, 6, 0.3);
+  
+  --brand-primary: #D97706;
+  --brand-primary-hover: #B45309;
+  --brand-glow: rgba(217, 119, 6, 0.1);
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+}
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="4--step-by-step-generation-protocol-for-ai-agents" class="doc-h2"><a href="#4--step-by-step-generation-protocol-for-ai-agents" class="heading-anchor">#</a> 4. Step-by-Step Generation Protocol for AI Agents</h2>
+<p class="doc-p">When requested to create or update HTML documentation for a skill (e.g. <em>&quot;згенеруй html документацію для скіла &lt;skill-name&gt;&quot;</em>):</p>
+<h3 class="doc-h3">Step 1: Read &amp; Parse the Target <code class="inline-code">SKILL.md</code></h3>
+<ol class="doc-ordered-list">
+<li>Extract frontmatter <code class="inline-code">name</code> and <code class="inline-code">description</code>.</li>
+<li>Extract all Mermaid diagrams, code blocks, checklists, DOs/DONTs, and referenced sub-skills.</li>
+<li>Identify the skill category/layer (<code class="inline-code">Architecture</code>, <code class="inline-code">Domain</code>, <code class="inline-code">Data</code>, <code class="inline-code">Presentation</code>, <code class="inline-code">Native</code>, <code class="inline-code">Infrastructure</code>, <code class="inline-code">Bootstrap</code>, etc.).</li>
+</ul>
+<h3 class="doc-h3">Step 2: Build the Self-Contained <code class="inline-code">&lt;skill-name&gt;.html</code> File</h3>
+<p class="doc-p">Construct a complete HTML5 document containing:</p>
+<ul class="doc-list">
+<li><code class="inline-code">&lt;head&gt;</code> with CDN imports: Google Fonts (Outfit, Inter, JetBrains Mono), Highlight.js (CSS + JS), Mermaid.js (<code class="inline-code">cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js</code>).</li>
+<li>Complete <code class="inline-code">&lt;style&gt;</code> block with responsive layouts, CSS variables, glassmorphic cards, syntax theme overrides, and button hover states.</li>
+<li>Sticky navigation bar with Logo, Skill Name, Table of Contents anchors, and Light/Dark toggle button.</li>
+<li>Hero header with trigger keywords pills (<code class="inline-code">#clean-architecture</code>, <code class="inline-code">#bloc</code>, <code class="inline-code">#usecase</code>, etc.) and layer badge.</li>
+<li>Interactive Mermaid container: <code class="inline-code">&lt;div class=&quot;mermaid&quot;&gt;...&lt;/div&gt;</code> with dynamic theme detection.</li>
+<li>Content sections matching the target skill&#039;s architecture.</li>
+<li>Interactive code blocks with <code class="inline-code">&lt;button class=&quot;copy-btn&quot;&gt;Copy&lt;/button&gt;</code>.</li>
+<li>Rules &amp; Laws section with <code class="inline-code">.rule-card.do</code> and <code class="inline-code">.rule-card.dont</code>.</li>
+<li>Interactive checklist with <code class="inline-code">&lt;input type=&quot;checkbox&quot;&gt;</code> and dynamic percentage progress bar.</li>
+<li><code class="inline-code">&lt;script&gt;</code> tag handling Mermaid initialization, theme toggle, copy button clipboard logic, and checklist state tracking.</li>
+</ul>
+<h3 class="doc-h3">Step 3: Write File to Target Skill Directory</h3>
+<p class="doc-p">Write the generated HTML to <code class="inline-code">.agents/skills/.../&lt;target-skill-folder&gt;/&lt;skill-name&gt;.html</code>.</p>
+<hr class="doc-divider">
+<h2 id="5--standard-interactive-javascript-components" class="doc-h2"><a href="#5--standard-interactive-javascript-components" class="heading-anchor">#</a> 5. Standard Interactive JavaScript Components</h2>
+<p class="doc-p">Every generated landing page must include the following client-side JS logic:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">javascript</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-javascript">// 1. Theme Toggle &amp; Mermaid Re-render
+function toggleTheme() {
+  const current = document.documentElement.getAttribute(&#039;data-theme&#039;) || &#039;dark&#039;;
+  const next = current === &#039;dark&#039; ? &#039;light&#039; : &#039;dark&#039;;
+  document.documentElement.setAttribute(&#039;data-theme&#039;, next);
+  localStorage.setItem(&#039;skill_doc_theme&#039;, next);
+  updateThemeIcon(next);
+}
+
+// 2. Clipboard Copy
+document.querySelectorAll(&#039;.copy-btn&#039;).forEach(button =&gt; {
+  button.addEventListener(&#039;click&#039;, () =&gt; {
+    const code = button.closest(&#039;.code-block-wrapper&#039;).querySelector(&#039;code&#039;).innerText;
+    navigator.clipboard.writeText(code).then(() =&gt; {
+      button.textContent = &#039;Copied!&#039;;
+      setTimeout(() =&gt; button.textContent = &#039;Copy&#039;, 2000);
+    });
+  });
+});
+
+// 3. Checklist Progress Calculator
+function updateProgress() {
+  const checkboxes = document.querySelectorAll(&#039;.checklist-item input[type=&quot;checkbox&quot;]&#039;);
+  const checked = document.querySelectorAll(&#039;.checklist-item input[type=&quot;checkbox&quot;]:checked&#039;);
+  const percent = checkboxes.length ? Math.round((checked.length / checkboxes.length) * 100) : 0;
+  document.getElementById(&#039;progress-bar&#039;).style.width = percent + &#039;%&#039;;
+  document.getElementById(&#039;progress-text&#039;).textContent = percent + &#039;% Completed&#039;;
+}
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="6--automated-repository-wide-generator-script" class="doc-h2"><a href="#6--automated-repository-wide-generator-script" class="heading-anchor">#</a> 6. Automated Repository-Wide Generator Script</h2>
+<p class="doc-p">To generate or regenerate the entire documentation portal, <code class="inline-code">AGENTS.md</code> rules, and all 100+ skill landing pages with interconnected hyperlinks and bilingual support:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">bash</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-bash">dart run .agents/skills/documentation/skill-html-doc-generator/scripts/doc_generator.dart
+</code></pre>
+</div>
+<p class="doc-p">This script automatically:</p>
+<ol class="doc-ordered-list">
+<li>Recursively scans <code class="inline-code">.agents/skills/</code> for all <code class="inline-code">SKILL.md</code> files and <code class="inline-code">.agents/AGENTS.md</code>.</li>
+<li>Computes the complete cross-reference matrix across all skills.</li>
+<li>Automatically converts all markdown skill links and bare identifiers into relative hyperlinks.</li>
+<li>Generates individual <code class="inline-code">&lt;skill-name&gt;.html</code> files inside each skill folder.</li>
+<li>Generates the central search &amp; discovery portal at <code class="inline-code">.agents/index.html</code>.</li>
+<li>Generates <code class="inline-code">.agents/agents-rules.html</code> for project architecture rules.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="7--verification---quality-gates" class="doc-h2"><a href="#7--verification---quality-gates" class="heading-anchor">#</a> 7. Verification &amp; Quality Gates</h2>
+<p class="doc-p">Before concluding documentation generation:</p>
+<ul class="doc-list">
+<li>Ensure the page renders without horizontal overflow on both desktop and mobile viewports.</li>
+<li>Validate that all Mermaid syntax parses cleanly.</li>
+<li>Verify that dark/light theme toggle transitions smoothly.</li>
+<li>Verify Ukrainian (🇺🇦 UA) / English (🇬🇧 EN) language toggle functionality.</li>
+</ul>
+
+    </article>
+
+
+
+    <footer class="footer">
+      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
+    </footer>
+  </main>
+
+  <script>
+// Theme Management
+function initTheme() {
+  const saved = localStorage.getItem('agent_doc_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeButton(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('agent_doc_theme', next);
+  updateThemeButton(next);
+}
+
+function updateThemeButton(theme) {
+  const icon = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-text');
+  if (icon && label) {
+    if (theme === 'dark') {
+      icon.textContent = '🌙';
+      label.setAttribute('data-i18n', 'dark_theme');
+      if (currentLang === 'ua') label.textContent = 'Темна';
+      else label.textContent = 'Dark';
+    } else {
+      icon.textContent = '☀️';
+      label.setAttribute('data-i18n', 'light_theme');
+      if (currentLang === 'ua') label.textContent = 'Світла';
+      else label.textContent = 'Light';
+    }
+  }
+}
+
+// Language Management (UA / EN)
+let currentLang = localStorage.getItem('agent_doc_lang') || 'ua';
+
+const translations = {
+  ua: {
+    portal_title: "Центр Документації Агентів",
+    all_skills: "Всі скіли",
+    project_rules: "Правила Проєкту (AGENTS.md)",
+    search_placeholder: "Пошук скілів за назвою, категорією або тригерами...",
+    stats_total_skills: "Всього Скілів",
+    stats_categories: "Категорій / Шарів",
+    stats_rules: "Правил Архітектури",
+    stats_connected: "100% Взаємозв'язані",
+    filter_all: "Всі",
+    copy: "Копіювати",
+    copied: "Скопійовано!",
+    progress: "Прогрес виконання",
+    checklist_title: "Чекліст верифікації та виконання",
+    sub_skills_title: "Пов'язані та рекомендовані скіли",
+    dark_theme: "Темна",
+    light_theme: "Світла",
+    lang_btn: "UA 🇺🇦",
+    back_to_portal: "← До Порталу",
+    view_docs: "Читати",
+    rules_overview: "Огляд архітектурних правил та контрактів"
+  },
+  en: {
+    portal_title: "Agent Documentation Hub",
+    all_skills: "All Skills",
+    project_rules: "Project Rules (AGENTS.md)",
+    search_placeholder: "Search skills by name, layer, or triggers...",
+    stats_total_skills: "Total Skills",
+    stats_categories: "Categories / Layers",
+    stats_rules: "Architectural Rules",
+    stats_connected: "100% Interconnected",
+    filter_all: "All",
+    copy: "Copy",
+    copied: "Copied!",
+    progress: "Execution Progress",
+    checklist_title: "Verification & Quality Checklist",
+    sub_skills_title: "Related & Referenced Skills",
+    dark_theme: "Dark",
+    light_theme: "Light",
+    lang_btn: "EN 🇬🇧",
+    back_to_portal: "← Back to Portal",
+    view_docs: "Explore",
+    rules_overview: "Architectural rules & layer interaction contracts"
+  }
+};
+
+function initLanguage() {
+  setLanguage(currentLang);
+}
+
+function toggleLanguage() {
+  const next = currentLang === 'ua' ? 'en' : 'ua';
+  setLanguage(next);
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('agent_doc_lang', lang);
+  
+  const dict = translations[lang] || translations.ua;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      if (el.tagName === 'INPUT' && el.getAttribute('placeholder')) {
+        el.setAttribute('placeholder', dict[key]);
+      } else {
+        el.textContent = dict[key];
+      }
+    }
+  });
+
+  const langBtn = document.getElementById('lang-text');
+  if (langBtn) {
+    langBtn.textContent = lang === 'ua' ? '🇺🇦 UA' : '🇬🇧 EN';
+  }
+
+  // Update category texts if available
+  document.querySelectorAll('[data-cat-ua]').forEach(el => {
+    if (lang === 'ua') {
+      el.textContent = el.getAttribute('data-cat-ua');
+    } else {
+      el.textContent = el.getAttribute('data-cat-en');
+    }
+  });
+
+  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
+}
+
+// Copy Code
+function copyCode(button) {
+  const wrapper = button.closest('.code-block-wrapper');
+  const code = wrapper.querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    const btnText = button.querySelector('.btn-text');
+    const original = btnText.innerText;
+    btnText.innerText = currentLang === 'ua' ? 'Скопійовано!' : 'Copied!';
+    button.style.borderColor = 'var(--success)';
+    button.style.color = 'var(--success)';
+    setTimeout(() => {
+      btnText.innerText = original;
+      button.style.borderColor = '';
+      button.style.color = '';
+    }, 2000);
+  });
+}
+
+// Checklist Progress
+function updateChecklistProgress() {
+  const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+  const checked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked');
+  if (!checkboxes.length) return;
+
+  const percent = Math.round((checked.length / checkboxes.length) * 100);
+  const fill = document.getElementById('checklist-progress-fill');
+  const text = document.getElementById('checklist-progress-text');
+  if (fill) fill.style.width = percent + '%';
+  if (text) text.textContent = percent + '% (' + checked.length + '/' + checkboxes.length + ')';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initLanguage();
+  updateChecklistProgress();
+  if (typeof mermaid !== 'undefined') {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isLight ? 'default' : 'dark',
+      themeVariables: {
+        fontSize: '14px',
+        fontFamily: 'Inter, Outfit, sans-serif',
+        primaryColor: isLight ? '#f1f5f9' : '#1e293b',
+        primaryTextColor: isLight ? '#0f172a' : '#f8fafc',
+        primaryBorderColor: isLight ? '#d97706' : '#FFDE3F',
+        lineColor: isLight ? '#2563eb' : '#60a5fa',
+        secondaryColor: isLight ? '#ffffff' : '#111827',
+        tertiaryColor: isLight ? '#f8fafc' : '#0b0f19'
+      },
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis',
+        nodeSpacing: 40,
+        rankSpacing: 45
+      },
+      securityLevel: 'loose'
+    });
+  }
+});
+
+    hljs.highlightAll();
+  </script>
+</body>
+</html>

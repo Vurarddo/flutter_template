@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>project-bootstrap-hub — Agent Skill Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.75);
+  --bg-card-hover: rgba(31, 41, 55, 0.9);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(255, 222, 63, 0.35);
+  
+  --brand-primary: #FFDE3F;
+  --brand-primary-hover: #FACC15;
+  --brand-glow: rgba(255, 222, 63, 0.18);
+  
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.12);
+  --error: #EF4444;
+  --error-bg: rgba(239, 68, 68, 0.12);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --info: #3B82F6;
+  --info-bg: rgba(59, 130, 246, 0.12);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+[data-theme="light"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: #FFFFFF;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(217, 119, 6, 0.35);
+  
+  --brand-primary: #D97706;
+  --brand-primary-hover: #B45309;
+  --brand-glow: rgba(217, 119, 6, 0.12);
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Header */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(11, 15, 25, 0.8);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+[data-theme="light"] .top-nav {
+  background: rgba(248, 250, 252, 0.85);
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.brand-logo {
+  background: linear-gradient(135deg, var(--brand-primary), #FB923C);
+  color: #000;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 1rem;
+}
+.nav-breadcrumbs {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-breadcrumbs a:hover {
+  color: var(--brand-primary);
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.btn-icon {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-icon:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  color: var(--brand-primary);
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--brand-primary), #38BDF8, #A855F7);
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-category {
+  background: var(--brand-glow);
+  color: var(--brand-primary);
+  border: 1px solid var(--border-accent);
+}
+.badge-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Section Headings */
+.doc-h1 { font-family: var(--font-heading); font-size: 2rem; margin: 2rem 0 1rem; color: var(--text-primary); }
+.doc-h2 { font-family: var(--font-heading); font-size: 1.45rem; margin: 2.25rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); position: relative; }
+.heading-anchor { color: var(--text-muted); text-decoration: none; margin-right: 0.25rem; opacity: 0; transition: opacity 0.2s; }
+.doc-h2:hover .heading-anchor { opacity: 1; }
+.doc-h3 { font-family: var(--font-heading); font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--brand-primary); }
+.doc-h4 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; color: var(--text-primary); }
+.doc-p { margin-bottom: 1rem; color: var(--text-primary); }
+.doc-divider { border: none; height: 1px; background: var(--border-color); margin: 2.5rem 0; }
+
+/* Lists */
+.doc-list, .doc-ordered-list {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.doc-list li, .doc-ordered-list li {
+  margin-bottom: 0.4rem;
+}
+
+/* Links & Badges */
+.doc-link {
+  color: var(--brand-primary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--brand-primary);
+}
+.doc-link:hover {
+  border-bottom-style: solid;
+}
+.skill-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin: 0 0.2rem;
+}
+.skill-ref-badge:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #60A5FA;
+  transform: translateY(-1px);
+}
+.skill-ref-link {
+  color: #38BDF8;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.skill-ref-link:hover {
+  color: var(--brand-primary);
+  text-decoration: underline;
+}
+.ext-icon { font-size: 0.75rem; }
+
+/* Code Blocks */
+.inline-code {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--brand-primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+[data-theme="light"] .inline-code {
+  background: rgba(0, 0, 0, 0.06);
+}
+.code-block-wrapper {
+  background: #090d16;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 1.25rem 0;
+  overflow: hidden;
+}
+[data-theme="light"] .code-block-wrapper {
+  background: #F1F5F9;
+}
+.code-header {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.45rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+.code-lang {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s;
+}
+.copy-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--brand-primary);
+}
+pre {
+  padding: 1.2rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Tables */
+.table-responsive {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.doc-table th, .doc-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+.doc-table th {
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+[data-theme="light"] .doc-table th {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Mermaid Diagrams */
+.mermaid-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+}
+.mermaid-header {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+.mermaid-container .mermaid {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  min-height: 240px;
+}
+.mermaid-container .mermaid svg {
+  width: 100% !important;
+  max-width: 950px !important;
+  height: auto !important;
+  font-family: var(--font-body) !important;
+}
+
+/* Checklist */
+.checklist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+.checklist-item:hover {
+  border-color: var(--border-accent);
+}
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+.checkbox-container input {
+  margin-top: 0.3rem;
+  cursor: pointer;
+}
+.progress-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.progress-bar-bg {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-primary), var(--success));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Alerts */
+.alert-box {
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  margin: 1.25rem 0;
+  border-left: 4px solid;
+}
+.alert-info { background: var(--info-bg); border-left-color: var(--info); }
+.alert-warning { background: var(--warning-bg); border-left-color: var(--warning); }
+.alert-error { background: var(--error-bg); border-left-color: var(--error); }
+.alert-success { background: var(--success-bg); border-left-color: var(--success); }
+.alert-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; text-transform: uppercase; }
+
+/* Footer */
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+  </style>
+</head>
+<body>
+  <header class="top-nav">
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="../../../index.html" class="nav-brand">
+        <div class="brand-logo">AG</div>
+        <span>Antigravity Docs</span>
+      </a>
+      <div class="nav-breadcrumbs">
+        <a href="../../../index.html" data-i18n="portal_title">Центр Документації</a>
+        <span>/</span>
+        <span data-cat-ua="Ініціалізація Проєкту" data-cat-en="Project Bootstrap">Ініціалізація Проєкту</span>
+        <span>/</span>
+        <span style="color: var(--text-primary); font-weight: 600;">project-bootstrap-hub</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="../../../agents-rules.html" class="btn-icon">
+        <span>📜</span>
+        <span data-i18n="project_rules">Правила AGENTS.md</span>
+      </a>
+      <button class="btn-icon" onclick="toggleLanguage()">
+        <span id="lang-text">🇺🇦 UA</span>
+      </button>
+      <button class="btn-icon" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text" data-i18n="dark_theme">Темна</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-badges">
+        <span class="badge badge-category" data-cat-ua="Ініціалізація Проєкту" data-cat-en="Project Bootstrap">Ініціалізація Проєкту</span>
+        <span class="badge badge-tag">SKILL</span>
+        <span class="badge badge-tag">#primary</span>
+<span class="badge badge-tag">#coordinator</span>
+<span class="badge badge-tag">#master</span>
+<span class="badge badge-tag">#orchestrator</span>
+<span class="badge badge-tag">#scaffolding</span>
+<span class="badge badge-tag">#bootstrapping</span>
+<span class="badge badge-tag">#brand</span>
+<span class="badge badge-tag">#production</span>
+      </div>
+      <h1 class="hero-title">project-bootstrap-hub</h1>
+      <p class="hero-description">Primary coordinator and master orchestrator for scaffolding and bootstrapping a brand new production Flutter project from scratch. Coordinates Flutter initialization, dependency injection &amp; conflict resolution, package compatibility auditing, Clean Architecture &amp; Flavors scaffolding, Material 3 (#FFDE3F) theme &amp; interactive UiKit showcase generation, Hydrated ThemeCubit, and test verification with runbook documentation.</p>
+    </section>
+
+    <div class="progress-card">
+      <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600;">
+        <span data-i18n="progress">Прогрес виконання</span>
+        <span id="checklist-progress-text">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="checklist-progress-fill"></div>
+      </div>
+    </div>
+
+    <article class="doc-content">
+<h1 class="doc-h1">Project Bootstrap &amp; Scaffolding Coordinator</h1>
+<h2 id="1--overview---two-phase-lifecycle" class="doc-h2"><a href="#1--overview---two-phase-lifecycle" class="heading-anchor">#</a> 1. Overview &amp; Two-Phase Lifecycle</h2>
+<p class="doc-p">This skill coordinates the end-to-end initialization and scaffolding of a brand new, production-ready Flutter application adhering strictly to Clean Architecture, Material 3, multi-environment Flavors, and full testability.</p>
+<p class="doc-p">To prevent misconfigurations and ensure 100% alignment, the bootstrapping process operates in <strong>two strict phases</strong>:</p>
+<div class="mermaid-container"><div class="mermaid">graph TD
+    subgraph "Phase 1: Interactive Grill-Me Interview & Planning"
+        Q1["1. SDK Upgrade & Version Check"] --> Q2["2. Project Name, Org & Platforms"]
+        Q2 --> Q3["3. Theme Brand Color (#FFDE3F) & Modes"]
+        Q3 --> Q4["4. Flavors & Environment Endpoints"]
+        Q4 --> Plan["5. Generate Detailed implementation_plan.md<br/>(Request User Approval)"]
+    end
+
+    subgraph "Phase 2: Approved Autonomous Execution"
+        Plan -->|User Approves| Exec1["1. flutter create<br/>(bootstrap-flutter-init)"]
+        Exec1 --> Exec2["2. Dependencies & Conflicts<br/>(bootstrap-dependencies-sync)"]
+        Exec2 --> Exec3["3. Package & Signature Audit<br/>(bootstrap-package-auditor)"]
+        Exec3 --> Exec4["4. Clean Architecture & Flavors<br/>(bootstrap-architecture-scaffold)"]
+        Exec4 --> Exec5["5. M3 Theme & UiKit Showcase<br/>(bootstrap-theme-uikit)"]
+        Exec5 --> Exec6["6. Verification & Runbook Docs<br/>(bootstrap-verification-docs)"]
+    end
+</div></div>
+<hr class="doc-divider">
+<h2 id="2--phase-1--interactive-discovery-interview---grill-me--protocol-" class="doc-h2"><a href="#2--phase-1--interactive-discovery-interview---grill-me--protocol-" class="heading-anchor">#</a> 2. Phase 1: Interactive Discovery Interview (<code class="inline-code">grill-me</code> Protocol)</h2>
+<p class="doc-p">When the user asks to create/bootstrap a new project (e.g. <em>&quot;створи новий проект&quot;</em>, <em>&quot;bootstrap new flutter app&quot;</em>, <em>&quot;ініціалізуй проект з шаблону&quot;</em>):</p>
+<p class="doc-p">The agent <strong>MUST NOT</strong> immediately run modifying commands. Instead, the agent conducts a structured interview using the <code class="inline-code">ask_question</code> tool:</p>
+<ol class="doc-ordered-list">
+<li><strong>Flutter SDK Upgrade:</strong> Check current SDK and ask if user wants to upgrade to latest <code class="inline-code">stable</code>.</li>
+<li><strong>Project Identity:</strong> Discover project name (snake_case), description, and organization reverse-domain (<code class="inline-code">--org com.example</code>).</li>
+<li><strong>Target Platforms:</strong> Select platforms (<code class="inline-code">android</code>, <code class="inline-code">ios</code>, <code class="inline-code">web</code>, <code class="inline-code">macos</code>, <code class="inline-code">windows</code>, <code class="inline-code">linux</code>).</li>
+<li><strong>Primary Brand Theme:</strong> Confirm <code class="inline-code">#FFDE3F</code> or allow custom primary seed color.</li>
+<li><strong>Flavors &amp; Environments:</strong> Confirm standard environments (<code class="inline-code">dev</code>, <code class="inline-code">stage</code>, <code class="inline-code">prod</code>) and base URLs.</li>
+</ul>
+<h3 class="doc-h3">Bootstrap Manifest &amp; Implementation Plan Generation</h3>
+<p class="doc-p">Once all questions are answered, the agent compiles a comprehensive <code class="inline-code">implementation_plan.md</code> artifact containing:</p>
+<ul class="doc-list">
+<li>Selected project metadata and exact CLI command to be executed.</li>
+<li>Dependencies list with version locks.</li>
+<li>Layer directory map.</li>
+<li>ColorScheme tokens and <code class="inline-code">UiKitPage</code> showcase outline.</li>
+<li>Test and verification plan.</li>
+</ul>
+<div class="alert-box alert-warning"><div class="alert-title">ВАЖЛИВО / IMPORTANT</div><div class="alert-content">
+<p>The agent sets <code class="inline-code">RequestFeedback: true</code> on the artifact and <strong>STOPS to wait for explicit user approval</strong> before executing Phase 2.</p>
+<hr class="doc-divider">
+<h2 id="3--phase-2--execution-sub-skill-tree---routing-matrix" class="doc-h2"><a href="#3--phase-2--execution-sub-skill-tree---routing-matrix" class="heading-anchor">#</a> 3. Phase 2: Execution Sub-Skill Tree &amp; Routing Matrix</h2>
+<p class="doc-p">Once the user approves the plan, execute the following sub-skills sequentially:</p>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Step</th>
+<th>Target Skill</th>
+<th>Purpose &amp; Output</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>1. Flutter Initialization</strong></td>
+<td><a href="../bootstrap-flutter-init/bootstrap-flutter-init.html" class="skill-ref-link" title="Handles the first phase of project creation. Prompts user to upgrade Flutter SDK to latest stable, gathers project parameters (name, organization, platforms), and executes `flutter create` with strict arguments. Use when initializing a new Flutter project from scratch.">bootstrap-flutter-init <span class="ext-icon">↗</span></a></td>
+<td>Executing <code class="inline-code">flutter create</code> with approved org, name, and platforms.</td>
+</tr>
+<tr>
+<td><strong>2. Dependencies &amp; Conflicts</strong></td>
+<td><a href="../bootstrap-dependencies-sync/bootstrap-dependencies-sync.html" class="skill-ref-link" title="Injects standard production packages into pubspec.yaml, executes flutter pub get, resolves version locks, and upgrades packages to the latest compatible versions. Use when configuring or synchronizing dependencies for a new or updated Flutter project.">bootstrap-dependencies-sync <span class="ext-icon">↗</span></a></td>
+<td>Injecting <code class="inline-code">pubspec.yaml</code> packages, running <code class="inline-code">flutter pub get</code>, upgrading &amp; tightening constraints.</td>
+</tr>
+<tr>
+<td><strong>3. Package Compatibility Audit</strong></td>
+<td><a href="../bootstrap-package-auditor/bootstrap-package-auditor.html" class="skill-ref-link" title="Audits the codebase and skill tree for deprecated APIs, breaking signature changes, and compiler errors after package upgrades. Applies automatic fixes and synchronizes skill guidelines with updated library versions. Use when validating compatibility after dependency updates.">bootstrap-package-auditor <span class="ext-icon">↗</span></a></td>
+<td>Running <code class="inline-code">dart analyze</code>, applying <code class="inline-code">dart fix --apply</code>, checking breaking changes.</td>
+</tr>
+<tr>
+<td><strong>4. Architecture &amp; Flavors</strong></td>
+<td><a href="../bootstrap-architecture-scaffold/bootstrap-architecture-scaffold.html" class="skill-ref-link" title="Scaffolds the complete Clean Architecture directory hierarchy, multi-environment Flavors (dev, stage, prod), configuration models, DI container, and core entrypoints (main.dart, application.dart). Use when establishing the architecture backbone for a new Flutter project.">bootstrap-architecture-scaffold <span class="ext-icon">↗</span></a></td>
+<td>Scaffolding layer folders, <code class="inline-code">config/env_*.json</code>, <code class="inline-code">AppConfig</code>, <code class="inline-code">main.dart</code>, and <code class="inline-code">application.dart</code>.</td>
+</tr>
+<tr>
+<td><strong>5. Theme &amp; UiKit Showcase</strong></td>
+<td><a href="../bootstrap-theme-uikit/bootstrap-theme-uikit.html" class="skill-ref-link" title="Generates a complete Material 3 Theme with primary color #FFDE3F (Light &amp; Dark ColorScheme, TextTheme, AppCustomColors ThemeExtension), an injectable Hydrated ThemeCubit for persistent theme mode switching, and an interactive adaptive UiKitPage showcase landing displaying all core UI widgets. Use when generating project theming and the design system showcase.">bootstrap-theme-uikit <span class="ext-icon">↗</span></a></td>
+<td>Generating M3 theme <code class="inline-code">#FFDE3F</code>, injectable <code class="inline-code">HydratedThemeCubit</code>, and adaptive <code class="inline-code">UiKitPage</code>.</td>
+</tr>
+<tr>
+<td><strong>6. Verification &amp; Runbooks</strong></td>
+<td><a href="../bootstrap-verification-docs/bootstrap-verification-docs.html" class="skill-ref-link" title="Executes code generation, runs the full automated test suite, and authors the comprehensive project launch documentation (README.md and RUNBOOK.md). Use during the final phase of bootstrapping a Flutter project.">bootstrap-verification-docs <span class="ext-icon">↗</span></a></td>
+<td>Running <code class="inline-code">build_runner</code>, executing <code class="inline-code">flutter test</code>, and generating <code class="inline-code">README.md</code> &amp; <code class="inline-code">RUNBOOK.md</code>.</td>
+</tr>
+</tbody></table></div>
+<hr class="doc-divider">
+<h2 id="4--global-bootstrapping-laws" class="doc-h2"><a href="#4--global-bootstrapping-laws" class="heading-anchor">#</a> 4. Global Bootstrapping Laws</h2>
+<ol class="doc-ordered-list">
+<li><strong>Zero Domain Pollution:</strong> All scaffolded template code must use universal, domain-agnostic identifiers (<code class="inline-code">Item</code>, <code class="inline-code">Payload</code>, <code class="inline-code">AppConfig</code>, <code class="inline-code">ThemeMode</code>).</li>
+<li><strong>Strict Clean Architecture:</strong> Domain contains pure Dart only. Data maps DTOs to Entities. BLoC/Cubit communicates exclusively with Use Cases.</li>
+<li><strong>Flavors First-Class:</strong> Every project must support distinct environments (<code class="inline-code">dev</code>, <code class="inline-code">stage</code>, <code class="inline-code">prod</code>) driven by <code class="inline-code">config/env_*.json</code> and <code class="inline-code">--dart-define-from-file</code>.</li>
+<li><strong>Theme Resilience:</strong> Theme primary color <code class="inline-code">#FFDE3F</code> must be dynamically applied with Light &amp; Dark ColorSchemes, TextTheme, and <code class="inline-code">AppCustomColors</code> ThemeExtension.</li>
+<li><strong>Persistence Hygiene:</strong> <code class="inline-code">ThemeCubit</code> must use <code class="inline-code">hydrated_bloc</code> with serialization extracted into <code class="inline-code">hydrated_theme_cubit.mixin.dart</code>.</li>
+<li><strong>Automatic Verification:</strong> Code generation, static analysis, and test suites must pass 100% with zero warnings before completion.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="5--master-bootstrapping-checklist" class="doc-h2"><a href="#5--master-bootstrapping-checklist" class="heading-anchor">#</a> 5. Master Bootstrapping Checklist</h2>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Interactive Grill-Me interview conducted with user.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text"><code class="inline-code">implementation_plan.md</code> created and approved by user.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Flutter SDK upgraded to latest stable (if requested).</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text"><code class="inline-code">flutter create</code> executed with explicit <code class="inline-code">--org</code> and <code class="inline-code">--platforms</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Dependencies injected and synchronized in <code class="inline-code">pubspec.yaml</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Package compatibility audit passed with zero deprecation warnings.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Clean Architecture directory structure created with all layer hubs.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Flavors configured for Android (<code class="inline-code">productFlavors</code>), iOS (Schemes &amp; Build Configurations), and Dart (<code class="inline-code">AppConfig</code>).</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Primary theme <code class="inline-code">#FFDE3F</code> generated with Light/Dark support and <code class="inline-code">ThemeCubit</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Interactive <code class="inline-code">UiKitPage</code> created showcasing all design system components.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text"><code class="inline-code">build_runner</code> and <code class="inline-code">intl_utils</code> code generators executed successfully.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">All tests passed via <code class="inline-code">flutter test</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Comprehensive <code class="inline-code">README.md</code> and <code class="inline-code">RUNBOOK.md</code> documentation generated.</span>
+  </label>
+</div>
+
+    </article>
+
+<div class="related-skills-section" style="margin-top: 3rem;">
+<h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+<a href="../bootstrap-verification-docs/bootstrap-verification-docs.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    bootstrap-verification-docs ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Ініціалізація Проєкту" data-cat-en="Project Bootstrap">
+    Ініціалізація Проєкту
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Executes code generation, runs the full automated test suite, and authors the comprehensive project launch doc...
+  </div>
+</a>
+<a href="../bootstrap-package-auditor/bootstrap-package-auditor.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    bootstrap-package-auditor ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Ініціалізація Проєкту" data-cat-en="Project Bootstrap">
+    Ініціалізація Проєкту
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Audits the codebase and skill tree for deprecated APIs, breaking signature changes, and compiler errors after ...
+  </div>
+</a>
+<a href="../bootstrap-theme-uikit/bootstrap-theme-uikit.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    bootstrap-theme-uikit ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Ініціалізація Проєкту" data-cat-en="Project Bootstrap">
+    Ініціалізація Проєкту
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Generates a complete Material 3 Theme with primary color #FFDE3F (Light &amp; Dark ColorScheme, TextTheme, AppCust...
+  </div>
+</a>
+<a href="../bootstrap-dependencies-sync/bootstrap-dependencies-sync.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    bootstrap-dependencies-sync ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Ініціалізація Проєкту" data-cat-en="Project Bootstrap">
+    Ініціалізація Проєкту
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Injects standard production packages into pubspec.yaml, executes flutter pub get, resolves version locks, and ...
+  </div>
+</a>
+<a href="../bootstrap-flutter-init/bootstrap-flutter-init.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    bootstrap-flutter-init ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Ініціалізація Проєкту" data-cat-en="Project Bootstrap">
+    Ініціалізація Проєкту
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Handles the first phase of project creation. Prompts user to upgrade Flutter SDK to latest stable, gathers pro...
+  </div>
+</a>
+<a href="../bootstrap-architecture-scaffold/bootstrap-architecture-scaffold.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    bootstrap-architecture-scaffold ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Ініціалізація Проєкту" data-cat-en="Project Bootstrap">
+    Ініціалізація Проєкту
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Scaffolds the complete Clean Architecture directory hierarchy, multi-environment Flavors (dev, stage, prod), c...
+  </div>
+</a>
+</div></div>
+
+
+    <footer class="footer">
+      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
+    </footer>
+  </main>
+
+  <script>
+// Theme Management
+function initTheme() {
+  const saved = localStorage.getItem('agent_doc_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeButton(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('agent_doc_theme', next);
+  updateThemeButton(next);
+}
+
+function updateThemeButton(theme) {
+  const icon = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-text');
+  if (icon && label) {
+    if (theme === 'dark') {
+      icon.textContent = '🌙';
+      label.setAttribute('data-i18n', 'dark_theme');
+      if (currentLang === 'ua') label.textContent = 'Темна';
+      else label.textContent = 'Dark';
+    } else {
+      icon.textContent = '☀️';
+      label.setAttribute('data-i18n', 'light_theme');
+      if (currentLang === 'ua') label.textContent = 'Світла';
+      else label.textContent = 'Light';
+    }
+  }
+}
+
+// Language Management (UA / EN)
+let currentLang = localStorage.getItem('agent_doc_lang') || 'ua';
+
+const translations = {
+  ua: {
+    portal_title: "Центр Документації Агентів",
+    all_skills: "Всі скіли",
+    project_rules: "Правила Проєкту (AGENTS.md)",
+    search_placeholder: "Пошук скілів за назвою, категорією або тригерами...",
+    stats_total_skills: "Всього Скілів",
+    stats_categories: "Категорій / Шарів",
+    stats_rules: "Правил Архітектури",
+    stats_connected: "100% Взаємозв'язані",
+    filter_all: "Всі",
+    copy: "Копіювати",
+    copied: "Скопійовано!",
+    progress: "Прогрес виконання",
+    checklist_title: "Чекліст верифікації та виконання",
+    sub_skills_title: "Пов'язані та рекомендовані скіли",
+    dark_theme: "Темна",
+    light_theme: "Світла",
+    lang_btn: "UA 🇺🇦",
+    back_to_portal: "← До Порталу",
+    view_docs: "Читати",
+    rules_overview: "Огляд архітектурних правил та контрактів"
+  },
+  en: {
+    portal_title: "Agent Documentation Hub",
+    all_skills: "All Skills",
+    project_rules: "Project Rules (AGENTS.md)",
+    search_placeholder: "Search skills by name, layer, or triggers...",
+    stats_total_skills: "Total Skills",
+    stats_categories: "Categories / Layers",
+    stats_rules: "Architectural Rules",
+    stats_connected: "100% Interconnected",
+    filter_all: "All",
+    copy: "Copy",
+    copied: "Copied!",
+    progress: "Execution Progress",
+    checklist_title: "Verification & Quality Checklist",
+    sub_skills_title: "Related & Referenced Skills",
+    dark_theme: "Dark",
+    light_theme: "Light",
+    lang_btn: "EN 🇬🇧",
+    back_to_portal: "← Back to Portal",
+    view_docs: "Explore",
+    rules_overview: "Architectural rules & layer interaction contracts"
+  }
+};
+
+function initLanguage() {
+  setLanguage(currentLang);
+}
+
+function toggleLanguage() {
+  const next = currentLang === 'ua' ? 'en' : 'ua';
+  setLanguage(next);
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('agent_doc_lang', lang);
+  
+  const dict = translations[lang] || translations.ua;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      if (el.tagName === 'INPUT' && el.getAttribute('placeholder')) {
+        el.setAttribute('placeholder', dict[key]);
+      } else {
+        el.textContent = dict[key];
+      }
+    }
+  });
+
+  const langBtn = document.getElementById('lang-text');
+  if (langBtn) {
+    langBtn.textContent = lang === 'ua' ? '🇺🇦 UA' : '🇬🇧 EN';
+  }
+
+  // Update category texts if available
+  document.querySelectorAll('[data-cat-ua]').forEach(el => {
+    if (lang === 'ua') {
+      el.textContent = el.getAttribute('data-cat-ua');
+    } else {
+      el.textContent = el.getAttribute('data-cat-en');
+    }
+  });
+
+  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
+}
+
+// Copy Code
+function copyCode(button) {
+  const wrapper = button.closest('.code-block-wrapper');
+  const code = wrapper.querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    const btnText = button.querySelector('.btn-text');
+    const original = btnText.innerText;
+    btnText.innerText = currentLang === 'ua' ? 'Скопійовано!' : 'Copied!';
+    button.style.borderColor = 'var(--success)';
+    button.style.color = 'var(--success)';
+    setTimeout(() => {
+      btnText.innerText = original;
+      button.style.borderColor = '';
+      button.style.color = '';
+    }, 2000);
+  });
+}
+
+// Checklist Progress
+function updateChecklistProgress() {
+  const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+  const checked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked');
+  if (!checkboxes.length) return;
+
+  const percent = Math.round((checked.length / checkboxes.length) * 100);
+  const fill = document.getElementById('checklist-progress-fill');
+  const text = document.getElementById('checklist-progress-text');
+  if (fill) fill.style.width = percent + '%';
+  if (text) text.textContent = percent + '% (' + checked.length + '/' + checkboxes.length + ')';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initLanguage();
+  updateChecklistProgress();
+  if (typeof mermaid !== 'undefined') {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isLight ? 'default' : 'dark',
+      themeVariables: {
+        fontSize: '14px',
+        fontFamily: 'Inter, Outfit, sans-serif',
+        primaryColor: isLight ? '#f1f5f9' : '#1e293b',
+        primaryTextColor: isLight ? '#0f172a' : '#f8fafc',
+        primaryBorderColor: isLight ? '#d97706' : '#FFDE3F',
+        lineColor: isLight ? '#2563eb' : '#60a5fa',
+        secondaryColor: isLight ? '#ffffff' : '#111827',
+        tertiaryColor: isLight ? '#f8fafc' : '#0b0f19'
+      },
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis',
+        nodeSpacing: 40,
+        rankSpacing: 45
+      },
+      securityLevel: 'loose'
+    });
+  }
+});
+
+    hljs.highlightAll();
+  </script>
+</body>
+</html>

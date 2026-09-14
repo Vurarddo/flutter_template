@@ -1,0 +1,1492 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>flutter-clean-architecture — Agent Skill Documentation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/yaml.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+  <style>
+:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #111827;
+  --bg-card: rgba(17, 24, 39, 0.75);
+  --bg-card-hover: rgba(31, 41, 55, 0.9);
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(255, 222, 63, 0.35);
+  
+  --brand-primary: #FFDE3F;
+  --brand-primary-hover: #FACC15;
+  --brand-glow: rgba(255, 222, 63, 0.18);
+  
+  --text-primary: #F9FAFB;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  --success: #10B981;
+  --success-bg: rgba(16, 185, 129, 0.12);
+  --error: #EF4444;
+  --error-bg: rgba(239, 68, 68, 0.12);
+  --warning: #F59E0B;
+  --warning-bg: rgba(245, 158, 11, 0.12);
+  --info: #3B82F6;
+  --info-bg: rgba(59, 130, 246, 0.12);
+  
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.6);
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+[data-theme="light"] {
+  --bg-primary: #F8FAFC;
+  --bg-secondary: #FFFFFF;
+  --bg-card: rgba(255, 255, 255, 0.9);
+  --bg-card-hover: #FFFFFF;
+  --border-color: rgba(0, 0, 0, 0.08);
+  --border-accent: rgba(217, 119, 6, 0.35);
+  
+  --brand-primary: #D97706;
+  --brand-primary-hover: #B45309;
+  --brand-glow: rgba(217, 119, 6, 0.12);
+  
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #94A3B8;
+  
+  --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Header */
+.top-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(11, 15, 25, 0.8);
+  border-bottom: 1px solid var(--border-color);
+  padding: 0.75rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+[data-theme="light"] .top-nav {
+  background: rgba(248, 250, 252, 0.85);
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+.brand-logo {
+  background: linear-gradient(135deg, var(--brand-primary), #FB923C);
+  color: #000;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  font-weight: 800;
+  font-size: 1rem;
+}
+.nav-breadcrumbs {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.nav-breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-breadcrumbs a:hover {
+  color: var(--brand-primary);
+}
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.btn-icon {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+.btn-icon:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-accent);
+  color: var(--brand-primary);
+}
+
+/* Container */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 5rem 1.5rem;
+}
+
+/* Hero Section */
+.hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem;
+  margin-bottom: 2.5rem;
+  box-shadow: var(--shadow-card);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, var(--brand-primary), #38BDF8, #A855F7);
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.badge-category {
+  background: var(--brand-glow);
+  color: var(--brand-primary);
+  border: 1px solid var(--border-accent);
+}
+.badge-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+}
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: 2.25rem;
+  font-weight: 800;
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+}
+.hero-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Section Headings */
+.doc-h1 { font-family: var(--font-heading); font-size: 2rem; margin: 2rem 0 1rem; color: var(--text-primary); }
+.doc-h2 { font-family: var(--font-heading); font-size: 1.45rem; margin: 2.25rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-color); color: var(--text-primary); position: relative; }
+.heading-anchor { color: var(--text-muted); text-decoration: none; margin-right: 0.25rem; opacity: 0; transition: opacity 0.2s; }
+.doc-h2:hover .heading-anchor { opacity: 1; }
+.doc-h3 { font-family: var(--font-heading); font-size: 1.2rem; margin: 1.5rem 0 0.75rem; color: var(--brand-primary); }
+.doc-h4 { font-size: 1.05rem; margin: 1.2rem 0 0.5rem; color: var(--text-primary); }
+.doc-p { margin-bottom: 1rem; color: var(--text-primary); }
+.doc-divider { border: none; height: 1px; background: var(--border-color); margin: 2.5rem 0; }
+
+/* Lists */
+.doc-list, .doc-ordered-list {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.doc-list li, .doc-ordered-list li {
+  margin-bottom: 0.4rem;
+}
+
+/* Links & Badges */
+.doc-link {
+  color: var(--brand-primary);
+  text-decoration: none;
+  border-bottom: 1px dashed var(--brand-primary);
+}
+.doc-link:hover {
+  border-bottom-style: solid;
+}
+.skill-ref-badge {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(59, 130, 246, 0.12);
+  color: #60A5FA;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  padding: 0.15rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-family: var(--font-mono);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin: 0 0.2rem;
+}
+.skill-ref-badge:hover {
+  background: rgba(59, 130, 246, 0.25);
+  border-color: #60A5FA;
+  transform: translateY(-1px);
+}
+.skill-ref-link {
+  color: #38BDF8;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+.skill-ref-link:hover {
+  color: var(--brand-primary);
+  text-decoration: underline;
+}
+.ext-icon { font-size: 0.75rem; }
+
+/* Code Blocks */
+.inline-code {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--brand-primary);
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+}
+[data-theme="light"] .inline-code {
+  background: rgba(0, 0, 0, 0.06);
+}
+.code-block-wrapper {
+  background: #090d16;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  margin: 1.25rem 0;
+  overflow: hidden;
+}
+[data-theme="light"] .code-block-wrapper {
+  background: #F1F5F9;
+}
+.code-header {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.45rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+.code-lang {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-weight: 700;
+}
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s;
+}
+.copy-btn:hover {
+  color: var(--text-primary);
+  border-color: var(--brand-primary);
+}
+pre {
+  padding: 1.2rem;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Tables */
+.table-responsive {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+.doc-table th, .doc-table td {
+  padding: 0.85rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+.doc-table th {
+  background: rgba(0, 0, 0, 0.2);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+[data-theme="light"] .doc-table th {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Mermaid Diagrams */
+.mermaid-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2rem 1.5rem;
+  margin: 2rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow-x: auto;
+  box-shadow: var(--shadow-card);
+}
+.mermaid-header {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--brand-primary);
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+.mermaid-container .mermaid {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  min-height: 240px;
+}
+.mermaid-container .mermaid svg {
+  width: 100% !important;
+  max-width: 950px !important;
+  height: auto !important;
+  font-family: var(--font-body) !important;
+}
+
+/* Checklist */
+.checklist-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  margin-bottom: 0.5rem;
+  transition: all 0.2s;
+}
+.checklist-item:hover {
+  border-color: var(--border-accent);
+}
+.checkbox-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+.checkbox-container input {
+  margin-top: 0.3rem;
+  cursor: pointer;
+}
+.progress-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+.progress-bar-bg {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 0.5rem 0;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-primary), var(--success));
+  width: 0%;
+  transition: width 0.3s ease;
+}
+
+/* Alerts */
+.alert-box {
+  border-radius: var(--radius-md);
+  padding: 1.2rem;
+  margin: 1.25rem 0;
+  border-left: 4px solid;
+}
+.alert-info { background: var(--info-bg); border-left-color: var(--info); }
+.alert-warning { background: var(--warning-bg); border-left-color: var(--warning); }
+.alert-error { background: var(--error-bg); border-left-color: var(--error); }
+.alert-success { background: var(--success-bg); border-left-color: var(--success); }
+.alert-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.4rem; text-transform: uppercase; }
+
+/* Footer */
+.footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+  </style>
+</head>
+<body>
+  <header class="top-nav">
+    <div style="display: flex; align-items: center; gap: 1.5rem;">
+      <a href="../../index.html" class="nav-brand">
+        <div class="brand-logo">AG</div>
+        <span>Antigravity Docs</span>
+      </a>
+      <div class="nav-breadcrumbs">
+        <a href="../../index.html" data-i18n="portal_title">Центр Документації</a>
+        <span>/</span>
+        <span data-cat-ua="Архітектура Flutter" data-cat-en="Flutter Architecture">Архітектура Flutter</span>
+        <span>/</span>
+        <span style="color: var(--text-primary); font-weight: 600;">flutter-clean-architecture</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="../../agents-rules.html" class="btn-icon">
+        <span>📜</span>
+        <span data-i18n="project_rules">Правила AGENTS.md</span>
+      </a>
+      <button class="btn-icon" onclick="toggleLanguage()">
+        <span id="lang-text">🇺🇦 UA</span>
+      </button>
+      <button class="btn-icon" onclick="toggleTheme()">
+        <span id="theme-icon">🌙</span>
+        <span id="theme-text" data-i18n="dark_theme">Темна</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-badges">
+        <span class="badge badge-category" data-cat-ua="Архітектура Flutter" data-cat-en="Flutter Architecture">Архітектура Flutter</span>
+        <span class="badge badge-tag">SKILL</span>
+        <span class="badge badge-tag">#enforces</span>
+<span class="badge badge-tag">#clean</span>
+<span class="badge badge-tag">#architecture</span>
+<span class="badge badge-tag">#solid</span>
+<span class="badge badge-tag">#layer-first</span>
+<span class="badge badge-tag">#packaging</span>
+<span class="badge badge-tag">#domain</span>
+<span class="badge badge-tag">#data</span>
+      </div>
+      <h1 class="hero-title">flutter-clean-architecture</h1>
+      <p class="hero-description">Enforces Clean Architecture, DDD, and SOLID with Layer-First packaging (domain, data, presentation, infrastructure), repository interfaces in Domain, single-responsibility UseCases, DTOs with inline toDomain() mappers in Data, Retrofit clients, sealed class failures, and BLoC state management. Use when creating new features, refactoring layers, reviewing PRs, or implementing architecture logic.</p>
+    </section>
+
+    <div class="progress-card">
+      <div style="display: flex; justify-content: space-between; font-size: 0.85rem; font-weight: 600;">
+        <span data-i18n="progress">Прогрес виконання</span>
+        <span id="checklist-progress-text">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="checklist-progress-fill"></div>
+      </div>
+    </div>
+
+    <article class="doc-content">
+<h1 class="doc-h1">Flutter Clean Architecture &amp; DDD Skill</h1>
+<h2 id="when-to-apply" class="doc-h2"><a href="#when-to-apply" class="heading-anchor">#</a> When to Apply</h2>
+<p class="doc-p">Use this skill when creating features, refactoring code across layers, reviewing architecture, or generating UseCases, Repositories, BLoCs, and DTOs.</p>
+<hr class="doc-divider">
+<h2 id="mandatory-dependency---import-rules" class="doc-h2"><a href="#mandatory-dependency---import-rules" class="heading-anchor">#</a> Mandatory Dependency &amp; Import Rules</h2>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">text</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-text">Presentation → Domain ← Data
+                  ↑
+            Infrastructure
+
+</code></pre>
+</div>
+<ul class="doc-list">
+<li><strong>Domain:</strong> Pure Dart. Dependencies ALLOWED: <code class="inline-code">injectable</code> (for DI annotations), <code class="inline-code">@freezed</code> (immutable models). <strong>PROHIBITED:</strong> <code class="inline-code">package:flutter</code>, Dio, Retrofit, SharedPreferences, or <code class="inline-code">data/</code>/<code class="inline-code">presentation/</code> layers.</li>
+<li><strong>Data:</strong> Implements Domain contracts. Depends on <strong>Domain</strong> (Imports Domain Entities for mapping). <strong>PROHIBITED:</strong> Dependencies on <code class="inline-code">presentation/</code> or UI widgets.</li>
+<li><strong>Presentation:</strong> Depends ONLY on <strong>Domain UseCases</strong> and entities. <strong>PROHIBITED:</strong> Direct access to <code class="inline-code">Repositories</code>, Retrofit <code class="inline-code">ApiClient</code>s, or DTOs.</li>
+<li><strong>Infrastructure:</strong> Centralizes DI setup, Dio base configuration, global environments, and core services.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="layer-responsibilities---contracts" class="doc-h2"><a href="#layer-responsibilities---contracts" class="heading-anchor">#</a> Layer Responsibilities &amp; Contracts</h2>
+<h3 class="doc-h3">1. Domain Layer (<code class="inline-code">lib/domain/&lt;feature_name&gt;/</code>)</h3>
+<ul class="doc-list">
+<li>Consult <a href="../domain/domain-hub/domain-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for the Domain layer (lib/domain/). Enforces Clean Architecture DDD principles, 100% pure Dart boundaries (zero Flutter/Dio/Storage imports), Single Responsibility UseCases, Freezed 3+ immutable entities, abstract repository interfaces, and Dart 3 sealed failures.">domain-hub <span class="ext-icon">↗</span></a>.</li>
+<li><strong>Entities:</strong> Pure Dart immutable classes using <code class="inline-code">@freezed</code> (consult <a href="../domain/domain-entities-freezed/domain-entities-freezed.html" class="skill-ref-link" title="Standards and patterns for creating immutable Domain Entities using Freezed 3+ and Equatable under strict build.yaml generation flags (copyWith, equals, hashCode, toString only). Enforces field definitions in class body, const constructors with _$ClassName, zero fromJson/toJson/when/map generation, and defensive collection immutability.">domain-entities-freezed <span class="ext-icon">↗</span></a>).</li>
+<li>_Strict Restriction (per <code class="inline-code">build.yaml</code>):_ DO NOT generate or use <code class="inline-code">map</code>, <code class="inline-code">when</code>, <code class="inline-code">fromJson</code>, or <code class="inline-code">toJson</code> on Freezed models.</li>
+<li><strong>Repository Contracts:</strong> <code class="inline-code">abstract class I&lt;Feature&gt;Repository</code> (consult <a href="../domain/domain-repositories/domain-repositories.html" class="skill-ref-link" title="Standards and patterns for defining abstract Repository Interfaces in lib/domain/&lt;feature&gt;/repositories/. Covers pure Dart interface contracts, method signatures, Stream contracts, and enforcing Dependency Inversion between Domain and Data.">domain-repositories <span class="ext-icon">↗</span></a>). Methods return Domain Entities or Streams.</li>
+<li><strong>Failures:</strong> Model error states using Dart 3 <code class="inline-code">sealed class</code> hierarchies (consult <a href="../domain/domain-failures/domain-failures.html" class="skill-ref-link" title="Standards and patterns for modeling typed domain error states in lib/domain/&lt;feature&gt;/failures/ using Dart 3 sealed class hierarchies. Covers compile-time exhaustive pattern matching in BLoCs, value equality with Equatable, and mapping technical exceptions to user-facing domain failures.">domain-failures <span class="ext-icon">↗</span></a>). <strong>NO <code class="inline-code">dartz</code> / <code class="inline-code">fpdart</code> (<code class="inline-code">Either</code>)</strong>.</li>
+<li><strong>Use Cases (SRP):</strong> Single responsibility business actions with <code class="inline-code">call()</code> method (consult <a href="../domain/domain-usecases/domain-usecases.html" class="skill-ref-link" title="Standards and patterns for creating Single Responsibility UseCases (Interactors) in lib/domain/&lt;feature&gt;/usecases/. Covers callable class call() methods, typed input parameters, @injectable DI registration, error propagation, and enforcing the mandatory UseCase boundary between BLoC and Repositories.">domain-usecases <span class="ext-icon">↗</span></a>). Must depend ONLY on Repository Interfaces. BLoCs/Cubits MUST ONLY interact with Use Cases.</li>
+</ul>
+<h3 class="doc-h3">2. Data Layer (<code class="inline-code">lib/data/&lt;feature_name&gt;/</code>)</h3>
+<ul class="doc-list">
+<li>Consult <a href="../data/data-hub/data-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for the Data layer (lib/data/). Enforces Clean Architecture data provider boundaries, DTO encapsulation, inline toDomain() mapping standards, Retrofit API clients, and repository implementations.">data-hub <span class="ext-icon">↗</span></a>.</li>
+<li><strong>DTOs &amp; Inline Mappers (<code class="inline-code">lib/data/&lt;feature_name&gt;/dto/</code>):</strong> API models with <code class="inline-code">@JsonSerializable</code> and explicit inline <code class="inline-code">toDomain()</code> mappers (consult <a href="../data/data-dto-mappers/data-dto-mappers.html" class="skill-ref-link" title="Standards and patterns for Data Transfer Objects (DTOs) and inline toDomain() mappers in lib/data/&lt;feature&gt;/dto/. Covers json_serializable configuration (@JsonSerializable, @JsonKey), safe parsing fallbacks, nested collection mapping, enum translations, and strict DTO encapsulation.">data-dto-mappers <span class="ext-icon">↗</span></a>). DTOs must NEVER cross into Domain or UI layers.</li>
+<li><strong>Endpoints (<code class="inline-code">lib/data/&lt;feature_name&gt;/endpoints/</code>):</strong> Centralized route constants (<code class="inline-code">static const String ...</code>).</li>
+<li><strong>API Clients (<code class="inline-code">lib/data/&lt;feature_name&gt;/client/</code>):</strong> Retrofit interfaces (<code class="inline-code">@RestApi()</code>) using Dio (consult <a href="../data/data-retrofit-clients/data-retrofit-clients.html" class="skill-ref-link" title="Standards and patterns for Retrofit REST API clients in lib/data/&lt;feature&gt;/client/ (or datasources/). Covers @RestApi interface definitions, [Feature]Endpoints static constants, HTTP annotations (@GET, @POST, @Path, @Queries, @Body), CancelToken request lifecycle, and DI registration.">data-retrofit-clients <span class="ext-icon">↗</span></a>).</li>
+<li><strong>Local Data Sources (<code class="inline-code">lib/data/&lt;feature_name&gt;/datasources/</code>):</strong> Local caching, memory caches, DAOs (consult <a href="../data/data-datasources-local/data-datasources-local.html" class="skill-ref-link" title="Standards and patterns for Local Data Sources and caching in lib/data/&lt;feature&gt;/datasources/. Covers in-memory caching, local database DAOs (SQLite, Drift, Isar), Time-To-Live (TTL) cache invalidation, and offline persistence.">data-datasources-local <span class="ext-icon">↗</span></a>).</li>
+<li><strong>Repository Implementations (<code class="inline-code">lib/data/&lt;feature_name&gt;/repositories/</code>):</strong> Implement Domain <code class="inline-code">IRepository</code> contracts, orchestrate data sources, and map <code class="inline-code">DioException</code> via <code class="inline-code">DioExceptionMapper</code> to typed Domain Failures (consult <a href="../data/data-repositories/data-repositories.html" class="skill-ref-link" title="Standards and patterns for Repository Implementations in lib/data/&lt;feature&gt;/repositories/. Covers implementing Domain repository contracts (implements I&lt;Feature&gt;Repository), orchestrating remote API clients and local caches, converting DTOs via toDomain(), mapping DioException to typed Domain Failures, and DI registration via @LazySingleton(as: IRepository).">data-repositories <span class="ext-icon">↗</span></a>).</li>
+</ul>
+<h3 class="doc-h3">3. Presentation Layer (<code class="inline-code">lib/presentation/</code>)</h3>
+<ul class="doc-list">
+<li><strong>State Management (<code class="inline-code">lib/presentation/state_management/&lt;feature_name&gt;/</code>):</strong></li>
+<li>Consult <a href="../presentation/state-management/flutter-bloc-hub/flutter-bloc-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter BLoC &amp; Cubit state management. Use when designing, organizing, refactoring, or auditing presentation state management. Serves as the central entry point and routes to specialized sub-skills for BLoC core patterns, UI widgets &amp; scoping, and HydratedBloc persistence.">flutter-bloc-hub <span class="ext-icon">↗</span></a> and <a href="../presentation/state-management/flutter-bloc-core/flutter-bloc-core.html" class="skill-ref-link" title="Core architecture patterns and best practices for Flutter BLoC and Cubit. Use when creating BLoC or Cubit classes, designing sealed states and events, configuring event transformers (bloc_concurrency), handling async guards (emit.isDone), implementing error handling, or deciding between BLoC and Cubit.">flutter-bloc-core <span class="ext-icon">↗</span></a>.</li>
+<li>Split into 3 files: <code class="inline-code">_event.dart</code>, <code class="inline-code">_state.dart</code>, <code class="inline-code">_bloc.dart</code> using <code class="inline-code">part</code>/<code class="inline-code">part of</code>.</li>
+<li>States &amp; Events: Defined using Dart 3 <code class="inline-code">sealed class</code> and <code class="inline-code">final class</code>. Extend <code class="inline-code">Equatable</code>.</li>
+<li>BLoC Logic: Calls <strong>UseCases ONLY</strong>. Direct Repository/DataSource access is strictly prohibited.</li>
+<li>Async Safety: ALWAYS add <code class="inline-code">if (emit.isDone) return;</code> after every <code class="inline-code">await</code>.</li>
+<li>Event Concurrency: Use <code class="inline-code">bloc_concurrency</code> (<code class="inline-code">droppable()</code>, <code class="inline-code">restartable()</code>, <code class="inline-code">sequential()</code>).</li>
+<li>Hydrated BLoC: Extract <code class="inline-code">fromJson</code>/<code class="inline-code">toJson</code> into <code class="inline-code">hydrated_&lt;feature&gt;_bloc.mixin.dart</code> (per <a href="../presentation/state-management/flutter-hydrated-bloc/flutter-hydrated-bloc.html" class="skill-ref-link" title="Best practices for local state persistence using HydratedBloc and HydratedCubit in Flutter. Use when implementing persistent UI states, caching filter preferences, separating serialization into mixin files, enforcing PII/token security constraints, and handling corrupted cache fallbacks.">flutter-hydrated-bloc <span class="ext-icon">↗</span></a>).</li>
+<li>UI Scoping &amp; Widgets: Follow <a href="../presentation/state-management/flutter-bloc-widgets/flutter-bloc-widgets.html" class="skill-ref-link" title="Complete Flutter UI widgets and scoping guide for flutter_bloc. Use when building UI with BlocBuilder, BlocListener, BlocConsumer, BlocSelector, MultiBlocProvider, MultiBlocListener, deciding between context.read vs watch vs select, or configuring BlocProvider vs BlocProvider.value for bottom sheets, dialogs, and navigation routes.">flutter-bloc-widgets <span class="ext-icon">↗</span></a> (<code class="inline-code">BlocProvider.value</code> for dialogs/modals).</li>
+<li>Rules: Strictly NO <code class="inline-code">package:flutter/material.dart</code> imports in BLoC files.</li>
+</ul>
+<ul class="doc-list">
+<li><strong>Pages &amp; Widgets (<code class="inline-code">lib/presentation/pages/&lt;feature_name&gt;/</code>):</strong></li>
+<li>Max file size: 150–200 lines.</li>
+<li>No helper builder methods (<code class="inline-code">_buildHeader()</code>). Extract UI into <code class="inline-code">widgets/&lt;name&gt;.dart</code>.</li>
+<li>Theme access: Use <code class="inline-code">context.colorScheme</code> or <code class="inline-code">context.customColors</code> (<code class="inline-code">ThemeExtension</code>). <strong>NO hardcoded <code class="inline-code">Color(0x...)</strong></code>.</li>
+</ul>
+<ul class="doc-list">
+<li><strong>Global Presentation Modules:</strong></li>
+<li><code class="inline-code">navigation/</code>: <code class="inline-code">app_router.dart</code> (<code class="inline-code">auto_route</code>) &amp; <code class="inline-code">guards/</code> (consult <a href="../presentation/navigation/flutter-auto-route-hub/flutter-auto-route-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for AutoRoute navigation in Flutter. Use when designing, organizing, refactoring, or auditing application routing, page definitions, route guards, nested tab navigation, and deep linking. Serves as the central entry point and routes to specialized navigation sub-skills.">flutter-auto-route-hub <span class="ext-icon">↗</span></a>).</li>
+<li><code class="inline-code">theme/</code>: Theme definitions &amp; <code class="inline-code">ThemeExtension</code> implementations (consult <a href="../presentation/theme/flutter-ui-theme-hub/flutter-ui-theme-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter Material 3 theming system. Use when configuring app themes, splitting theme files (AppTheme, AppColorScheme, AppTextTheme, AppCustomColors), setting up Light/Dark modes, or managing theme extensions. Routes to specialized sub-skills for colors, typography, and theme extensions.">flutter-ui-theme-hub <span class="ext-icon">↗</span></a>).</li>
+<li><code class="inline-code">ui_kit/</code>: Pure, reusable, stateless widgets annotated with <code class="inline-code">@Preview</code> (consult <a href="../presentation/ui/ui-kit/flutter-ui-kit-hub/flutter-ui-kit-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for authoring pure UI Kit components in lib/presentation/ui_kit/. Enforces atomic design, 100% pure stateless widgets, zero BLoC/Domain dependencies, design token access, and mandatory dual-theme @Preview coverage. Use when designing, creating, refactoring, or auditing reusable UI components.">flutter-ui-kit-hub <span class="ext-icon">↗</span></a>).</li>
+<li><code class="inline-code">ui_utils/</code>: UI formatters, extensions, forms accessors, and helpers (consult <a href="../presentation/ui-utils/flutter-ui-utils-hub/flutter-ui-utils-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter UI Utilities (lib/presentation/ui_utils/). Enforces presentation helper boundaries, routing to specialized sub-skills for BuildContext extensions, TextInputFormatters, Reactive Forms accessors/adapters, and system UI helpers.">flutter-ui-utils-hub <span class="ext-icon">↗</span></a>).</li>
+</ul>
+<h3 class="doc-h3">4. Core Layer (<code class="inline-code">lib/core/</code>)</h3>
+<ul class="doc-list">
+<li>Consult <a href="../core/core-hub/core-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for the Core layer (lib/core/). Enforces Pure Dart boundaries (strictly zero Flutter SDK imports), routing to specialized sub-skills for global extensions, algorithmic utilities, constants, and data transformers.">core-hub <span class="ext-icon">↗</span></a>.</li>
+<li><strong>Pure Dart Only:</strong> 100% framework-agnostic, zero <code class="inline-code">package:flutter/*</code> imports.</li>
+<li><strong><code class="inline-code">constants/</code>:</strong> Global regex patterns, time durations, pagination limits (consult <a href="../core/core-constants/core-constants.html" class="skill-ref-link" title="Standards and patterns for global non-UI constants in lib/core/constants/. Covers regex patterns, global time duration constants, pagination defaults, and formatting constants.">core-constants <span class="ext-icon">↗</span></a>).</li>
+<li><strong><code class="inline-code">extensions/</code>:</strong> Pure Dart extensions on <code class="inline-code">DateTime</code>, <code class="inline-code">String</code>, <code class="inline-code">num</code>, <code class="inline-code">Iterable</code> (consult <a href="../core/core-extensions/core-extensions.html" class="skill-ref-link" title="Standards and implementation patterns for Pure Dart extensions in lib/core/extensions/. Covers DateTime manipulation, String transformations, num/currency formatting, Iterable filtering, and Map utilities without any Flutter SDK dependencies.">core-extensions <span class="ext-icon">↗</span></a>).</li>
+<li><strong><code class="inline-code">utils/</code>:</strong> Algorithmic helpers, currency precision math, pure debouncers (consult <a href="../core/core-utils/core-utils.html" class="skill-ref-link" title="Standards and implementation patterns for Pure Dart utilities in lib/core/utils/. Covers algorithmic helpers, regex validators, cryptography hashing, debounce timers, and currency calculations without Flutter SDK dependencies.">core-utils <span class="ext-icon">↗</span></a>).</li>
+</ul>
+<h3 class="doc-h3">5. Infrastructure Layer (<code class="inline-code">lib/infrastructure/</code>)</h3>
+<ul class="doc-list">
+<li>Consult <a href="../infrastructure/infrastructure-hub/infrastructure-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for the Infrastructure layer (lib/infrastructure/). Enforces Clean Architecture adapter boundaries, preventing utils junk drawers, and routing to specialized sub-skills for Dio networking, DI (injectable), storage interactors, Firebase, deep links, in-app purchases, environment configuration, and logging.">infrastructure-hub <span class="ext-icon">↗</span></a>.</li>
+<li><strong><code class="inline-code">config/</code>:</strong> Environment settings via <code class="inline-code">--dart-define</code>, <code class="inline-code">AppConfig</code>, <code class="inline-code">AppEnvironment</code> (consult <a href="../infrastructure/infrastructure-config/infrastructure-config.html" class="skill-ref-link" title="Standards for environment configuration and secrets management in lib/infrastructure/config/. Covers --dart-define-from-file, strongly-typed AppConfig, AppEnvironment enum (dev, staging, prod), and Git security hygiene.">infrastructure-config <span class="ext-icon">↗</span></a>).</li>
+<li><strong><code class="inline-code">di/</code>:</strong> Dependency Injection setup via <code class="inline-code">get_it</code> + <code class="inline-code">injectable</code> with <code class="inline-code">@module</code> (consult <a href="../infrastructure/infrastructure-di/infrastructure-di.html" class="skill-ref-link" title="Standards for Dependency Injection (DI) in lib/infrastructure/di/ using injectable and get_it. Covers @module for external SDKs, lifecycle annotations (@lazySingleton, @injectable, @singleton), async @preResolve, environment switching, test isolation, and anti-service-locator boundaries.">infrastructure-di <span class="ext-icon">↗</span></a>).</li>
+<li><strong><code class="inline-code">network/</code>:</strong> Production <code class="inline-code">Dio</code> singleton, <code class="inline-code">BackgroundTransformer</code> (isolates), 401 <code class="inline-code">QueuedInterceptor</code> (consult <a href="../infrastructure/infrastructure-network-dio/infrastructure-network-dio.html" class="skill-ref-link" title="Standards and patterns for the Dio networking layer in lib/infrastructure/network/. Covers centralized BaseOptions, BackgroundTransformer (isolate JSON parsing), single-flight 401 QueuedInterceptor, SSL pinning, network logging, and mapping DioException to typed Domain Failures.">infrastructure-network-dio <span class="ext-icon">↗</span></a>).</li>
+<li><strong><code class="inline-code">storage/</code>:</strong> <code class="inline-code">SecureStoreInteractor</code> for tokens &amp; <code class="inline-code">StoreInteractor</code> for preferences (consult <a href="../infrastructure/infrastructure-storage/infrastructure-storage.html" class="skill-ref-link" title="Standards and patterns for storage interactors in lib/infrastructure/storage/ (or lib/infrastructure/utils/storage/). Covers SecureStoreInteractor (flutter_secure_storage) for tokens/PII, StoreInteractor (shared_preferences) for UI preferences, and reactive storage streams.">infrastructure-storage <span class="ext-icon">↗</span></a>).</li>
+<li><strong><code class="inline-code">services/</code>:</strong> External SDK wrappers and platform services:</li>
+<li><code class="inline-code">firebase/</code>: Crashlytics, FCM notifications, RemoteConfig (consult <a href="../infrastructure/infrastructure-services-firebase/infrastructure-services-firebase.html" class="skill-ref-link" title="Standards and patterns for Firebase service integrations in lib/infrastructure/services/firebase/ (or lib/infrastructure/firebase/). Covers modular FirebaseInitializer, CrashlyticsService, FCMNotificationService, RemoteConfigService, and clean architecture boundaries.">infrastructure-services-firebase <span class="ext-icon">↗</span></a>).</li>
+<li><code class="inline-code">deep_link/</code>: App Links / Universal Links listeners (consult <a href="../infrastructure/infrastructure-services-deep-link/infrastructure-services-deep-link.html" class="skill-ref-link" title="Standards and patterns for handling Deep Links, App Links, and Universal Links in lib/infrastructure/services/deep_link/. Covers stream subscription, URI parsing, parameter extraction, and bridging to AutoRoute.">infrastructure-services-deep-link <span class="ext-icon">↗</span></a>).</li>
+<li><code class="inline-code">purchase/</code>: In-App Purchases &amp; RevenueCat billing adapters (consult <a href="../infrastructure/infrastructure-services-purchase/infrastructure-services-purchase.html" class="skill-ref-link" title="Standards and patterns for In-App Purchases and subscription services in lib/infrastructure/services/purchase/. Covers RevenueCat / StoreKit / Google Play Billing adapters, mapping SDK customer info to Domain Entities, and isolating payment SDKs behind Domain repository interfaces.">infrastructure-services-purchase <span class="ext-icon">↗</span></a>).</li>
+<li><strong><code class="inline-code">logging/</code>:</strong> Centralized <code class="inline-code">AppLogger</code> with PII sanitization (consult <a href="../infrastructure/infrastructure-logging/infrastructure-logging.html" class="skill-ref-link" title="Standards and patterns for application logging in lib/infrastructure/logging/. Covers AppLogger, log levels (debug, info, warning, error), PII redaction, Talker integration, and production log filtering.">infrastructure-logging <span class="ext-icon">↗</span></a>).</li>
+</ul>
+<h3 class="doc-h3">6. Localization Layer (<code class="inline-code">lib/l10n/</code>)</h3>
+<ul class="doc-list">
+<li>Consult <a href="../l10n/l10n-hub/l10n-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Internationalization (i18n) and Localization (l10n) in lib/l10n/. Enforces type-safe code generation via flutter_intl / intl_utils, Clean Architecture separation (Domain returns typed Failures, Presentation maps to localized strings), strict ICU format rules, and dynamic locale switching.">l10n-hub <span class="ext-icon">↗</span></a>.</li>
+<li><strong>Single Source of Truth:</strong> <code class="inline-code">intl_en.arb</code> and <code class="inline-code">intl_uk.arb</code> (consult <a href="../l10n/l10n-arb-icu/l10n-arb-icu.html" class="skill-ref-link" title="Standards and syntax for Application Resource Bundle (ARB) files and ICU message format in lib/l10n/. Covers camelCase naming conventions, typed placeholders, ICU plurals (zero, one, few, many, other for Slavic languages), ICU select formats, and metadata descriptors (@key).">l10n-arb-icu <span class="ext-icon">↗</span></a>).</li>
+<li><strong>Code Generation:</strong> <code class="inline-code">flutter pub run intl_utils:generate</code> outputs to <code class="inline-code">lib/l10n/generated/</code> (consult <a href="../l10n/l10n-generation-workflow/l10n-generation-workflow.html" class="skill-ref-link" title="Code generation toolchain and CLI workflows for localization files in lib/l10n/generated/. Covers flutter_intl, intl_utils commands, build_runner integration, analysis_options exclusions, and CI/CD validation.">l10n-generation-workflow <span class="ext-icon">↗</span></a>).</li>
+<li><strong>Presentation Access:</strong> UI widgets access copy via <code class="inline-code">context.localization.&lt;key&gt;</code>, and map <code class="inline-code">DomainFailure</code> via UI extensions (consult <a href="../l10n/l10n-presentation-integration/l10n-presentation-integration.html" class="skill-ref-link" title="Integration patterns for localized copy in the Presentation layer. Covers MaterialApp.router setup (localizationsDelegates, supportedLocales), BuildContext extensions (context.localization), DomainFailure to localized string mappers, dynamic locale switching via Cubit, and locale-aware DateFormat/NumberFormat.">l10n-presentation-integration <span class="ext-icon">↗</span></a>).</li>
+</ul>
+<h3 class="doc-h3">7. Cross-Cutting: Error Handling &amp; Resilience</h3>
+<ul class="doc-list">
+<li>Consult <a href="../error-handling/error-handling-hub/error-handling-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for end-to-end type-safe Error Handling and Resilience across all application layers. Enforces Clean Architecture error boundaries, transport DioException mapping, sealed DomainFailure hierarchies, BLoC addError stacktrace tracking, localized UI messages via context.localization, and global crash reporting.">error-handling-hub <span class="ext-icon">↗</span></a>.</li>
+<li><strong>Transport Mapping:</strong> Data layer catches <code class="inline-code">DioException</code> and converts via <code class="inline-code">DioExceptionMapper</code> (consult <a href="../error-handling/error-handling-data-transport/error-handling-data-transport.html" class="skill-ref-link" title="Standards and patterns for Data layer exception handling and transport error transformation. Covers DioExceptionMapper, HTTP status code mapping (401, 403, 404, 500), timeout types, SocketException, server error JSON DTO extraction, and repository try-catch patterns.">error-handling-data-transport <span class="ext-icon">↗</span></a>).</li>
+<li><strong>Domain Contracts:</strong> Pure Dart sealed <code class="inline-code">DomainFailure</code> models (consult <a href="../domain/domain-failures/domain-failures.html" class="skill-ref-link" title="Standards and patterns for modeling typed domain error states in lib/domain/&lt;feature&gt;/failures/ using Dart 3 sealed class hierarchies. Covers compile-time exhaustive pattern matching in BLoCs, value equality with Equatable, and mapping technical exceptions to user-facing domain failures.">domain-failures <span class="ext-icon">↗</span></a>).</li>
+<li><strong>BLoC &amp; UI Resolution:</strong> BLoC <code class="inline-code">addError(error, stackTrace)</code> and <code class="inline-code">DomainFailureLocalizationX</code> (consult <a href="../error-handling/error-handling-bloc-ui/error-handling-bloc-ui.html" class="skill-ref-link" title="Standards and patterns for BLoC error handling and Presentation layer UI error resolution. Covers BLoC try-catch, addError stacktrace tracking, Failure state modeling, DomainFailureLocalizationX mapping via context.localization, error SnackBars, and retry flows.">error-handling-bloc-ui <span class="ext-icon">↗</span></a>).</li>
+<li><strong>Global Crash Monitoring:</strong> <code class="inline-code">runZonedGuarded</code>, <code class="inline-code">PlatformDispatcher.onError</code>, Crashlytics (consult <a href="../error-handling/error-handling-global-crash/error-handling-global-crash.html" class="skill-ref-link" title="Standards and patterns for global uncaught exception handling, crash reporting, and observability in main.dart. Covers runZonedGuarded, FlutterError.onError, PlatformDispatcher.instance.onError, BlocObserver error logging, and Firebase Crashlytics / Sentry integration.">error-handling-global-crash <span class="ext-icon">↗</span></a>).</li>
+</ul>
+<h3 class="doc-h3">8. Cross-Platform Testing Strategy</h3>
+<ul class="doc-list">
+<li>Consult <a href="../testing/testing-hub/testing-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Testing Strategy across all Flutter platforms (Mobile, Web, Desktop). Enforces the Testing Pyramid (Unit, BLoC, Widget, Integration), deterministic async execution, mocktail isolation, DI reset lifecycle, and cross-platform verification.">testing-hub <span class="ext-icon">↗</span></a>.</li>
+<li><strong>Unit Testing (Pure Dart):</strong> UseCases, DTO mappers, Core utils (consult <a href="../testing/testing-unit/testing-unit.html" class="skill-ref-link" title="Standards and patterns for Pure Dart Unit Tests in test/domain/, test/data/, and test/core/. Covers testing UseCases, Repository implementations with Mocktail, DTO toDomain() mappers, Core utilities/extensions, and edge-case error assertions.">testing-unit <span class="ext-icon">↗</span></a>).</li>
+<li><strong>BLoC Testing:</strong> <code class="inline-code">bloc_test</code> state transitions and concurrency transformers (consult <a href="../testing/testing-bloc/testing-bloc.html" class="skill-ref-link" title="Standards and patterns for BLoC and Cubit State Transition Testing using package:bloc_test and package:mocktail. Covers mocking UseCases, testing async event-to-state sequences, verifying bloc_concurrency transformers (droppable, restartable), and asserting Failure state emissions.">testing-bloc <span class="ext-icon">↗</span></a>).</li>
+<li><strong>Widget Testing:</strong> <code class="inline-code">WidgetTester</code>, <code class="inline-code">WidgetTestWrapper</code>, <code class="inline-code">ValueKey</code> finders (consult <a href="../testing/testing-widget/testing-widget.html" class="skill-ref-link" title="Standards and patterns for Flutter Widget Testing using WidgetTester and WidgetTestWrapper. Covers Key-first finders, lazy list scrolling (scrollUntilVisible), async frame pumping (avoiding pumpAndSettle timeouts on spinners), mocking BLoCs via Mocktail, and testing responsive/theme variations.">testing-widget <span class="ext-icon">↗</span></a>).</li>
+<li><strong>Integration Testing:</strong> End-to-end user flows on <strong>Mobile, Web, and Desktop</strong> (consult <a href="../testing/testing-integration/testing-integration.html" class="skill-ref-link" title="Standards and patterns for End-to-End Integration Testing across Mobile (Android, iOS), Web (Chrome), and Desktop (macOS, Windows, Linux) using package:integration_test. Covers platform driver setup, responsive viewport sizing, DI resets, complete user journeys, and CI/CD execution.">testing-integration <span class="ext-icon">↗</span></a>).</li>
+</ul>
+<h3 class="doc-h3">9. Native Platform Integrations &amp; Flavors</h3>
+<ul class="doc-list">
+<li>Consult <a href="../native/native-hub/native-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Native Platform Integrations and Flavors across Android, iOS, and Desktop. Enforces clean platform adapter boundaries (pure OS adapters in Kotlin/Swift, zero business rules), Pigeon type-safe contracts, and multi-environment Flavors (dev, stage, prod).">native-hub <span class="ext-icon">↗</span></a>.</li>
+<li><strong>Multi-Environment Flavors:</strong> Configuration management across <code class="inline-code">config/env_*.json</code>, Gradle <code class="inline-code">productFlavors</code>, and Xcode Build Configurations / Schemes (consult <a href="../native/native-flavors-environments/native-flavors-environments.html" class="skill-ref-link" title="Complete guide for setting up and managing Flutter Multi-Environment Flavors (dev, stage, prod) across Android, iOS, and Dart. Covers --dart-define-from-file with config/*.json, Android productFlavors in Gradle, iOS Xcode Schemes/Configurations/xcconfig, per-flavor app icons with flutter_launcher_icons, and release build commands.">native-flavors-environments <span class="ext-icon">↗</span></a>).</li>
+<li><strong>Android Platform Channels &amp; Native:</strong> Kotlin v2 embedding, Coroutines, Pigeon, PlatformViews, and ProGuard rules (consult <a href="../native/native-android/native-android.html" class="skill-ref-link" title="Enforces Flutter Android platform integration standards using Kotlin, v2 embedding (configureFlutterEngine), Pigeon typed contracts, MethodChannel setups, Kotlin Coroutines, ViewBinding for PlatformViews, Android 12-15+ manifest hygiene (android:exported, foregroundServiceType), WorkManager, and ProGuard/R8 release safety. Use when editing android/ source code, MainActivity, platform channels, native UI, services, Gradle dependencies, or ProGuard rules.">native-android <span class="ext-icon">↗</span></a>).</li>
+<li><strong>iOS Platform Channels &amp; Native:</strong> Swift <code class="inline-code">@MainActor</code>, async/await, Pigeon, FlutterPlatformView, and Privacy Manifests (consult <a href="../native/native-ios/native-ios.html" class="skill-ref-link" title="Develops Flutter iOS platform integrations using Swift, @MainActor, async/await concurrency, Pigeon typed contracts, and FlutterPlatformView. Enforces Swift API Design Guidelines, structured FlutterError codes, Info.plist hygiene, and iOS 17+ Privacy Manifests (PrivacyInfo.xcprivacy). Use when writing Swift code in ios/Runner, creating platform channels, embedding native UIKit views, configuring CocoaPods/SPM, or adding iOS capabilities.">native-ios <span class="ext-icon">↗</span></a>).</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="complete-project-structure-matrix" class="doc-h2"><a href="#complete-project-structure-matrix" class="heading-anchor">#</a> Complete Project Structure Matrix</h2>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">text</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-text">lib/
+├── core/                               # Pure Dart (Zero Flutter SDK)
+│   ├── constants/
+│   ├── extensions/
+│   └── utils/
+│
+├── domain/&lt;feature&gt;/
+│   ├── entities/&lt;feature&gt;_entity.dart
+│   ├── failures/&lt;feature&gt;_failure.dart
+│   ├── repositories/i_&lt;feature&gt;_repository.dart
+│   └── usecases/get_&lt;feature&gt;_usecase.dart
+│
+├── data/&lt;feature&gt;/
+│   ├── dto/&lt;feature&gt;_dto.dart          # Contains JsonSerializable &amp; toDomain() mapper
+│   ├── client/&lt;feature&gt;_api_client.dart    # Retrofit @RestApi client
+│   └── repositories/&lt;feature&gt;_repository_impl.dart
+│
+├── l10n/                               # Localization &amp; ARB files
+│   ├── generated/                      # Generated S classes (S.delegate, S.of(context))
+│   ├── intl_en.arb                     # English base template
+│   └── intl_uk.arb                     # Ukrainian translations (Slavic plurals)
+│
+├── presentation/
+│   ├── state_management/&lt;feature&gt;/
+│   │   ├── &lt;feature&gt;_event.dart
+│   │   ├── &lt;feature&gt;_state.dart
+│   │   ├── &lt;feature&gt;_bloc.dart
+│   │   └── hydrated_&lt;feature&gt;_bloc.mixin.dart (if hydrated)
+│   ├── pages/&lt;feature&gt;/
+│   │   ├── &lt;feature&gt;_page.dart
+│   │   └── widgets/
+│   ├── navigation/
+│   │   ├── app_router.dart
+│   │   └── guards/
+│   ├── theme/
+│   ├── ui_kit/
+│   └── ui_utils/                       # extensions (context.localization), formatters, forms, assets
+│
+└── infrastructure/
+    ├── config/                         # AppConfig, AppEnvironment, --dart-define
+    ├── di/                             # GetIt + Injectable modules
+    ├── network/                        # Dio setup, BackgroundTransformer, QueuedInterceptor
+    ├── storage/                        # SecureStoreInteractor, StoreInteractor
+    ├── services/                       # Firebase, DeepLink, Purchase, Connectivity
+    └── logging/                        # AppLogger, PII redaction
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> Anti-Patterns (Strictly Prohibited)</h2>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Violation</th>
+<th>Severity</th>
+<th>Corrective Action</th>
+</tr></thead><tbody>
+<tr>
+<td>Import <code class="inline-code">package:flutter/*</code> in Domain or Data</td>
+<td><strong>CRITICAL</strong></td>
+<td>Remove Flutter dependency. Domain/Data must be pure Dart.</td>
+</tr>
+<tr>
+<td>Separate <code class="inline-code">mappers/</code> folder for 1-line mappings</td>
+<td><strong>LOW</strong></td>
+<td>Move <code class="inline-code">toDomain()</code> mapper directly inside <code class="inline-code">&lt;feature&gt;_dto.dart</code>.</td>
+</tr>
+<tr>
+<td>BLoC calling <code class="inline-code">Repository</code> or <code class="inline-code">ApiClient</code> directly</td>
+<td><strong>HIGH</strong></td>
+<td>Create a single-action <code class="inline-code">UseCase</code> and inject it into BLoC.</td>
+</tr>
+<tr>
+<td><code class="inline-code">when</code> / <code class="inline-code">map</code> / <code class="inline-code">fromJson</code> on <code class="inline-code">@freezed</code> models</td>
+<td><strong>HIGH</strong></td>
+<td>Use explicit <code class="inline-code">sealed class</code> pattern matching (per <code class="inline-code">build.yaml</code>).</td>
+</tr>
+<tr>
+<td>DTOs crossing into BLoC or UI</td>
+<td><strong>HIGH</strong></td>
+<td>Map DTO to Domain Entity via <code class="inline-code">toDomain()</code> inside Repository Implementation.</td>
+</tr>
+<tr>
+<td>Hardcoded <code class="inline-code">Color()</code> in UI</td>
+<td><strong>MEDIUM</strong></td>
+<td>Use <code class="inline-code">context.colorScheme</code> or <code class="inline-code">context.customColors</code>.</td>
+</tr>
+</tbody></table></div>
+<hr class="doc-divider">
+<h2 id="agent-execution-checklist" class="doc-h2"><a href="#agent-execution-checklist" class="heading-anchor">#</a> Agent Execution Checklist</h2>
+<p class="doc-p">When generating or refactoring code:</p>
+<ol class="doc-ordered-list">
+<li><strong>Verify Imports:</strong> Check that Domain contains zero Flutter UI imports and Data contains zero Presentation imports.</li>
+<li><strong>Verify DTO &amp; Mapping:</strong> Ensure DTO is in <code class="inline-code">data/&lt;feature&gt;/dto/</code> and implements <code class="inline-code">toDomain()</code> for mapping to Domain Entity.</li>
+<li><strong>Verify BLoC Async Safety:</strong> Check if <code class="inline-code">if (emit.isDone) return;</code> exists after every <code class="inline-code">await</code> call in BLoC.</li>
+<li><strong>Verify Granularity:</strong> Ensure no UI file exceeds 200 lines and no helper methods like <code class="inline-code">_buildHeader()</code> exist.</li>
+</ul>
+
+    </article>
+
+<div class="related-skills-section" style="margin-top: 3rem;">
+<h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+<a href="../error-handling/error-handling-hub/error-handling-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    error-handling-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Обробка Помилок" data-cat-en="Error Handling">
+    Обробка Помилок
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for end-to-end type-safe Error Handling and Resilience across all a...
+  </div>
+</a>
+<a href="../error-handling/error-handling-data-transport/error-handling-data-transport.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    error-handling-data-transport ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Обробка Помилок" data-cat-en="Error Handling">
+    Обробка Помилок
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for Data layer exception handling and transport error transformation. Covers DioExcepti...
+  </div>
+</a>
+<a href="../error-handling/error-handling-bloc-ui/error-handling-bloc-ui.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    error-handling-bloc-ui ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Обробка Помилок" data-cat-en="Error Handling">
+    Обробка Помилок
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for BLoC error handling and Presentation layer UI error resolution. Covers BLoC try-cat...
+  </div>
+</a>
+<a href="../error-handling/error-handling-global-crash/error-handling-global-crash.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    error-handling-global-crash ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Обробка Помилок" data-cat-en="Error Handling">
+    Обробка Помилок
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for global uncaught exception handling, crash reporting, and observability in main.dart...
+  </div>
+</a>
+<a href="../l10n/l10n-presentation-integration/l10n-presentation-integration.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    l10n-presentation-integration ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Локалізація (l10n)" data-cat-en="Localization (l10n)">
+    Локалізація (l10n)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Integration patterns for localized copy in the Presentation layer. Covers MaterialApp.router setup (localizati...
+  </div>
+</a>
+<a href="../l10n/l10n-generation-workflow/l10n-generation-workflow.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    l10n-generation-workflow ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Локалізація (l10n)" data-cat-en="Localization (l10n)">
+    Локалізація (l10n)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Code generation toolchain and CLI workflows for localization files in lib/l10n/generated/. Covers flutter_intl...
+  </div>
+</a>
+<a href="../l10n/l10n-hub/l10n-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    l10n-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Локалізація (l10n)" data-cat-en="Localization (l10n)">
+    Локалізація (l10n)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for Internationalization (i18n) and Localization (l10n) in lib/l10n...
+  </div>
+</a>
+<a href="../l10n/l10n-arb-icu/l10n-arb-icu.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    l10n-arb-icu ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Локалізація (l10n)" data-cat-en="Localization (l10n)">
+    Локалізація (l10n)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and syntax for Application Resource Bundle (ARB) files and ICU message format in lib/l10n/. Covers c...
+  </div>
+</a>
+<a href="../core/core-constants/core-constants.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    core-constants ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Core Утиліти та Розширення" data-cat-en="Core Utilities">
+    Core Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for global non-UI constants in lib/core/constants/. Covers regex patterns, global time ...
+  </div>
+</a>
+<a href="../core/core-utils/core-utils.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    core-utils ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Core Утиліти та Розширення" data-cat-en="Core Utilities">
+    Core Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and implementation patterns for Pure Dart utilities in lib/core/utils/. Covers algorithmic helpers, ...
+  </div>
+</a>
+<a href="../core/core-hub/core-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    core-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Core Утиліти та Розширення" data-cat-en="Core Utilities">
+    Core Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for the Core layer (lib/core/). Enforces Pure Dart boundaries (stri...
+  </div>
+</a>
+<a href="../core/core-extensions/core-extensions.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    core-extensions ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Core Утиліти та Розширення" data-cat-en="Core Utilities">
+    Core Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and implementation patterns for Pure Dart extensions in lib/core/extensions/. Covers DateTime manipu...
+  </div>
+</a>
+<a href="../native/native-hub/native-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    native-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Нативні Платформи (iOS/Android)" data-cat-en="Native Platforms">
+    Нативні Платформи (iOS/Android)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for Native Platform Integrations and Flavors across Android, iOS, a...
+  </div>
+</a>
+<a href="../native/native-android/native-android.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    native-android ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Нативні Платформи (iOS/Android)" data-cat-en="Native Platforms">
+    Нативні Платформи (iOS/Android)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Enforces Flutter Android platform integration standards using Kotlin, v2 embedding (configureFlutterEngine), P...
+  </div>
+</a>
+<a href="../native/native-ios/native-ios.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    native-ios ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Нативні Платформи (iOS/Android)" data-cat-en="Native Platforms">
+    Нативні Платформи (iOS/Android)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Develops Flutter iOS platform integrations using Swift, @MainActor, async/await concurrency, Pigeon typed cont...
+  </div>
+</a>
+<a href="../native/native-flavors-environments/native-flavors-environments.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    native-flavors-environments ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Нативні Платформи (iOS/Android)" data-cat-en="Native Platforms">
+    Нативні Платформи (iOS/Android)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Complete guide for setting up and managing Flutter Multi-Environment Flavors (dev, stage, prod) across Android...
+  </div>
+</a>
+<a href="../testing/testing-bloc/testing-bloc.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    testing-bloc ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Тестування (Unit, Widget, BLoC)" data-cat-en="Testing">
+    Тестування (Unit, Widget, BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for BLoC and Cubit State Transition Testing using package:bloc_test and package:mocktai...
+  </div>
+</a>
+<a href="../testing/testing-integration/testing-integration.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    testing-integration ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Тестування (Unit, Widget, BLoC)" data-cat-en="Testing">
+    Тестування (Unit, Widget, BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for End-to-End Integration Testing across Mobile (Android, iOS), Web (Chrome), and Desk...
+  </div>
+</a>
+<a href="../testing/testing-hub/testing-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    testing-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Тестування (Unit, Widget, BLoC)" data-cat-en="Testing">
+    Тестування (Unit, Widget, BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for Testing Strategy across all Flutter platforms (Mobile, Web, Des...
+  </div>
+</a>
+<a href="../testing/testing-unit/testing-unit.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    testing-unit ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Тестування (Unit, Widget, BLoC)" data-cat-en="Testing">
+    Тестування (Unit, Widget, BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for Pure Dart Unit Tests in test/domain/, test/data/, and test/core/. Covers testing Us...
+  </div>
+</a>
+<a href="../testing/testing-widget/testing-widget.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    testing-widget ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Тестування (Unit, Widget, BLoC)" data-cat-en="Testing">
+    Тестування (Unit, Widget, BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for Flutter Widget Testing using WidgetTester and WidgetTestWrapper. Covers Key-first f...
+  </div>
+</a>
+<a href="../infrastructure/infrastructure-di/infrastructure-di.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    infrastructure-di ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
+    Інфраструктура та Сервіси
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards for Dependency Injection (DI) in lib/infrastructure/di/ using injectable and get_it. Covers @module ...
+  </div>
+</a>
+<a href="../infrastructure/infrastructure-storage/infrastructure-storage.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    infrastructure-storage ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
+    Інфраструктура та Сервіси
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for storage interactors in lib/infrastructure/storage/ (or lib/infrastructure/utils/sto...
+  </div>
+</a>
+<a href="../infrastructure/infrastructure-services-deep-link/infrastructure-services-deep-link.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    infrastructure-services-deep-link ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
+    Інфраструктура та Сервіси
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for handling Deep Links, App Links, and Universal Links in lib/infrastructure/services/...
+  </div>
+</a>
+<a href="../infrastructure/infrastructure-services-purchase/infrastructure-services-purchase.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    infrastructure-services-purchase ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
+    Інфраструктура та Сервіси
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for In-App Purchases and subscription services in lib/infrastructure/services/purchase/...
+  </div>
+</a>
+<a href="../infrastructure/infrastructure-hub/infrastructure-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    infrastructure-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
+    Інфраструктура та Сервіси
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for the Infrastructure layer (lib/infrastructure/). Enforces Clean ...
+  </div>
+</a>
+<a href="../infrastructure/infrastructure-services-firebase/infrastructure-services-firebase.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    infrastructure-services-firebase ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
+    Інфраструктура та Сервіси
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for Firebase service integrations in lib/infrastructure/services/firebase/ (or lib/infr...
+  </div>
+</a>
+<a href="../infrastructure/infrastructure-network-dio/infrastructure-network-dio.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    infrastructure-network-dio ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
+    Інфраструктура та Сервіси
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for the Dio networking layer in lib/infrastructure/network/. Covers centralized BaseOpt...
+  </div>
+</a>
+<a href="../infrastructure/infrastructure-config/infrastructure-config.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    infrastructure-config ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
+    Інфраструктура та Сервіси
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards for environment configuration and secrets management in lib/infrastructure/config/. Covers --dart-de...
+  </div>
+</a>
+<a href="../infrastructure/infrastructure-logging/infrastructure-logging.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    infrastructure-logging ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Інфраструктура та Сервіси" data-cat-en="Infrastructure Layer">
+    Інфраструктура та Сервіси
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for application logging in lib/infrastructure/logging/. Covers AppLogger, log levels (d...
+  </div>
+</a>
+<a href="../data/data-retrofit-clients/data-retrofit-clients.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    data-retrofit-clients ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Data (Дані та API)" data-cat-en="Data Layer">
+    Шар Data (Дані та API)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for Retrofit REST API clients in lib/data/&lt;feature&gt;/client/ (or datasources/). Covers @...
+  </div>
+</a>
+<a href="../data/data-datasources-local/data-datasources-local.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    data-datasources-local ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Data (Дані та API)" data-cat-en="Data Layer">
+    Шар Data (Дані та API)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for Local Data Sources and caching in lib/data/&lt;feature&gt;/datasources/. Covers in-memory...
+  </div>
+</a>
+<a href="../data/data-hub/data-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    data-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Data (Дані та API)" data-cat-en="Data Layer">
+    Шар Data (Дані та API)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for the Data layer (lib/data/). Enforces Clean Architecture data pr...
+  </div>
+</a>
+<a href="../data/data-repositories/data-repositories.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    data-repositories ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Data (Дані та API)" data-cat-en="Data Layer">
+    Шар Data (Дані та API)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for Repository Implementations in lib/data/&lt;feature&gt;/repositories/. Covers implementing...
+  </div>
+</a>
+<a href="../data/data-dto-mappers/data-dto-mappers.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    data-dto-mappers ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Data (Дані та API)" data-cat-en="Data Layer">
+    Шар Data (Дані та API)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for Data Transfer Objects (DTOs) and inline toDomain() mappers in lib/data/&lt;feature&gt;/dt...
+  </div>
+</a>
+<a href="../domain/domain-failures/domain-failures.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    domain-failures ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Domain (Бізнес-логіка)" data-cat-en="Domain Layer">
+    Шар Domain (Бізнес-логіка)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for modeling typed domain error states in lib/domain/&lt;feature&gt;/failures/ using Dart 3 s...
+  </div>
+</a>
+<a href="../domain/domain-hub/domain-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    domain-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Domain (Бізнес-логіка)" data-cat-en="Domain Layer">
+    Шар Domain (Бізнес-логіка)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for the Domain layer (lib/domain/). Enforces Clean Architecture DDD...
+  </div>
+</a>
+<a href="../domain/domain-usecases/domain-usecases.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    domain-usecases ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Domain (Бізнес-логіка)" data-cat-en="Domain Layer">
+    Шар Domain (Бізнес-логіка)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for creating Single Responsibility UseCases (Interactors) in lib/domain/&lt;feature&gt;/useca...
+  </div>
+</a>
+<a href="../domain/domain-repositories/domain-repositories.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    domain-repositories ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Domain (Бізнес-логіка)" data-cat-en="Domain Layer">
+    Шар Domain (Бізнес-логіка)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for defining abstract Repository Interfaces in lib/domain/&lt;feature&gt;/repositories/. Cove...
+  </div>
+</a>
+<a href="../domain/domain-entities-freezed/domain-entities-freezed.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    domain-entities-freezed ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Шар Domain (Бізнес-логіка)" data-cat-en="Domain Layer">
+    Шар Domain (Бізнес-логіка)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Standards and patterns for creating immutable Domain Entities using Freezed 3+ and Equatable under strict buil...
+  </div>
+</a>
+<a href="../presentation/ui/ui-kit/flutter-ui-kit-hub/flutter-ui-kit-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-kit-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Kit Компоненти" data-cat-en="UI Kit">
+    UI Kit Компоненти
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for authoring pure UI Kit components in lib/presentation/ui_kit/. E...
+  </div>
+</a>
+<a href="../presentation/navigation/flutter-auto-route-hub/flutter-auto-route-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-auto-route-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Навігація (AutoRoute)" data-cat-en="Navigation">
+    Навігація (AutoRoute)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for AutoRoute navigation in Flutter. Use when designing, organizing...
+  </div>
+</a>
+<a href="../presentation/state-management/flutter-hydrated-bloc/flutter-hydrated-bloc.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-hydrated-bloc ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Керування станом (BLoC)" data-cat-en="State Management">
+    Керування станом (BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Best practices for local state persistence using HydratedBloc and HydratedCubit in Flutter. Use when implement...
+  </div>
+</a>
+<a href="../presentation/state-management/flutter-bloc-core/flutter-bloc-core.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-bloc-core ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Керування станом (BLoC)" data-cat-en="State Management">
+    Керування станом (BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Core architecture patterns and best practices for Flutter BLoC and Cubit. Use when creating BLoC or Cubit clas...
+  </div>
+</a>
+<a href="../presentation/state-management/flutter-bloc-widgets/flutter-bloc-widgets.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-bloc-widgets ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Керування станом (BLoC)" data-cat-en="State Management">
+    Керування станом (BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Complete Flutter UI widgets and scoping guide for flutter_bloc. Use when building UI with BlocBuilder, BlocLis...
+  </div>
+</a>
+<a href="../presentation/state-management/flutter-bloc-hub/flutter-bloc-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-bloc-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Керування станом (BLoC)" data-cat-en="State Management">
+    Керування станом (BLoC)
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for Flutter BLoC &amp; Cubit state management. Use when designing, orga...
+  </div>
+</a>
+<a href="../presentation/theme/flutter-ui-theme-hub/flutter-ui-theme-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-theme-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Теми та Стилі" data-cat-en="Theme & Styling">
+    Теми та Стилі
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for Flutter Material 3 theming system. Use when configuring app the...
+  </div>
+</a>
+<a href="../presentation/ui-utils/flutter-ui-utils-hub/flutter-ui-utils-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-ui-utils-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">
+    UI Утиліти та Розширення
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Primary coordinator and architecture guide for Flutter UI Utilities (lib/presentation/ui_utils/). Enforces pre...
+  </div>
+</a>
+</div></div>
+
+
+    <footer class="footer">
+      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
+    </footer>
+  </main>
+
+  <script>
+// Theme Management
+function initTheme() {
+  const saved = localStorage.getItem('agent_doc_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeButton(saved);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = current === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('agent_doc_theme', next);
+  updateThemeButton(next);
+}
+
+function updateThemeButton(theme) {
+  const icon = document.getElementById('theme-icon');
+  const label = document.getElementById('theme-text');
+  if (icon && label) {
+    if (theme === 'dark') {
+      icon.textContent = '🌙';
+      label.setAttribute('data-i18n', 'dark_theme');
+      if (currentLang === 'ua') label.textContent = 'Темна';
+      else label.textContent = 'Dark';
+    } else {
+      icon.textContent = '☀️';
+      label.setAttribute('data-i18n', 'light_theme');
+      if (currentLang === 'ua') label.textContent = 'Світла';
+      else label.textContent = 'Light';
+    }
+  }
+}
+
+// Language Management (UA / EN)
+let currentLang = localStorage.getItem('agent_doc_lang') || 'ua';
+
+const translations = {
+  ua: {
+    portal_title: "Центр Документації Агентів",
+    all_skills: "Всі скіли",
+    project_rules: "Правила Проєкту (AGENTS.md)",
+    search_placeholder: "Пошук скілів за назвою, категорією або тригерами...",
+    stats_total_skills: "Всього Скілів",
+    stats_categories: "Категорій / Шарів",
+    stats_rules: "Правил Архітектури",
+    stats_connected: "100% Взаємозв'язані",
+    filter_all: "Всі",
+    copy: "Копіювати",
+    copied: "Скопійовано!",
+    progress: "Прогрес виконання",
+    checklist_title: "Чекліст верифікації та виконання",
+    sub_skills_title: "Пов'язані та рекомендовані скіли",
+    dark_theme: "Темна",
+    light_theme: "Світла",
+    lang_btn: "UA 🇺🇦",
+    back_to_portal: "← До Порталу",
+    view_docs: "Читати",
+    rules_overview: "Огляд архітектурних правил та контрактів"
+  },
+  en: {
+    portal_title: "Agent Documentation Hub",
+    all_skills: "All Skills",
+    project_rules: "Project Rules (AGENTS.md)",
+    search_placeholder: "Search skills by name, layer, or triggers...",
+    stats_total_skills: "Total Skills",
+    stats_categories: "Categories / Layers",
+    stats_rules: "Architectural Rules",
+    stats_connected: "100% Interconnected",
+    filter_all: "All",
+    copy: "Copy",
+    copied: "Copied!",
+    progress: "Execution Progress",
+    checklist_title: "Verification & Quality Checklist",
+    sub_skills_title: "Related & Referenced Skills",
+    dark_theme: "Dark",
+    light_theme: "Light",
+    lang_btn: "EN 🇬🇧",
+    back_to_portal: "← Back to Portal",
+    view_docs: "Explore",
+    rules_overview: "Architectural rules & layer interaction contracts"
+  }
+};
+
+function initLanguage() {
+  setLanguage(currentLang);
+}
+
+function toggleLanguage() {
+  const next = currentLang === 'ua' ? 'en' : 'ua';
+  setLanguage(next);
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('agent_doc_lang', lang);
+  
+  const dict = translations[lang] || translations.ua;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (dict[key]) {
+      if (el.tagName === 'INPUT' && el.getAttribute('placeholder')) {
+        el.setAttribute('placeholder', dict[key]);
+      } else {
+        el.textContent = dict[key];
+      }
+    }
+  });
+
+  const langBtn = document.getElementById('lang-text');
+  if (langBtn) {
+    langBtn.textContent = lang === 'ua' ? '🇺🇦 UA' : '🇬🇧 EN';
+  }
+
+  // Update category texts if available
+  document.querySelectorAll('[data-cat-ua]').forEach(el => {
+    if (lang === 'ua') {
+      el.textContent = el.getAttribute('data-cat-ua');
+    } else {
+      el.textContent = el.getAttribute('data-cat-en');
+    }
+  });
+
+  const theme = document.documentElement.getAttribute('data-theme') || 'dark';
+  updateThemeButton(theme);
+}
+
+// Copy Code
+function copyCode(button) {
+  const wrapper = button.closest('.code-block-wrapper');
+  const code = wrapper.querySelector('code').innerText;
+  navigator.clipboard.writeText(code).then(() => {
+    const btnText = button.querySelector('.btn-text');
+    const original = btnText.innerText;
+    btnText.innerText = currentLang === 'ua' ? 'Скопійовано!' : 'Copied!';
+    button.style.borderColor = 'var(--success)';
+    button.style.color = 'var(--success)';
+    setTimeout(() => {
+      btnText.innerText = original;
+      button.style.borderColor = '';
+      button.style.color = '';
+    }, 2000);
+  });
+}
+
+// Checklist Progress
+function updateChecklistProgress() {
+  const checkboxes = document.querySelectorAll('.checklist-item input[type="checkbox"]');
+  const checked = document.querySelectorAll('.checklist-item input[type="checkbox"]:checked');
+  if (!checkboxes.length) return;
+
+  const percent = Math.round((checked.length / checkboxes.length) * 100);
+  const fill = document.getElementById('checklist-progress-fill');
+  const text = document.getElementById('checklist-progress-text');
+  if (fill) fill.style.width = percent + '%';
+  if (text) text.textContent = percent + '% (' + checked.length + '/' + checkboxes.length + ')';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  initLanguage();
+  updateChecklistProgress();
+  if (typeof mermaid !== 'undefined') {
+    const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isLight ? 'default' : 'dark',
+      themeVariables: {
+        fontSize: '14px',
+        fontFamily: 'Inter, Outfit, sans-serif',
+        primaryColor: isLight ? '#f1f5f9' : '#1e293b',
+        primaryTextColor: isLight ? '#0f172a' : '#f8fafc',
+        primaryBorderColor: isLight ? '#d97706' : '#FFDE3F',
+        lineColor: isLight ? '#2563eb' : '#60a5fa',
+        secondaryColor: isLight ? '#ffffff' : '#111827',
+        tertiaryColor: isLight ? '#f8fafc' : '#0b0f19'
+      },
+      flowchart: {
+        useMaxWidth: true,
+        htmlLabels: true,
+        curve: 'basis',
+        nodeSpacing: 40,
+        rankSpacing: 45
+      },
+      securityLevel: 'loose'
+    });
+  }
+});
+
+    hljs.highlightAll();
+  </script>
+</body>
+</html>
