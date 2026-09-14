@@ -44,13 +44,18 @@ Create environment definition files in `config/`:
 Official Documentation: [Flutter Android Flavors](https://docs.flutter.dev/deployment/flavors)
 
 - **Gradle Template:** See [examples/android_build.gradle.kts](examples/android_build.gradle.kts).
-- **Manifest Placeholders:** In `android/app/src/main/AndroidManifest.xml`:
+- **Manifest Configuration:** In `android/app/src/main/AndroidManifest.xml`:
   ```xml
-  <application
-      android:label="${appName}"
-      android:icon="${appIcon}">
-      ...
-  </application>
+  <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+      <!-- Mandatory Internet Permission -->
+      <uses-permission android:name="android.permission.INTERNET" />
+
+      <application
+          android:label="${appName}"
+          android:icon="${appIcon}">
+          ...
+      </application>
+  </manifest>
   ```
 
 ---

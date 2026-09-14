@@ -584,6 +584,7 @@ pre {
 <li>Never retain an <code class="inline-code">Activity</code> instance in static fields. Use <code class="inline-code">applicationContext</code> for long-lived operations.</li>
 <li>Cancel <code class="inline-code">CoroutineScope</code> jobs when the plugin or view is detached/disposed.</li>
 <li><strong>Manifest Hygiene &amp; ProGuard/R8 Safety:</strong></li>
+<li>Include mandatory <code class="inline-code">&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;</code> for all network/API communications.</li>
 <li>Declare <code class="inline-code">android:exported=&quot;true|false&quot;</code> explicitly on all activities, services, and receivers (API 31+).</li>
 <li>Configure <code class="inline-code">-keep</code> rules for any native SDKs using reflection with R8.</li>
 </ul>

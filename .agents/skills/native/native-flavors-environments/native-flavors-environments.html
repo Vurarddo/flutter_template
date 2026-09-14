@@ -582,7 +582,7 @@ pre {
 <p class="doc-p">Official Documentation: <a href="https://docs.flutter.dev/deployment/flavors" class="doc-link">Flutter Android Flavors</a></p>
 <ul class="doc-list">
 <li><strong>Gradle Template:</strong> See <a href="examples/android_build.gradle.kts" class="doc-link">examples/android_build.gradle.kts</a>.</li>
-<li><strong>Manifest Placeholders:</strong> In <code class="inline-code">android/app/src/main/AndroidManifest.xml</code>:</li>
+<li><strong>Manifest Configuration:</strong> In <code class="inline-code">android/app/src/main/AndroidManifest.xml</code>:</li>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">xml</span>
@@ -591,11 +591,16 @@ pre {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-xml">  &lt;application
-      android:label=&quot;${appName}&quot;
-      android:icon=&quot;${appIcon}&quot;&gt;
-      ...
-  &lt;/application&gt;
+  <pre><code class="language-xml">  &lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+      &lt;!-- Mandatory Internet Permission --&gt;
+      &lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;
+
+      &lt;application
+          android:label=&quot;${appName}&quot;
+          android:icon=&quot;${appIcon}&quot;&gt;
+          ...
+      &lt;/application&gt;
+  &lt;/manifest&gt;
 </code></pre>
 </div>
 </ul>

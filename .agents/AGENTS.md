@@ -212,7 +212,7 @@ lib/presentation/state_management/<feature>/
 
 - **Multi-Environment Flavors Across All Platforms:**
   - Multi-flavor environments (`dev`, `stage`, `prod`) MUST be configured across all targeted native platforms:
-    - **Android:** `android/app/build.gradle.kts` (or `build.gradle`) with `flavorDimensions += "default"`, `productFlavors` (`applicationIdSuffix`, `manifestPlaceholders`), and `AndroidManifest.xml` (`${appName}`, `${appIcon}`). Official guide: https://docs.flutter.dev/deployment/flavors
+    - **Android:** `android/app/build.gradle.kts` (or `build.gradle`) with `flavorDimensions += "default"`, `productFlavors` (`applicationIdSuffix`, `manifestPlaceholders`), and `AndroidManifest.xml` (`${appName}`, `${appIcon}`, and mandatory `<uses-permission android:name="android.permission.INTERNET" />`). Official guide: https://docs.flutter.dev/deployment/flavors
     - **iOS:** Xcode Build Configurations (`Debug-dev`, `Release-dev`), shared Schemes (`dev`, `stage`, `prod`), `xcconfig` files, and `Info.plist`. Official guide: https://docs.flutter.dev/deployment/flavors-ios
     - **Linux:** `linux/CMakeLists.txt` build definitions and `my_application.cc`. Official guide: https://docs.flutter.dev/deployment/flavors-linux
     - **Windows:** `windows/CMakeLists.txt`, `windows/runner/Runner.rc`, and `windows/runner/main.cpp`. Official guide: https://docs.flutter.dev/deployment/flavors-windows

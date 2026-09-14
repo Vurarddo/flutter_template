@@ -43,6 +43,7 @@ Use this skill whenever:
    - Never retain an `Activity` instance in static fields. Use `applicationContext` for long-lived operations.
    - Cancel `CoroutineScope` jobs when the plugin or view is detached/disposed.
 5. **Manifest Hygiene & ProGuard/R8 Safety:**
+   - Include mandatory `<uses-permission android:name="android.permission.INTERNET" />` for all network/API communications.
    - Declare `android:exported="true|false"` explicitly on all activities, services, and receivers (API 31+).
    - Configure `-keep` rules for any native SDKs using reflection with R8.
 
