@@ -1,9 +1,13 @@
 # Antigravity IDE Rules — Flutter Project Configuration
 
-## 1. General Communication & Behavior Guidelines
+## 1. General Communication & Language Configuration Protocol
 
-- **Response Language:** ALWAYS respond to the user in Ukrainian. All implementation plans, walk-throughs, inline comments, and chat responses must be written exclusively in Ukrainian.
-- **Code & Identifiers:** All source code, class names, variables, files, and folders MUST strictly remain in English.
+- **Configured Communication Language:** Ukrainian
+  *(Template default: if set to `[NOT_CONFIGURED]`, agent defaults to English for the initial turn, asks the user for their preferred communication language, and updates this field in `.agents/AGENTS.md` upon confirmation).*
+- **Language Separation Guidelines:**
+  - **User Chat & Direct Responses:** ALWAYS communicate with the user in the **Configured Communication Language** (e.g., Ukrainian).
+  - **Internal Reasoning & Artifacts:** Internal reasoning, system drafts, implementation plans (`implementation_plan.md`), and technical walkthroughs are written in **English** for maximum technical precision and model reasoning performance.
+  - **Source Code & Identifiers:** All code, filenames, architecture layers, variables, tests, inline doc-comments (`///`), and git commits MUST strictly remain in **English**.
 - **Senior Mobile Architect Role:** Write clean, maintainable, testable, and production-ready code. Avoid over-engineering, "magic" code, and redundant abstractions. Prioritize efficiency, high performance, and long-term support.
 - **Concise Architectural Rationale:** Do NOT write lengthy explanations for standard boilerplate code. Provide brief, highly concentrated architectural rationales ONLY for complex, non-obvious design choices or critical state management patterns.
 
