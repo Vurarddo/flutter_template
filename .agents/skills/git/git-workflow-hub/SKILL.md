@@ -10,11 +10,12 @@ description: Primary coordinator and architecture guide for Git version control 
 This skill acts as the central coordinator for all version control, branching, and commit operations in the repository. It enforces the **GitFlow** branching methodology, **Conventional Commits**, and safe repository hygiene.
 
 ### 🛡️ Golden Repository Safety Rules:
-1. **Never Force-Push to Protected Branches:** `git push --force` or `--force-with-lease` is **STRICTLY PROHIBITED** on `master`, `main`, and `develop`.
-2. **Zero Secrets in Commits:** Local environment credentials (`config/env_*.json`), signing keystores (`*.jks`, `*.keystore`), and private tokens must NEVER be committed (enforce via `.gitignore`).
-3. **Clean Working Tree Before Switching:** Always `git stash` or commit work before switching branches to prevent unstaged file pollution.
-4. **Pre-Commit Quality Gate:** Code must pass `dart format`, `dart analyze`, and unit tests before committing and opening PRs.
-5. **Linear & Clean History:** Feature branches must be rebased on top of the latest `origin/develop` before merging.
+1. **No Automatic `git push` by AI Agents:** AI agents are **STRICTLY PROHIBITED** from executing `git push` unless the user gives direct, explicit instruction (e.g. "запуш", "push", "запуш зміни"). Local commits (`git commit`) are allowed when finishing work, but remote pushes require explicit user confirmation.
+2. **Never Force-Push to Protected Branches:** `git push --force` or `--force-with-lease` is **STRICTLY PROHIBITED** on `master`, `main`, and `develop`.
+3. **Zero Secrets in Commits:** Local environment credentials (`config/env_*.json`), signing keystores (`*.jks`, `*.keystore`), and private tokens must NEVER be committed (enforce via `.gitignore`).
+4. **Clean Working Tree Before Switching:** Always `git stash` or commit work before switching branches to prevent unstaged file pollution.
+5. **Pre-Commit Quality Gate:** Code must pass `dart format`, `dart analyze`, and unit tests before committing and opening PRs.
+6. **Linear & Clean History:** Feature branches must be rebased on top of the latest `origin/develop` before merging.
 
 ---
 

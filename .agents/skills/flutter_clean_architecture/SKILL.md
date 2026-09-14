@@ -49,13 +49,15 @@ Presentation → Domain ← Data
 ### 3. Presentation Layer (`lib/presentation/`)
 
 - **State Management (`lib/presentation/state_management/<feature_name>/`):**
-- Split into 3 files: `_event.dart`, `_state.dart`, `_bloc.dart` using `part`/`part of`.
-- States & Events: Defined using Dart 3 `sealed class` and `final class`. Extend `Equatable`.
-- BLoC Logic: Calls **UseCases ONLY**.
-- Async Safety: ALWAYS add `if (emit.isDone) return;` after every `await`.
-- Event Concurrency: Use `bloc_concurrency` (`droppable()`, `restartable()`, `sequential()`).
-- Hydrated BLoC: Extract `fromJson`/`toJson` into `hydrated_<feature>_bloc.mixin.dart`.
-- Rules: Strictly NO `package:flutter/material.dart` imports in BLoC files.
+  - Consult [flutter-bloc-hub](presentation/state_management/flutter-bloc-hub/SKILL.md) and [flutter-bloc-core](presentation/state_management/flutter-bloc-core/SKILL.md).
+  - Split into 3 files: `_event.dart`, `_state.dart`, `_bloc.dart` using `part`/`part of`.
+  - States & Events: Defined using Dart 3 `sealed class` and `final class`. Extend `Equatable`.
+  - BLoC Logic: Calls **UseCases ONLY**. Direct Repository/DataSource access is strictly prohibited.
+  - Async Safety: ALWAYS add `if (emit.isDone) return;` after every `await`.
+  - Event Concurrency: Use `bloc_concurrency` (`droppable()`, `restartable()`, `sequential()`).
+  - Hydrated BLoC: Extract `fromJson`/`toJson` into `hydrated_<feature>_bloc.mixin.dart` (per [flutter-hydrated-bloc](presentation/state_management/flutter-hydrated-bloc/SKILL.md)).
+  - UI Scoping & Widgets: Follow [flutter-bloc-widgets](presentation/state_management/flutter-bloc-widgets/SKILL.md) (`BlocProvider.value` for dialogs/modals).
+  - Rules: Strictly NO `package:flutter/material.dart` imports in BLoC files.
 
 - **Pages & Widgets (`lib/presentation/pages/<feature_name>/`):**
 - Max file size: 150–200 lines.

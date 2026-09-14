@@ -23,6 +23,7 @@ Use this skill whenever:
 | **Custom Controls** | [flutter-ui-forms-custom-controls](../flutter-ui-forms-custom-controls/SKILL.md) | Binding custom UI Kit widgets with `reactive_forms`. |
 | **Parent UI Hub** | [flutter-ui-hub](../../flutter-ui-hub/SKILL.md) | Global presentation layer architecture. |
 | **UI Kit Components** | [flutter-ui-kit-components](../../ui_kit/flutter-ui-kit-components/SKILL.md) | Base styled input components. |
+| **BLoC UI Widgets** | [flutter-bloc-widgets](../../../state_management/flutter-bloc-widgets/SKILL.md) | Dispatching form events (`context.read<Bloc>().add`) and handling submit states. |
 
 ---
 

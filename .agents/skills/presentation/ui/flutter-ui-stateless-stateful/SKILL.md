@@ -21,6 +21,7 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [flutter-ui-hub](../flutter-ui-hub/SKILL.md) | High-level presentation laws and routing. |
+| **BLoC Widgets & Scoping** | [flutter-bloc-widgets](../../state_management/flutter-bloc-widgets/SKILL.md) | Integrating BLoC/Cubit with UI widgets without mixing local state. |
 | **Performance** | [flutter-ui-performance](../flutter-ui-performance/SKILL.md) | RepaintBoundary and frame rate optimizations. |
 | **Theming** | [flutter-ui-material](../flutter-ui-material/SKILL.md) | Accessing design tokens inside build methods. |
 | **Previews** | [flutter-ui-kit-preview](../ui_kit/flutter-ui-kit-preview/SKILL.md) | Visual testing of isolated widgets. |

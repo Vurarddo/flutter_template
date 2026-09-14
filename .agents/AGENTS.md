@@ -189,6 +189,7 @@ _bloc.dart (or _cubit.dart)
 
 ## 12. AI Execution Guidelines
 
+- **Git Push Policy (Strict):** AI agents MUST NEVER automatically execute `git push` to remote repositories unless the user gives direct, explicit instruction (e.g., "запуш", "push", "запуш зміни"). Staging and creating local commits (`git add`, `git commit`) can be done as requested, but pushing to the remote repository is strictly forbidden without explicit permission.
 - Do NOT introduce any unrequested third-party packages or alternative state management solutions (e.g., Riverpod, Provider).
 - Always ensure generated code strictly complies with `injectable`, `auto_route`, and `reactive_forms` patterns used in the project.
 - Maintain trailing commas in all Dart code snippets to prevent formatting churn.

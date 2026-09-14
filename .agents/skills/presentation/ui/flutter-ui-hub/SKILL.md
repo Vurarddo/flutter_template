@@ -22,6 +22,9 @@ This skill serves as the central root coordinator for all UI development within 
 
 Use this matrix to navigate to the specialized sub-skill matching your specific UI task:
 
+| **State Management Hub** | [flutter-bloc-hub](../../state_management/flutter-bloc-hub/SKILL.md) | Central coordinator for BLoC/Cubit state management architecture. |
+| **BLoC UI Widgets & Scoping** | [flutter-bloc-widgets](../../state_management/flutter-bloc-widgets/SKILL.md) | `BlocBuilder`, `BlocListener`, `BlocConsumer`, `BlocSelector`, `BlocProvider` vs `BlocProvider.value`. |
+| **BLoC & Cubit Core Logic** | [flutter-bloc-core](../../state_management/flutter-bloc-core/SKILL.md) | BLoC vs Cubit decision, sealed events/states, `bloc_concurrency`, async safety. |
 | **UI Kit Architecture** | [flutter-ui-kit-hub](../ui_kit/flutter-ui-kit-hub/SKILL.md) | Pure decoupled components in `lib/presentation/ui_kit/`, buttons, cards, modals, badges. |
 | **Widget Previews** | [flutter-ui-kit-preview](../ui_kit/flutter-ui-kit-preview/SKILL.md) | `@Preview` decorators, `PreviewWrapper`, isolated component verification in IDE/web-runner. |
 | **Reactive Forms Core** | [flutter-ui-forms-reactive](../forms/flutter-ui-forms-reactive/SKILL.md) | Strongly-typed `reactive_forms`, `FormGroup`, `FormControl`, cross-field validation, async debounce. |
