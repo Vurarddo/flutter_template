@@ -1,0 +1,11 @@
+// Debug-dev.xcconfig
+#include "Generated.xcconfig"
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.debug-dev.xcconfig"
+PRODUCT_BUNDLE_IDENTIFIER = com.example.app.dev
+APP_DISPLAY_NAME = App Dev
+
+// Release-prod.xcconfig
+#include "Generated.xcconfig"
+#include "Pods/Target Support Files/Pods-Runner/Pods-Runner.release-prod.xcconfig"
+PRODUCT_BUNDLE_IDENTIFIER = com.example.app
+APP_DISPLAY_NAME = App

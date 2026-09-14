@@ -113,6 +113,15 @@ skills/ui/
     └── SKILL.md
 ```
 
+### 4.3 When to Include Optional Subfolders (`examples/`, `references/`, `scripts/`, `resources/`)
+
+| Subfolder | Primary Purpose | When to Use | When NOT to Use (Keep in `SKILL.md`) |
+| :--- | :--- | :--- | :--- |
+| **`examples/`** | Full-fledged reference implementations, multi-file code samples, and concrete boilerplate templates. | • Multi-file architectural patterns (e.g., Dio Interceptors + Retry Logic + Domain Mapping, or Hydrated BLoC + Mixin + State).<br/>• Code samples exceeding **50–100 lines** that would bloat `SKILL.md`.<br/>• Standalone `.dart` files that benefit from IDE syntax validation and linting.<br/>• Isolated `good_practice.dart` vs `bad_practice.dart` comparisons. | • Short snippets (**10–30 lines**).<br/>• Simple configuration files.<br/>• Tooling, CLI runbooks, and lint rules (e.g., `import_sorter`, `build_runner`). |
+| **`references/`** | Extended domain specs, deep-dive manuals, and architecture notes. | • Exhaustive API specifications, long tables, or complete domain schemas. | • Core architectural rules and primary routing tables needed during standard activation. |
+| **`scripts/`** | Executable automation scripts and command helpers. | • Multi-step bash/python automation or code generation validation scripts. | • Single-line CLI commands (embed directly in `SKILL.md`). |
+| **`resources/`** | Assets, JSON templates, or base config files. | • Static mock JSON payloads, project config templates, or boilerplate schemas. | • Small config blocks easily displayed as markdown snippets. |
+
 ---
 
 ## 5. Frontmatter Specifications
@@ -158,10 +167,11 @@ To enable seamless navigation across trees and meshes:
 1. **Progressive Disclosure:**
    - Keep the root `SKILL.md` concise and high-signal (under 250–350 lines).
    - Move large reference manuals, exhaustive API docs, or heavy schemas into `references/` and link to them using relative links (`./references/doc.md`).
+   - Move large multi-file boilerplate, full class implementations (>50–100 lines), or complete architectural templates into `examples/` and link to them (`./examples/sample.dart`).
 2. **Zero Redundant Boilerplate:**
    - Focus strictly on project conventions, exact architecture patterns, constraints, and non-obvious nuances.
 3. **Actionable Code Examples:**
-   - Provide concrete, copy-paste-ready before/after code snippets reflecting production standards.
+   - Provide concrete, copy-paste-ready before/after code snippets reflecting production standards. Keep short snippets inline; offload extensive reference files to `examples/`.
 4. **Anti-Patterns & Severity Matrix:**
    - Include a dedicated table listing common mistakes, why they fail, their severity (`CRITICAL`, `HIGH`, `MEDIUM`), and the explicit remedy.
 5. **Domain-Agnostic & Abstract Naming Rule (Universal Portability):**

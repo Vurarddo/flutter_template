@@ -11,7 +11,7 @@ Use this skill during the theming and presentation scaffolding phase:
 - Generating dynamic **Light** and **Dark** Material 3 themes centered around primary brand color `#FFDE3F`.
 - Implementing `AppCustomColors` `ThemeExtension` with custom domain tokens.
 - Creating an `@injectable` `ThemeCubit` (`HydratedCubit<ThemeState>`) with serialization separated into `hydrated_theme_cubit.mixin.dart`.
-- Generating an interactive, adaptive `UiKitPage` landing showcase (inspired by Material Theme Builder) rendering all key design system components: Color Palette, Typography, Buttons, Form Inputs, Cards, Badges, Modals, and live ThemeMode switching.
+- Generating an interactive, adaptive `UiKitPage` landing showcase (inspired by Material Theme Builder) rendering all key design system components.
 
 ---
 
@@ -29,130 +29,21 @@ Use this skill during the theming and presentation scaffolding phase:
 
 ## 3. Theme Architecture (`lib/presentation/theme/`)
 
-### 3.1 Primary Brand Color & Seed
 - **Primary Color:** `const Color(0xFFFFDE3F)` (Warm Gold / Vibrant Yellow).
-
-### 3.2 Color Scheme Setup (`lib/presentation/theme/app_color_scheme.dart`)
-
-```dart
-import 'package:flutter/material.dart';
-
-abstract final class AppColorScheme {
-  static const Color primarySeed = Color(0xFFFFDE3F);
-
-  static final ColorScheme light = ColorScheme.fromSeed(
-    seedColor: primarySeed,
-    brightness: Brightness.light,
-    primary: primarySeed,
-    onPrimary: const Color(0xFF221B00),
-    primaryContainer: const Color(0xFFFFE264),
-    onPrimaryContainer: const Color(0xFF241A00),
-    surface: const Color(0xFFFFFBF0),
-    onSurface: const Color(0xFF1E1B16),
-  );
-
-  static final ColorScheme dark = ColorScheme.fromSeed(
-    seedColor: primarySeed,
-    brightness: Brightness.dark,
-    primary: primarySeed,
-    onPrimary: const Color(0xFF3B2F00),
-    primaryContainer: const Color(0xFF554400),
-    onPrimaryContainer: const Color(0xFFFFE264),
-    surface: const Color(0xFF16130E),
-    onSurface: const Color(0xFFE9E1D8),
-  );
-}
-```
-
-### 3.3 Custom Tokens Extension (`lib/presentation/theme/app_custom_colors.dart`)
-
-```dart
-import 'package:flutter/material.dart';
-
-@immutable
-class AppCustomColors extends ThemeExtension<AppCustomColors> {
-  final Color success;
-  final Color warning;
-  final Color info;
-  final Color shimmerBase;
-  final Color shimmerHighlight;
-
-  const AppCustomColors({
-    required this.success,
-    required this.warning,
-    required this.info,
-    required this.shimmerBase,
-    required this.shimmerHighlight,
-  });
-
-  static const AppCustomColors light = AppCustomColors(
-    success: Color(0xFF2E7D32),
-    warning: Color(0xFFED6C02),
-    info: Color(0xFF0288D1),
-    shimmerBase: Color(0xFFE0E0E0),
-    shimmerHighlight: Color(0xFFF5F5F5),
-  );
-
-  static const AppCustomColors dark = AppCustomColors(
-    success: Color(0xFF66BB6A),
-    warning: Color(0xFFFFA726),
-    info: Color(0xFF29B6F6),
-    shimmerBase: Color(0xFF2C2C2C),
-    shimmerHighlight: Color(0xFF3D3D3D),
-  );
-
-  @override
-  AppCustomColors copyWith({
-    Color? success,
-    Color? warning,
-    Color? info,
-    Color? shimmerBase,
-    Color? shimmerHighlight,
-  }) {
-    return AppCustomColors(
-      success: success ?? this.success,
-      warning: warning ?? this.warning,
-      info: info ?? this.info,
-      shimmerBase: shimmerBase ?? this.shimmerBase,
-      shimmerHighlight: shimmerHighlight ?? this.shimmerHighlight,
-    );
-  }
-
-  @override
-  AppCustomColors lerp(ThemeExtension<AppCustomColors>? other, double t) {
-    if (other is! AppCustomColors) return this;
-    return AppCustomColors(
-      success: Color.lerp(success, other.success, t) ?? success,
-      warning: Color.lerp(warning, other.warning, t) ?? warning,
-      info: Color.lerp(info, other.info, t) ?? info,
-      shimmerBase: Color.lerp(shimmerBase, other.shimmerBase, t) ?? shimmerBase,
-      shimmerHighlight: Color.lerp(shimmerHighlight, other.shimmerHighlight, t) ?? shimmerHighlight,
-    );
-  }
-}
-```
-
-### 3.4 Main Theme Factory (`lib/presentation/theme/app_theme.dart`)
-
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_template/presentation/theme/app_color_scheme.dart';
-import 'package:flutter_template/presentation/theme/app_custom_colors.dart';
-import 'package:flutter_template/presentation/theme/app_text_theme.dart';
-
-abstract final class AppTheme {
-  static ThemeData get lightTheme {
-    return ThemeData(
+- **Color Scheme Setup:** See [examples/app_color_scheme.dart](examples/app_color_scheme.dart).
+- **Custom Tokens ThemeExtension:** See [examples/app_custom_colors.dart](examples/app_custom_colors.dart).
+- **ThemeData Assembly (`app_theme.dart`):**
+  ```dart
+  abstract final class AppTheme {
+    static ThemeData get lightTheme => ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: AppColorScheme.light,
       textTheme: AppTextTheme.textTheme,
       extensions: const [AppCustomColors.light],
     );
-  }
 
-  static ThemeData get darkTheme {
-    return ThemeData(
+    static ThemeData get darkTheme => ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: AppColorScheme.dark,
@@ -160,8 +51,7 @@ abstract final class AppTheme {
       extensions: const [AppCustomColors.dark],
     );
   }
-}
-```
+  ```
 
 ---
 
@@ -169,99 +59,13 @@ abstract final class AppTheme {
 
 > [!IMPORTANT]
 > **Zero Flutter SDK Imports in BLoC / Cubit:**
-> `ThemeCubit`, `ThemeState`, and `HydratedThemeCubitMixin` must NEVER import `package:flutter/material.dart` (enforced by `avoid_flutter_imports`).
-> Instead, define a pure Dart `AppThemeMode` enum in the state layer and map it to Flutter's `ThemeMode` in the presentation layer via `AppThemeModeX.toFlutter()`.
+> `ThemeCubit`, `ThemeState`, and `HydratedThemeCubitMixin` must NEVER import `package:flutter/material.dart` (enforced by `avoid_flutter_imports`). Map to Flutter types in UI via `AppThemeModeX.toFlutter()`.
 
-### 4.1 State & Domain Enum (`theme_state.dart`)
-```dart
-import 'package:equatable/equatable.dart';
-
-enum AppThemeMode {
-  system,
-  light,
-  dark,
-}
-
-final class ThemeState extends Equatable {
-  final AppThemeMode themeMode;
-
-  const ThemeState({this.themeMode = AppThemeMode.system});
-
-  ThemeState copyWith({AppThemeMode? themeMode}) {
-    return ThemeState(themeMode: themeMode ?? this.themeMode);
-  }
-
-  @override
-  List<Object?> get props => [themeMode];
-}
-```
-
-### 4.2 Serialization Mixin (`hydrated_theme_cubit.mixin.dart`)
-```dart
-import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:flutter_template/presentation/state-management/theme/theme_state.dart';
-
-mixin HydratedThemeCubitMixin on HydratedMixin<ThemeState> {
-  @override
-  String get storagePrefix => 'ThemeCubit';
-
-  @override
-  ThemeState fromJson(Map<String, dynamic> json) {
-    try {
-      final index = json['themeModeIndex'] as int?;
-      return ThemeState(
-        themeMode: index != null ? AppThemeMode.values[index] : AppThemeMode.system,
-      );
-    } catch (_) {
-      return const ThemeState(themeMode: AppThemeMode.system);
-    }
-  }
-
-  @override
-  Map<String, dynamic> toJson(ThemeState state) {
-    return {'themeModeIndex': state.themeMode.index};
-  }
-}
-```
-
-### 4.3 Cubit Implementation (`theme_cubit.dart`)
-```dart
-import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:injectable/injectable.dart';
-import 'package:flutter_template/presentation/state-management/theme/hydrated_theme_cubit.mixin.dart';
-import 'package:flutter_template/presentation/state-management/theme/theme_state.dart';
-
-@lazySingleton
-class ThemeCubit extends HydratedCubit<ThemeState> with HydratedThemeCubitMixin {
-  ThemeCubit() : super(const ThemeState());
-
-  void setThemeMode(AppThemeMode mode) {
-    emit(state.copyWith(themeMode: mode));
-  }
-
-  void toggleTheme() {
-    final next = switch (state.themeMode) {
-      AppThemeMode.system || AppThemeMode.light => AppThemeMode.dark,
-      AppThemeMode.dark => AppThemeMode.light,
-    };
-    emit(state.copyWith(themeMode: next));
-  }
-}
-```
-
-### 4.4 Presentation Mapping Extension (`lib/presentation/ui_utils/extensions/app_theme_mode_extension.dart`)
-```dart
-import 'package:flutter/material.dart';
-import 'package:flutter_template/presentation/state-management/theme/theme_state.dart';
-
-extension AppThemeModeX on AppThemeMode {
-  ThemeMode toFlutter() => switch (this) {
-    AppThemeMode.system => ThemeMode.system,
-    AppThemeMode.light => ThemeMode.light,
-    AppThemeMode.dark => ThemeMode.dark,
-  };
-}
-```
+- **Complete Implementation Guide & Code:** See [examples/theme_cubit_bundle.dart](examples/theme_cubit_bundle.dart) covering:
+  1. Pure Dart `AppThemeMode` & `ThemeState` (`theme_state.dart`).
+  2. Isolated serialization `HydratedThemeCubitMixin` (`hydrated_theme_cubit.mixin.dart`).
+  3. `@lazySingleton` `ThemeCubit` (`theme_cubit.dart`).
+  4. Presentation extension `AppThemeModeX` (`app_theme_mode_extension.dart`).
 
 ---
 
@@ -283,13 +87,13 @@ lib/presentation/pages/uikit/
 ```
 
 ### Showcase Sections Breakdown:
-1. **Header & Theme Switcher:** Displays app name, environment badge (`dev`/`stage`/`prod`), and a `SegmentedButton<ThemeMode>` (System / Light / Dark).
-2. **Color Palette Section:** Renders color swatches for `primary`, `secondary`, `tertiary`, `surface`, `error`, `primaryContainer`, plus custom tokens `success`, `warning`, `info`.
-3. **Typography Scale:** Renders sample text for `displayLarge`, `headlineMedium`, `titleMedium`, `bodyLarge`, `labelSmall`.
-4. **Buttons & Actions:** Renders interactive `FilledButton`, `ElevatedButton`, `FilledTonalButton`, `OutlinedButton`, `TextButton`, and `IconButton`.
-5. **Form Controls:** Renders `ReactiveForm` with text inputs, password toggle, email validation, dropdown selection, date picker, and checkbox/switch.
-6. **Cards & Surfaces:** Renders elevated cards, outlined cards, and containers with varying corner radii and surface tints.
-7. **Badges, Chips & Feedback:** Renders status chips, action chips, badges, and snackbar/dialog triggers.
+1. **Header & Theme Switcher:** Displays app name, environment badge (`dev`/`stage`/`prod`), and `SegmentedButton<ThemeMode>`.
+2. **Color Palette Section:** Swatches for `primary`, `secondary`, `tertiary`, `surface`, `error`, and custom tokens `success`, `warning`, `info`.
+3. **Typography Scale:** Sample text for `displayLarge`, `headlineMedium`, `titleMedium`, `bodyLarge`, `labelSmall`.
+4. **Buttons & Actions:** Interactive `FilledButton`, `ElevatedButton`, `FilledTonalButton`, `OutlinedButton`, `TextButton`, `IconButton`.
+5. **Form Controls:** `ReactiveForm` with text inputs, password toggle, email validation, dropdown, date picker, checkbox/switch.
+6. **Cards & Surfaces:** Elevated cards, outlined cards, varying corner radii and surface tints.
+7. **Badges, Chips & Feedback:** Status chips, action chips, badges, and snackbar/dialog triggers.
 
 ---
 

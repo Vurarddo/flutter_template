@@ -535,7 +535,7 @@ pre {
 <li>Generating dynamic <strong>Light</strong> and <strong>Dark</strong> Material 3 themes centered around primary brand color <code class="inline-code">#FFDE3F</code>.</li>
 <li>Implementing <code class="inline-code">AppCustomColors</code> <code class="inline-code">ThemeExtension</code> with custom domain tokens.</li>
 <li>Creating an <code class="inline-code">@injectable</code> <code class="inline-code">ThemeCubit</code> (<code class="inline-code">HydratedCubit&lt;ThemeState&gt;</code>) with serialization separated into <code class="inline-code">hydrated_theme_cubit.mixin.dart</code>.</li>
-<li>Generating an interactive, adaptive <code class="inline-code">UiKitPage</code> landing showcase (inspired by Material Theme Builder) rendering all key design system components: Color Palette, Typography, Buttons, Form Inputs, Cards, Badges, Modals, and live ThemeMode switching.</li>
+<li>Generating an interactive, adaptive <code class="inline-code">UiKitPage</code> landing showcase (inspired by Material Theme Builder) rendering all key design system components.</li>
 </ul>
 <hr class="doc-divider">
 <h2 id="2--prerequisites---related-skills" class="doc-h2"><a href="#2--prerequisites---related-skills" class="heading-anchor">#</a> 2. Prerequisites &amp; Related Skills</h2>
@@ -573,11 +573,11 @@ pre {
 </tbody></table></div>
 <hr class="doc-divider">
 <h2 id="3--theme-architecture---lib-presentation-theme---" class="doc-h2"><a href="#3--theme-architecture---lib-presentation-theme---" class="heading-anchor">#</a> 3. Theme Architecture (<code class="inline-code">lib/presentation/theme/</code>)</h2>
-<h3 class="doc-h3">3.1 Primary Brand Color &amp; Seed</h3>
 <ul class="doc-list">
 <li><strong>Primary Color:</strong> <code class="inline-code">const Color(0xFFFFDE3F)</code> (Warm Gold / Vibrant Yellow).</li>
-</ul>
-<h3 class="doc-h3">3.2 Color Scheme Setup (<code class="inline-code">lib/presentation/theme/app_color_scheme.dart</code>)</h3>
+<li><strong>Color Scheme Setup:</strong> See <a href="examples/app_color_scheme.dart" class="doc-link">examples/app_color_scheme.dart</a>.</li>
+<li><strong>Custom Tokens ThemeExtension:</strong> See <a href="examples/app_custom_colors.dart" class="doc-link">examples/app_custom_colors.dart</a>.</li>
+<li><strong>ThemeData Assembly (<code class="inline-code">app_theme.dart</code>):</strong></li>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -586,136 +586,16 @@ pre {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-
-abstract final class AppColorScheme {
-  static const Color primarySeed = Color(0xFFFFDE3F);
-
-  static final ColorScheme light = ColorScheme.fromSeed(
-    seedColor: primarySeed,
-    brightness: Brightness.light,
-    primary: primarySeed,
-    onPrimary: const Color(0xFF221B00),
-    primaryContainer: const Color(0xFFFFE264),
-    onPrimaryContainer: const Color(0xFF241A00),
-    surface: const Color(0xFFFFFBF0),
-    onSurface: const Color(0xFF1E1B16),
-  );
-
-  static final ColorScheme dark = ColorScheme.fromSeed(
-    seedColor: primarySeed,
-    brightness: Brightness.dark,
-    primary: primarySeed,
-    onPrimary: const Color(0xFF3B2F00),
-    primaryContainer: const Color(0xFF554400),
-    onPrimaryContainer: const Color(0xFFFFE264),
-    surface: const Color(0xFF16130E),
-    onSurface: const Color(0xFFE9E1D8),
-  );
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">3.3 Custom Tokens Extension (<code class="inline-code">lib/presentation/theme/app_custom_colors.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-
-@immutable
-class AppCustomColors extends ThemeExtension&lt;AppCustomColors&gt; {
-  final Color success;
-  final Color warning;
-  final Color info;
-  final Color shimmerBase;
-  final Color shimmerHighlight;
-
-  const AppCustomColors({
-    required this.success,
-    required this.warning,
-    required this.info,
-    required this.shimmerBase,
-    required this.shimmerHighlight,
-  });
-
-  static const AppCustomColors light = AppCustomColors(
-    success: Color(0xFF2E7D32),
-    warning: Color(0xFFED6C02),
-    info: Color(0xFF0288D1),
-    shimmerBase: Color(0xFFE0E0E0),
-    shimmerHighlight: Color(0xFFF5F5F5),
-  );
-
-  static const AppCustomColors dark = AppCustomColors(
-    success: Color(0xFF66BB6A),
-    warning: Color(0xFFFFA726),
-    info: Color(0xFF29B6F6),
-    shimmerBase: Color(0xFF2C2C2C),
-    shimmerHighlight: Color(0xFF3D3D3D),
-  );
-
-  @override
-  AppCustomColors copyWith({
-    Color? success,
-    Color? warning,
-    Color? info,
-    Color? shimmerBase,
-    Color? shimmerHighlight,
-  }) {
-    return AppCustomColors(
-      success: success ?? this.success,
-      warning: warning ?? this.warning,
-      info: info ?? this.info,
-      shimmerBase: shimmerBase ?? this.shimmerBase,
-      shimmerHighlight: shimmerHighlight ?? this.shimmerHighlight,
-    );
-  }
-
-  @override
-  AppCustomColors lerp(ThemeExtension&lt;AppCustomColors&gt;? other, double t) {
-    if (other is! AppCustomColors) return this;
-    return AppCustomColors(
-      success: Color.lerp(success, other.success, t) ?? success,
-      warning: Color.lerp(warning, other.warning, t) ?? warning,
-      info: Color.lerp(info, other.info, t) ?? info,
-      shimmerBase: Color.lerp(shimmerBase, other.shimmerBase, t) ?? shimmerBase,
-      shimmerHighlight: Color.lerp(shimmerHighlight, other.shimmerHighlight, t) ?? shimmerHighlight,
-    );
-  }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">3.4 Main Theme Factory (<code class="inline-code">lib/presentation/theme/app_theme.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_template/presentation/theme/app_color_scheme.dart&#039;;
-import &#039;package:flutter_template/presentation/theme/app_custom_colors.dart&#039;;
-import &#039;package:flutter_template/presentation/theme/app_text_theme.dart&#039;;
-
-abstract final class AppTheme {
-  static ThemeData get lightTheme {
-    return ThemeData(
+  <pre><code class="language-dart">  abstract final class AppTheme {
+    static ThemeData get lightTheme =&gt; ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: AppColorScheme.light,
       textTheme: AppTextTheme.textTheme,
       extensions: const [AppCustomColors.light],
     );
-  }
 
-  static ThemeData get darkTheme {
-    return ThemeData(
+    static ThemeData get darkTheme =&gt; ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: AppColorScheme.dark,
@@ -723,134 +603,21 @@ abstract final class AppTheme {
       extensions: const [AppCustomColors.dark],
     );
   }
-}
 </code></pre>
 </div>
+</ul>
 <hr class="doc-divider">
 <h2 id="4--injectable-hydrated--themecubit----lib-presentation-state-management-theme---" class="doc-h2"><a href="#4--injectable-hydrated--themecubit----lib-presentation-state-management-theme---" class="heading-anchor">#</a> 4. Injectable Hydrated <code class="inline-code">ThemeCubit</code> (<code class="inline-code">lib/presentation/state-management/theme/</code>)</h2>
 <div class="alert-box alert-warning"><div class="alert-title">ВАЖЛИВО / IMPORTANT</div><div class="alert-content">
 <p><strong>Zero Flutter SDK Imports in BLoC / Cubit:</strong></p>
-<p><code class="inline-code">ThemeCubit</code>, <code class="inline-code">ThemeState</code>, and <code class="inline-code">HydratedThemeCubitMixin</code> must NEVER import <code class="inline-code">package:flutter/material.dart</code> (enforced by <code class="inline-code">avoid_flutter_imports</code>).</p>
-<p>Instead, define a pure Dart <code class="inline-code">AppThemeMode</code> enum in the state layer and map it to Flutter&#039;s <code class="inline-code">ThemeMode</code> in the presentation layer via <code class="inline-code">AppThemeModeX.toFlutter()</code>.</p>
-<h3 class="doc-h3">4.1 State &amp; Domain Enum (<code class="inline-code">theme_state.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:equatable/equatable.dart&#039;;
-
-enum AppThemeMode {
-  system,
-  light,
-  dark,
-}
-
-final class ThemeState extends Equatable {
-  final AppThemeMode themeMode;
-
-  const ThemeState({this.themeMode = AppThemeMode.system});
-
-  ThemeState copyWith({AppThemeMode? themeMode}) {
-    return ThemeState(themeMode: themeMode ?? this.themeMode);
-  }
-
-  @override
-  List&lt;Object?&gt; get props =&gt; [themeMode];
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">4.2 Serialization Mixin (<code class="inline-code">hydrated_theme_cubit.mixin.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:hydrated_bloc/hydrated_bloc.dart&#039;;
-import &#039;package:flutter_template/presentation/state-management/theme/theme_state.dart&#039;;
-
-mixin HydratedThemeCubitMixin on HydratedMixin&lt;ThemeState&gt; {
-  @override
-  String get storagePrefix =&gt; &#039;ThemeCubit&#039;;
-
-  @override
-  ThemeState fromJson(Map&lt;String, dynamic&gt; json) {
-    try {
-      final index = json[&#039;themeModeIndex&#039;] as int?;
-      return ThemeState(
-        themeMode: index != null ? AppThemeMode.values[index] : AppThemeMode.system,
-      );
-    } catch (_) {
-      return const ThemeState(themeMode: AppThemeMode.system);
-    }
-  }
-
-  @override
-  Map&lt;String, dynamic&gt; toJson(ThemeState state) {
-    return {&#039;themeModeIndex&#039;: state.themeMode.index};
-  }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">4.3 Cubit Implementation (<code class="inline-code">theme_cubit.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:hydrated_bloc/hydrated_bloc.dart&#039;;
-import &#039;package:injectable/injectable.dart&#039;;
-import &#039;package:flutter_template/presentation/state-management/theme/hydrated_theme_cubit.mixin.dart&#039;;
-import &#039;package:flutter_template/presentation/state-management/theme/theme_state.dart&#039;;
-
-@lazySingleton
-class ThemeCubit extends HydratedCubit&lt;ThemeState&gt; with HydratedThemeCubitMixin {
-  ThemeCubit() : super(const ThemeState());
-
-  void setThemeMode(AppThemeMode mode) {
-    emit(state.copyWith(themeMode: mode));
-  }
-
-  void toggleTheme() {
-    final next = switch (state.themeMode) {
-      AppThemeMode.system || AppThemeMode.light =&gt; AppThemeMode.dark,
-      AppThemeMode.dark =&gt; AppThemeMode.light,
-    };
-    emit(state.copyWith(themeMode: next));
-  }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">4.4 Presentation Mapping Extension (<code class="inline-code">lib/presentation/ui_utils/extensions/app_theme_mode_extension.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:flutter_template/presentation/state-management/theme/theme_state.dart&#039;;
-
-extension AppThemeModeX on AppThemeMode {
-  ThemeMode toFlutter() =&gt; switch (this) {
-    AppThemeMode.system =&gt; ThemeMode.system,
-    AppThemeMode.light =&gt; ThemeMode.light,
-    AppThemeMode.dark =&gt; ThemeMode.dark,
-  };
-}
-</code></pre>
-</div>
+<p><code class="inline-code">ThemeCubit</code>, <code class="inline-code">ThemeState</code>, and <code class="inline-code">HydratedThemeCubitMixin</code> must NEVER import <code class="inline-code">package:flutter/material.dart</code> (enforced by <code class="inline-code">avoid_flutter_imports</code>). Map to Flutter types in UI via <code class="inline-code">AppThemeModeX.toFlutter()</code>.</p>
+<ul class="doc-list">
+<li><strong>Complete Implementation Guide &amp; Code:</strong> See <a href="examples/theme_cubit_bundle.dart" class="doc-link">examples/theme_cubit_bundle.dart</a> covering:</li>
+<li>Pure Dart <code class="inline-code">AppThemeMode</code> &amp; <code class="inline-code">ThemeState</code> (<code class="inline-code">theme_state.dart</code>).</li>
+<li>Isolated serialization <code class="inline-code">HydratedThemeCubitMixin</code> (<code class="inline-code">hydrated_theme_cubit.mixin.dart</code>).</li>
+<li><code class="inline-code">@lazySingleton</code> <code class="inline-code">ThemeCubit</code> (<code class="inline-code">theme_cubit.dart</code>).</li>
+<li>Presentation extension <code class="inline-code">AppThemeModeX</code> (<code class="inline-code">app_theme_mode_extension.dart</code>).</li>
+</ul>
 <hr class="doc-divider">
 <h2 id="5--adaptive--uikitpage--showcase---lib-presentation-pages-uikit---" class="doc-h2"><a href="#5--adaptive--uikitpage--showcase---lib-presentation-pages-uikit---" class="heading-anchor">#</a> 5. Adaptive <code class="inline-code">UiKitPage</code> Showcase (<code class="inline-code">lib/presentation/pages/uikit/</code>)</h2>
 <p class="doc-p">Create an interactive landing showcase rendering all design tokens and UI Kit components:</p>
@@ -876,13 +643,13 @@ extension AppThemeModeX on AppThemeMode {
 </div>
 <h3 class="doc-h3">Showcase Sections Breakdown:</h3>
 <ol class="doc-ordered-list">
-<li><strong>Header &amp; Theme Switcher:</strong> Displays app name, environment badge (<code class="inline-code">dev</code>/<code class="inline-code">stage</code>/<code class="inline-code">prod</code>), and a <code class="inline-code">SegmentedButton&lt;ThemeMode&gt;</code> (System / Light / Dark).</li>
-<li><strong>Color Palette Section:</strong> Renders color swatches for <code class="inline-code">primary</code>, <code class="inline-code">secondary</code>, <code class="inline-code">tertiary</code>, <code class="inline-code">surface</code>, <code class="inline-code">error</code>, <code class="inline-code">primaryContainer</code>, plus custom tokens <code class="inline-code">success</code>, <code class="inline-code">warning</code>, <code class="inline-code">info</code>.</li>
-<li><strong>Typography Scale:</strong> Renders sample text for <code class="inline-code">displayLarge</code>, <code class="inline-code">headlineMedium</code>, <code class="inline-code">titleMedium</code>, <code class="inline-code">bodyLarge</code>, <code class="inline-code">labelSmall</code>.</li>
-<li><strong>Buttons &amp; Actions:</strong> Renders interactive <code class="inline-code">FilledButton</code>, <code class="inline-code">ElevatedButton</code>, <code class="inline-code">FilledTonalButton</code>, <code class="inline-code">OutlinedButton</code>, <code class="inline-code">TextButton</code>, and <code class="inline-code">IconButton</code>.</li>
-<li><strong>Form Controls:</strong> Renders <code class="inline-code">ReactiveForm</code> with text inputs, password toggle, email validation, dropdown selection, date picker, and checkbox/switch.</li>
-<li><strong>Cards &amp; Surfaces:</strong> Renders elevated cards, outlined cards, and containers with varying corner radii and surface tints.</li>
-<li><strong>Badges, Chips &amp; Feedback:</strong> Renders status chips, action chips, badges, and snackbar/dialog triggers.</li>
+<li><strong>Header &amp; Theme Switcher:</strong> Displays app name, environment badge (<code class="inline-code">dev</code>/<code class="inline-code">stage</code>/<code class="inline-code">prod</code>), and <code class="inline-code">SegmentedButton&lt;ThemeMode&gt;</code>.</li>
+<li><strong>Color Palette Section:</strong> Swatches for <code class="inline-code">primary</code>, <code class="inline-code">secondary</code>, <code class="inline-code">tertiary</code>, <code class="inline-code">surface</code>, <code class="inline-code">error</code>, and custom tokens <code class="inline-code">success</code>, <code class="inline-code">warning</code>, <code class="inline-code">info</code>.</li>
+<li><strong>Typography Scale:</strong> Sample text for <code class="inline-code">displayLarge</code>, <code class="inline-code">headlineMedium</code>, <code class="inline-code">titleMedium</code>, <code class="inline-code">bodyLarge</code>, <code class="inline-code">labelSmall</code>.</li>
+<li><strong>Buttons &amp; Actions:</strong> Interactive <code class="inline-code">FilledButton</code>, <code class="inline-code">ElevatedButton</code>, <code class="inline-code">FilledTonalButton</code>, <code class="inline-code">OutlinedButton</code>, <code class="inline-code">TextButton</code>, <code class="inline-code">IconButton</code>.</li>
+<li><strong>Form Controls:</strong> <code class="inline-code">ReactiveForm</code> with text inputs, password toggle, email validation, dropdown, date picker, checkbox/switch.</li>
+<li><strong>Cards &amp; Surfaces:</strong> Elevated cards, outlined cards, varying corner radii and surface tints.</li>
+<li><strong>Badges, Chips &amp; Feedback:</strong> Status chips, action chips, badges, and snackbar/dialog triggers.</li>
 </ul>
 <hr class="doc-divider">
 <h2 id="6--verification-checklist" class="doc-h2"><a href="#6--verification-checklist" class="heading-anchor">#</a> 6. Verification Checklist</h2>

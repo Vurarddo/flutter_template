@@ -666,6 +666,39 @@ pre {
     └── SKILL.md
 </code></pre>
 </div>
+<h3 class="doc-h3">4.3 When to Include Optional Subfolders (<code class="inline-code">examples/</code>, <code class="inline-code">references/</code>, <code class="inline-code">scripts/</code>, <code class="inline-code">resources/</code>)</h3>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Subfolder</th>
+<th>Primary Purpose</th>
+<th>When to Use</th>
+<th>When NOT to Use (Keep in <code class="inline-code">SKILL.md</code>)</th>
+</tr></thead><tbody>
+<tr>
+<td><strong><code class="inline-code">examples/</code></strong></td>
+<td>Full-fledged reference implementations, multi-file code samples, and concrete boilerplate templates.</td>
+<td>• Multi-file architectural patterns (e.g., Dio Interceptors + Retry Logic + Domain Mapping, or Hydrated BLoC + Mixin + State).&lt;br/&gt;• Code samples exceeding <strong>50–100 lines</strong> that would bloat <code class="inline-code">SKILL.md</code>.&lt;br/&gt;• Standalone <code class="inline-code">.dart</code> files that benefit from IDE syntax validation and linting.&lt;br/&gt;• Isolated <code class="inline-code">good_practice.dart</code> vs <code class="inline-code">bad_practice.dart</code> comparisons.</td>
+<td>• Short snippets (<strong>10–30 lines</strong>).&lt;br/&gt;• Simple configuration files.&lt;br/&gt;• Tooling, CLI runbooks, and lint rules (e.g., <code class="inline-code">import_sorter</code>, <code class="inline-code">build_runner</code>).</td>
+</tr>
+<tr>
+<td><strong><code class="inline-code">references/</code></strong></td>
+<td>Extended domain specs, deep-dive manuals, and architecture notes.</td>
+<td>• Exhaustive API specifications, long tables, or complete domain schemas.</td>
+<td>• Core architectural rules and primary routing tables needed during standard activation.</td>
+</tr>
+<tr>
+<td><strong><code class="inline-code">scripts/</code></strong></td>
+<td>Executable automation scripts and command helpers.</td>
+<td>• Multi-step bash/python automation or code generation validation scripts.</td>
+<td>• Single-line CLI commands (embed directly in <code class="inline-code">SKILL.md</code>).</td>
+</tr>
+<tr>
+<td><strong><code class="inline-code">resources/</code></strong></td>
+<td>Assets, JSON templates, or base config files.</td>
+<td>• Static mock JSON payloads, project config templates, or boilerplate schemas.</td>
+<td>• Small config blocks easily displayed as markdown snippets.</td>
+</tr>
+</tbody></table></div>
 <hr class="doc-divider">
 <h2 id="5--frontmatter-specifications" class="doc-h2"><a href="#5--frontmatter-specifications" class="heading-anchor">#</a> 5. Frontmatter Specifications</h2>
 <p class="doc-p">The <code class="inline-code">SKILL.md</code> MUST start with a YAML frontmatter block:</p>
@@ -713,10 +746,11 @@ description: &gt;-
 <li><strong>Progressive Disclosure:</strong></li>
 <li>Keep the root <code class="inline-code">SKILL.md</code> concise and high-signal (under 250–350 lines).</li>
 <li>Move large reference manuals, exhaustive API docs, or heavy schemas into <code class="inline-code">references/</code> and link to them using relative links (<code class="inline-code">./references/doc.md</code>).</li>
+<li>Move large multi-file boilerplate, full class implementations (&gt;50–100 lines), or complete architectural templates into <code class="inline-code">examples/</code> and link to them (<code class="inline-code">./examples/sample.dart</code>).</li>
 <li><strong>Zero Redundant Boilerplate:</strong></li>
 <li>Focus strictly on project conventions, exact architecture patterns, constraints, and non-obvious nuances.</li>
 <li><strong>Actionable Code Examples:</strong></li>
-<li>Provide concrete, copy-paste-ready before/after code snippets reflecting production standards.</li>
+<li>Provide concrete, copy-paste-ready before/after code snippets reflecting production standards. Keep short snippets inline; offload extensive reference files to <code class="inline-code">examples/</code>.</li>
 <li><strong>Anti-Patterns &amp; Severity Matrix:</strong></li>
 <li>Include a dedicated table listing common mistakes, why they fail, their severity (<code class="inline-code">CRITICAL</code>, <code class="inline-code">HIGH</code>, <code class="inline-code">MEDIUM</code>), and the explicit remedy.</li>
 <li><strong>Domain-Agnostic &amp; Abstract Naming Rule (Universal Portability):</strong></li>

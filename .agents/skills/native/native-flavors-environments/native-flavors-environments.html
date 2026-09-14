@@ -569,143 +569,20 @@ pre {
 <hr class="doc-divider">
 <h2 id="3--step-1--dart-side-environment-json-files---config---" class="doc-h2"><a href="#3--step-1--dart-side-environment-json-files---config---" class="heading-anchor">#</a> 3. Step 1: Dart-Side Environment JSON Files (<code class="inline-code">config/</code>)</h2>
 <p class="doc-p">Create environment definition files in <code class="inline-code">config/</code>:</p>
-<h3 class="doc-h3"><code class="inline-code">config/env_dev.json</code></h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">json</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-json">{
-  &quot;APP_ENV&quot;: &quot;dev&quot;,
-  &quot;BASE_URL&quot;: &quot;https://api-dev.example.com/v1&quot;,
-  &quot;API_KEY&quot;: &quot;dev_mock_key_123&quot;
-}
-</code></pre>
-</div>
-<h3 class="doc-h3"><code class="inline-code">config/env_stage.json</code></h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">json</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-json">{
-  &quot;APP_ENV&quot;: &quot;stage&quot;,
-  &quot;BASE_URL&quot;: &quot;https://api-stage.example.com/v1&quot;,
-  &quot;API_KEY&quot;: &quot;stage_qa_key_456&quot;
-}
-</code></pre>
-</div>
-<h3 class="doc-h3"><code class="inline-code">config/env_prod.json</code></h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">json</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-json">{
-  &quot;APP_ENV&quot;: &quot;prod&quot;,
-  &quot;BASE_URL&quot;: &quot;https://api.example.com/v1&quot;,
-  &quot;API_KEY&quot;: &quot;prod_live_key_789&quot;
-}
-</code></pre>
-</div>
-<h3 class="doc-h3"><code class="inline-code">config/env_template.json</code> (Committed to Git)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">json</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-json">{
-  &quot;APP_ENV&quot;: &quot;dev&quot;,
-  &quot;BASE_URL&quot;: &quot;https://api-dev.example.com/v1&quot;,
-  &quot;API_KEY&quot;: &quot;YOUR_API_KEY_HERE&quot;
-}
-</code></pre>
-</div>
+<ul class="doc-list">
+<li><code class="inline-code">config/env_dev.json</code> (<code class="inline-code">APP_ENV: &quot;dev&quot;</code>, <code class="inline-code">BASE_URL</code>, <code class="inline-code">API_KEY</code>)</li>
+<li><code class="inline-code">config/env_stage.json</code> (<code class="inline-code">APP_ENV: &quot;stage&quot;</code>, <code class="inline-code">BASE_URL</code>, <code class="inline-code">API_KEY</code>)</li>
+<li><code class="inline-code">config/env_prod.json</code> (<code class="inline-code">APP_ENV: &quot;prod&quot;</code>, <code class="inline-code">BASE_URL</code>, <code class="inline-code">API_KEY</code>)</li>
+<li><code class="inline-code">config/env_template.json</code> (Template committed to Git)</li>
+</ul>
 <p>[!CAUTION]</p>
 <p><strong>Git Hygiene Rule:</strong> Local JSON files with real keys (<code class="inline-code">config/env_dev.json</code>, <code class="inline-code">config/env_prod.json</code>) MUST be listed in <code class="inline-code">.gitignore</code> and NEVER committed. Commit ONLY <code class="inline-code">config/env_template.json</code>.</p>
 <hr class="doc-divider">
 <h2 id="4--step-2--android-gradle--productflavors--setup" class="doc-h2"><a href="#4--step-2--android-gradle--productflavors--setup" class="heading-anchor">#</a> 4. Step 2: Android Gradle <code class="inline-code">productFlavors</code> Setup</h2>
 <p class="doc-p">Official Documentation: <a href="https://docs.flutter.dev/deployment/flavors" class="doc-link">Flutter Android Flavors</a></p>
-<h3 class="doc-h3">In <code class="inline-code">android/app/build.gradle.kts</code> (Kotlin DSL):</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">kotlin</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-kotlin">android {
-    ...
-    flavorDimensions += &quot;default&quot;
-
-    productFlavors {
-        create(&quot;dev&quot;) {
-            dimension = &quot;default&quot;
-            applicationIdSuffix = &quot;.dev&quot;
-            manifestPlaceholders[&quot;appName&quot;] = &quot;App Dev&quot;
-            manifestPlaceholders[&quot;appIcon&quot;] = &quot;@mipmap/ic_launcher_dev&quot;
-        }
-        create(&quot;stage&quot;) {
-            dimension = &quot;default&quot;
-            applicationIdSuffix = &quot;.stage&quot;
-            manifestPlaceholders[&quot;appName&quot;] = &quot;App Staging&quot;
-            manifestPlaceholders[&quot;appIcon&quot;] = &quot;@mipmap/ic_launcher_stage&quot;
-        }
-        create(&quot;prod&quot;) {
-            dimension = &quot;default&quot;
-            manifestPlaceholders[&quot;appName&quot;] = &quot;App&quot;
-            manifestPlaceholders[&quot;appIcon&quot;] = &quot;@mipmap/ic_launcher&quot;
-        }
-    }
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">Or in <code class="inline-code">android/app/build.gradle</code> (Groovy DSL):</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">groovy</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-groovy">android {
-    ...
-    flavorDimensions &quot;default&quot;
-
-    productFlavors {
-        dev {
-            dimension &quot;default&quot;
-            applicationIdSuffix &quot;.dev&quot;
-            manifestPlaceholders = [appName: &quot;App Dev&quot;, appIcon: &quot;@mipmap/ic_launcher_dev&quot;]
-        }
-        stage {
-            dimension &quot;default&quot;
-            applicationIdSuffix &quot;.stage&quot;
-            manifestPlaceholders = [appName: &quot;App Staging&quot;, appIcon: &quot;@mipmap/ic_launcher_stage&quot;]
-        }
-        prod {
-            dimension &quot;default&quot;
-            manifestPlaceholders = [appName: &quot;App&quot;, appIcon: &quot;@mipmap/ic_launcher&quot;]
-        }
-    }
-}
-</code></pre>
-</div>
-<p class="doc-p">In <code class="inline-code">android/app/src/main/AndroidManifest.xml</code>:</p>
+<ul class="doc-list">
+<li><strong>Gradle Template:</strong> See <a href="examples/android_build.gradle.kts" class="doc-link">examples/android_build.gradle.kts</a>.</li>
+<li><strong>Manifest Placeholders:</strong> In <code class="inline-code">android/app/src/main/AndroidManifest.xml</code>:</li>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">xml</span>
@@ -714,194 +591,34 @@ pre {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-xml">&lt;application
-    android:label=&quot;${appName}&quot;
-    android:icon=&quot;${appIcon}&quot;&gt;
-    ...
-&lt;/application&gt;
+  <pre><code class="language-xml">  &lt;application
+      android:label=&quot;${appName}&quot;
+      android:icon=&quot;${appIcon}&quot;&gt;
+      ...
+  &lt;/application&gt;
 </code></pre>
 </div>
+</ul>
 <hr class="doc-divider">
-<h2 id="5--step-3--ios---macos-xcode-schemes---build-configurations-setup" class="doc-h2"><a href="#5--step-3--ios---macos-xcode-schemes---build-configurations-setup" class="heading-anchor">#</a> 5. Step 3: iOS &amp; macOS Xcode Schemes &amp; Build Configurations Setup</h2>
+<h2 id="5--step-3--ios---macos-xcode-schemes---build-configurations" class="doc-h2"><a href="#5--step-3--ios---macos-xcode-schemes---build-configurations" class="heading-anchor">#</a> 5. Step 3: iOS &amp; macOS Xcode Schemes &amp; Build Configurations</h2>
 <p class="doc-p">Official Documentation: <a href="https://docs.flutter.dev/deployment/flavors-ios" class="doc-link">Flutter iOS Flavors</a></p>
-<p class="doc-p">iOS and macOS require configuring Xcode Build Configurations and Schemes:</p>
-<h3 class="doc-h3">A. Build Configurations</h3>
-<p class="doc-p">In Xcode (<code class="inline-code">Runner.xcodeproj</code> -&gt; <code class="inline-code">Project</code> -&gt; <code class="inline-code">Info</code> -&gt; <code class="inline-code">Configurations</code>):</p>
-<p class="doc-p">Duplicate <code class="inline-code">Debug</code>, <code class="inline-code">Profile</code>, and <code class="inline-code">Release</code> for each flavor:</p>
-<ul class="doc-list">
+<ol class="doc-ordered-list">
+<li><strong>Build Configurations:</strong> In Xcode duplicate <code class="inline-code">Debug</code>, <code class="inline-code">Profile</code>, <code class="inline-code">Release</code> into:</li>
 <li><code class="inline-code">Debug-dev</code>, <code class="inline-code">Profile-dev</code>, <code class="inline-code">Release-dev</code></li>
 <li><code class="inline-code">Debug-stage</code>, <code class="inline-code">Profile-stage</code>, <code class="inline-code">Release-stage</code></li>
 <li><code class="inline-code">Debug-prod</code>, <code class="inline-code">Profile-prod</code>, <code class="inline-code">Release-prod</code></li>
+<li><strong>Shared Schemes:</strong> Create <code class="inline-code">dev</code>, <code class="inline-code">stage</code>, <code class="inline-code">prod</code> schemes mapped to corresponding build configurations.</li>
+<li><strong>xcconfig Linking:</strong> See <a href="examples/xcconfig_sample.xcconfig" class="doc-link">examples/xcconfig_sample.xcconfig</a>.</li>
 </ul>
-<h3 class="doc-h3">B. Xcode Schemes</h3>
-<p class="doc-p">Create 3 shared Schemes in Xcode (<code class="inline-code">Product</code> -&gt; <code class="inline-code">Scheme</code> -&gt; <code class="inline-code">Manage Schemes...</code>):</p>
-<ol class="doc-ordered-list">
-<li><strong><code class="inline-code">dev</code> Scheme:</strong></li>
-<li>Build / Run / Test -&gt; Uses <code class="inline-code">Debug-dev</code></li>
-<li>Archive -&gt; Uses <code class="inline-code">Release-dev</code></li>
-<li><strong><code class="inline-code">stage</code> Scheme:</strong></li>
-<li>Build / Run / Test -&gt; Uses <code class="inline-code">Debug-stage</code></li>
-<li>Archive -&gt; Uses <code class="inline-code">Release-stage</code></li>
-<li><strong><code class="inline-code">prod</code> Scheme:</strong></li>
-<li>Build / Run / Test -&gt; Uses <code class="inline-code">Debug-prod</code></li>
-<li>Archive -&gt; Uses <code class="inline-code">Release-prod</code></li>
+<hr class="doc-divider">
+<h2 id="6--step-4--desktop-flavors-setup--linux---windows-" class="doc-h2"><a href="#6--step-4--desktop-flavors-setup--linux---windows-" class="heading-anchor">#</a> 6. Step 4: Desktop Flavors Setup (Linux &amp; Windows)</h2>
+<p class="doc-p">For desktop CMakeLists and window title configuration:</p>
+<ul class="doc-list">
+<li>See full implementation guide: <a href="examples/desktop_flavor_setup.html" class="doc-link">examples/desktop_flavor_setup.md</a>.</li>
 </ul>
-<h3 class="doc-h3">C. <code class="inline-code">xcconfig</code> Linking</h3>
-<p class="doc-p">In <code class="inline-code">ios/Flutter/</code> (and <code class="inline-code">macos/Flutter/</code>):</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">text</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-text">Debug-dev.xcconfig:
-#include &quot;Generated.xcconfig&quot;
-#include &quot;Pods/Target Support Files/Pods-Runner/Pods-Runner.debug-dev.xcconfig&quot;
-PRODUCT_BUNDLE_IDENTIFIER = com.example.app.dev
-APP_DISPLAY_NAME = App Dev
-
-Release-prod.xcconfig:
-#include &quot;Generated.xcconfig&quot;
-#include &quot;Pods/Target Support Files/Pods-Runner/Pods-Runner.release-prod.xcconfig&quot;
-PRODUCT_BUNDLE_IDENTIFIER = com.example.app
-APP_DISPLAY_NAME = App
-</code></pre>
-</div>
-<p class="doc-p">In <code class="inline-code">ios/Runner/Info.plist</code>:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">xml</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-xml">&lt;key&gt;CFBundleDisplayName&lt;/key&gt;
-&lt;string&gt;$(APP_DISPLAY_NAME)&lt;/string&gt;
-</code></pre>
-</div>
 <hr class="doc-divider">
-<h2 id="6--step-4--linux-desktop-flavors-setup" class="doc-h2"><a href="#6--step-4--linux-desktop-flavors-setup" class="heading-anchor">#</a> 6. Step 4: Linux Desktop Flavors Setup</h2>
-<p class="doc-p">Official Documentation: <a href="https://docs.flutter.dev/deployment/flavors-linux" class="doc-link">Flutter Linux Flavors</a></p>
-<p class="doc-p">In <code class="inline-code">linux/CMakeLists.txt</code>, read the flavor passed by Flutter tool and configure binary definitions:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">cmake</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-cmake"># Add flavor definition support
-if(DEFINED FLUTTER_FLAVOR)
-  add_definitions(-DFLUTTER_FLAVOR=&quot;${FLUTTER_FLAVOR}&quot;)
-endif()
-</code></pre>
-</div>
-<p class="doc-p">In <code class="inline-code">linux/my_application.cc</code>:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">cpp</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-cpp">// Set application title dynamically based on FLUTTER_FLAVOR
-#ifdef FLUTTER_FLAVOR
-  std::string flavor = FLUTTER_FLAVOR;
-  if (flavor == &quot;dev&quot;) {
-    gtk_window_set_title(window, &quot;App Dev&quot;);
-  } else if (flavor == &quot;stage&quot;) {
-    gtk_window_set_title(window, &quot;App Staging&quot;);
-  } else {
-    gtk_window_set_title(window, &quot;App&quot;);
-  }
-#else
-  gtk_window_set_title(window, &quot;App&quot;);
-#endif
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="7--step-5--windows-desktop-flavors-setup" class="doc-h2"><a href="#7--step-5--windows-desktop-flavors-setup" class="heading-anchor">#</a> 7. Step 5: Windows Desktop Flavors Setup</h2>
-<p class="doc-p">Official Documentation: <a href="https://docs.flutter.dev/deployment/flavors-windows" class="doc-link">Flutter Windows Flavors</a></p>
-<p class="doc-p">In <code class="inline-code">windows/CMakeLists.txt</code>:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">cmake</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-cmake">if(DEFINED FLUTTER_FLAVOR)
-  add_definitions(-DFLUTTER_FLAVOR=&quot;${FLUTTER_FLAVOR}&quot;)
-endif()
-</code></pre>
-</div>
-<p class="doc-p">In <code class="inline-code">windows/runner/main.cpp</code>:</p>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">cpp</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-cpp">#ifdef FLUTTER_FLAVOR
-  std::string flavor = FLUTTER_FLAVOR;
-  std::wstring title = L&quot;App&quot;;
-  if (flavor == &quot;dev&quot;) {
-    title = L&quot;App Dev&quot;;
-  } else if (flavor == &quot;stage&quot;) {
-    title = L&quot;App Staging&quot;;
-  }
-  if (!window.Create(title, origin, size)) {
-    return EXIT_FAILURE;
-  }
-#else
-  if (!window.Create(L&quot;App&quot;, origin, size)) {
-    return EXIT_FAILURE;
-  }
-#endif
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="8--step-6--flavor-app-icons-with--flutter_launcher_icons-" class="doc-h2"><a href="#8--step-6--flavor-app-icons-with--flutter_launcher_icons-" class="heading-anchor">#</a> 8. Step 6: Flavor App Icons with <code class="inline-code">flutter_launcher_icons</code></h2>
-<p class="doc-p">Create per-flavor icon configurations in root:</p>
-<h3 class="doc-h3"><code class="inline-code">flutter_launcher_icons-dev.yaml</code></h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">yaml</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-yaml">flutter_launcher_icons:
-  android: &quot;ic_launcher_dev&quot;
-  ios: &quot;AppIcon-dev&quot;
-  image_path: &quot;assets/icons/icon_dev.png&quot;
-</code></pre>
-</div>
-<h3 class="doc-h3"><code class="inline-code">flutter_launcher_icons-prod.yaml</code></h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">yaml</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-yaml">flutter_launcher_icons:
-  android: &quot;ic_launcher&quot;
-  ios: &quot;AppIcon&quot;
-  image_path: &quot;assets/icons/icon_prod.png&quot;
-</code></pre>
-</div>
-<h3 class="doc-h3">Generate Icons Command:</h3>
+<h2 id="7--step-5--flavor-app-icons-with--flutter_launcher_icons-" class="doc-h2"><a href="#7--step-5--flavor-app-icons-with--flutter_launcher_icons-" class="heading-anchor">#</a> 7. Step 5: Flavor App Icons with <code class="inline-code">flutter_launcher_icons</code></h2>
+<p class="doc-p">Create per-flavor icon configurations (<code class="inline-code">flutter_launcher_icons-dev.yaml</code>, <code class="inline-code">flutter_launcher_icons-prod.yaml</code>):</p>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">bash</span>
@@ -915,7 +632,7 @@ flutter pub run flutter_launcher_icons -f flutter_launcher_icons-prod.yaml
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="9--cli-execution---release-commands" class="doc-h2"><a href="#9--cli-execution---release-commands" class="heading-anchor">#</a> 9. CLI Execution &amp; Release Commands</h2>
+<h2 id="8--cli-execution---release-commands" class="doc-h2"><a href="#8--cli-execution---release-commands" class="heading-anchor">#</a> 8. CLI Execution &amp; Release Commands</h2>
 <h3 class="doc-h3">Running Locally</h3>
 <div class="code-block-wrapper">
   <div class="code-header">
@@ -925,7 +642,7 @@ flutter pub run flutter_launcher_icons -f flutter_launcher_icons-prod.yaml
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-bash"># Run Development Flavor (Mobile, Desktop, Web)
+  <pre><code class="language-bash"># Run Development Flavor
 flutter run --flavor dev --dart-define-from-file=config/env_dev.json
 
 # Run Staging Flavor
@@ -936,7 +653,6 @@ flutter run --flavor prod --dart-define-from-file=config/env_prod.json
 </code></pre>
 </div>
 <h3 class="doc-h3">Building Release Artifacts</h3>
-<h4 class="doc-h4">Android (APK &amp; App Bundle)</h4>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">bash</span>
@@ -945,47 +661,16 @@ flutter run --flavor prod --dart-define-from-file=config/env_prod.json
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-bash"># Build Prod APK
+  <pre><code class="language-bash"># Android AppBundle &amp; APK
+flutter build appbundle --flavor prod --dart-define-from-file=config/env_prod.json
 flutter build apk --flavor prod --dart-define-from-file=config/env_prod.json
 
-# Build Prod AppBundle (Google Play Release)
-flutter build appbundle --flavor prod --dart-define-from-file=config/env_prod.json
-</code></pre>
-</div>
-<h4 class="doc-h4">iOS (IPA for App Store)</h4>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">bash</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-bash"># Build Prod IPA
+# iOS IPA
 flutter build ipa --flavor prod --dart-define-from-file=config/env_prod.json
 </code></pre>
 </div>
-<h4 class="doc-h4">Desktop Release Builds</h4>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">bash</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-bash"># macOS
-flutter build macos --flavor prod --dart-define-from-file=config/env_prod.json
-
-# Windows
-flutter build windows --flavor prod --dart-define-from-file=config/env_prod.json
-
-# Linux
-flutter build linux --flavor prod --dart-define-from-file=config/env_prod.json
-</code></pre>
-</div>
 <hr class="doc-divider">
-<h2 id="10--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#10--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 10. Anti-Patterns (Strictly Prohibited)</h2>
+<h2 id="9--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#9--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 9. Anti-Patterns (Strictly Prohibited)</h2>
 <div class="table-responsive"><table class="doc-table">
 <thead><tr>
 <th>Anti-Pattern</th>
@@ -1012,14 +697,9 @@ flutter build linux --flavor prod --dart-define-from-file=config/env_prod.json
 <td><strong>HIGH</strong></td>
 <td>Run <code class="inline-code">cd ios &amp;&amp; pod install</code> after modifying Build Configurations.</td>
 </tr>
-<tr>
-<td>Omitting Linux/Windows flavor CMake definitions</td>
-<td><strong>MEDIUM</strong></td>
-<td>Configure CMakeLists.txt to pass <code class="inline-code">FLUTTER_FLAVOR</code>.</td>
-</tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="11--verification-checklist" class="doc-h2"><a href="#11--verification-checklist" class="heading-anchor">#</a> 11. Verification Checklist</h2>
+<h2 id="10--verification-checklist" class="doc-h2"><a href="#10--verification-checklist" class="heading-anchor">#</a> 10. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
@@ -1045,7 +725,7 @@ flutter build linux --flavor prod --dart-define-from-file=config/env_prod.json
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Desktop platforms (macOS, Windows, Linux) display appropriate flavor window titles.</span>
+    <span class="check-text">Desktop platforms display appropriate flavor window titles.</span>
   </label>
 </div>
 <div class="checklist-item">

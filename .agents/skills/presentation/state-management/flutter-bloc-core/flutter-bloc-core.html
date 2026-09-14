@@ -619,235 +619,26 @@ pre {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="5--standard-implementation-templates" class="doc-h2"><a href="#5--standard-implementation-templates" class="heading-anchor">#</a> 5. Standard Implementation Templates</h2>
-<h3 class="doc-h3">5.1 Events (<code class="inline-code">&lt;feature_name&gt;_event.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">part of &#039;&lt;feature_name&gt;_bloc.dart&#039;;
-
-sealed class FeatureEvent extends Equatable {
-  const FeatureEvent();
-
-  @override
-  List&lt;Object?&gt; get props =&gt; [];
-}
-
-final class FeatureFetchRequested extends FeatureEvent {
-  final String query;
-
-  const FeatureFetchRequested({this.query = &#039;&#039;});
-
-  @override
-  List&lt;Object?&gt; get props =&gt; [query];
-}
-
-final class FeatureSubmitPressed extends FeatureEvent {
-  final FeatureRequestEntity payload;
-
-  const FeatureSubmitPressed(this.payload);
-
-  @override
-  List&lt;Object?&gt; get props =&gt; [payload];
-}
-
-final class FeatureRetryClicked extends FeatureEvent {
-  const FeatureRetryClicked();
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">5.2 States (<code class="inline-code">&lt;feature_name&gt;_state.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">part of &#039;&lt;feature_name&gt;_bloc.dart&#039;;
-
-sealed class FeatureState extends Equatable {
-  const FeatureState();
-
-  @override
-  List&lt;Object?&gt; get props =&gt; [];
-}
-
-final class FeatureInitial extends FeatureState {}
-
-final class FeatureLoadInProgress extends FeatureState {}
-
-@CopyWith()
-final class FeatureLoadSuccess extends FeatureState {
-  final List&lt;FeatureEntity&gt; items;
-  final bool hasMore;
-  final bool isRefreshing;
-
-  const FeatureLoadSuccess({
-    required this.items,
-    this.hasMore = false,
-    this.isRefreshing = false,
-  });
-
-  @override
-  List&lt;Object?&gt; get props =&gt; [items, hasMore, isRefreshing];
-}
-
-final class FeatureFailure extends FeatureState {
-  final String message;
-
-  const FeatureFailure(this.message);
-
-  @override
-  List&lt;Object?&gt; get props =&gt; [message];
-}
-</code></pre>
-</div>
-<h3 class="doc-h3">5.3 BLoC Class (<code class="inline-code">&lt;feature_name&gt;_bloc.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:bloc/bloc.dart&#039;;
-import &#039;package:bloc_concurrency/bloc_concurrency.dart&#039;;
-import &#039;package:copy_with_extension/copy_with_extension.dart&#039;;
-import &#039;package:equatable/equatable.dart&#039;;
-import &#039;package:injectable/injectable.dart&#039;;
-
-import &#039;package:flutter_template/domain/feature/entities/feature_entity.dart&#039;;
-import &#039;package:flutter_template/domain/feature/entities/feature_request_entity.dart&#039;;
-import &#039;package:flutter_template/domain/feature/usecases/get_features_usecase.dart&#039;;
-import &#039;package:flutter_template/domain/feature/usecases/submit_feature_usecase.dart&#039;;
-
-part &#039;&lt;feature_name&gt;_event.dart&#039;;
-part &#039;&lt;feature_name&gt;_state.dart&#039;;
-part &#039;&lt;feature_name&gt;_bloc.g.dart&#039;;
-
-@injectable
-class FeatureBloc extends Bloc&lt;FeatureEvent, FeatureState&gt; {
-  final GetFeaturesUseCase _getFeaturesUseCase;
-  final SubmitFeatureUseCase _submitFeatureUseCase;
-
-  FeatureBloc(
-    this._getFeaturesUseCase,
-    this._submitFeatureUseCase,
-  ) : super(FeatureInitial()) {
-    on&lt;FeatureFetchRequested&gt;(
-      _onFetchRequested,
-      transformer: restartable(), // Cancels previous in-flight search on new input
-    );
-    on&lt;FeatureSubmitPressed&gt;(
-      _onSubmitPressed,
-      transformer: droppable(), // Drops rapid duplicate clicks until submission completes
-    );
-    on&lt;FeatureRetryClicked&gt;(
-      _onRetryClicked,
-      transformer: droppable(),
-    );
-  }
-
-  Future&lt;void&gt; _onFetchRequested(
-    FeatureFetchRequested event,
-    Emitter&lt;FeatureState&gt; emit,
-  ) async {
-    emit(FeatureLoadInProgress());
-
-    try {
-      final items = await _getFeaturesUseCase(event.query);
-
-      // Mandatory Async Safety Guard Check
-      if (emit.isDone) return;
-
-      emit(FeatureLoadSuccess(items: items));
-    } catch (error, stackTrace) {
-      if (emit.isDone) return;
-
-      // Pass error to global observer for logging/crashlytics
-      addError(error, stackTrace);
-
-      emit(FeatureFailure(error.toString()));
-    }
-  }
-
-  Future&lt;void&gt; _onSubmitPressed(
-    FeatureSubmitPressed event,
-    Emitter&lt;FeatureState&gt; emit,
-  ) async {
-    try {
-      await _submitFeatureUseCase(event.payload);
-
-      if (emit.isDone) return;
-
-      // Re-trigger fetch or emit success state
-    } catch (error, stackTrace) {
-      if (emit.isDone) return;
-
-      addError(error, stackTrace);
-      emit(FeatureFailure(error.toString()));
-    }
-  }
-
-  Future&lt;void&gt; _onRetryClicked(
-    FeatureRetryClicked event,
-    Emitter&lt;FeatureState&gt; emit,
-  ) async {
-    add(const FeatureFetchRequested());
-  }
-}
-</code></pre>
-</div>
-<hr class="doc-divider">
-<h2 id="6--event-concurrency-transformers-reference" class="doc-h2"><a href="#6--event-concurrency-transformers-reference" class="heading-anchor">#</a> 6. Event Concurrency Transformers Reference</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Transformer</th>
-<th>Mechanism</th>
-<th>Best Use Cases</th>
-</tr></thead><tbody>
-<tr>
-<td><code class="inline-code">restartable()</code></td>
-<td>Cancels any currently executing handler when a new event of the same type arrives.</td>
-<td>Live search inputs, filter tabs switching, auto-complete queries.</td>
-</tr>
-<tr>
-<td><code class="inline-code">droppable()</code></td>
-<td>Ignores incoming events of the same type while the current event handler is executing.</td>
-<td>Form submit buttons, checkout/payment CTA, manual pull-to-refresh.</td>
-</tr>
-<tr>
-<td><code class="inline-code">sequential()</code></td>
-<td>Queues incoming events and executes them one after another in order.</td>
-<td>Transaction queues, message sending queue, sequential analytics processing.</td>
-</tr>
-<tr>
-<td><code class="inline-code">concurrent()</code> (default)</td>
-<td>Executes each event handler concurrently without cancellation or queuing.</td>
-<td>Independent read requests, independent widget heartbeats.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="7--error-handling---state-stability-rules" class="doc-h2"><a href="#7--error-handling---state-stability-rules" class="heading-anchor">#</a> 7. Error Handling &amp; State Stability Rules</h2>
-<ol class="doc-ordered-list">
-<li><strong>Emit Failure, Do Not Auto-Reset:</strong></li>
-<li>NEVER emit <code class="inline-code">FeatureFailure</code> and immediately follow it with <code class="inline-code">FeatureInitial</code> within the same event handler. This causes severe UI flickering.</li>
-<li>Failure states should be dismissed ONLY via explicit user retry actions (e.g. <code class="inline-code">FeatureRetryClicked</code>).</li>
-<li><strong>Mandatory <code class="inline-code">addError</code> Logging:</strong></li>
-<li>Always invoke <code class="inline-code">addError(error, stackTrace)</code> before emitting <code class="inline-code">FeatureFailure</code>. This ensures errors reach <code class="inline-code">BlocObserver</code> and remote telemetry (Crashlytics/Sentry).</li>
-<li><strong>Async Guards (<code class="inline-code">emit.isDone</code>):</strong></li>
-<li>After ANY <code class="inline-code">await</code> call, you MUST check <code class="inline-code">if (emit.isDone) return;</code>. This prevents unhandled exceptions when BLoC is closed or an event was cancelled by <code class="inline-code">restartable()</code>.</li>
+<h2 id="5--reference-implementation---examples-sample_bloc---" class="doc-h2"><a href="#5--reference-implementation---examples-sample_bloc---" class="heading-anchor">#</a> 5. Reference Implementation (<code class="inline-code">examples/sample_bloc/</code>)</h2>
+<p class="doc-p">A production-ready reference implementation is available in <code class="inline-code">examples/sample_bloc/</code>:</p>
+<ul class="doc-list">
+<li><strong>Events Definition:</strong> <a href="examples/sample_bloc/sample_event.dart" class="doc-link">examples/sample_bloc/sample_event.dart</a></li>
+<li><code class="inline-code">sealed class SampleEvent</code> with <code class="inline-code">final class</code> concrete event variants.</li>
+<li><strong>States Definition:</strong> <a href="examples/sample_bloc/sample_state.dart" class="doc-link">examples/sample_bloc/sample_state.dart</a></li>
+<li><code class="inline-code">sealed class SampleState</code> with <code class="inline-code">@CopyWith()</code> for modified states (<code class="inline-code">Initial</code>, <code class="inline-code">InProgress</code>, <code class="inline-code">Success</code>, <code class="inline-code">Failure</code>).</li>
+<li><strong>BLoC Class Implementation:</strong> <a href="examples/sample_bloc/sample_bloc.dart" class="doc-link">examples/sample_bloc/sample_bloc.dart</a></li>
+<li><code class="inline-code">@injectable</code> registration, <code class="inline-code">bloc_concurrency</code> event transformers, async emitter guards (<code class="inline-code">if (emit.isDone) return;</code>), and error logging via <code class="inline-code">addError(e, st)</code>.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="8--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#8--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 8. Anti-Patterns (Strictly Prohibited)</h2>
+<h2 id="6--strict-architectural-constraints" class="doc-h2"><a href="#6--strict-architectural-constraints" class="heading-anchor">#</a> 6. Strict Architectural Constraints</h2>
+<ol class="doc-ordered-list">
+<li><strong>Zero Flutter SDK Imports in BLoC Layer:</strong> Never import <code class="inline-code">package:flutter/material.dart</code> or UI packages.</li>
+<li><strong>Never Call Public Methods on BLoCs:</strong> UI dispatches actions strictly via <code class="inline-code">context.read&lt;FeatureBloc&gt;().add(Event())</code>.</li>
+<li><strong>Always Check Emitter Status:</strong> After every <code class="inline-code">await</code>, check <code class="inline-code">if (emit.isDone) return;</code>.</li>
+<li><strong>No Direct Repository Calls:</strong> BLoCs interact exclusively through injected Domain Use Cases.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="7--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#7--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 7. Anti-Patterns (Strictly Prohibited)</h2>
 <div class="table-responsive"><table class="doc-table">
 <thead><tr>
 <th>Anti-Pattern</th>
@@ -855,78 +646,68 @@ class FeatureBloc extends Bloc&lt;FeatureEvent, FeatureState&gt; {
 <th>Corrective Action</th>
 </tr></thead><tbody>
 <tr>
-<td>Importing <code class="inline-code">package:flutter/material.dart</code> inside BLoC/Cubit</td>
+<td>Exposing public methods on BLoC classes</td>
 <td><strong>CRITICAL</strong></td>
-<td>Remove Flutter imports. Keep BLoC 100% pure Dart.</td>
-</tr>
-<tr>
-<td>Calling <code class="inline-code">Repository</code> or <code class="inline-code">ApiClient</code> directly from BLoC</td>
-<td><strong>CRITICAL</strong></td>
-<td>Inject and call single-purpose <strong>Domain UseCases</strong> only.</td>
+<td>Keep methods private; trigger actions strictly via Events.</td>
 </tr>
 <tr>
 <td>Missing <code class="inline-code">if (emit.isDone) return;</code> after <code class="inline-code">await</code></td>
 <td><strong>HIGH</strong></td>
-<td>Add safety guard check after every asynchronous operation.</td>
+<td>Add safety guard after every async operation.</td>
 </tr>
 <tr>
-<td>Exposing public methods on BLoC (e.g., <code class="inline-code">bloc.loadData()</code>)</td>
+<td>Emitting states without <code class="inline-code">bloc_concurrency</code> on search/click buttons</td>
 <td><strong>HIGH</strong></td>
-<td>Define typed <code class="inline-code">FeatureEvent</code> and trigger via <code class="inline-code">bloc.add()</code>.</td>
+<td>Use <code class="inline-code">restartable()</code> for search inputs and <code class="inline-code">droppable()</code> for submit buttons.</td>
 </tr>
 <tr>
-<td>Single monolithic state with 10+ nullable boolean flags</td>
-<td><strong>HIGH</strong></td>
-<td>Model explicit lifecycle states: <code class="inline-code">Initial</code>, <code class="inline-code">InProgress</code>, <code class="inline-code">Success</code>, <code class="inline-code">Failure</code>.</td>
-</tr>
-<tr>
-<td>Manual <code class="inline-code">copyWith</code> implementation for complex state</td>
-<td><strong>MEDIUM</strong></td>
-<td>Annotate state class with <code class="inline-code">@CopyWith()</code> from <code class="inline-code">copy_with_extension</code>.</td>
+<td>Importing Flutter UI libraries into BLoCs</td>
+<td><strong>CRITICAL</strong></td>
+<td>Use pure Dart types; map to Flutter widgets/enums in UI layer.</td>
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="9--verification-checklist" class="doc-h2"><a href="#9--verification-checklist" class="heading-anchor">#</a> 9. Verification Checklist</h2>
+<h2 id="8--verification-checklist" class="doc-h2"><a href="#8--verification-checklist" class="heading-anchor">#</a> 8. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">BLoC file is split into <code class="inline-code">_event.dart</code>, <code class="inline-code">_state.dart</code>, <code class="inline-code">_bloc.dart</code> using <code class="inline-code">part</code> / <code class="inline-code">part of</code>.</span>
+    <span class="check-text">3-file structure applied with <code class="inline-code">part</code> / <code class="inline-code">part of</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Dependencies injected via constructor are Domain UseCases annotated with <code class="inline-code">@injectable</code>.</span>
+    <span class="check-text">Events and States modeled with <code class="inline-code">sealed</code> and <code class="inline-code">final</code> classes.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Base event/state classes use <code class="inline-code">sealed class</code>; variants use <code class="inline-code">final class</code> and extend <code class="inline-code">Equatable</code>.</span>
+    <span class="check-text">Concurrency transformers applied (<code class="inline-code">restartable</code>, <code class="inline-code">droppable</code>, <code class="inline-code">sequential</code>).</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Every asynchronous handler verifies <code class="inline-code">if (emit.isDone) return;</code> immediately after <code class="inline-code">await</code>.</span>
+    <span class="check-text">All event handlers check <code class="inline-code">if (emit.isDone) return;</code> after awaits.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">restartable()</code> or <code class="inline-code">droppable()</code> transformers are configured where race conditions or double-taps may occur.</span>
+    <span class="check-text">Zero Flutter SDK imports in BLoC / Cubit files.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Errors are captured with <code class="inline-code">addError(error, stackTrace)</code> and mapped to typed failure states.</span>
+    <span class="check-text">Annotated with <code class="inline-code">@injectable</code> for DI registration.</span>
   </label>
 </div>
 

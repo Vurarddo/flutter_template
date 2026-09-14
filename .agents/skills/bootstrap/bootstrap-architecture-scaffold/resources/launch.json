@@ -1,0 +1,140 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "🔧 Debug Dev",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "dev",
+                "--dart-define-from-file=config/env_dev.json"
+            ]
+        },
+        {
+            "name": "⚙️ Profile Dev",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "dev",
+                "--dart-define-from-file=config/env_dev.json",
+                "--profile"
+            ]
+        },
+        {
+            "name": "📱 Release Dev",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "dev",
+                "--dart-define-from-file=config/env_dev.json",
+                "--release"
+            ]
+        },
+        {
+            "name": "🔧 Debug Stage",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "stage",
+                "--dart-define-from-file=config/env_stage.json"
+            ]
+        },
+        {
+            "name": "⚙️ Profile Stage",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "stage",
+                "--dart-define-from-file=config/env_stage.json",
+                "--profile"
+            ]
+        },
+        {
+            "name": "📱 Release Stage",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "stage",
+                "--dart-define-from-file=config/env_stage.json",
+                "--release"
+            ]
+        },
+        {
+            "name": "🔧 Debug Prod",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "prod",
+                "--dart-define-from-file=config/env_prod.json"
+            ]
+        },
+        {
+            "name": "⚙️ Profile Prod",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "prod",
+                "--dart-define-from-file=config/env_prod.json",
+                "--profile"
+            ]
+        },
+        {
+            "name": "📱 Release Prod",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "prod",
+                "--dart-define-from-file=config/env_prod.json",
+                "--release"
+            ]
+        },
+        {
+            "name": "🧪 Run All Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/"
+        },
+        {
+            "name": "🧪 Run Unit Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/unit/"
+        },
+        {
+            "name": "🧪 Run Widget Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/widget/"
+        },
+        {
+            "name": "🧪 Run BLoC Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/bloc/"
+        },
+        {
+            "name": "🔍 Run Integration Tests (UiKit)",
+            "request": "launch",
+            "type": "dart",
+            "program": "integration_test/uikit_page_test.dart"
+        }
+    ]
+}
