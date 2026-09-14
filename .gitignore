@@ -55,5 +55,8 @@ config/env_*.json
 *.config.dart
 lib/l10n/generated/
 lib/presentation/ui_utils/assets/
-
-
+# Local agent configuration & user overrides
+.agents/rules/local_*.md
+.agents/rules/*.local.md
+.agents/local.json
+.agents/local_*.json

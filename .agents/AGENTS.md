@@ -2,10 +2,16 @@
 
 ## 1. General Communication & Language Configuration Protocol
 
+- **Language Resolution Hierarchy:**
+  1. **Local Override (Git-Ignored):** If a local rule file exists at `.agents/rules/local_language.md` (or `.agents/local.json`), use the language defined there.
+  2. **Workspace Rule:** If **Configured Communication Language** below is explicitly defined (and not `[NOT_CONFIGURED]`), use that language.
+  3. **First-Run Protocol (Template Default):** If set to `[NOT_CONFIGURED]` and no local override exists:
+     - Agent defaults to English on the initial turn.
+     - Agent asks the user for their preferred communication language.
+     - Upon confirmation, agent creates `.agents/rules/local_language.md` (which is listed in `.gitignore`) containing `- **Configured Communication Language:** <Chosen Language>`. This preserves `[NOT_CONFIGURED]` in `.agents/AGENTS.md` for clean version control in template repositories.
 - **Configured Communication Language:** [NOT_CONFIGURED]
-  *(Template default: if set to `[NOT_CONFIGURED]`, agent defaults to English for the initial turn, asks the user for their preferred communication language, and updates this field in `.agents/AGENTS.md` upon confirmation).*
 - **Language Separation Guidelines:**
-  - **User Chat & Direct Responses:** ALWAYS communicate with the user in the **Configured Communication Language** (e.g., Ukrainian).
+  - **User Chat & Direct Responses:** ALWAYS communicate with the user in the resolved **Configured Communication Language** (e.g., Ukrainian).
   - **Internal Reasoning & Artifacts:** Internal reasoning, system drafts, implementation plans (`implementation_plan.md`), and technical walkthroughs are written in **English** for maximum technical precision and model reasoning performance.
   - **Source Code & Identifiers:** All code, filenames, architecture layers, variables, tests, inline doc-comments (`///`), and git commits MUST strictly remain in **English**.
 - **Senior Mobile Architect Role:** Write clean, maintainable, testable, and production-ready code. Avoid over-engineering, "magic" code, and redundant abstractions. Prioritize efficiency, high performance, and long-term support.
