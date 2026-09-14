@@ -554,6 +554,14 @@ pre {
 <li>  <strong>Tighten Dev Dependencies:</strong> Set the lower bound of <code class="inline-code">dev_dependencies</code> to the exact version currently used. This reduces resolution complexity and prevents older, incompatible dev tools from being selected.</li>
 <li>  <strong>Enforce Lockfiles in CI:</strong> Use <code class="inline-code">dart pub get --enforce-lockfile</code> in CI/CD pipelines to ensure the exact versions tested locally are used in production.</li>
 </ul>
+<h2 id="mcp-tooling---accelerated-dependency-investigation" class="doc-h2"><a href="#mcp-tooling---accelerated-dependency-investigation" class="heading-anchor">#</a> MCP Tooling &amp; Accelerated Dependency Investigation</h2>
+<p class="doc-p">Antigravity IDE provides fast, programmatic package intelligence:</p>
+<ul class="doc-list">
+<li><strong>Search Package Metadata (<code class="inline-code">pub_dev_search</code>):</strong> Call MCP <code class="inline-code">pub_dev_search</code> to query pub.dev for current versions, popularity metrics, and official descriptions without external web browsers.</li>
+<li><strong>Inspect Cached SDK &amp; Library Code (<code class="inline-code">rip_grep_packages</code>):</strong> Grep across all downloaded third-party packages to inspect method signatures, breaking changes, or deprecations.</li>
+<li><strong>Read Library Source (<code class="inline-code">read_package_uris</code>):</strong> Directly read <code class="inline-code">package:...</code> source files to understand underlying implementations.</li>
+<li><strong>Master Reference:</strong> See <a href="../tooling/mcp-tooling-hub/mcp-tooling-hub.html" class="skill-ref-link" title="Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (hot_reload, hot_restart, widget_inspector, get_runtime_errors, analyze_files, lsp, pub_dev_search, rip_grep_packages, vm_service), firebase-mcp-server, and android-management-api. Use when choosing between MCP-accelerated IDE actions and CLI commands.">mcp-tooling-hub <span class="ext-icon">↗</span></a>.</li>
+</ul>
 <h2 id="workflow--auditing-dependencies" class="doc-h2"><a href="#workflow--auditing-dependencies" class="heading-anchor">#</a> Workflow: Auditing Dependencies</h2>
 <p class="doc-p">Run this workflow periodically to identify stale packages that may impact stability or performance.</p>
 <p class="doc-p"><strong>Task Progress:</strong></p>
@@ -561,7 +569,7 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Run <code class="inline-code">dart pub outdated</code>.</span>
+    <span class="check-text">Query pub.dev status via MCP <code class="inline-code">pub_dev_search</code> or run <code class="inline-code">dart pub outdated</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
@@ -773,6 +781,21 @@ pre {
 
     </article>
 
+<div class="related-skills-section" style="margin-top: 3rem;">
+<h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
+<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+<a href="../tooling/mcp-tooling-hub/mcp-tooling-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    mcp-tooling-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
+    General
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (...
+  </div>
+</a>
+</div></div>
 
 
     <footer class="footer">

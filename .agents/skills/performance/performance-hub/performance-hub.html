@@ -610,7 +610,33 @@ pre {
 <li>Enable <strong>&quot;Highlight repaints&quot;</strong> to visualize with rainbow borders which sections of the screen are repainting on each frame. Static elements should NEVER flash borders during localized animations.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="4--performance-laws---standards" class="doc-h2"><a href="#4--performance-laws---standards" class="heading-anchor">#</a> 4. Performance Laws &amp; Standards</h2>
+<h2 id="4--mcp-tooling---accelerated-profiling-workflows" class="doc-h2"><a href="#4--mcp-tooling---accelerated-profiling-workflows" class="heading-anchor">#</a> 4. MCP Tooling &amp; Accelerated Profiling Workflows</h2>
+<p class="doc-p">Antigravity IDE provides direct programmatic access to Dart runtime daemons and VM services via MCP tools:</p>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>MCP Tool</th>
+<th>Capability</th>
+<th>Performance Diagnostic Flow</th>
+</tr></thead><tbody>
+<tr>
+<td><code class="inline-code">vm_service</code></td>
+<td>Dart VM RPC integration</td>
+<td>Inspect isolate memory allocations, garbage collection pauses, and CPU timeline events.</td>
+</tr>
+<tr>
+<td><code class="inline-code">widget_inspector</code></td>
+<td>Live widget tree introspection</td>
+<td>Identify deep widget hierarchies, inspect constraints, and verify render object boundaries.</td>
+</tr>
+<tr>
+<td><code class="inline-code">hot_reload</code></td>
+<td>Sub-second code updates</td>
+<td>Instantly test performance refactors (e.g. adding <code class="inline-code">RepaintBoundary</code> or <code class="inline-code">const</code>) without app reboots.</td>
+</tr>
+</tbody></table></div>
+<p class="doc-p">For a complete guide on available IDE tools, refer to the <a href="../../tooling/mcp-tooling-hub/mcp-tooling-hub.html" class="skill-ref-link" title="Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (hot_reload, hot_restart, widget_inspector, get_runtime_errors, analyze_files, lsp, pub_dev_search, rip_grep_packages, vm_service), firebase-mcp-server, and android-management-api. Use when choosing between MCP-accelerated IDE actions and CLI commands.">mcp-tooling-hub <span class="ext-icon">↗</span></a>.</p>
+<hr class="doc-divider">
+<h2 id="5--performance-laws---standards" class="doc-h2"><a href="#5--performance-laws---standards" class="heading-anchor">#</a> 5. Performance Laws &amp; Standards</h2>
 <ol class="doc-ordered-list">
 <li><strong>Zero Heavy Work in <code class="inline-code">build()</code>:</strong> No sorting, filtering of large collections, JSON decoding, or async futures initiated inside <code class="inline-code">build()</code>.</li>
 <li><strong>Mandatory <code class="inline-code">const</code> Usage:</strong> Maximize <code class="inline-code">const</code> widget constructors to short-circuit subtree re-evaluation.</li>
@@ -620,7 +646,7 @@ pre {
 <li><strong>Lazy Scrollable Views:</strong> Use <code class="inline-code">itemExtent</code> or <code class="inline-code">prototypeItem</code> on all uniform lists to eliminate per-item layout measurements.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="5--performance-verification-checklist" class="doc-h2"><a href="#5--performance-verification-checklist" class="heading-anchor">#</a> 5. Performance Verification Checklist</h2>
+<h2 id="6--performance-verification-checklist" class="doc-h2"><a href="#6--performance-verification-checklist" class="heading-anchor">#</a> 6. Performance Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
@@ -662,6 +688,17 @@ pre {
 <div class="related-skills-section" style="margin-top: 3rem;">
 <h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+<a href="../../tooling/mcp-tooling-hub/mcp-tooling-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    mcp-tooling-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
+    General
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (...
+  </div>
+</a>
 <a href="../performance-rendering-build/performance-rendering-build.html" class="checklist-item" style="text-decoration: none; display: block;">
   <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
     performance-rendering-build ↗

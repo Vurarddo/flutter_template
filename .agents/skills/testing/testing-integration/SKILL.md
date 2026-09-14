@@ -230,9 +230,16 @@ flutter test integration_test/item_journey_test.dart -d windows
 flutter test integration_test/item_journey_test.dart -d linux
 ```
 
+## 7. MCP Tooling & Driver Automation
+
+Antigravity IDE provides direct MCP integration with Dart VM and Flutter driver endpoints:
+- **Programmatic Driver Commands (`flutter_driver_command`):** Dispatch automated driver commands and UI gestures directly to running apps.
+- **VM Service Diagnostics (`vm_service`):** Capture VM timeline events, frame render benchmarks, and isolate states during end-to-end test execution.
+- **Tooling Guide:** See [mcp-tooling-hub](../../tooling/mcp-tooling-hub/SKILL.md).
+
 ---
 
-## 7. Anti-Patterns (Strictly Prohibited)
+## 8. Anti-Patterns (Strictly Prohibited)
 
 | Anti-Pattern | Severity | Corrective Action |
 | :--- | :--- | :--- |
@@ -243,7 +250,7 @@ flutter test integration_test/item_journey_test.dart -d linux
 
 ---
 
-## 8. Verification Checklist
+## 9. Verification Checklist
 
 - [ ] `IntegrationTestWidgetsFlutterBinding.ensureInitialized()` is called at start of test.
 - [ ] Test executes end-to-end user flow without mocking presentation layer.

@@ -94,7 +94,17 @@ Every completed screen or widget must adhere to these product & completeness sta
 
 ---
 
-## 5. Master UI Verification Checklist
+## 5. MCP Tooling & Accelerated UI Iteration
+
+Leverage IDE-integrated MCP tools during UI development cycles:
+- **Instant Visual Updates (`hot_reload`):** Call MCP `hot_reload` immediately after tweaking styling, padding, or theme attributes.
+- **Layout & Render Object Verification (`widget_inspector`):** Call MCP `widget_inspector` to inspect parent constraints, flex factors, and verify element hierarchy.
+- **App Restart (`hot_restart`):** Call MCP `hot_restart` when introducing new top-level providers, state initializers, or routing definitions.
+- **Tooling Reference:** See [mcp-tooling-hub](../../tooling/mcp-tooling-hub/SKILL.md).
+
+---
+
+## 6. Master UI Verification Checklist
 
 Before completing any UI task:
 - [ ] File size is strictly under 150–200 lines.

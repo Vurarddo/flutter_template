@@ -62,7 +62,21 @@ graph TD
 
 ---
 
-## 4. Performance Laws & Standards
+## 4. MCP Tooling & Accelerated Profiling Workflows
+
+Antigravity IDE provides direct programmatic access to Dart runtime daemons and VM services via MCP tools:
+
+| MCP Tool | Capability | Performance Diagnostic Flow |
+| :--- | :--- | :--- |
+| `vm_service` | Dart VM RPC integration | Inspect isolate memory allocations, garbage collection pauses, and CPU timeline events. |
+| `widget_inspector` | Live widget tree introspection | Identify deep widget hierarchies, inspect constraints, and verify render object boundaries. |
+| `hot_reload` | Sub-second code updates | Instantly test performance refactors (e.g. adding `RepaintBoundary` or `const`) without app reboots. |
+
+For a complete guide on available IDE tools, refer to the [mcp-tooling-hub](../../tooling/mcp-tooling-hub/SKILL.md).
+
+---
+
+## 5. Performance Laws & Standards
 
 1. **Zero Heavy Work in `build()`:** No sorting, filtering of large collections, JSON decoding, or async futures initiated inside `build()`.
 2. **Mandatory `const` Usage:** Maximize `const` widget constructors to short-circuit subtree re-evaluation.
@@ -73,7 +87,7 @@ graph TD
 
 ---
 
-## 5. Performance Verification Checklist
+## 6. Performance Verification Checklist
 
 - [ ] App tested on physical device in `--profile` mode.
 - [ ] UI thread frame time remains under 16ms (60 FPS) / 8ms (120 FPS).

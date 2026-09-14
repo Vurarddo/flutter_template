@@ -33,12 +33,20 @@ Understand the output columns of `dart pub outdated`:
 *   **Tighten Dev Dependencies:** Set the lower bound of `dev_dependencies` to the exact version currently used. This reduces resolution complexity and prevents older, incompatible dev tools from being selected.
 *   **Enforce Lockfiles in CI:** Use `dart pub get --enforce-lockfile` in CI/CD pipelines to ensure the exact versions tested locally are used in production.
 
+## MCP Tooling & Accelerated Dependency Investigation
+
+Antigravity IDE provides fast, programmatic package intelligence:
+- **Search Package Metadata (`pub_dev_search`):** Call MCP `pub_dev_search` to query pub.dev for current versions, popularity metrics, and official descriptions without external web browsers.
+- **Inspect Cached SDK & Library Code (`rip_grep_packages`):** Grep across all downloaded third-party packages to inspect method signatures, breaking changes, or deprecations.
+- **Read Library Source (`read_package_uris`):** Directly read `package:...` source files to understand underlying implementations.
+- **Master Reference:** See [mcp-tooling-hub](../tooling/mcp-tooling-hub/SKILL.md).
+
 ## Workflow: Auditing Dependencies
 
 Run this workflow periodically to identify stale packages that may impact stability or performance.
 
 **Task Progress:**
-- [ ] Run `dart pub outdated`.
+- [ ] Query pub.dev status via MCP `pub_dev_search` or run `dart pub outdated`.
 - [ ] Review the **Upgradable** column to identify packages that can be updated without modifying `pubspec.yaml`.
 - [ ] Review the **Resolvable** column to identify packages that require constraint modifications in `pubspec.yaml` to update.
 - [ ] Identify any packages marked as retracted or discontinued.

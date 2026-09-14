@@ -728,7 +728,16 @@ pre {
 <li><strong>Sensory &amp; Visual Polish:</strong> Trigger subtle haptics (<code class="inline-code">HapticFeedback.lightImpact()</code>) on primary user actions and provide smooth state transitions.</li>
 </ul>
 <hr class="doc-divider">
-<h2 id="5--master-ui-verification-checklist" class="doc-h2"><a href="#5--master-ui-verification-checklist" class="heading-anchor">#</a> 5. Master UI Verification Checklist</h2>
+<h2 id="5--mcp-tooling---accelerated-ui-iteration" class="doc-h2"><a href="#5--mcp-tooling---accelerated-ui-iteration" class="heading-anchor">#</a> 5. MCP Tooling &amp; Accelerated UI Iteration</h2>
+<p class="doc-p">Leverage IDE-integrated MCP tools during UI development cycles:</p>
+<ul class="doc-list">
+<li><strong>Instant Visual Updates (<code class="inline-code">hot_reload</code>):</strong> Call MCP <code class="inline-code">hot_reload</code> immediately after tweaking styling, padding, or theme attributes.</li>
+<li><strong>Layout &amp; Render Object Verification (<code class="inline-code">widget_inspector</code>):</strong> Call MCP <code class="inline-code">widget_inspector</code> to inspect parent constraints, flex factors, and verify element hierarchy.</li>
+<li><strong>App Restart (<code class="inline-code">hot_restart</code>):</strong> Call MCP <code class="inline-code">hot_restart</code> when introducing new top-level providers, state initializers, or routing definitions.</li>
+<li><strong>Tooling Reference:</strong> See <a href="../../../tooling/mcp-tooling-hub/mcp-tooling-hub.html" class="skill-ref-link" title="Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (hot_reload, hot_restart, widget_inspector, get_runtime_errors, analyze_files, lsp, pub_dev_search, rip_grep_packages, vm_service), firebase-mcp-server, and android-management-api. Use when choosing between MCP-accelerated IDE actions and CLI commands.">mcp-tooling-hub <span class="ext-icon">↗</span></a>.</li>
+</ul>
+<hr class="doc-divider">
+<h2 id="6--master-ui-verification-checklist" class="doc-h2"><a href="#6--master-ui-verification-checklist" class="heading-anchor">#</a> 6. Master UI Verification Checklist</h2>
 <p class="doc-p">Before completing any UI task:</p>
 <div class="checklist-item">
   <label class="checkbox-container">
@@ -778,6 +787,17 @@ pre {
 <div class="related-skills-section" style="margin-top: 3rem;">
 <h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
+<a href="../../../tooling/mcp-tooling-hub/mcp-tooling-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    mcp-tooling-hub ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
+    General
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (...
+  </div>
+</a>
 <a href="../../../core/core-hub/core-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
   <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
     core-hub ↗

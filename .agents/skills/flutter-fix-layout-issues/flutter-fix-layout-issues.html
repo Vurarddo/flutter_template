@@ -547,12 +547,20 @@ pre {
 </ul>
 <h2 id="layout-error-resolution-workflow" class="doc-h2"><a href="#layout-error-resolution-workflow" class="heading-anchor">#</a> Layout Error Resolution Workflow</h2>
 <p class="doc-p">Copy and use this checklist to systematically resolve layout constraint violations.</p>
+<h3 class="doc-h3">MCP Tooling &amp; Accelerated Layout Debugging</h3>
+<p class="doc-p">When working inside Antigravity IDE with an active Flutter debug session:</p>
+<ol class="doc-ordered-list">
+<li><strong>Fetch Exceptions (<code class="inline-code">get_runtime_errors</code>):</strong> Call MCP <code class="inline-code">get_runtime_errors</code> to immediately retrieve the active <code class="inline-code">FlutterError</code> details, offending widget names, and constraint metrics without terminal log diving.</li>
+<li><strong>Inspect Render Objects (<code class="inline-code">widget_inspector</code>):</strong> Use MCP <code class="inline-code">widget_inspector</code> to evaluate exact render box dimensions, incoming box constraints (<code class="inline-code">minWidth</code>, <code class="inline-code">maxWidth</code>, <code class="inline-code">minHeight</code>, <code class="inline-code">maxHeight</code>), and flex parent data.</li>
+<li><strong>Apply Code Fix:</strong> Apply the structural correction below using <code class="inline-code">replace_file_content</code>.</li>
+<li><strong>Instant Verification (<code class="inline-code">hot_reload</code>):</strong> Call MCP <code class="inline-code">hot_reload</code> to re-render the view and verify that overflow stripes disappear.</li>
+</ul>
 <h3 class="doc-h3">Task Progress</h3>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Run the application in debug mode to capture the exact layout exception in the console.</span>
+    <span class="check-text">Call MCP <code class="inline-code">get_runtime_errors</code> or inspect debug console to capture the exact layout exception.</span>
   </label>
 </div>
 <div class="checklist-item">
@@ -566,11 +574,18 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
+    <span class="check-text">Inspect constraints using MCP <code class="inline-code">widget_inspector</code> if depth or parent constraints are ambiguous.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
     <span class="check-text">Apply the conditional fix based on the specific error type:</span>
   </label>
 </div>
 <ul class="doc-list">
-<li><strong>If &quot;Vertical viewport was given unbounded height&quot;</strong>: Wrap the scrollable child (<code class="inline-code">ListView</code>, <code class="inline-code">GridView</code>) in an <code class="inline-code">Expanded</code> widget to consume remaining space, or wrap it in a <code class="inline-code">SizedBox</code> to provide an absolute height constraint.</li>
+<li><strong>If &quot;Vertical viewport was given unbounded height&quot;</strong>: Wrap the scrollable child (<code class="inline-code">ListView</code>, <code class="inline-code">GridView</code>) in an <code class="inline-code">Expanded</code> widget to consume remaining space, or wrap it in a <code class="inline-code">SizedBox</code> to provide an absolute height constraint (or convert to <code class="inline-code">CustomScrollView</code>).</li>
 <li><strong>If &quot;An InputDecorator...cannot have an unbounded width&quot;</strong>: Wrap the <code class="inline-code">TextField</code> or <code class="inline-code">TextFormField</code> in an <code class="inline-code">Expanded</code> or <code class="inline-code">Flexible</code> widget.</li>
 <li><strong>If &quot;RenderFlex overflowed&quot;</strong>: Constrain the overflowing child by wrapping it in an <code class="inline-code">Expanded</code> widget (to force it to fit) or a <code class="inline-code">Flexible</code> widget (to allow it to be smaller than the allocated space).</li>
 <li><strong>If &quot;Incorrect use of ParentData widget&quot;</strong>: Move the <code class="inline-code">ParentDataWidget</code> to be a direct child of its required parent. Ensure <code class="inline-code">Expanded</code>/<code class="inline-code">Flexible</code> are direct children of <code class="inline-code">Row</code>/<code class="inline-code">Column</code>/<code class="inline-code">Flex</code>. Ensure <code class="inline-code">Positioned</code> is a direct child of <code class="inline-code">Stack</code>.</li>
@@ -578,14 +593,14 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Execute Flutter hot reload.</span>
+    <span class="check-text">Execute MCP <code class="inline-code">hot_reload</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Run validator -&gt; review errors -&gt; fix: Inspect the UI to verify the red/grey error screen or yellow/black overflow stripes are resolved. If new layout errors appear, repeat the workflow.</span>
+    <span class="check-text">Verify UI: Check that yellow/black overflow stripes or red error screens are completely resolved.</span>
   </label>
 </div>
 </ul>

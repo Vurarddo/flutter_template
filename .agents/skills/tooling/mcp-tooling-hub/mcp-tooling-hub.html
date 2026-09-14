@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dart-run-static-analysis — Agent Skill Documentation</title>
+  <title>mcp-tooling-hub — Agent Skill Documentation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
@@ -472,20 +472,20 @@ pre {
 <body>
   <header class="top-nav">
     <div style="display: flex; align-items: center; gap: 1.5rem;">
-      <a href="../../index.html" class="nav-brand">
+      <a href="../../../index.html" class="nav-brand">
         <div class="brand-logo">AG</div>
         <span>Antigravity Docs</span>
       </a>
       <div class="nav-breadcrumbs">
-        <a href="../../index.html" data-i18n="portal_title">Центр Документації</a>
+        <a href="../../../index.html" data-i18n="portal_title">Центр Документації</a>
         <span>/</span>
-        <span data-cat-ua="Стандарти Dart" data-cat-en="Dart Best Practices">Стандарти Dart</span>
+        <span data-cat-ua="General" data-cat-en="General">General</span>
         <span>/</span>
-        <span style="color: var(--text-primary); font-weight: 600;">dart-run-static-analysis</span>
+        <span style="color: var(--text-primary); font-weight: 600;">mcp-tooling-hub</span>
       </div>
     </div>
     <div class="nav-actions">
-      <a href="../../agents-rules.html" class="btn-icon">
+      <a href="../../../agents-rules.html" class="btn-icon">
         <span>📜</span>
         <span data-i18n="project_rules">Правила AGENTS.md</span>
       </a>
@@ -502,19 +502,19 @@ pre {
   <main class="container">
     <section class="hero">
       <div class="hero-badges">
-        <span class="badge badge-category" data-cat-ua="Стандарти Dart" data-cat-en="Dart Best Practices">Стандарти Dart</span>
+        <span class="badge badge-category" data-cat-ua="General" data-cat-en="General">General</span>
         <span class="badge badge-tag">SKILL</span>
-        <span class="badge badge-tag">#execute</span>
-<span class="badge badge-tag">#`dart</span>
-<span class="badge badge-tag">#analyze`</span>
-<span class="badge badge-tag">#identify</span>
-<span class="badge badge-tag">#warnings</span>
-<span class="badge badge-tag">#errors</span>
-<span class="badge badge-tag">#--apply`</span>
-<span class="badge badge-tag">#automatically</span>
+        <span class="badge badge-tag">#master</span>
+<span class="badge badge-tag">#catalog</span>
+<span class="badge badge-tag">#guide</span>
+<span class="badge badge-tag">#model</span>
+<span class="badge badge-tag">#context</span>
+<span class="badge badge-tag">#protocol</span>
+<span class="badge badge-tag">#tooling</span>
+<span class="badge badge-tag">#antigravity</span>
       </div>
-      <h1 class="hero-title">dart-run-static-analysis</h1>
-      <p class="hero-description">Execute `dart analyze` to identify warnings and errors, and use `dart fix --apply` to automatically resolve mechanical lint issues. Use during development to ensure code quality and before committing changes.</p>
+      <h1 class="hero-title">mcp-tooling-hub</h1>
+      <p class="hero-description">Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (hot_reload, hot_restart, widget_inspector, get_runtime_errors, analyze_files, lsp, pub_dev_search, rip_grep_packages, vm_service), firebase-mcp-server, and android-management-api. Use when choosing between MCP-accelerated IDE actions and CLI commands.</p>
     </section>
 
     <div class="progress-card">
@@ -528,218 +528,270 @@ pre {
     </div>
 
     <article class="doc-content">
-<h1 class="doc-h1">Analyzing and Fixing Dart Code</h1>
-<h2 id="contents" class="doc-h2"><a href="#contents" class="heading-anchor">#</a> Contents</h2>
+<h1 class="doc-h1">MCP Tooling Hub: Accelerated IDE &amp; Runtime Automation</h1>
+<h2 id="1--overview---tooling-architecture" class="doc-h2"><a href="#1--overview---tooling-architecture" class="heading-anchor">#</a> 1. Overview &amp; Tooling Architecture</h2>
+<p class="doc-p">Antigravity IDE integrates native <strong>Model Context Protocol (MCP)</strong> servers that provide direct, high-speed programmatic access to runtime daemons, IDE services, analysis servers, and cloud providers.</p>
+<p class="doc-p">Using MCP tools instead of traditional shell commands yields significant benefits:</p>
 <ul class="doc-list">
-<li><a href="#analysis-configuration" class="doc-link">Analysis Configuration</a></li>
-<li><a href="#diagnostic-suppression" class="doc-link">Diagnostic Suppression</a></li>
-<li><a href="#workflow-executing-static-analysis" class="doc-link">Workflow: Executing Static Analysis</a></li>
-<li><a href="#workflow-applying-automated-fixes" class="doc-link">Workflow: Applying Automated Fixes</a></li>
-<li><a href="#examples" class="doc-link">Examples</a></li>
+<li><strong>Zero Process Overhead:</strong> Instant execution without spawning cold CLI processes.</li>
+<li><strong>Structured JSON Payloads:</strong> Type-safe programmatic responses without fragile text parsing.</li>
+<li><strong>Stateful Introspection:</strong> Live connection to running Flutter VMs, render trees, and Dart Tooling Daemons (DTD).</li>
 </ul>
-<h2 id="analysis-configuration" class="doc-h2"><a href="#analysis-configuration" class="heading-anchor">#</a> Analysis Configuration</h2>
-<p class="doc-p">Configure the Dart analyzer using the <code class="inline-code">analysis_options.yaml</code> file located at the package root.</p>
-<ul class="doc-list">
-<li><strong>Base Configuration:</strong> Always include a standard rule set (e.g., <code class="inline-code">package:lints/recommended.yaml</code> or <code class="inline-code">package:flutter_lints/flutter.yaml</code>) using the <code class="inline-code">include:</code> directive.</li>
-<li><strong>Strict Type Checks:</strong> Enable strict type checks under the <code class="inline-code">analyzer: language:</code> node to prevent implicit downcasts and dynamic inferences. Set <code class="inline-code">strict-casts: true</code>, <code class="inline-code">strict-inference: true</code>, and <code class="inline-code">strict-raw-types: true</code>.</li>
-<li><strong>Linter Rules:</strong> Explicitly enable or disable specific rules under the <code class="inline-code">linter: rules:</code> node. Use a key-value map (<code class="inline-code">rule_name: true/false</code>) when overriding included rules, or a list (<code class="inline-code">- rule_name</code>) when defining a fresh set. Do not mix list and map syntax in the same <code class="inline-code">rules</code> block.</li>
-<li><strong>Formatter Configuration:</strong> Configure <code class="inline-code">dart format</code> behavior under the <code class="inline-code">formatter:</code> node. Set <code class="inline-code">page_width</code> (default 80) and <code class="inline-code">trailing_commas</code> (<code class="inline-code">automate</code> or <code class="inline-code">preserve</code>).</li>
-<li><strong>Analyzer Plugins:</strong> Enable custom diagnostics by adding plugins under the <code class="inline-code">analyzer: plugins:</code> node. Ensure the plugin package is added as a <code class="inline-code">dev_dependency</code> in <code class="inline-code">pubspec.yaml</code>.</li>
+<div class="mermaid-container"><div class="mermaid">graph TD
+    Agent["Antigravity Agent"]
+    
+    subgraph "Dart & Flutter MCP Server (dart-mcp-server)"
+        Agent -->|Hot reload / restart| HR["hot_reload / hot_restart"]
+        Agent -->|Widget tree & constraints| WI["widget_inspector"]
+        Agent -->|Active stack traces| RE["get_runtime_errors"]
+        Agent -->|Symbols & diagnostics| LSP["lsp / analyze_files"]
+        Agent -->|Package & dependency lookup| PUB["pub_dev_search / rip_grep_packages"]
+        Agent -->|VM metrics & timeline| VM["vm_service / dtd"]
+    end
+    
+    subgraph "Firebase MCP Server (firebase-mcp-server)"
+        Agent -->|Project & SDK config| FB_CFG["firebase_get_sdk_config / firebase_init"]
+        Agent -->|Security rules & deploy| FB_DEP["firebase_get_security_rules / firebase_deploy"]
+    end
+
+    subgraph "Android Management API"
+        Agent -->|Device & policy inspection| AND["get_device / list_devices / get_policy"]
+    end
+</div></div>
+<hr class="doc-divider">
+<h2 id="2--connected-mcp-servers---capabilities-catalog" class="doc-h2"><a href="#2--connected-mcp-servers---capabilities-catalog" class="heading-anchor">#</a> 2. Connected MCP Servers &amp; Capabilities Catalog</h2>
+<h3 class="doc-h3">2.1 <code class="inline-code">dart-mcp-server</code> (Dart &amp; Flutter SDK Core)</h3>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Tool Name</th>
+<th>Scope &amp; Purpose</th>
+<th>Recommended Use Cases</th>
+</tr></thead><tbody>
+<tr>
+<td><code class="inline-code">hot_reload</code></td>
+<td>Triggers sub-second hot reload on running Flutter app.</td>
+<td>Instant visual feedback after UI, style, or method body changes.</td>
+</tr>
+<tr>
+<td><code class="inline-code">hot_restart</code></td>
+<td>Reinitializes app state without rebuilding native binary.</td>
+<td>Resetting stateful services, BLoCs, or top-level initializers.</td>
+</tr>
+<tr>
+<td><code class="inline-code">widget_inspector</code></td>
+<td>Inspects widget tree, render objects, layout bounds, and flex constraints.</td>
+<td>Diagnosing layout overflows, unbounded heights, and tree depth.</td>
+</tr>
+<tr>
+<td><code class="inline-code">get_runtime_errors</code></td>
+<td>Fetches active exceptions, FlutterError details, and stack traces.</td>
+<td>Real-time bug investigation during live debugging sessions.</td>
+</tr>
+<tr>
+<td><code class="inline-code">analyze_files</code></td>
+<td>Runs fast in-memory static analysis across specified file URIs.</td>
+<td>Verifying single or multi-file changes before full workspace builds.</td>
+</tr>
+<tr>
+<td><code class="inline-code">lsp</code></td>
+<td>Language Server Protocol integration for symbol navigation and definitions.</td>
+<td>Finding symbol references, definitions, and code completion context.</td>
+</tr>
+<tr>
+<td><code class="inline-code">pub_dev_search</code></td>
+<td>Queries pub.dev repository for package metadata, scores, and versions.</td>
+<td>Researching verified packages and resolving version constraints.</td>
+</tr>
+<tr>
+<td><code class="inline-code">rip_grep_packages</code></td>
+<td>Greps directly inside cached third-party dependencies and Flutter SDK.</td>
+<td>Inspecting external package source code and method signatures.</td>
+</tr>
+<tr>
+<td><code class="inline-code">read_package_uris</code></td>
+<td>Reads resolved source contents for <code class="inline-code">package:...</code> URIs.</td>
+<td>Reading underlying third-party source files without manual file path resolution.</td>
+</tr>
+<tr>
+<td><code class="inline-code">vm_service</code></td>
+<td>Direct RPC communication with Dart VM Service.</td>
+<td>Frame timing, memory allocation profiling, and isolate inspection.</td>
+</tr>
+<tr>
+<td><code class="inline-code">flutter_driver_command</code></td>
+<td>Dispatches programmatic driver commands to running integration tests.</td>
+<td>End-to-end user interaction simulation and widget verification.</td>
+</tr>
+<tr>
+<td><code class="inline-code">dtd</code></td>
+<td>Interfaces with Dart Tooling Daemon.</td>
+<td>Workspace-level tool coordination and editor synchronization.</td>
+</tr>
+</tbody></table></div>
+<h3 class="doc-h3">2.2 <code class="inline-code">firebase-mcp-server</code> (Firebase Cloud Ecosystem)</h3>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Tool Name</th>
+<th>Scope &amp; Purpose</th>
+</tr></thead><tbody>
+<tr>
+<td><code class="inline-code">firebase_get_sdk_config</code></td>
+<td>Retrieves platform SDK configuration (<code class="inline-code">google-services.json</code>, <code class="inline-code">GoogleService-Info.plist</code>).</td>
+</tr>
+<tr>
+<td><code class="inline-code">firebase_get_security_rules</code></td>
+<td>Audits and inspects Firestore and Storage security rules.</td>
+</tr>
+<tr>
+<td><code class="inline-code">firebase_deploy</code></td>
+<td>Deploys rules, functions, or hosting configurations.</td>
+</tr>
+<tr>
+<td><code class="inline-code">developerknowledge_*</code></td>
+<td>Queries official Firebase documentation and architectural patterns.</td>
+</tr>
+</tbody></table></div>
+<h3 class="doc-h3">2.3 <code class="inline-code">android-management-api</code> (Device &amp; Enterprise)</h3>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Tool Name</th>
+<th>Scope &amp; Purpose</th>
+</tr></thead><tbody>
+<tr>
+<td><code class="inline-code">get_device</code> / <code class="inline-code">list_devices</code></td>
+<td>Inspects connected Android test devices, OS levels, and state.</td>
+</tr>
+<tr>
+<td><code class="inline-code">get_policy</code> / <code class="inline-code">list_policies</code></td>
+<td>Audits Android security policies and application permissions.</td>
+</tr>
+</tbody></table></div>
+<hr class="doc-divider">
+<h2 id="3--decision-matrix--mcp-vs-terminal-cli" class="doc-h2"><a href="#3--decision-matrix--mcp-vs-terminal-cli" class="heading-anchor">#</a> 3. Decision Matrix: MCP vs Terminal CLI</h2>
+<div class="mermaid-container"><div class="mermaid">graph TD
+    Start["Task Requirement"] --> Q1{"Is the Flutter app currently running?"}
+    
+    Q1 -->|Yes| Q2{"What is the goal?"}
+    Q2 -->|Update UI / State| M1["Call MCP: hot_reload / hot_restart"]
+    Q2 -->|Investigate Crash / Overflow| M2["Call MCP: get_runtime_errors / widget_inspector"]
+    Q2 -->|Profile Performance / FPS| M3["Call MCP: vm_service"]
+    
+    Q1 -->|No| Q3{"What is the action?"}
+    Q3 -->|Verify Single File Syntax| M4["Call MCP: analyze_files / lsp"]
+    Q3 -->|Find New Package on pub.dev| M5["Call MCP: pub_dev_search"]
+    Q3 -->|Inspect External Library Source| M6["Call MCP: rip_grep_packages / read_package_uris"]
+    Q3 -->|Full Workspace CI Validation| C1["Run CLI: dart analyze . && flutter test"]
+    Q3 -->|Code Generation| C2["Run CLI: flutter pub run build_runner build"]
+</div></div>
+<hr class="doc-divider">
+<h2 id="4--mcp-accelerated-workflows" class="doc-h2"><a href="#4--mcp-accelerated-workflows" class="heading-anchor">#</a> 4. MCP Accelerated Workflows</h2>
+<h3 class="doc-h3">4.1 Accelerated UI Debugging &amp; Layout Fixes</h3>
+<ol class="doc-ordered-list">
+<li><strong>Detect Error:</strong> Call <code class="inline-code">get_runtime_errors</code> to extract active exception stack trace.</li>
+<li><strong>Inspect Tree:</strong> Call <code class="inline-code">widget_inspector</code> on the offending widget to check render bounds and constraints.</li>
+<li><strong>Apply Code Edit:</strong> Fix layout using <code class="inline-code">replace_file_content</code> (e.g. wrap in <code class="inline-code">Expanded</code> or use <code class="inline-code">CustomScrollView</code>).</li>
+<li><strong>Instant Verification:</strong> Call <code class="inline-code">hot_reload</code> to verify fix without restarting app.</li>
 </ul>
-<h2 id="diagnostic-suppression" class="doc-h2"><a href="#diagnostic-suppression" class="heading-anchor">#</a> Diagnostic Suppression</h2>
-<p class="doc-p">When a diagnostic (lint or warning) yields a false positive or applies to generated code, suppress it explicitly.</p>
-<ul class="doc-list">
-<li><strong>File-level Exclusion:</strong> Use the <code class="inline-code">analyzer: exclude:</code> node in <code class="inline-code">analysis_options.yaml</code> to exclude entire files or directories (e.g., <code class="inline-code"><em>*/</em>.g.dart</code>) using glob patterns.</li>
-<li><strong>File-level Suppression:</strong> Add <code class="inline-code">// ignore_for_file: &lt;diagnostic_code&gt;</code> at the top of a Dart file to suppress specific diagnostics for the entire file. Use <code class="inline-code">// ignore_for_file: type=lint</code> to suppress all linter rules.</li>
-<li><strong>Line-level Suppression:</strong> Add <code class="inline-code">// ignore: &lt;diagnostic_code&gt;</code> on the line directly above the offending code, or appended to the end of the offending line.</li>
-<li><strong>Pubspec Suppression:</strong> Add <code class="inline-code"># ignore: &lt;diagnostic_code&gt;</code> above the offending line in <code class="inline-code">pubspec.yaml</code> files (e.g., <code class="inline-code"># ignore: sort_pub_dependencies</code>).</li>
-<li><strong>Plugin Diagnostics:</strong> Prefix the diagnostic code with the plugin name when suppressing plugin-specific issues (e.g., <code class="inline-code">// ignore: some_plugin/some_code</code>).</li>
+<h3 class="doc-h3">4.2 Dependency Resolution &amp; SDK Investigation</h3>
+<ol class="doc-ordered-list">
+<li><strong>Search Package:</strong> Call <code class="inline-code">pub_dev_search</code> with target query to get official version and popularity.</li>
+<li><strong>Inspect Implementation:</strong> Call <code class="inline-code">rip_grep_packages</code> to review actual Dart source code inside the dependency.</li>
+<li><strong>Add Dependency:</strong> Update <code class="inline-code">pubspec.yaml</code> and verify compatibility.</li>
 </ul>
-<h2 id="workflow--executing-static-analysis" class="doc-h2"><a href="#workflow--executing-static-analysis" class="heading-anchor">#</a> Workflow: Executing Static Analysis</h2>
-<p class="doc-p">Use this workflow to identify type-related bugs, style violations, and potential runtime errors.</p>
-<h3 class="doc-h3">MCP Tooling &amp; Accelerated Analysis</h3>
-<p class="doc-p">Antigravity IDE integrates Dart analyzer daemons directly:</p>
-<ul class="doc-list">
-<li><strong>Fast In-Memory Analysis (<code class="inline-code">analyze_files</code>):</strong> Call MCP <code class="inline-code">analyze_files</code> with specific file URIs to validate single-file edits instantly without waiting for a full workspace CLI scan.</li>
-<li><strong>Language Server Diagnostics (<code class="inline-code">lsp</code>):</strong> Use MCP <code class="inline-code">lsp</code> to query live compilation errors, symbol definitions, and completions.</li>
-<li><strong>Master Reference:</strong> See <a href="../tooling/mcp-tooling-hub/mcp-tooling-hub.html" class="skill-ref-link" title="Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (hot_reload, hot_restart, widget_inspector, get_runtime_errors, analyze_files, lsp, pub_dev_search, rip_grep_packages, vm_service), firebase-mcp-server, and android-management-api. Use when choosing between MCP-accelerated IDE actions and CLI commands.">mcp-tooling-hub <span class="ext-icon">↗</span></a> for full MCP server details.</li>
-</ul>
-<p class="doc-p"><strong>Task Progress:</strong></p>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">1. Verify <code class="inline-code">analysis_options.yaml</code> exists at the project root.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">2. Run in-memory analysis via MCP <code class="inline-code">analyze_files</code> for modified files, or run full CLI validation: <code class="inline-code">dart analyze .</code>.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">3. Review diagnostic output and resolve critical errors.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">4. If info-level issues must be treated as failures in CI, append <code class="inline-code">--fatal-infos</code>.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">5. Run <code class="inline-code">flutter pub run import_sorter:main</code> to enforce import ordering.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">6. Resolve reported errors manually or proceed to the Automated Fixes workflow.</span>
-  </label>
-</div>
-<h2 id="workflow--applying-automated-fixes" class="doc-h2"><a href="#workflow--applying-automated-fixes" class="heading-anchor">#</a> Workflow: Applying Automated Fixes</h2>
-<p class="doc-p">Use this workflow to resolve outdated API usages, apply quick fixes, and migrate code (e.g., Dart 3 migrations).</p>
-<p class="doc-p"><strong>Task Progress:</strong></p>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">1. Execute a dry run to preview proposed changes using the <code class="inline-code">dart_fix</code> MCP tool or CLI command <code class="inline-code">dart fix --dry-run</code>.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">2. Review the proposed fixes to ensure they align with the intended architecture.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">3. If additional fixes are required, verify that the corresponding linter rules are enabled in <code class="inline-code">analysis_options.yaml</code>.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">4. Apply the fixes using the <code class="inline-code">dart_fix</code> MCP tool or CLI command <code class="inline-code">dart fix --apply</code>.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">5. Format the modified code using the <code class="inline-code">dart_format</code> MCP tool or CLI command <code class="inline-code">dart format .</code>.</span>
-  </label>
-</div>
-<div class="checklist-item">
-  <label class="checkbox-container">
-    <input type="checkbox"  onchange="updateChecklistProgress()">
-    <span class="checkmark"></span>
-    <span class="check-text">6. Run the static analysis workflow to verify all diagnostics are resolved.</span>
-  </label>
-</div>
-<h2 id="examples" class="doc-h2"><a href="#examples" class="heading-anchor">#</a> Examples</h2>
-<h3 class="doc-h3">Production <code class="inline-code">analysis_options.yaml</code> (Template Standard)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">yaml</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-yaml">include: package:flutter_lints/flutter.yaml
-
-analyzer:
-  exclude:
-    - build/**
-    - lib/**.g.dart
-    - lib/l10n/generated/**
-    - android/**
-    - ios/**
-    - web/**
-    - windows/**
-    - macos/**
-    - linux/**
-  errors:
-    invalid_annotation_target: ignore
-
-linter:
-  rules:
-    annotate_overrides: false
-    constant_identifier_names: false
-    no_leading_underscores_for_library_prefixes: false
-    prefer_const_constructors: true
-
-bloc:
-  rules:
-    avoid_flutter_imports: true
-    avoid_public_bloc_methods: true
-    avoid_public_fields: true
-    prefer_void_public_cubit_methods: true
-
-formatter:
-  trailing_commas: preserve
-  page_width: 100
-</code></pre>
-</div>
-<h3 class="doc-h3">Inline Diagnostic Suppression</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">// Suppress for the entire file
-// ignore_for_file: unused_local_variable, dead_code
-
-void processData() {
-  // Suppress for a specific line
-  // ignore: invalid_assignment
-  int x = &#039;&#039;;
-  
-  const y = 10; // ignore: constant_identifier_names
-}
-</code></pre>
-</div>
+<hr class="doc-divider">
+<h2 id="5--related-skills---hubs" class="doc-h2"><a href="#5--related-skills---hubs" class="heading-anchor">#</a> 5. Related Skills &amp; Hubs</h2>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Hub / Skill</th>
+<th>Focus Area</th>
+</tr></thead><tbody>
+<tr>
+<td><a href="../../dart-fix-runtime-errors/dart-fix-runtime-errors.html" class="skill-ref-link" title="Uses get_runtime_errors and lsp to fetch an active stack trace, locate the failing line, apply a fix, and verify resolution via hot_reload.">dart-fix-runtime-errors <span class="ext-icon">↗</span></a></td>
+<td>Runtime error resolution via <code class="inline-code">get_runtime_errors</code> &amp; <code class="inline-code">hot_reload</code>.</td>
+</tr>
+<tr>
+<td><a href="../../flutter-fix-layout-issues/flutter-fix-layout-issues.html" class="skill-ref-link" title="Fixes Flutter layout errors (overflows, unbounded constraints) using Dart and Flutter MCP tools. Use when addressing &quot;RenderFlex overflowed&quot;, &quot;Vertical viewport was given unbounded height&quot;, or similar layout issues.">flutter-fix-layout-issues <span class="ext-icon">↗</span></a></td>
+<td>Layout constraint debugging via <code class="inline-code">widget_inspector</code>.</td>
+</tr>
+<tr>
+<td><a href="../../dart-run-static-analysis/dart-run-static-analysis.html" class="skill-ref-link" title="Execute `dart analyze` to identify warnings and errors, and use `dart fix --apply` to automatically resolve mechanical lint issues. Use during development to ensure code quality and before committing changes.">dart-run-static-analysis <span class="ext-icon">↗</span></a></td>
+<td>Code quality validation with <code class="inline-code">analyze_files</code> and <code class="inline-code">lsp</code>.</td>
+</tr>
+<tr>
+<td><a href="../../dart-resolve-package-conflicts/dart-resolve-package-conflicts.html" class="skill-ref-link" title="Workflow for fixing package version conflicts. Use this when `pub get` fails due to incompatible package versions.">dart-resolve-package-conflicts <span class="ext-icon">↗</span></a></td>
+<td>Package exploration with <code class="inline-code">pub_dev_search</code> and <code class="inline-code">rip_grep_packages</code>.</td>
+</tr>
+<tr>
+<td><a href="../../performance/performance-hub/performance-hub.html" class="skill-ref-link" title="Primary coordinator and master guide for Flutter performance profiling, diagnostics, and optimization. Covers Flutter DevTools (Performance View, Widget Rebuild Tracker, Highlight Repaints), CPU/GPU jank troubleshooting, Profile mode benchmarking, and routing to specialized sub-skills.">performance-hub <span class="ext-icon">↗</span></a></td>
+<td>Frame rate and memory analysis with <code class="inline-code">vm_service</code>.</td>
+</tr>
+</tbody></table></div>
 
     </article>
 
 <div class="related-skills-section" style="margin-top: 3rem;">
 <h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
 <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
-<a href="../tooling/mcp-tooling-hub/mcp-tooling-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+<a href="../../dart-resolve-package-conflicts/dart-resolve-package-conflicts.html" class="checklist-item" style="text-decoration: none; display: block;">
   <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    mcp-tooling-hub ↗
+    dart-resolve-package-conflicts ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Стандарти Dart" data-cat-en="Dart Best Practices">
+    Стандарти Dart
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Workflow for fixing package version conflicts. Use this when `pub get` fails due to incompatible package versi...
+  </div>
+</a>
+<a href="../../flutter-fix-layout-issues/flutter-fix-layout-issues.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    flutter-fix-layout-issues ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Архітектура Flutter" data-cat-en="Flutter Architecture">
+    Архітектура Flutter
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Fixes Flutter layout errors (overflows, unbounded constraints) using Dart and Flutter MCP tools. Use when addr...
+  </div>
+</a>
+<a href="../../dart-fix-runtime-errors/dart-fix-runtime-errors.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    dart-fix-runtime-errors ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Стандарти Dart" data-cat-en="Dart Best Practices">
+    Стандарти Dart
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Uses get_runtime_errors and lsp to fetch an active stack trace, locate the failing line, apply a fix, and veri...
+  </div>
+</a>
+<a href="../../performance/performance-hub/performance-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    performance-hub ↗
   </div>
   <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="General" data-cat-en="General">
     General
   </div>
   <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Master catalog and guide for Model Context Protocol (MCP) tooling in Antigravity IDE. Covers dart-mcp-server (...
+    Primary coordinator and master guide for Flutter performance profiling, diagnostics, and optimization. Covers ...
+  </div>
+</a>
+<a href="../../dart-run-static-analysis/dart-run-static-analysis.html" class="checklist-item" style="text-decoration: none; display: block;">
+  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
+    dart-run-static-analysis ↗
+  </div>
+  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Стандарти Dart" data-cat-en="Dart Best Practices">
+    Стандарти Dart
+  </div>
+  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
+    Execute `dart analyze` to identify warnings and errors, and use `dart fix --apply` to automatically resolve me...
   </div>
 </a>
 </div></div>
 
 
     <footer class="footer">
-      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
+      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
     </footer>
   </main>
 

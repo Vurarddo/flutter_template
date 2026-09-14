@@ -38,12 +38,20 @@ When a diagnostic (lint or warning) yields a false positive or applies to genera
 
 Use this workflow to identify type-related bugs, style violations, and potential runtime errors.
 
+### MCP Tooling & Accelerated Analysis
+
+Antigravity IDE integrates Dart analyzer daemons directly:
+- **Fast In-Memory Analysis (`analyze_files`):** Call MCP `analyze_files` with specific file URIs to validate single-file edits instantly without waiting for a full workspace CLI scan.
+- **Language Server Diagnostics (`lsp`):** Use MCP `lsp` to query live compilation errors, symbol definitions, and completions.
+- **Master Reference:** See [mcp-tooling-hub](../tooling/mcp-tooling-hub/SKILL.md) for full MCP server details.
+
 **Task Progress:**
 - [ ] 1. Verify `analysis_options.yaml` exists at the project root.
-- [ ] 2. Run the analyzer using the `analyze_files` MCP tool (if available) or the CLI command `dart analyze <target_directory>`.
-- [ ] 3. Review the diagnostic output.
-- [ ] 4. If info-level issues must be treated as failures, append the `--fatal-infos` flag.
-- [ ] 5. Resolve reported errors manually or proceed to the Automated Fixes workflow.
+- [ ] 2. Run in-memory analysis via MCP `analyze_files` for modified files, or run full CLI validation: `dart analyze .`.
+- [ ] 3. Review diagnostic output and resolve critical errors.
+- [ ] 4. If info-level issues must be treated as failures in CI, append `--fatal-infos`.
+- [ ] 5. Run `flutter pub run import_sorter:main` to enforce import ordering.
+- [ ] 6. Resolve reported errors manually or proceed to the Automated Fixes workflow.
 
 ## Workflow: Applying Automated Fixes
 

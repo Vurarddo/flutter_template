@@ -28,16 +28,25 @@ Diagnose layout failures using the following error signatures:
 
 Copy and use this checklist to systematically resolve layout constraint violations.
 
+### MCP Tooling & Accelerated Layout Debugging
+
+When working inside Antigravity IDE with an active Flutter debug session:
+1. **Fetch Exceptions (`get_runtime_errors`):** Call MCP `get_runtime_errors` to immediately retrieve the active `FlutterError` details, offending widget names, and constraint metrics without terminal log diving.
+2. **Inspect Render Objects (`widget_inspector`):** Use MCP `widget_inspector` to evaluate exact render box dimensions, incoming box constraints (`minWidth`, `maxWidth`, `minHeight`, `maxHeight`), and flex parent data.
+3. **Apply Code Fix:** Apply the structural correction below using `replace_file_content`.
+4. **Instant Verification (`hot_reload`):** Call MCP `hot_reload` to re-render the view and verify that overflow stripes disappear.
+
 ### Task Progress
-- [ ] Run the application in debug mode to capture the exact layout exception in the console.
+- [ ] Call MCP `get_runtime_errors` or inspect debug console to capture the exact layout exception.
 - [ ] Identify the primary error message (ignore cascading "RenderBox was not laid out" errors).
+- [ ] Inspect constraints using MCP `widget_inspector` if depth or parent constraints are ambiguous.
 - [ ] Apply the conditional fix based on the specific error type:
-  - **If "Vertical viewport was given unbounded height"**: Wrap the scrollable child (`ListView`, `GridView`) in an `Expanded` widget to consume remaining space, or wrap it in a `SizedBox` to provide an absolute height constraint.
+  - **If "Vertical viewport was given unbounded height"**: Wrap the scrollable child (`ListView`, `GridView`) in an `Expanded` widget to consume remaining space, or wrap it in a `SizedBox` to provide an absolute height constraint (or convert to `CustomScrollView`).
   - **If "An InputDecorator...cannot have an unbounded width"**: Wrap the `TextField` or `TextFormField` in an `Expanded` or `Flexible` widget.
   - **If "RenderFlex overflowed"**: Constrain the overflowing child by wrapping it in an `Expanded` widget (to force it to fit) or a `Flexible` widget (to allow it to be smaller than the allocated space).
   - **If "Incorrect use of ParentData widget"**: Move the `ParentDataWidget` to be a direct child of its required parent. Ensure `Expanded`/`Flexible` are direct children of `Row`/`Column`/`Flex`. Ensure `Positioned` is a direct child of `Stack`.
-- [ ] Execute Flutter hot reload.
-- [ ] Run validator -> review errors -> fix: Inspect the UI to verify the red/grey error screen or yellow/black overflow stripes are resolved. If new layout errors appear, repeat the workflow.
+- [ ] Execute MCP `hot_reload`.
+- [ ] Verify UI: Check that yellow/black overflow stripes or red error screens are completely resolved.
 
 ## Examples
 
