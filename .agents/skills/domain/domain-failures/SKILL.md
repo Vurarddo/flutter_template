@@ -32,35 +32,35 @@ Use Dart 3 `sealed class` with `final class` variants extending `Equatable`:
 ```dart
 import 'package:equatable/equatable.dart';
 
-sealed class MovieFailure extends Equatable implements Exception {
+sealed class ItemFailure extends Equatable implements Exception {
   final String message;
 
-  const MovieFailure(this.message);
+  const ItemFailure(this.message);
 
   @override
   List<Object?> get props => [message];
 }
 
-final class MovieNotFoundFailure extends MovieFailure {
-  const MovieNotFoundFailure({String message = 'The requested movie was not found.'})
+final class ItemNotFoundFailure extends ItemFailure {
+  const ItemNotFoundFailure({String message = 'The requested resource was not found.'})
       : super(message);
 }
 
-final class MovieQuotaExceededFailure extends MovieFailure {
-  const MovieQuotaExceededFailure({String message = 'Daily movie watch limit exceeded.'})
+final class ItemQuotaExceededFailure extends ItemFailure {
+  const ItemQuotaExceededFailure({String message = 'Action quota exceeded.'})
       : super(message);
 }
 
-final class MovieNetworkFailure extends MovieFailure {
-  const MovieNetworkFailure({String message = 'Unable to reach the movie server. Please check connection.'})
+final class ItemNetworkFailure extends ItemFailure {
+  const ItemNetworkFailure({String message = 'Unable to reach the server. Please check connection.'})
       : super(message);
 }
 
-final class MovieUnknownFailure extends MovieFailure {
+final class ItemUnknownFailure extends ItemFailure {
   final Object? error;
   final StackTrace? stackTrace;
 
-  const MovieUnknownFailure({
+  const ItemUnknownFailure({
     String message = 'An unexpected error occurred.',
     this.error,
     this.stackTrace,
@@ -78,21 +78,21 @@ final class MovieUnknownFailure extends MovieFailure {
 Inside BLoC event handlers:
 
 ```dart
-void _onFetchMovieDetails(FetchMovieDetails event, Emitter<MovieState> emit) async {
-  emit(const MovieState.inProgress());
+void _onFetchItemDetails(FetchItemDetails event, Emitter<ItemState> emit) async {
+  emit(const ItemState.inProgress());
   try {
-    final movie = await _getMovieDetailsUseCase(event.movieId);
+    final item = await _getItemDetailsUseCase(event.id);
     if (emit.isDone) return;
-    emit(MovieState.success(movie));
-  } on MovieFailure catch (failure) {
+    emit(ItemState.success(item));
+  } on ItemFailure catch (failure) {
     if (emit.isDone) return;
     final userMessage = switch (failure) {
-      MovieNotFoundFailure(:final message) => message,
-      MovieQuotaExceededFailure(:final message) => message,
-      MovieNetworkFailure(:final message) => message,
-      MovieUnknownFailure(:final message) => message,
+      ItemNotFoundFailure(:final message) => message,
+      ItemQuotaExceededFailure(:final message) => message,
+      ItemNetworkFailure(:final message) => message,
+      ItemUnknownFailure(:final message) => message,
     };
-    emit(MovieState.failure(userMessage));
+    emit(ItemState.failure(userMessage));
   }
 }
 ```

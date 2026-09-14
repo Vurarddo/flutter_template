@@ -58,31 +58,31 @@ In accordance with project standards and Freezed 3+, Domain Entities must declar
 ```dart
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'movie_entity.freezed.dart';
+part 'item_entity.freezed.dart';
 
 @freezed
-class MovieEntity with _$MovieEntity {
+class ItemEntity with _$ItemEntity {
   final String id;
   final String title;
-  final String overview;
-  final double rating;
-  final DateTime releaseDate;
-  final List<String> genres;
+  final String description;
+  final double score;
+  final DateTime createdAt;
+  final List<String> tags;
   final bool isFavorite;
 
-  const MovieEntity({
+  const ItemEntity({
     required this.id,
     required this.title,
-    required this.overview,
-    required this.rating,
-    required this.releaseDate,
-    required this.genres,
+    required this.description,
+    required this.score,
+    required this.createdAt,
+    required this.tags,
     this.isFavorite = false,
   });
 
   /// Custom computed domain getters
-  bool get isHighRated => rating >= 8.0;
-  bool get hasReleased => releaseDate.isBefore(DateTime.now());
+  bool get isHighPriority => score >= 8.0;
+  bool get isPast => createdAt.isBefore(DateTime.now());
 }
 ```
 
@@ -117,15 +117,15 @@ Always protect domain entity collections against external mutation:
 
 ```dart
 // In Data layer DTO toDomain() mapper:
-extension MovieDtoMapper on MovieDto {
-  MovieEntity toDomain() {
-    return MovieEntity(
+extension ItemDtoMapper on ItemDto {
+  ItemEntity toDomain() {
+    return ItemEntity(
       id: id,
       title: title,
-      overview: overview,
-      rating: rating,
-      releaseDate: DateTime.parse(releaseDate),
-      genres: List.unmodifiable(genres), // Defensive copy
+      description: description,
+      score: score,
+      createdAt: DateTime.parse(createdAt),
+      tags: List.unmodifiable(tags), // Defensive copy
       isFavorite: isFavorite ?? false,
     );
   }

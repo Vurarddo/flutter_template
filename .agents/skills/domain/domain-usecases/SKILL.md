@@ -33,17 +33,17 @@ Use this skill whenever:
 ```dart
 import 'package:injectable/injectable.dart';
 
-import 'package:flutter_template/domain/movies/entities/movie_entity.dart';
-import 'package:flutter_template/domain/movies/repositories/i_movie_repository.dart';
+import 'package:flutter_template/domain/items/entities/item_entity.dart';
+import 'package:flutter_template/domain/items/repositories/i_item_repository.dart';
 
 @injectable
-class GetMovieDetailsUseCase {
-  final IMovieRepository _repository;
+class GetItemDetailsUseCase {
+  final IItemRepository _repository;
 
-  GetMovieDetailsUseCase(this._repository);
+  GetItemDetailsUseCase(this._repository);
 
-  Future<MovieEntity> call(String movieId) {
-    return _repository.getMovieDetails(movieId);
+  Future<ItemEntity> call(String id) {
+    return _repository.getItemDetails(id);
   }
 }
 ```
@@ -58,34 +58,34 @@ When a UseCase requires more than 2 parameters, encapsulate them in a typed para
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:flutter_template/domain/movies/repositories/i_movie_repository.dart';
+import 'package:flutter_template/domain/items/repositories/i_item_repository.dart';
 
-class RateMovieParams extends Equatable {
-  final String movieId;
-  final double score;
-  final String? review;
+class UpdateItemParams extends Equatable {
+  final String id;
+  final String title;
+  final String? description;
 
-  const RateMovieParams({
-    required this.movieId,
-    required this.score,
-    this.review,
+  const UpdateItemParams({
+    required this.id,
+    required this.title,
+    this.description,
   });
 
   @override
-  List<Object?> get props => [movieId, score, review];
+  List<Object?> get props => [id, title, description];
 }
 
 @injectable
-class RateMovieUseCase {
-  final IMovieRepository _repository;
+class UpdateItemUseCase {
+  final IItemRepository _repository;
 
-  RateMovieUseCase(this._repository);
+  UpdateItemUseCase(this._repository);
 
-  Future<void> call(RateMovieParams params) {
-    return _repository.rateMovie(
-      movieId: params.movieId,
-      score: params.score,
-      review: params.review,
+  Future<void> call(UpdateItemParams params) {
+    return _repository.updateItem(
+      id: params.id,
+      title: params.title,
+      description: params.description,
     );
   }
 }
@@ -98,17 +98,17 @@ class RateMovieUseCase {
 ```dart
 import 'package:injectable/injectable.dart';
 
-import 'package:flutter_template/domain/movies/entities/movie_entity.dart';
-import 'package:flutter_template/domain/movies/repositories/i_movie_repository.dart';
+import 'package:flutter_template/domain/items/entities/item_entity.dart';
+import 'package:flutter_template/domain/items/repositories/i_item_repository.dart';
 
 @injectable
-class WatchFavoriteMoviesUseCase {
-  final IMovieRepository _repository;
+class WatchFavoriteItemsUseCase {
+  final IItemRepository _repository;
 
-  WatchFavoriteMoviesUseCase(this._repository);
+  WatchFavoriteItemsUseCase(this._repository);
 
-  Stream<List<MovieEntity>> call() {
-    return _repository.watchFavoriteMovies();
+  Stream<List<ItemEntity>> call() {
+    return _repository.watchFavoriteItems();
   }
 }
 ```

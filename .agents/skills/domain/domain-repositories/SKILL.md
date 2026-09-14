@@ -26,39 +26,39 @@ Use this skill whenever:
 
 ## 3. Standard Interface Contract Pattern
 
-Repository interfaces must be named with an `I` prefix (e.g. `IMovieRepository`, `IAuthRepository`) and defined as an `abstract interface class` or `abstract class`:
+Repository interfaces must be named with an `I` prefix (e.g. `IItemRepository`, `IAuthRepository`) and defined as an `abstract interface class` or `abstract class`:
 
 ```dart
-import 'package:flutter_template/domain/movies/entities/movie_entity.dart';
+import 'package:flutter_template/domain/items/entities/item_entity.dart';
 
-abstract interface class IMovieRepository {
-  /// Fetches a paginated list of movies.
-  Future<List<MovieEntity>> getMovies({
+abstract interface class IItemRepository {
+  /// Fetches a paginated list of items.
+  Future<List<ItemEntity>> getItems({
     required int page,
     int? limit,
     String? category,
   });
 
-  /// Fetches details for a specific movie.
-  Future<MovieEntity> getMovieDetails(String movieId);
+  /// Fetches details for a specific item.
+  Future<ItemEntity> getItemDetails(String id);
 
-  /// Searches movies by query string.
-  Future<List<MovieEntity>> searchMovies(String query);
+  /// Searches items by query string.
+  Future<List<ItemEntity>> searchItems(String query);
 
-  /// Subscribes to real-time updates for favorite movies.
-  Stream<List<MovieEntity>> watchFavoriteMovies();
+  /// Subscribes to real-time updates for favorite items.
+  Stream<List<ItemEntity>> watchFavoriteItems();
 
-  /// Toggles favorite status for a movie.
+  /// Toggles favorite status for an item.
   Future<void> toggleFavorite({
-    required String movieId,
+    required String id,
     required bool isFavorite,
   });
 
-  /// Rates a movie.
-  Future<void> rateMovie({
-    required String movieId,
-    required double score,
-    String? review,
+  /// Updates or saves an item.
+  Future<void> updateItem({
+    required String id,
+    required String title,
+    String? description,
   });
 }
 ```
@@ -67,7 +67,7 @@ abstract interface class IMovieRepository {
 
 ## 4. Contract Rules & Constraints
 
-1. **Pure Domain Types:** Method parameters and return types must be pure Dart primitives (`String`, `int`, `DateTime`) or Domain Entities (`MovieEntity`). NEVER use DTOs or API response models in repository contracts.
+1. **Pure Domain Types:** Method parameters and return types must be pure Dart primitives (`String`, `int`, `DateTime`) or Domain Entities (`ItemEntity`). NEVER use DTOs or API response models in repository contracts.
 2. **Asynchronous & Reactive:** Use `Future<T>` for one-shot requests and `Stream<T>` for real-time/cached observations.
 3. **No Transport Exceptions in Signatures:** Do not throw raw `DioException` or `SqliteException` across this boundary. The Data layer implementation is responsible for catching technical exceptions and throwing typed Domain Failures.
 4. **No Either / fpdart / dartz:** Method signatures should return pure `Future<T>` and throw typed `DomainFailure` states instead of using `Either<Failure, T>` wrappers.
@@ -88,6 +88,6 @@ abstract interface class IMovieRepository {
 ## 6. Verification Checklist
 
 - [ ] Interface is defined in `lib/domain/<feature>/repositories/i_<feature>_repository.dart`.
-- [ ] Name starts with `I` (e.g. `IMovieRepository`).
+- [ ] Name starts with `I` (e.g. `IItemRepository`).
 - [ ] Returns pure Domain Entities or Dart primitives.
 - [ ] Zero imports from `data/`, `presentation/`, or external networking packages.

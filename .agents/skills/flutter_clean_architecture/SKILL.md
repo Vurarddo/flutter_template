@@ -38,12 +38,12 @@ Presentation → Domain ← Data
 - **Use Cases (SRP):** Single responsibility business actions with `call()` method (consult [domain-usecases](domain/domain-usecases/SKILL.md)). Must depend ONLY on Repository Interfaces. BLoCs/Cubits MUST ONLY interact with Use Cases.
 
 ### 2. Data Layer (`lib/data/<feature_name>/`)
-
-- **DTOs (`lib/data/<feature_name>/dto/`):** API models annotated with `@JsonSerializable(createToJson: false/true)`.
-- _Inline Mappers:_ DTOs must contain an explicit `toDomain()` method (and internal private helper extensions) converting the DTO into a Domain Entity.
-
-- **API Clients (`lib/data/<feature_name>/client/`):** Retrofit interfaces (`@RestApi()`) using Dio.
-- **Repository Implementations:** Implement Domain contracts. Catch network/storage exceptions, log them, and map them into typed `DomainFailure` exceptions before throwing/returning. **NO business rules here.**
+- Consult [data-hub](data/data-hub/SKILL.md).
+- **DTOs & Inline Mappers (`lib/data/<feature_name>/dto/`):** API models with `@JsonSerializable` and explicit inline `toDomain()` mappers (consult [data-dto-mappers](data/data-dto-mappers/SKILL.md)). DTOs must NEVER cross into Domain or UI layers.
+- **Endpoints (`lib/data/<feature_name>/endpoints/`):** Centralized route constants (`static const String ...`).
+- **API Clients (`lib/data/<feature_name>/client/`):** Retrofit interfaces (`@RestApi()`) using Dio (consult [data-retrofit-clients](data/data-retrofit-clients/SKILL.md)).
+- **Local Data Sources (`lib/data/<feature_name>/datasources/`):** Local caching, memory caches, DAOs (consult [data-datasources-local](data/data-datasources-local/SKILL.md)).
+- **Repository Implementations (`lib/data/<feature_name>/repositories/`):** Implement Domain `IRepository` contracts, orchestrate data sources, and map `DioException` via `DioExceptionMapper` to typed Domain Failures (consult [data-repositories](data/data-repositories/SKILL.md)).
 
 ### 3. Presentation Layer (`lib/presentation/`)
 
@@ -88,6 +88,12 @@ Presentation → Domain ← Data
   - `purchase/`: In-App Purchases & RevenueCat billing adapters (consult [infrastructure-services-purchase](infrastructure/infrastructure-services-purchase/SKILL.md)).
 - **`logging/`:** Centralized `AppLogger` with PII sanitization (consult [infrastructure-logging](infrastructure/infrastructure-logging/SKILL.md)).
 
+### 6. Localization Layer (`lib/l10n/`)
+- Consult [l10n-hub](l10n/l10n-hub/SKILL.md).
+- **Single Source of Truth:** `intl_en.arb` and `intl_uk.arb` (consult [l10n-arb-icu](l10n/l10n-arb-icu/SKILL.md)).
+- **Code Generation:** `flutter pub run intl_utils:generate` outputs to `lib/l10n/generated/` (consult [l10n-generation-workflow](l10n/l10n-generation-workflow/SKILL.md)).
+- **Presentation Access:** UI widgets access copy via `context.localization.<key>`, and map `DomainFailure` via UI extensions (consult [l10n-presentation-integration](l10n/l10n-presentation-integration/SKILL.md)).
+
 ---
 
 ## Complete Project Structure Matrix
@@ -110,6 +116,11 @@ lib/
 │   ├── client/<feature>_api_client.dart    # Retrofit @RestApi client
 │   └── repositories/<feature>_repository_impl.dart
 │
+├── l10n/                               # Localization & ARB files
+│   ├── generated/                      # Generated S classes (S.delegate, S.of(context))
+│   ├── intl_en.arb                     # English base template
+│   └── intl_uk.arb                     # Ukrainian translations (Slavic plurals)
+│
 ├── presentation/
 │   ├── state_management/<feature>/
 │   │   ├── <feature>_event.dart
@@ -124,7 +135,7 @@ lib/
 │   │   └── guards/
 │   ├── theme/
 │   ├── ui_kit/
-│   └── ui_utils/                       # extensions, formatters, forms, helpers, assets
+│   └── ui_utils/                       # extensions (context.localization), formatters, forms, assets
 │
 └── infrastructure/
     ├── config/                         # AppConfig, AppEnvironment, --dart-define

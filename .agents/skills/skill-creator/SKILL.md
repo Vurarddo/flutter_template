@@ -164,7 +164,10 @@ To enable seamless navigation across trees and meshes:
    - Provide concrete, copy-paste-ready before/after code snippets reflecting production standards.
 4. **Anti-Patterns & Severity Matrix:**
    - Include a dedicated table listing common mistakes, why they fail, their severity (`CRITICAL`, `HIGH`, `MEDIUM`), and the explicit remedy.
-5. **Agent Verification Checklist:**
+5. **Domain-Agnostic & Abstract Naming Rule (Universal Portability):**
+   - ALL code snippets, class names, functions, variables, DTOs, entities, and use cases inside skills MUST use **abstract, domain-agnostic identifiers** (e.g., `[Feature]`, `Item`, `ItemDto`, `ItemEntity`, `User`, `Account`, `Product`, `Resource`, `ExampleItem`) instead of project-specific domain names (e.g., `Movie`, `TMDB`, `CryptoTrade`).
+   - This ensures skills remain 100% portable, reusable, and copy-paste ready across any Flutter codebase without domain residue.
+6. **Agent Verification Checklist:**
    - End with a task-oriented markdown checklist (`- [ ] ...`) allowing the agent to self-verify its work before finishing.
 
 ---
