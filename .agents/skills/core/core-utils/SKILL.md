@@ -20,7 +20,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [core-hub](../core-hub/SKILL.md) | Core layer laws and zero-Flutter constraint. |
 | **Pure Dart Extensions** | [core-extensions](../core-extensions/SKILL.md) | Extensions on primitive types. |
-| **Unit Testing** | [dart-add-unit-test](../../dart-add-unit-test/SKILL.md) | Unit testing pure algorithmic utilities. |
+| **Unit Testing** | [testing-unit](../../testing/testing-unit/SKILL.md) | Unit testing pure algorithmic utilities. |
 
 ---
 

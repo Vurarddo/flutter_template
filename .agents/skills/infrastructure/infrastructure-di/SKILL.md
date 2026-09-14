@@ -22,7 +22,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [infrastructure-hub](../infrastructure-hub/SKILL.md) | Infrastructure layer boundaries and composition root. |
 | **Build Runner** | [flutter-build-runner](../../flutter_build_runner/SKILL.md) | Running code generation for `injectable.config.dart`. |
-| **Testing** | [flutter-testing](../../flutter_testing/SKILL.md) | Resetting and mocking DI container in tests. |
+| **Testing** | [testing-hub](../../testing/testing-hub/SKILL.md) | Resetting and mocking DI container in tests. |
 
 ---
 

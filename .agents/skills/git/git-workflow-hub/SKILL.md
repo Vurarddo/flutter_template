@@ -122,7 +122,7 @@ Before pushing code or requesting a PR review:
 - [ ] Working branch was created from the latest `origin/develop`.
 - [ ] Code adheres to [code-review-advisor](../../code-review-advisor/SKILL.md) and Clean Architecture rules.
 - [ ] Static analysis passes cleanly ([dart-run-static-analysis](../../dart-run-static-analysis/SKILL.md)): `dart analyze`.
-- [ ] Unit & widget tests pass ([flutter_testing](../../flutter_testing/SKILL.md)): `flutter test`.
+- [ ] Unit & widget tests pass ([testing-hub](../../testing/testing-hub/SKILL.md)): `flutter test`.
 - [ ] Code generation is up to date: `flutter pub run build_runner build --delete-conflicting-outputs`.
 - [ ] Commit messages follow [git-commit-standards](../git-commit-standards/SKILL.md).
 - [ ] History is clean of intermediate "wip" or "fix typo" commits via [git-rebase-conflict-resolution](../git-rebase-conflict-resolution/SKILL.md).

@@ -22,7 +22,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [flutter-ui-utils-hub](../flutter-ui-utils-hub/SKILL.md) | UI Utils architecture and directory boundaries. |
 | **Reactive Forms Controls** | [flutter-ui-forms-custom-controls](../../ui/forms/flutter-ui-forms-custom-controls/SKILL.md) | Integrating formatters inside custom reactive inputs. |
-| **Unit Testing** | [dart-add-unit-test](../../../dart-add-unit-test/SKILL.md) | Writing unit tests for deterministic formatter algorithms. |
+| **Unit Testing** | [testing-unit](../../../testing/testing-unit/SKILL.md) | Writing unit tests for deterministic formatter algorithms. |
 
 ---
 

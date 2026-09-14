@@ -22,7 +22,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [flutter-bloc-hub](../flutter-bloc-hub/SKILL.md) | Domain architecture and overall routing. |
 | **Core BLoC Logic** | [flutter-bloc-core](../flutter-bloc-core/SKILL.md) | Designing base states, events, and lifecycle. |
-| **Unit Testing** | [dart-add-unit-test](../../../dart-add-unit-test/SKILL.md) | Testing state restoration and error fallbacks. |
+| **Unit Testing** | [testing-unit](../../../testing/testing-unit/SKILL.md) | Testing state restoration and error fallbacks. |
 
 ---
 

@@ -101,6 +101,13 @@ Presentation → Domain ← Data
 - **BLoC & UI Resolution:** BLoC `addError(error, stackTrace)` and `DomainFailureLocalizationX` (consult [error-handling-bloc-ui](error_handling/error-handling-bloc-ui/SKILL.md)).
 - **Global Crash Monitoring:** `runZonedGuarded`, `PlatformDispatcher.onError`, Crashlytics (consult [error-handling-global-crash](error_handling/error-handling-global-crash/SKILL.md)).
 
+### 8. Cross-Platform Testing Strategy
+- Consult [testing-hub](testing/testing-hub/SKILL.md).
+- **Unit Testing (Pure Dart):** UseCases, DTO mappers, Core utils (consult [testing-unit](testing/testing-unit/SKILL.md)).
+- **BLoC Testing:** `bloc_test` state transitions and concurrency transformers (consult [testing-bloc](testing/testing-bloc/SKILL.md)).
+- **Widget Testing:** `WidgetTester`, `WidgetTestWrapper`, `ValueKey` finders (consult [testing-widget](testing/testing-widget/SKILL.md)).
+- **Integration Testing:** End-to-end user flows on **Mobile, Web, and Desktop** (consult [testing-integration](testing/testing-integration/SKILL.md)).
+
 ---
 
 ## Complete Project Structure Matrix

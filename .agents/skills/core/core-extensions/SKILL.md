@@ -20,7 +20,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [core-hub](../core-hub/SKILL.md) | Core layer laws and zero-Flutter constraint. |
 | **UI Extensions** | [flutter-ui-utils-extensions](../../presentation/ui_utils/flutter-ui-utils-extensions/SKILL.md) | BuildContext & Widget extensions (lives in `presentation/ui_utils/`). |
-| **Unit Testing** | [dart-add-unit-test](../../dart-add-unit-test/SKILL.md) | Writing unit tests for pure Dart extension methods. |
+| **Unit Testing** | [testing-unit](../../testing/testing-unit/SKILL.md) | Writing unit tests for pure Dart extension methods. |
 
 ---
 
