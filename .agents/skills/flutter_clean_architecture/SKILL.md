@@ -108,6 +108,12 @@ Presentation → Domain ← Data
 - **Widget Testing:** `WidgetTester`, `WidgetTestWrapper`, `ValueKey` finders (consult [testing-widget](testing/testing-widget/SKILL.md)).
 - **Integration Testing:** End-to-end user flows on **Mobile, Web, and Desktop** (consult [testing-integration](testing/testing-integration/SKILL.md)).
 
+### 9. Native Platform Integrations & Flavors
+- Consult [native-hub](native/native-hub/SKILL.md).
+- **Multi-Environment Flavors:** Configuration management across `config/env_*.json`, Gradle `productFlavors`, and Xcode Build Configurations / Schemes (consult [native-flavors-environments](native/native-flavors-environments/SKILL.md)).
+- **Android Platform Channels & Native:** Kotlin v2 embedding, Coroutines, Pigeon, PlatformViews, and ProGuard rules (consult [native-android](native/native-android/SKILL.md)).
+- **iOS Platform Channels & Native:** Swift `@MainActor`, async/await, Pigeon, FlutterPlatformView, and Privacy Manifests (consult [native-ios](native/native-ios/SKILL.md)).
+
 ---
 
 ## Complete Project Structure Matrix
