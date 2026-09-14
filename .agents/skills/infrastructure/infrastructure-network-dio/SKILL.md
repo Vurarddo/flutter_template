@@ -23,7 +23,7 @@ Use this skill whenever:
 | **Parent Hub** | [infrastructure-hub](../infrastructure-hub/SKILL.md) | Infrastructure layer boundaries. |
 | **Environment Config** | [infrastructure-config](../infrastructure-config/SKILL.md) | Base URLs and timeouts from `AppConfig`. |
 | **DI Setup** | [infrastructure-di](../infrastructure-di/SKILL.md) | Registering `Dio` in `@module`. |
-| **Data Layer Clients** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | Retrofit `@RestApi` client integration. |
+| **Data Layer Clients** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | Retrofit `@RestApi` client integration. |
 
 ---
 

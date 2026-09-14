@@ -21,7 +21,7 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [error-handling-hub](../error-handling-hub/SKILL.md) | End-to-end error lifecycle. |
-| **Domain Failures** | [error-handling-domain-failures](../error-handling-domain-failures/SKILL.md) | Target `DomainFailure` contracts being produced. |
+| **Domain Failures** | [domain-failures](../../domain/domain-failures/SKILL.md) | Target `DomainFailure` contracts being produced. |
 | **Network Dio** | [infrastructure-network-dio](../../infrastructure/infrastructure-network-dio/SKILL.md) | Production Dio client and interceptor setup. |
 | **Data Repositories** | [data-repositories](../../data/data-repositories/SKILL.md) | Repository implementation patterns consuming this mapper. |
 

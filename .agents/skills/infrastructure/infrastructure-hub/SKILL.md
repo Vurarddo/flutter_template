@@ -36,7 +36,7 @@ Use this matrix to navigate to the specialized sub-skill matching your task:
 | **In-App Purchases & Subscriptions** | [infrastructure-services-purchase](../infrastructure-services-purchase/SKILL.md) | In-App Purchases (RevenueCat, StoreKit, Google Play Billing) adapters and Domain boundary. |
 | **Centralized Logging** | [infrastructure-logging](../infrastructure-logging/SKILL.md) | `AppLogger`, log levels, PII masking, Talker/Logger integration. |
 | **Core Layer Hub** | [core-hub](../../core/core-hub/SKILL.md) | Pure Dart foundations, extensions, and utilities. |
-| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | System-wide layer separation and DDD principles. |
+| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | System-wide layer separation and DDD principles. |
 
 ---
 

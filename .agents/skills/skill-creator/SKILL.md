@@ -314,7 +314,7 @@ When implementing or reviewing code with this skill:
 
 ### Step 5: Post-Flight De-Duplication, Pruning & Mesh Validation
 1. **Prune Stale & Duplicate Files:** Delete old monolithic or redundant skill directories (`rm -rf`) that are superseded by the new tree.
-2. **Sync Cross-Links:** Update parent hubs, `flutter_clean_architecture`, and adjacent layer hubs so all relative markdown links point to active, valid files.
+2. **Sync Cross-Links:** Update parent hubs, `flutter-clean-architecture`, and adjacent layer hubs so all relative markdown links point to active, valid files.
 3. **Verify Quality Checklist:**
    - [ ] Is the frontmatter `name` kebab-case?
    - [ ] Does the `description` contain clear "Use when..." activation triggers?

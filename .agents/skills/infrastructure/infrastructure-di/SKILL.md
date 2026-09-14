@@ -21,7 +21,7 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [infrastructure-hub](../infrastructure-hub/SKILL.md) | Infrastructure layer boundaries and composition root. |
-| **Build Runner** | [flutter-build-runner](../../flutter_build_runner/SKILL.md) | Running code generation for `injectable.config.dart`. |
+| **Build Runner** | [flutter-build-runner](../../flutter-build-runner/SKILL.md) | Running code generation for `injectable.config.dart`. |
 | **Testing** | [testing-hub](../../testing/testing-hub/SKILL.md) | Resetting and mocking DI container in tests. |
 
 ---

@@ -37,8 +37,7 @@ Use this matrix to navigate to specialized sub-skills matching your theming task
 | **Color Schemes & Palettes** | [flutter-ui-theme-colors](../flutter-ui-theme-colors/SKILL.md) | Defining `AppColorScheme.light` & `AppColorScheme.dark`, M3 surface containers, outlines, and role mappings. |
 | **Typography & Font Management** | [flutter-ui-theme-typography](../flutter-ui-theme-typography/SKILL.md) | Configuring `AppTextTheme`, Material 3 text scales (display, headline, title, body, label), and `FontFamily` setup. |
 | **Theme Extensions & Custom Tokens** | [flutter-ui-theme-extensions](../flutter-ui-theme-extensions/SKILL.md) | Creating `AppCustomColors`, implementing `ThemeExtension<T>`, `lerp`, `copyWith`, and domain tokens. |
-| **UI Context Extensions** | [flutter-ui-utils-extensions](../../ui_utils/flutter-ui-utils-extensions/SKILL.md) | `BuildContext` helpers (`context.colorScheme`, `context.textTheme`, `context.customColors`, `isDark`). |
-| **Scaffold / New Theme Generator** | [create-theme](../../../create-theme/SKILL.md) | Generating standard boilerplate files and scaffolding a new theme via `/create-theme`. |
+| **UI Context Extensions** | [flutter-ui-utils-extensions](../../ui-utils/flutter-ui-utils-extensions/SKILL.md) | `BuildContext` helpers (`context.colorScheme`, `context.textTheme`, `context.customColors`, `isDark`). |
 | **Parent UI Coordinator** | [flutter-ui-hub](../../ui/flutter-ui-hub/SKILL.md) | Presentation layer laws, widget architecture, responsive layouts, and UI kit integration. |
 | **Material 3 Components** | [flutter-ui-material](../../ui/flutter-ui-material/SKILL.md) | Styling M3 widgets (`FilledButton`, `Card`, `NavigationBar`, `InputDecoration`). |
 

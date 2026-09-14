@@ -21,8 +21,8 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [l10n-hub](../l10n-hub/SKILL.md) | Architectural rules and layer separation. |
-| **UI Utils Hub** | [flutter-ui-utils-hub](../../presentation/ui_utils/flutter-ui-utils-hub/SKILL.md) | UI context extensions and presentation helpers. |
-| **State Management** | [flutter-state-management-hub](../../presentation/state_management/flutter-state-management-hub/SKILL.md) | BLoC/Cubit state management for runtime settings. |
+| **UI Utils Hub** | [flutter-ui-utils-hub](../../presentation/ui-utils/flutter-ui-utils-hub/SKILL.md) | UI context extensions and presentation helpers. |
+| **State Management** | [flutter-bloc-hub](../../presentation/state-management/flutter-bloc-hub/SKILL.md) | BLoC/Cubit state management for runtime settings. |
 | **Storage** | [infrastructure-storage](../../infrastructure/infrastructure-storage/SKILL.md) | Persisting user's selected locale to disk. |
 
 ---

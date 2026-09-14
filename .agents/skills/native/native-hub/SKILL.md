@@ -31,7 +31,7 @@ The `android/`, `ios/`, and native platform folders provide the direct bridge be
 | **Android Native** | [native-android](../native-android/SKILL.md) | Kotlin, Flutter v2 embedding, Coroutines, PlatformViews, Android 12-15+ Manifest hygiene, ProGuard/R8. |
 | **iOS Native** | [native-ios](../native-ios/SKILL.md) | Swift, `@MainActor`, async/await, Pigeon, FlutterPlatformView, iOS Privacy Manifests (`PrivacyInfo.xcprivacy`), Info.plist. |
 | **App Configuration** | [infrastructure-config](../../infrastructure/infrastructure-config/SKILL.md) | Dart-side `AppConfig` and `AppEnvironment` models. |
-| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | Layer-First architecture and dependency inversion rules. |
+| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | Layer-First architecture and dependency inversion rules. |
 
 ---
 

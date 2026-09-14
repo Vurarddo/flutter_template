@@ -21,7 +21,7 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [testing-hub](../testing-hub/SKILL.md) | Testing strategy and pyramid overview. |
-| **BLoC Core** | [flutter-bloc-core](../../presentation/state_management/flutter-bloc-core/SKILL.md) | Standard BLoC architecture, events, and states. |
+| **BLoC Core** | [flutter-bloc-core](../../presentation/state-management/flutter-bloc-core/SKILL.md) | Standard BLoC architecture, events, and states. |
 | **Unit Testing** | [testing-unit](../testing-unit/SKILL.md) | Unit testing UseCases before mocking them in BLoCs. |
 | **Widget Testing** | [testing-widget](../testing-widget/SKILL.md) | Testing UI integration with these BLoCs. |
 

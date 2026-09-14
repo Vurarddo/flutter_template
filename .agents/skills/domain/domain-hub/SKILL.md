@@ -34,7 +34,7 @@ Use this matrix to navigate to the specialized sub-skill matching your task:
 | **Repository Contracts** | [domain-repositories](../domain-repositories/SKILL.md) | `abstract class I<Feature>Repository` contracts, method signatures, stream contracts. |
 | **Domain Failures** | [domain-failures](../domain-failures/SKILL.md) | Dart 3 `sealed class` failure hierarchies, business error modeling, pattern matching. |
 | **Core Layer Hub** | [core-hub](../../core/core-hub/SKILL.md) | Pure Dart primitives, extensions, and utilities. |
-| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | Global architectural boundaries and DDD rules. |
+| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | Global architectural boundaries and DDD rules. |
 
 ---
 

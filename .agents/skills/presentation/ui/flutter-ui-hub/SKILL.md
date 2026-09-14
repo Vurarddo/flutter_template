@@ -29,21 +29,20 @@ Use this matrix to navigate to the specialized sub-skill matching your specific 
 | **Navigation Hub** | [flutter-auto-route-hub](../../navigation/flutter-auto-route-hub/SKILL.md) | Central coordinator for AutoRoute type-safe navigation and deep links. |
 | **AutoRoute Core** | [flutter-auto-route-core](../../navigation/flutter-auto-route-core/SKILL.md) | `@AutoRouterConfig`, `@RoutePage`, `push`/`replace`/`pop`, `@pathParam`, parameters. |
 | **Nested Tabs & Shells** | [flutter-auto-route-nested-tabs](../../navigation/flutter-auto-route-nested-tabs/SKILL.md) | `AutoTabsRouter`, `AutoTabsScaffold`, persistent tabs, `popUntilRoot`. |
-| **State Management Hub** | [flutter-bloc-hub](../../state_management/flutter-bloc-hub/SKILL.md) | Central coordinator for BLoC/Cubit state management architecture. |
-| **BLoC UI Widgets & Scoping** | [flutter-bloc-widgets](../../state_management/flutter-bloc-widgets/SKILL.md) | `BlocBuilder`, `BlocListener`, `BlocConsumer`, `BlocSelector`, `BlocProvider` vs `BlocProvider.value`. |
-| **BLoC & Cubit Core Logic** | [flutter-bloc-core](../../state_management/flutter-bloc-core/SKILL.md) | BLoC vs Cubit decision, sealed events/states, `bloc_concurrency`, async safety. |
-| **UI Utils Hub** | [flutter-ui-utils-hub](../../ui_utils/flutter-ui-utils-hub/SKILL.md) | Central coordinator for UI extensions, formatters, reactive form accessors, and helpers in `lib/presentation/ui_utils/`. |
-| **UI Context Extensions** | [flutter-ui-utils-extensions](../../ui_utils/flutter-ui-utils-extensions/SKILL.md) | `BuildContext` helpers (`context.colorScheme`, `context.textTheme`, `context.customColors`, `isDark`, media queries). |
-| **Input Formatters** | [flutter-ui-utils-formatters](../../ui_utils/flutter-ui-utils-formatters/SKILL.md) | `TextInputFormatter` classes (card numbers, phone masks, currency, uppercase transform). |
-| **Reactive Form Accessors** | [flutter-ui-utils-forms](../../ui_utils/flutter-ui-utils-forms/SKILL.md) | `ControlValueAccessor` implementations and UI form scroll/focus helpers. |
-| **System UI Helpers** | [flutter-ui-utils-helpers](../../ui_utils/flutter-ui-utils-helpers/SKILL.md) | `HapticFeedbackHelper`, `SystemUiOverlayHelper`, keyboard unfocusing, and clipboard tools. |
-| **UI Kit Architecture** | [flutter-ui-kit-hub](../ui_kit/flutter-ui-kit-hub/SKILL.md) | Pure decoupled components in `lib/presentation/ui_kit/`, buttons, cards, modals, badges. |
-| **Widget Previews** | [flutter-ui-kit-preview](../ui_kit/flutter-ui-kit-preview/SKILL.md) | `@Preview` decorators, `PreviewWrapper`, isolated component verification in IDE/web-runner. |
+| **State Management Hub** | [flutter-bloc-hub](../../state-management/flutter-bloc-hub/SKILL.md) | Central coordinator for BLoC/Cubit state management architecture. |
+| **BLoC UI Widgets & Scoping** | [flutter-bloc-widgets](../../state-management/flutter-bloc-widgets/SKILL.md) | `BlocBuilder`, `BlocListener`, `BlocConsumer`, `BlocSelector`, `BlocProvider` vs `BlocProvider.value`. |
+| **BLoC & Cubit Core Logic** | [flutter-bloc-core](../../state-management/flutter-bloc-core/SKILL.md) | BLoC vs Cubit decision, sealed events/states, `bloc_concurrency`, async safety. |
+| **UI Utils Hub** | [flutter-ui-utils-hub](../../ui-utils/flutter-ui-utils-hub/SKILL.md) | Central coordinator for UI extensions, formatters, reactive form accessors, and helpers in `lib/presentation/ui_utils/`. |
+| **UI Context Extensions** | [flutter-ui-utils-extensions](../../ui-utils/flutter-ui-utils-extensions/SKILL.md) | `BuildContext` helpers (`context.colorScheme`, `context.textTheme`, `context.customColors`, `isDark`, media queries). |
+| **Input Formatters** | [flutter-ui-utils-formatters](../../ui-utils/flutter-ui-utils-formatters/SKILL.md) | `TextInputFormatter` classes (card numbers, phone masks, currency, uppercase transform). |
+| **Reactive Form Accessors** | [flutter-ui-utils-forms](../../ui-utils/flutter-ui-utils-forms/SKILL.md) | `ControlValueAccessor` implementations and UI form scroll/focus helpers. |
+| **System UI Helpers** | [flutter-ui-utils-helpers](../../ui-utils/flutter-ui-utils-helpers/SKILL.md) | `HapticFeedbackHelper`, `SystemUiOverlayHelper`, keyboard unfocusing, and clipboard tools. |
+| **UI Kit Architecture** | [flutter-ui-kit-hub](../ui-kit/flutter-ui-kit-hub/SKILL.md) | Pure decoupled components in `lib/presentation/ui_kit/`, buttons, cards, modals, badges. |
+| **Widget Previews** | [flutter-ui-kit-preview](../ui-kit/flutter-ui-kit-preview/SKILL.md) | `@Preview` decorators, `PreviewWrapper`, isolated component verification in IDE/web-runner. |
 | **Reactive Forms Core** | [flutter-ui-forms-reactive](../forms/flutter-ui-forms-reactive/SKILL.md) | Strongly-typed `reactive_forms`, `FormGroup`, `FormControl`, cross-field validation, async debounce. |
 | **Custom Form Controls** | [flutter-ui-forms-custom-controls](../forms/flutter-ui-forms-custom-controls/SKILL.md) | `ControlValueAccessor`, custom chips, date pickers, masks, and stylized reactive inputs. |
 | **Theming System** | [flutter-ui-theme-hub](../../theme/flutter-ui-theme-hub/SKILL.md) | Modular theme architecture (`app_theme.dart`, `app_color_scheme.dart`, `app_text_theme.dart`, `app_custom_colors.dart`). |
 | **Material 3 Components** | [flutter-ui-material](../flutter-ui-material/SKILL.md) | Material 3 components (`FilledButton`, `Card`, `SegmentedButton`, `NavigationBar`, `InputDecoration`). |
-| **Theme Generator** | [create-theme](../../../create-theme/SKILL.md) | Scaffolding new themes and boilerplate via `/create-theme`. |
 | **Widget Architecture** | [flutter-ui-stateless-stateful](../flutter-ui-stateless-stateful/SKILL.md) | Choosing between Stateless/Stateful, element tree diffing, local state vs BLoC, lifecycle (`initState`, `dispose`). |
 | **Rendering Performance** | [flutter-ui-performance](../flutter-ui-performance/SKILL.md) | Optimizing 60/120 FPS, `const` constructors, `RepaintBoundary`, avoiding rebuild churn, `BlocSelector`. |
 | **Responsive & Desktop** | [flutter-ui-responsive-adaptive](../flutter-ui-responsive-adaptive/SKILL.md) | Breakpoints (Mobile `<600`, Tablet `600-1024`, Desktop `>=1024`), `MediaQuery.sizeOf`, hover, keyboard shortcuts, scrollbars. |

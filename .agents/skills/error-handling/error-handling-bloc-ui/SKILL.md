@@ -22,9 +22,9 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [error-handling-hub](../error-handling-hub/SKILL.md) | End-to-end error lifecycle. |
-| **BLoC Core** | [flutter-bloc-core](../../presentation/state_management/flutter-bloc-core/SKILL.md) | Standard BLoC architecture, events, and states. |
+| **BLoC Core** | [flutter-bloc-core](../../presentation/state-management/flutter-bloc-core/SKILL.md) | Standard BLoC architecture, events, and states. |
 | **Localization Integration** | [l10n-presentation-integration](../../l10n/l10n-presentation-integration/SKILL.md) | `context.localization` and ARB string access. |
-| **UI Utils Hub** | [flutter-ui-utils-hub](../../presentation/ui_utils/flutter-ui-utils-hub/SKILL.md) | UI context extensions and helpers. |
+| **UI Utils Hub** | [flutter-ui-utils-hub](../../presentation/ui-utils/flutter-ui-utils-hub/SKILL.md) | UI context extensions and helpers. |
 
 ---
 

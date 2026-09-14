@@ -22,7 +22,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [flutter-auto-route-hub](../flutter-auto-route-hub/SKILL.md) | Domain architecture, rules, and routing. |
 | **Core Routing** | [flutter-auto-route-core](../flutter-auto-route-core/SKILL.md) | Base routes and parameter configuration. |
-| **BLoC Widgets** | [flutter-bloc-widgets](../../state_management/flutter-bloc-widgets/SKILL.md) | Auth state listeners and session management. |
+| **BLoC Widgets** | [flutter-bloc-widgets](../../state-management/flutter-bloc-widgets/SKILL.md) | Auth state listeners and session management. |
 
 ---
 

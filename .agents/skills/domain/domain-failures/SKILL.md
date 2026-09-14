@@ -20,9 +20,9 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [domain-hub](../domain-hub/SKILL.md) | Domain layer architecture and Pure Dart law. |
-| **Error Handling Hub** | [error-handling-hub](../../error_handling/error-handling-hub/SKILL.md) | End-to-end error lifecycle and resilience rules. |
-| **Dio Network Mapper** | [infrastructure-network-dio](../../infrastructure/infrastructure-network-dio/SKILL.md) | Mapping HTTP network errors to Domain Failures. |
-| **BLoC Error Handling** | [flutter-bloc-core](../../presentation/state_management/flutter-bloc-core/SKILL.md) | Catching Domain Failures and emitting Failure states. |
+| **Error Handling Hub** | [error-handling-hub](../../error-handling/error-handling-hub/SKILL.md) | End-to-end error lifecycle and resilience rules. |
+| **Localization Mapping** | [l10n-presentation-integration](../../l10n/l10n-presentation-integration/SKILL.md) | Mapping Domain Failures to localized UI messages. |
+| **BLoC Error Handling** | [flutter-bloc-core](../../presentation/state-management/flutter-bloc-core/SKILL.md) | Catching Domain Failures and emitting Failure states. |
 
 ---
 

@@ -23,7 +23,7 @@ Use this skill whenever:
 | **Parent Hub** | [data-hub](../data-hub/SKILL.md) | Data layer architecture and client rules. |
 | **Dio Network** | [infrastructure-network-dio](../../infrastructure/infrastructure-network-dio/SKILL.md) | Primary `Dio` instance injected into Retrofit clients. |
 | **DTOs & Mappers** | [data-dto-mappers](../data-dto-mappers/SKILL.md) | DTO models returned by client methods. |
-| **Build Runner** | [flutter-build-runner](../../flutter_build_runner/SKILL.md) | Generating `*.g.dart` Retrofit client code. |
+| **Build Runner** | [flutter-build-runner](../../flutter-build-runner/SKILL.md) | Generating `*.g.dart` Retrofit client code. |
 
 ---
 

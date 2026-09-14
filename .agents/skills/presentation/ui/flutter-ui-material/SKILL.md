@@ -26,7 +26,7 @@ Use this skill whenever:
 | **Theme Extensions** | [flutter-ui-theme-extensions](../../theme/flutter-ui-theme-extensions/SKILL.md) | Custom domain tokens and ThemeExtension patterns. |
 | **Parent Hub** | [flutter-ui-hub](../flutter-ui-hub/SKILL.md) | Presentation rules and UI standards. |
 | **Cupertino** | [flutter-ui-cupertino](../flutter-ui-cupertino/SKILL.md) | iOS platform comparisons & adaptive widgets. |
-| **Previews** | [flutter-ui-kit-preview](../ui_kit/flutter-ui-kit-preview/SKILL.md) | Dual-theme preview verification (Light & Dark). |
+| **Previews** | [flutter-ui-kit-preview](../ui-kit/flutter-ui-kit-preview/SKILL.md) | Dual-theme preview verification (Light & Dark). |
 
 ---
 

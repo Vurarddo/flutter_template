@@ -23,7 +23,7 @@ Use this skill whenever:
 | **Parent Hub** | [flutter-bloc-hub](../flutter-bloc-hub/SKILL.md) | Domain architecture, laws, and routing. |
 | **UI Integration** | [flutter-bloc-widgets](../flutter-bloc-widgets/SKILL.md) | Connecting BLoC to widgets via Providers, Builders, and Listeners. |
 | **Persistence** | [flutter-hydrated-bloc](../flutter-hydrated-bloc/SKILL.md) | State persistence and mixin extraction. |
-| **Domain Layer** | [flutter-clean-architecture](../../../flutter_clean_architecture/SKILL.md) | Injecting Domain UseCases and Entities. |
+| **Domain Layer** | [flutter-clean-architecture](../../../flutter-clean-architecture/SKILL.md) | Injecting Domain UseCases and Entities. |
 
 ---
 

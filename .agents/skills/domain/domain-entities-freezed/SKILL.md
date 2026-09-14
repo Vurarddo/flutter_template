@@ -20,8 +20,8 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [domain-hub](../domain-hub/SKILL.md) | Domain layer architecture and Pure Dart law. |
-| **Build Runner** | [flutter-build-runner](../../flutter_build_runner/SKILL.md) | Executing code generation for `*.freezed.dart`. |
-| **Data Mappers (DTOs)** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | Converting Data layer DTOs into Domain Entities via `toDomain()`. |
+| **Build Runner** | [flutter-build-runner](../../flutter-build-runner/SKILL.md) | Executing code generation for `*.freezed.dart`. |
+| **Data Mappers (DTOs)** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | Converting Data layer DTOs into Domain Entities via `toDomain()`. |
 
 ---
 

@@ -22,7 +22,7 @@ Use this skill whenever:
 | **Parent Hub** | [domain-hub](../domain-hub/SKILL.md) | Domain layer architecture and Pure Dart law. |
 | **Repository Contracts** | [domain-repositories](../domain-repositories/SKILL.md) | Abstract `IRepository` interfaces consumed by UseCases. |
 | **DI Setup** | [infrastructure-di](../../infrastructure/infrastructure-di/SKILL.md) | Registering UseCases as `@injectable` (Factory). |
-| **BLoC State Management** | [flutter-bloc-core](../../presentation/state_management/flutter-bloc-core/SKILL.md) | Invoking UseCases from BLoC event handlers. |
+| **BLoC State Management** | [flutter-bloc-core](../../presentation/state-management/flutter-bloc-core/SKILL.md) | Invoking UseCases from BLoC event handlers. |
 
 ---
 

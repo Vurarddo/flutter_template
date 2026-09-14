@@ -21,9 +21,9 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Reactive Forms Core** | [flutter-ui-forms-reactive](../flutter-ui-forms-reactive/SKILL.md) | FormGroup/FormControl models & validation rules. |
-| **UI Forms & Accessors** | [flutter-ui-utils-forms](../../../ui_utils/flutter-ui-utils-forms/SKILL.md) | Centralized `ControlValueAccessor` implementations in `lib/presentation/ui_utils/forms/`. |
-| **Input Formatters** | [flutter-ui-utils-formatters](../../../ui_utils/flutter-ui-utils-formatters/SKILL.md) | `TextInputFormatter` classes for phone/card/currency formatting. |
-| **UI Kit Components** | [flutter-ui-kit-components](../../ui_kit/flutter-ui-kit-components/SKILL.md) | Base visual widgets and badges. |
+| **UI Forms & Accessors** | [flutter-ui-utils-forms](../../../ui-utils/flutter-ui-utils-forms/SKILL.md) | Centralized `ControlValueAccessor` implementations in `lib/presentation/ui_utils/forms/`. |
+| **Input Formatters** | [flutter-ui-utils-formatters](../../../ui-utils/flutter-ui-utils-formatters/SKILL.md) | `TextInputFormatter` classes for phone/card/currency formatting. |
+| **UI Kit Components** | [flutter-ui-kit-components](../../ui-kit/flutter-ui-kit-components/SKILL.md) | Base visual widgets and badges. |
 | **Theming System** | [flutter-ui-theme-hub](../../../theme/flutter-ui-theme-hub/SKILL.md) | Error colors and input decoration styles. |
 
 ---

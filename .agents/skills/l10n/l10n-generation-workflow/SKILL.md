@@ -20,7 +20,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [l10n-hub](../l10n-hub/SKILL.md) | Localization architecture and Clean Architecture rules. |
 | **ARB & ICU Syntax** | [l10n-arb-icu](../l10n-arb-icu/SKILL.md) | Syntax and rules for editing `.arb` files. |
-| **Build Runner Hub** | [flutter_build_runner](../../flutter_build_runner/SKILL.md) | Code generation across the entire Flutter project. |
+| **Build Runner Hub** | [flutter-build-runner](../../flutter-build-runner/SKILL.md) | Code generation across the entire Flutter project. |
 
 ---
 

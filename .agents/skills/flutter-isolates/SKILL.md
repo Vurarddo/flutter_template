@@ -41,14 +41,14 @@ import 'dart:isolate';
 
 abstract final class LargePayloadParser {
   /// Offloads heavy JSON decoding and DTO mapping to a separate Isolate in ONE batch
-  static Future<List<TransactionDto>> parseTransactions(String rawJson) async {
+  static Future<List<ItemDto>> parseItemsPayload(String rawJson) async {
     return Isolate.run(() {
       // Executed entirely on a background Isolate
       final List<dynamic> decodedList = jsonDecode(rawJson) as List<dynamic>;
 
       // Batch mapping inside the isolate loop
       return decodedList
-          .map((json) => TransactionDto.fromJson(json as Map<String, dynamic>))
+          .map((json) => ItemDto.fromJson(json as Map<String, dynamic>))
           .toList();
     });
   }

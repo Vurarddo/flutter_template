@@ -36,7 +36,7 @@ flowchart TD
 | **Data & Transport Mapping** | [error-handling-data-transport](../error-handling-data-transport/SKILL.md) | Capturing `DioException`, HTTP status codes (`401`, `404`, `500`), socket errors via `DioExceptionMapper`. |
 | **BLoC & UI Resolution** | [error-handling-bloc-ui](../error-handling-bloc-ui/SKILL.md) | BLoC `try-catch`, `addError` stacktrace preservation, `DomainFailureLocalizationX`, retry flows. |
 | **Global Crash Monitoring** | [error-handling-global-crash](../error-handling-global-crash/SKILL.md) | `runZonedGuarded`, `FlutterError.onError`, `PlatformDispatcher.instance.onError`, Crashlytics. |
-| **Clean Architecture** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | Global system layer boundaries and dependency rules. |
+| **Clean Architecture** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | Global system layer boundaries and dependency rules. |
 | **Localization Hub** | [l10n-hub](../../l10n/l10n-hub/SKILL.md) | Managing user-facing copy in `.arb` files and `context.localization`. |
 
 ---

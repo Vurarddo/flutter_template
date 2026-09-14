@@ -35,7 +35,7 @@ Use this matrix to navigate to the specialized sub-skill matching your specific 
 | **UI Widgets & Scoping** | [flutter-bloc-widgets](../flutter-bloc-widgets/SKILL.md) | `BlocBuilder`, `BlocListener`, `BlocConsumer`, `BlocSelector`, `context.read` vs `watch` vs `select`, `BlocProvider` vs `BlocProvider.value` for dialogs/bottom sheets/routes. |
 | **Hydrated Persistence** | [flutter-hydrated-bloc](../flutter-hydrated-bloc/SKILL.md) | Local UI state caching with `HydratedBloc`/`HydratedCubit`, mandatory separation of `fromJson`/`toJson` into `.mixin.dart`, PII safety rules, and fallback strategies. |
 | **Navigation Integration** | [flutter-auto-route-hub](../../navigation/flutter-auto-route-hub/SKILL.md) | Navigation architecture, deep linking, and type-safe routing. |
-| **Clean Architecture Integration** | [flutter-clean-architecture](../../../flutter_clean_architecture/SKILL.md) | Upstream Domain UseCases, Repository interfaces, and layer boundaries. |
+| **Clean Architecture Integration** | [flutter-clean-architecture](../../../flutter-clean-architecture/SKILL.md) | Upstream Domain UseCases, Repository interfaces, and layer boundaries. |
 | **UI Presentation Hub** | [flutter-ui-hub](../../ui/flutter-ui-hub/SKILL.md) | Downstream widget decomposition, page templates, and design system integration. |
 
 ---

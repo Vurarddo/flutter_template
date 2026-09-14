@@ -36,7 +36,7 @@ Use this matrix to navigate to the specialized sub-skill matching your specific 
 | **Core Routes & Parameters** | [flutter-auto-route-core](../flutter-auto-route-core/SKILL.md) | `@AutoRouterConfig`, `@RoutePage`, `push`/`replace`/`pop`/`maybePop`, `@pathParam`, `@queryParam`, transition animations, and `AppRouter` configuration. |
 | **Nested Tabs & Shells** | [flutter-auto-route-nested-tabs](../flutter-auto-route-nested-tabs/SKILL.md) | `AutoTabsRouter`, `AutoTabsScaffold`, bottom navigation bars, preserving tab states, popping nested stacks to root, and nested `StackRouter` scoping. |
 | **Guards & Deep Linking** | [flutter-auto-route-guards](../flutter-auto-route-guards/SKILL.md) | `AutoRouteGuard`, `NavigationResolver`, dynamic re-evaluation with `reevaluateListenable`, `deepLinkBuilder`, and 404 wildcard fallback routes. |
-| **BLoC UI Integration** | [flutter-bloc-widgets](../../state_management/flutter-bloc-widgets/SKILL.md) | Triggering route navigation from `BlocListener` / `BlocConsumer` side-effect handlers. |
+| **BLoC UI Integration** | [flutter-bloc-widgets](../../state-management/flutter-bloc-widgets/SKILL.md) | Triggering route navigation from `BlocListener` / `BlocConsumer` side-effect handlers. |
 | **UI Presentation Hub** | [flutter-ui-hub](../../ui/flutter-ui-hub/SKILL.md) | Main UI design system and screen layout decomposition. |
 
 ---

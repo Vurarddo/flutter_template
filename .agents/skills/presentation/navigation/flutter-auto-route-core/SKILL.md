@@ -23,7 +23,7 @@ Use this skill whenever:
 | **Parent Hub** | [flutter-auto-route-hub](../flutter-auto-route-hub/SKILL.md) | Domain architecture, rules, and routing. |
 | **Nested Navigation** | [flutter-auto-route-nested-tabs](../flutter-auto-route-nested-tabs/SKILL.md) | Tabs, shells, and bottom navigation. |
 | **Guards** | [flutter-auto-route-guards](../flutter-auto-route-guards/SKILL.md) | Protecting routes and handling deep links. |
-| **BLoC Integration** | [flutter-bloc-widgets](../../state_management/flutter-bloc-widgets/SKILL.md) | Dispatching navigation from `BlocListener`. |
+| **BLoC Integration** | [flutter-bloc-widgets](../../state-management/flutter-bloc-widgets/SKILL.md) | Dispatching navigation from `BlocListener`. |
 
 ---
 

@@ -31,8 +31,8 @@ Use this matrix to navigate to the specialized sub-skill matching your task:
 | **Algorithmic Utilities** | [core-utils](../core-utils/SKILL.md) | Pure Dart calculation utilities, regex validators, cryptography, currency math, debouncers. |
 | **Global Constants** | [core-constants](../core-constants/SKILL.md) | Application-wide constants, regex patterns, duration limits, date formats. |
 | **Infrastructure Hub** | [infrastructure-hub](../../infrastructure/infrastructure-hub/SKILL.md) | External SDKs, network, storage, DI, and platform services. |
-| **UI Utils Hub** | [flutter-ui-utils-hub](../../presentation/ui_utils/flutter-ui-utils-hub/SKILL.md) | UI-specific extensions (`BuildContext`), formatters, and reactive form accessors. |
-| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | System-wide layer separation, DDD, and dependency flow. |
+| **UI Utils Hub** | [flutter-ui-utils-hub](../../presentation/ui-utils/flutter-ui-utils-hub/SKILL.md) | UI-specific extensions (`BuildContext`), formatters, and reactive form accessors. |
+| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | System-wide layer separation, DDD, and dependency flow. |
 
 ---
 

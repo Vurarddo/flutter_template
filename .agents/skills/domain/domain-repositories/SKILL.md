@@ -20,7 +20,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [domain-hub](../domain-hub/SKILL.md) | Domain layer architecture and Pure Dart law. |
 | **Domain Entities** | [domain-entities-freezed](../domain-entities-freezed/SKILL.md) | Models returned by repository methods. |
-| **Data Implementations** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | Implementing `IRepository` in `lib/data/<feature>/repositories/`. |
+| **Data Implementations** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | Implementing `IRepository` in `lib/data/<feature>/repositories/`. |
 
 ---
 

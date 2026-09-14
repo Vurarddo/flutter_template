@@ -20,7 +20,7 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [infrastructure-hub](../infrastructure-hub/SKILL.md) | Infrastructure architecture and layer boundaries. |
-| **Clean Architecture** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | Inverting dependencies via Domain `IPurchaseRepository`. |
+| **Clean Architecture** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | Inverting dependencies via Domain `IPurchaseRepository`. |
 | **DI Setup** | [infrastructure-di](../infrastructure-di/SKILL.md) | Binding `PurchaseRepositoryImpl` to `IPurchaseRepository`. |
 
 ---

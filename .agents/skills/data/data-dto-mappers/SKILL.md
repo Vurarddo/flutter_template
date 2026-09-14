@@ -22,7 +22,7 @@ Use this skill whenever:
 | :--- | :--- | :--- |
 | **Parent Hub** | [data-hub](../data-hub/SKILL.md) | Data layer architecture and DTO encapsulation rules. |
 | **Domain Entities** | [domain-entities-freezed](../../domain/domain-entities-freezed/SKILL.md) | Target Domain Entities constructed by `toDomain()`. |
-| **Build Runner** | [flutter-build-runner](../../flutter_build_runner/SKILL.md) | Generating `*.g.dart` serialization files. |
+| **Build Runner** | [flutter-build-runner](../../flutter-build-runner/SKILL.md) | Generating `*.g.dart` serialization files. |
 
 ---
 

@@ -35,7 +35,7 @@ Use this matrix to navigate to the specialized sub-skill matching your task:
 | **Local Data Sources & Cache** | [data-datasources-local](../data-datasources-local/SKILL.md) | Local caching, in-memory caches, SQLite/Drift DAOs, TTL cache invalidation. |
 | **Domain Layer Hub** | [domain-hub](../../domain/domain-hub/SKILL.md) | Domain entities, use cases, repository interfaces, and failures. |
 | **Infrastructure Layer Hub** | [infrastructure-hub](../../infrastructure/infrastructure-hub/SKILL.md) | Dio network configuration, storage interactors, external SDKs. |
-| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | Global layer boundaries and DDD dependency flow. |
+| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | Global layer boundaries and DDD dependency flow. |
 
 ---
 

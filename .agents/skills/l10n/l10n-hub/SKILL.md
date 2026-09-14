@@ -31,8 +31,8 @@ The localization system in `lib/l10n/` provides type-safe, compile-time verified
 | **ARB & ICU Syntax** | [l10n-arb-icu](../l10n-arb-icu/SKILL.md) | ARB formatting, typed placeholders, ICU plurals (`few`/`many`), ICU select, metadata. |
 | **Code Generation** | [l10n-generation-workflow](../l10n-generation-workflow/SKILL.md) | `flutter_intl` CLI commands, `intl_utils`, CI validation, generated files hygiene. |
 | **Presentation Integration** | [l10n-presentation-integration](../l10n-presentation-integration/SKILL.md) | `MaterialApp` wiring, `context.localization`, `DomainFailure` mapping, dynamic locale switching, formatters. |
-| **Clean Architecture** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | System-wide layer separation and dependency rules. |
-| **UI Utils Hub** | [flutter-ui-utils-hub](../../presentation/ui_utils/flutter-ui-utils-hub/SKILL.md) | Presentation extensions, theme, and UI helper functions. |
+| **Clean Architecture** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | System-wide layer separation and dependency rules. |
+| **UI Utils Hub** | [flutter-ui-utils-hub](../../presentation/ui-utils/flutter-ui-utils-hub/SKILL.md) | Presentation extensions, theme, and UI helper functions. |
 
 ---
 

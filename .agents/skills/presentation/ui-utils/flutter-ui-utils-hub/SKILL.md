@@ -37,7 +37,7 @@ Use this matrix to navigate to the specialized sub-skill matching your specific 
 | **System UI Helpers** | [flutter-ui-utils-helpers](../flutter-ui-utils-helpers/SKILL.md) | System overlays, haptic feedback helpers, keyboard unfocus utilities, clipboard management. |
 | **Localization Integration** | [l10n-presentation-integration](../../../l10n/l10n-presentation-integration/SKILL.md) | `context.localization` accessors, `DomainFailure` string mappers, and locale-aware formatters. |
 | **Parent UI Coordinator** | [flutter-ui-hub](../../ui/flutter-ui-hub/SKILL.md) | Central UI architecture coordinator, widget decomposition, slivers, responsive layouts. |
-| **UI Kit Architecture** | [flutter-ui-kit-hub](../../ui/ui_kit/flutter-ui-kit-hub/SKILL.md) | Reusable visual design system components. |
+| **UI Kit Architecture** | [flutter-ui-kit-hub](../../ui/ui-kit/flutter-ui-kit-hub/SKILL.md) | Reusable visual design system components. |
 | **Theming System** | [flutter-ui-theme-hub](../../theme/flutter-ui-theme-hub/SKILL.md) | Material 3 ColorSchemes, TextThemes, and ThemeExtensions. |
 
 ---

@@ -31,7 +31,7 @@ flowchart TD
 | **BLoC & Cubit Testing** | [testing-bloc](../testing-bloc/SKILL.md) | State transition verification using `bloc_test`, Mocktail, and async event streams. |
 | **Widget Testing** | [testing-widget](../testing-widget/SKILL.md) | Component rendering, `ValueKey` finders, theme/localization wrappers, and pump mechanics. |
 | **Integration Testing** | [testing-integration](../testing-integration/SKILL.md) | End-to-end user flows across **Mobile (Android/iOS), Web, and Desktop (macOS/Windows/Linux)**. |
-| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter_clean_architecture/SKILL.md) | System-wide layer separation and dependency rules. |
+| **Clean Architecture Hub** | [flutter-clean-architecture](../../flutter-clean-architecture/SKILL.md) | System-wide layer separation and dependency rules. |
 
 ---
 

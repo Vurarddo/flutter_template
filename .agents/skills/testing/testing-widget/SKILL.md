@@ -21,7 +21,7 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [testing-hub](../testing-hub/SKILL.md) | Testing strategy and pyramid overview. |
-| **UI Kit** | [flutter-ui-kit-hub](../../presentation/ui/ui_kit/flutter-ui-kit-hub/SKILL.md) | Reusable visual components being tested. |
+| **UI Kit** | [flutter-ui-kit-hub](../../presentation/ui/ui-kit/flutter-ui-kit-hub/SKILL.md) | Reusable visual components being tested. |
 | **BLoC Testing** | [testing-bloc](../testing-bloc/SKILL.md) | Unit testing BLoC logic before mocking in widgets. |
 | **Localization Integration** | [l10n-presentation-integration](../../l10n/l10n-presentation-integration/SKILL.md) | Supplying localization delegates to test wrapper. |
 
