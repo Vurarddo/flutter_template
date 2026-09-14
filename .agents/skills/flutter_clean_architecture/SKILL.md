@@ -94,6 +94,13 @@ Presentation → Domain ← Data
 - **Code Generation:** `flutter pub run intl_utils:generate` outputs to `lib/l10n/generated/` (consult [l10n-generation-workflow](l10n/l10n-generation-workflow/SKILL.md)).
 - **Presentation Access:** UI widgets access copy via `context.localization.<key>`, and map `DomainFailure` via UI extensions (consult [l10n-presentation-integration](l10n/l10n-presentation-integration/SKILL.md)).
 
+### 7. Cross-Cutting: Error Handling & Resilience
+- Consult [error-handling-hub](error_handling/error-handling-hub/SKILL.md).
+- **Transport Mapping:** Data layer catches `DioException` and converts via `DioExceptionMapper` (consult [error-handling-data-transport](error_handling/error-handling-data-transport/SKILL.md)).
+- **Domain Contracts:** Pure Dart sealed `DomainFailure` models (consult [domain-failures](domain/domain-failures/SKILL.md)).
+- **BLoC & UI Resolution:** BLoC `addError(error, stackTrace)` and `DomainFailureLocalizationX` (consult [error-handling-bloc-ui](error_handling/error-handling-bloc-ui/SKILL.md)).
+- **Global Crash Monitoring:** `runZonedGuarded`, `PlatformDispatcher.onError`, Crashlytics (consult [error-handling-global-crash](error_handling/error-handling-global-crash/SKILL.md)).
+
 ---
 
 ## Complete Project Structure Matrix

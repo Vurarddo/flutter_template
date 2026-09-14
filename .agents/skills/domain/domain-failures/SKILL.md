@@ -20,6 +20,7 @@ Use this skill whenever:
 | Relation | Skill | Purpose |
 | :--- | :--- | :--- |
 | **Parent Hub** | [domain-hub](../domain-hub/SKILL.md) | Domain layer architecture and Pure Dart law. |
+| **Error Handling Hub** | [error-handling-hub](../../error_handling/error-handling-hub/SKILL.md) | End-to-end error lifecycle and resilience rules. |
 | **Dio Network Mapper** | [infrastructure-network-dio](../../infrastructure/infrastructure-network-dio/SKILL.md) | Mapping HTTP network errors to Domain Failures. |
 | **BLoC Error Handling** | [flutter-bloc-core](../../presentation/state_management/flutter-bloc-core/SKILL.md) | Catching Domain Failures and emitting Failure states. |
 
@@ -73,26 +74,31 @@ final class ItemUnknownFailure extends ItemFailure {
 
 ---
 
-## 4. Pattern Matching in BLoCs (Dart 3 `switch`)
+## 4. Pattern Matching in BLoCs & State Emission
 
-Inside BLoC event handlers:
+Inside BLoC event handlers, always emit the typed `DomainFailure` directly in the state, and let the Presentation layer resolve user messages via `DomainFailureLocalizationX`:
 
 ```dart
-void _onFetchItemDetails(FetchItemDetails event, Emitter<ItemState> emit) async {
+Future<void> _onFetchItemDetails(
+  FetchItemDetails event,
+  Emitter<ItemState> emit,
+) async {
   emit(const ItemState.inProgress());
   try {
     final item = await _getItemDetailsUseCase(event.id);
     if (emit.isDone) return;
     emit(ItemState.success(item));
-  } on ItemFailure catch (failure) {
+  } catch (error, stackTrace) {
+    // Preserve stack trace for observability
+    addError(error, stackTrace);
+
     if (emit.isDone) return;
-    final userMessage = switch (failure) {
-      ItemNotFoundFailure(:final message) => message,
-      ItemQuotaExceededFailure(:final message) => message,
-      ItemNetworkFailure(:final message) => message,
-      ItemUnknownFailure(:final message) => message,
-    };
-    emit(ItemState.failure(userMessage));
+
+    final failure = error is ItemFailure
+        ? error
+        : const ItemUnknownFailure();
+
+    emit(ItemState.failure(failure));
   }
 }
 ```
@@ -103,15 +109,16 @@ void _onFetchItemDetails(FetchItemDetails event, Emitter<ItemState> emit) async 
 
 | Anti-Pattern | Severity | Corrective Action |
 | :--- | :--- | :--- |
-| Exposing raw `DioException` or `HttpException` in Domain Failure fields | **CRITICAL** | Store only generic error objects or mapped string messages. |
-| Using `String` error messages directly without typed failure classes | **HIGH** | Create a typed `sealed class` for the feature domain. |
-| Using `dartz` `Left(Failure)` instead of throwing/returning typed failures | **MEDIUM** | Throw typed `DomainFailure` or return a sealed Result object. |
+| Using `dartz` or `fpdart` (`Either<Failure, T>`, `Left()`, `Right()`) | **CRITICAL** | **STRICTLY PROHIBITED.** Use native Dart 3 `sealed class` hierarchies or typed exceptions. |
+| Exposing raw `DioException` or `HttpException` in Domain Failure fields | **CRITICAL** | Store only domain-level error codes or mapped domain concepts. |
+| Using unstructured `String` error messages directly without typed failure classes | **HIGH** | Create a typed `sealed class` for the feature domain. |
+| Hardcoding English or Ukrainian UI strings inside `DomainFailure` | **HIGH** | Domain failures contain error codes; UI resolves copy via `context.localization`. |
 
 ---
 
 ## 6. Verification Checklist
 
-- [ ] Base failure class is declared as `sealed class <Feature>Failure`.
+- [ ] Base failure class is declared as `sealed class <Feature>Failure` (or extends `DomainFailure`).
 - [ ] Sub-failures use `final class` and extend base failure.
 - [ ] Implements `Exception` and extends `Equatable` for value comparison in tests.
-- [ ] Zero UI or transport imports in failure files.
+- [ ] Zero UI, transport (`Dio`), or functional library (`dartz`/`fpdart`) imports in failure files.

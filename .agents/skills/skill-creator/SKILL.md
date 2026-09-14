@@ -167,7 +167,12 @@ To enable seamless navigation across trees and meshes:
 5. **Domain-Agnostic & Abstract Naming Rule (Universal Portability):**
    - ALL code snippets, class names, functions, variables, DTOs, entities, and use cases inside skills MUST use **abstract, domain-agnostic identifiers** (e.g., `[Feature]`, `Item`, `ItemDto`, `ItemEntity`, `User`, `Account`, `Product`, `Resource`, `ExampleItem`) instead of project-specific domain names (e.g., `Movie`, `TMDB`, `CryptoTrade`).
    - This ensures skills remain 100% portable, reusable, and copy-paste ready across any Flutter codebase without domain residue.
-6. **Agent Verification Checklist:**
+6. **Holistic Tree Audit & De-duplication Rule (Trash & Bloat Pruning):**
+   - Whenever this skill is invoked to create or modify skills, the AI MUST actively audit the entire `.agents/skills/` tree, verify cross-link integrity, and eliminate redundant or duplicate files.
+   - **Single Source of Truth:** Never duplicate the same concept across multiple skill folders (e.g., domain failure definitions belong strictly in `domain-failures`, not duplicated in error handling).
+   - **Active Pruning:** Do NOT hesitate to delete obsolete, duplicate, or stale skills (`rm -rf`) to prevent folder bloat and keep the skill repository compact, high-signal, and clean.
+   - **Banned Dependencies Enforcement:** Strictly enforce project prohibitions in all generated skill code (e.g., **CRITICAL** ban on `dartz`/`fpdart` `Either`, `provider`, `riverpod`, relative imports, and hardcoded colors).
+7. **Agent Verification Checklist:**
    - End with a task-oriented markdown checklist (`- [ ] ...`) allowing the agent to self-verify its work before finishing.
 
 ---
@@ -286,28 +291,36 @@ When implementing or reviewing code with this skill:
 
 ## 9. Step-by-Step Skill Creation & Tree Scaffolding Workflow
 
-### Step 1: Scope & Hierarchy Planning
+### Step 1: Pre-Flight Audit & Duplicate Detection
+1. **Search Existing Skills:** Inspect `.agents/skills/` to identify existing skills covering the target domain.
+2. **Identify Duplication:** If similar skills exist, decide whether to refactor/extend them or replace them with a modular tree. Avoid creating overlapping duplicate skills!
+
+### Step 2: Scope & Hierarchy Planning
 1. Determine if the task needs a **Single Standalone Skill** or a **Skill Tree/Mesh**.
 2. If building a tree/mesh:
    - Identify the **Domain Root (Hub)**.
    - List distinct **Sub-Skills (Leaves)** and map inter-dependencies (upstream/downstream).
    - Identify cross-cutting **Utility Skills** needed.
 
-### Step 2: Scaffold Skill Folder Structure
+### Step 3: Scaffold Skill Folder Structure
 - For Standalone: Create `.agents/skills/<skill-name>/`.
 - For Skill Tree: Create domain folder `.agents/skills/<domain>/` with subdirectories for the hub and each child skill.
 
-### Step 3: Author Content with Interlinking
+### Step 4: Author Content with Interlinking
 1. Draft YAML frontmatters with clear triggers and hierarchical context.
 2. Fill Hub skills with domain routing tables and global constraints.
 3. Fill Child skills with actionable recipes, code patterns, and prerequisite links.
 4. Establish clear markdown file links between related skills.
 
-### Step 4: Validate Skill & Mesh Quality
-- [ ] Is the frontmatter `name` kebab-case?
-- [ ] Does the `description` contain clear "Use when..." activation triggers?
-- [ ] Are inter-skill dependencies and routing matrices explicitly documented with clickable markdown links?
-- [ ] Are code examples modern, complete, and syntactically valid?
-- [ ] Is progressive disclosure applied to prevent monolithic skill files?
-- [ ] Is the skill free of generic tutorial fluff?
+### Step 5: Post-Flight De-Duplication, Pruning & Mesh Validation
+1. **Prune Stale & Duplicate Files:** Delete old monolithic or redundant skill directories (`rm -rf`) that are superseded by the new tree.
+2. **Sync Cross-Links:** Update parent hubs, `flutter_clean_architecture`, and adjacent layer hubs so all relative markdown links point to active, valid files.
+3. **Verify Quality Checklist:**
+   - [ ] Is the frontmatter `name` kebab-case?
+   - [ ] Does the `description` contain clear "Use when..." activation triggers?
+   - [ ] Are inter-skill dependencies and routing matrices explicitly documented with clickable markdown links?
+   - [ ] Are code examples modern, domain-agnostic, and syntactically valid?
+   - [ ] Are project bans (e.g. `dartz`, `fpdart`, hardcoded colors, relative imports) strictly respected?
+   - [ ] Is progressive disclosure applied to prevent monolithic skill files?
+   - [ ] Zero dead, duplicate, or unlinked skill files remain in `.agents/skills/`.
 
