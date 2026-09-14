@@ -105,7 +105,49 @@ Create environment JSON files (added to `.gitignore`):
 
 ---
 
-## 5. Centralized Configuration Model (`lib/infrastructure/config/app_config.dart`)
+## 5. Quality & Linter Configuration (`analysis_options.yaml`)
+
+Scaffold the standard root `analysis_options.yaml` with strict BLoC rules, code generation exclusions, and formatter guidelines:
+
+```yaml
+include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - lib/**.g.dart
+    - lib/l10n/generated/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
+  errors:
+    invalid_annotation_target: ignore
+
+linter:
+  rules:
+    annotate_overrides: false
+    constant_identifier_names: false
+    no_leading_underscores_for_library_prefixes: false
+    prefer_const_constructors: true
+
+bloc:
+  rules:
+    avoid_flutter_imports: true
+    avoid_public_bloc_methods: true
+    avoid_public_fields: true
+    prefer_void_public_cubit_methods: true
+
+formatter:
+  trailing_commas: preserve
+  page_width: 100
+```
+
+---
+
+## 6. Centralized Configuration Model (`lib/infrastructure/config/app_config.dart`)
 
 ```dart
 enum AppEnvironment {
@@ -138,7 +180,7 @@ abstract final class AppConfig {
 
 ---
 
-## 6. Main Bootstrap Entrypoint (`lib/main.dart`)
+## 7. Main Bootstrap Entrypoint (`lib/main.dart`)
 
 ```dart
 import 'dart:async';
@@ -176,7 +218,7 @@ void main() {
 
 ---
 
-## 7. Application Root Widget (`lib/application.dart`)
+## 8. Application Root Widget (`lib/application.dart`)
 
 ```dart
 import 'package:flutter/material.dart';
@@ -225,10 +267,11 @@ class Application extends StatelessWidget {
 
 ---
 
-## 8. Verification Checklist
+## 9. Verification Checklist
 
 - [ ] Clean Architecture layer folders created.
 - [ ] `config/env_*.json` files generated and added to `.gitignore`.
+- [ ] `analysis_options.yaml` configured with strict BLoC rules, exclude paths, and `invalid_annotation_target: ignore`.
 - [ ] `AppConfig` strongly typed with `String.fromEnvironment`.
 - [ ] `lib/main.dart` wrapped in `runZonedGuarded` with `HydratedBloc` & `GetIt` initialization.
 - [ ] `lib/application.dart` configured with `MaterialApp.router`, `ThemeCubit`, and localization delegates.

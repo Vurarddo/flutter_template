@@ -639,7 +639,7 @@ pre {
   </label>
 </div>
 <h2 id="examples" class="doc-h2"><a href="#examples" class="heading-anchor">#</a> Examples</h2>
-<h3 class="doc-h3">Comprehensive <code class="inline-code">analysis_options.yaml</code></h3>
+<h3 class="doc-h3">Production <code class="inline-code">analysis_options.yaml</code> (Template Standard)</h3>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">yaml</span>
@@ -648,30 +648,39 @@ pre {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-yaml">include: package:flutter_lints/recommended.yaml
+  <pre><code class="language-yaml">include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - &quot;**/*.g.dart&quot;
-    - &quot;lib/generated/**&quot;
-  language:
-    strict-casts: true
-    strict-inference: true
-    strict-raw-types: true
+    - build/**
+    - lib/**.g.dart
+    - lib/l10n/generated/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
   errors:
-    todo: ignore
-    invalid_assignment: warning
-    missing_return: error
+    invalid_annotation_target: ignore
 
 linter:
   rules:
-    avoid_shadowing_type_parameters: false
-    await_only_futures: true
-    use_super_parameters: true
+    annotate_overrides: false
+    constant_identifier_names: false
+    no_leading_underscores_for_library_prefixes: false
+    prefer_const_constructors: true
+
+bloc:
+  rules:
+    avoid_flutter_imports: true
+    avoid_public_bloc_methods: true
+    avoid_public_fields: true
+    prefer_void_public_cubit_methods: true
 
 formatter:
-  page_width: 100
   trailing_commas: preserve
+  page_width: 100
 </code></pre>
 </div>
 <h3 class="doc-h3">Inline Diagnostic Suppression</h3>

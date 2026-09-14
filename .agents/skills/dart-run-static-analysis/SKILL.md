@@ -59,33 +59,42 @@ Use this workflow to resolve outdated API usages, apply quick fixes, and migrate
 
 ## Examples
 
-### Comprehensive `analysis_options.yaml`
+### Production `analysis_options.yaml` (Template Standard)
 
 ```yaml
-include: package:flutter_lints/recommended.yaml
+include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - "**/*.g.dart"
-    - "lib/generated/**"
-  language:
-    strict-casts: true
-    strict-inference: true
-    strict-raw-types: true
+    - build/**
+    - lib/**.g.dart
+    - lib/l10n/generated/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
   errors:
-    todo: ignore
-    invalid_assignment: warning
-    missing_return: error
+    invalid_annotation_target: ignore
 
 linter:
   rules:
-    avoid_shadowing_type_parameters: false
-    await_only_futures: true
-    use_super_parameters: true
+    annotate_overrides: false
+    constant_identifier_names: false
+    no_leading_underscores_for_library_prefixes: false
+    prefer_const_constructors: true
+
+bloc:
+  rules:
+    avoid_flutter_imports: true
+    avoid_public_bloc_methods: true
+    avoid_public_fields: true
+    prefer_void_public_cubit_methods: true
 
 formatter:
-  page_width: 100
   trailing_commas: preserve
+  page_width: 100
 ```
 
 ### Inline Diagnostic Suppression

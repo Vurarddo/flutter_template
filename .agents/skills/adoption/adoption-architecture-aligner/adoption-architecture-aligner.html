@@ -540,6 +540,7 @@ pre {
     L2 --> L3["Phase 3: Wrap DataSources & Implement Mappers"]
     L3 --> L4["Phase 4: Decouple UI & Introduce BLoC/Cubit"]
     L4 --> L5["Phase 5: Decompose Monolithic Widgets (>200 lines)"]
+    L5 --> L6["Phase 6: Align Quality Gates (`analysis_options.yaml`)"]
 </div></div>
 <hr class="doc-divider">
 <h2 id="3--incremental-refactoring-rules" class="doc-h2"><a href="#3--incremental-refactoring-rules" class="heading-anchor">#</a> 3. Incremental Refactoring Rules</h2>
@@ -594,9 +595,60 @@ pre {
 <li>Register all data sources, repositories, use cases, and BLoCs using <code class="inline-code">@lazySingleton</code>, <code class="inline-code">@injectable</code>, and <code class="inline-code">@factoryMethod</code>.</li>
 <li>Scaffold <code class="inline-code">lib/core/di/injection.dart</code> using <code class="inline-code">GetIt</code> and <code class="inline-code">injectable</code>.</li>
 </ul>
+<h3 class="doc-h3">Rule 5: Static Analysis &amp; Linter Options Alignment (<code class="inline-code">analysis_options.yaml</code>)</h3>
+<p class="doc-p">Ensure the project root <code class="inline-code">analysis_options.yaml</code> is upgraded to the template standard:</p>
+<ul class="doc-list">
+<li>Exclude code-generation paths (<code class="inline-code">build/<strong></code>, <code class="inline-code">lib/</strong>.g.dart</code>, <code class="inline-code">lib/l10n/generated/<strong></code>, <code class="inline-code">android/</strong></code>, <code class="inline-code">ios/**</code>).</li>
+<li>Suppress <code class="inline-code">invalid_annotation_target</code> for Freezed / JsonSerializable compatibility.</li>
+<li>Enable strict BLoC architectural rules (<code class="inline-code">avoid_flutter_imports: true</code>, <code class="inline-code">avoid_public_bloc_methods: true</code>, <code class="inline-code">avoid_public_fields: true</code>, <code class="inline-code">prefer_void_public_cubit_methods: true</code>).</li>
+<li>Configure formatter rules (<code class="inline-code">trailing_commas: preserve</code>, <code class="inline-code">page_width: 100</code>).</li>
+</ul>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">yaml</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-yaml">include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - lib/**.g.dart
+    - lib/l10n/generated/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
+  errors:
+    invalid_annotation_target: ignore
+
+linter:
+  rules:
+    annotate_overrides: false
+    constant_identifier_names: false
+    no_leading_underscores_for_library_prefixes: false
+    prefer_const_constructors: true
+
+bloc:
+  rules:
+    avoid_flutter_imports: true
+    avoid_public_bloc_methods: true
+    avoid_public_fields: true
+    prefer_void_public_cubit_methods: true
+
+formatter:
+  trailing_commas: preserve
+  page_width: 100
+</code></pre>
+</div>
 <hr class="doc-divider">
 <h2 id="4--verification" class="doc-h2"><a href="#4--verification" class="heading-anchor">#</a> 4. Verification</h2>
-<p class="doc-p">Run static analysis to confirm that UI files do not import data or infrastructure layers:</p>
+<p class="doc-p">Run static analysis to confirm that UI files do not import data or infrastructure layers and that all strict lint rules pass:</p>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">bash</span>
@@ -605,7 +657,11 @@ pre {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-bash">dart analyze
+  <pre><code class="language-bash"># 1. Inspect issues
+dart analyze
+
+# 2. Apply automatic mechanical fixes
+dart fix --apply
 </code></pre>
 </div>
 

@@ -675,7 +675,53 @@ pre {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="5--centralized-configuration-model---lib-infrastructure-config-app_config-dart--" class="doc-h2"><a href="#5--centralized-configuration-model---lib-infrastructure-config-app_config-dart--" class="heading-anchor">#</a> 5. Centralized Configuration Model (<code class="inline-code">lib/infrastructure/config/app_config.dart</code>)</h2>
+<h2 id="5--quality---linter-configuration---analysis_options-yaml--" class="doc-h2"><a href="#5--quality---linter-configuration---analysis_options-yaml--" class="heading-anchor">#</a> 5. Quality &amp; Linter Configuration (<code class="inline-code">analysis_options.yaml</code>)</h2>
+<p class="doc-p">Scaffold the standard root <code class="inline-code">analysis_options.yaml</code> with strict BLoC rules, code generation exclusions, and formatter guidelines:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">yaml</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-yaml">include: package:flutter_lints/flutter.yaml
+
+analyzer:
+  exclude:
+    - build/**
+    - lib/**.g.dart
+    - lib/l10n/generated/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
+  errors:
+    invalid_annotation_target: ignore
+
+linter:
+  rules:
+    annotate_overrides: false
+    constant_identifier_names: false
+    no_leading_underscores_for_library_prefixes: false
+    prefer_const_constructors: true
+
+bloc:
+  rules:
+    avoid_flutter_imports: true
+    avoid_public_bloc_methods: true
+    avoid_public_fields: true
+    prefer_void_public_cubit_methods: true
+
+formatter:
+  trailing_commas: preserve
+  page_width: 100
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="6--centralized-configuration-model---lib-infrastructure-config-app_config-dart--" class="doc-h2"><a href="#6--centralized-configuration-model---lib-infrastructure-config-app_config-dart--" class="heading-anchor">#</a> 6. Centralized Configuration Model (<code class="inline-code">lib/infrastructure/config/app_config.dart</code>)</h2>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -713,7 +759,7 @@ abstract final class AppConfig {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="6--main-bootstrap-entrypoint---lib-main-dart--" class="doc-h2"><a href="#6--main-bootstrap-entrypoint---lib-main-dart--" class="heading-anchor">#</a> 6. Main Bootstrap Entrypoint (<code class="inline-code">lib/main.dart</code>)</h2>
+<h2 id="7--main-bootstrap-entrypoint---lib-main-dart--" class="doc-h2"><a href="#7--main-bootstrap-entrypoint---lib-main-dart--" class="heading-anchor">#</a> 7. Main Bootstrap Entrypoint (<code class="inline-code">lib/main.dart</code>)</h2>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -756,7 +802,7 @@ void main() {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="7--application-root-widget---lib-application-dart--" class="doc-h2"><a href="#7--application-root-widget---lib-application-dart--" class="heading-anchor">#</a> 7. Application Root Widget (<code class="inline-code">lib/application.dart</code>)</h2>
+<h2 id="8--application-root-widget---lib-application-dart--" class="doc-h2"><a href="#8--application-root-widget---lib-application-dart--" class="heading-anchor">#</a> 8. Application Root Widget (<code class="inline-code">lib/application.dart</code>)</h2>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -810,7 +856,7 @@ class Application extends StatelessWidget {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="8--verification-checklist" class="doc-h2"><a href="#8--verification-checklist" class="heading-anchor">#</a> 8. Verification Checklist</h2>
+<h2 id="9--verification-checklist" class="doc-h2"><a href="#9--verification-checklist" class="heading-anchor">#</a> 9. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
@@ -823,6 +869,13 @@ class Application extends StatelessWidget {
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
     <span class="check-text"><code class="inline-code">config/env_*.json</code> files generated and added to <code class="inline-code">.gitignore</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text"><code class="inline-code">analysis_options.yaml</code> configured with strict BLoC rules, exclude paths, and <code class="inline-code">invalid_annotation_target: ignore</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
