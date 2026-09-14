@@ -72,8 +72,9 @@ Create environment definition files in `config/`:
 ---
 
 ## 4. Step 2: Android Gradle `productFlavors` Setup
+Official Documentation: [Flutter Android Flavors](https://docs.flutter.dev/deployment/flavors)
 
-In `android/app/build.gradle.kts` (or `build.gradle`):
+### In `android/app/build.gradle.kts` (Kotlin DSL):
 
 ```kotlin
 android {
@@ -102,6 +103,32 @@ android {
 }
 ```
 
+### Or in `android/app/build.gradle` (Groovy DSL):
+
+```groovy
+android {
+    ...
+    flavorDimensions "default"
+
+    productFlavors {
+        dev {
+            dimension "default"
+            applicationIdSuffix ".dev"
+            manifestPlaceholders = [appName: "App Dev", appIcon: "@mipmap/ic_launcher_dev"]
+        }
+        stage {
+            dimension "default"
+            applicationIdSuffix ".stage"
+            manifestPlaceholders = [appName: "App Staging", appIcon: "@mipmap/ic_launcher_stage"]
+        }
+        prod {
+            dimension "default"
+            manifestPlaceholders = [appName: "App", appIcon: "@mipmap/ic_launcher"]
+        }
+    }
+}
+```
+
 In `android/app/src/main/AndroidManifest.xml`:
 ```xml
 <application
@@ -113,9 +140,10 @@ In `android/app/src/main/AndroidManifest.xml`:
 
 ---
 
-## 5. Step 3: iOS Xcode Schemes & Build Configurations Setup
+## 5. Step 3: iOS & macOS Xcode Schemes & Build Configurations Setup
+Official Documentation: [Flutter iOS Flavors](https://docs.flutter.dev/deployment/flavors-ios)
 
-iOS requires configuring Xcode Build Configurations and Schemes:
+iOS and macOS require configuring Xcode Build Configurations and Schemes:
 
 ### A. Build Configurations
 In Xcode (`Runner.xcodeproj` -> `Project` -> `Info` -> `Configurations`):
@@ -137,7 +165,7 @@ Create 3 shared Schemes in Xcode (`Product` -> `Scheme` -> `Manage Schemes...`):
    - Archive -> Uses `Release-prod`
 
 ### C. `xcconfig` Linking
-In `ios/Flutter/`:
+In `ios/Flutter/` (and `macos/Flutter/`):
 ```text
 Debug-dev.xcconfig:
 #include "Generated.xcconfig"
@@ -160,7 +188,70 @@ In `ios/Runner/Info.plist`:
 
 ---
 
-## 6. Step 4: Flavor App Icons with `flutter_launcher_icons`
+## 6. Step 4: Linux Desktop Flavors Setup
+Official Documentation: [Flutter Linux Flavors](https://docs.flutter.dev/deployment/flavors-linux)
+
+In `linux/CMakeLists.txt`, read the flavor passed by Flutter tool and configure binary definitions:
+
+```cmake
+# Add flavor definition support
+if(DEFINED FLUTTER_FLAVOR)
+  add_definitions(-DFLUTTER_FLAVOR="${FLUTTER_FLAVOR}")
+endif()
+```
+
+In `linux/my_application.cc`:
+```cpp
+// Set application title dynamically based on FLUTTER_FLAVOR
+#ifdef FLUTTER_FLAVOR
+  std::string flavor = FLUTTER_FLAVOR;
+  if (flavor == "dev") {
+    gtk_window_set_title(window, "App Dev");
+  } else if (flavor == "stage") {
+    gtk_window_set_title(window, "App Staging");
+  } else {
+    gtk_window_set_title(window, "App");
+  }
+#else
+  gtk_window_set_title(window, "App");
+#endif
+```
+
+---
+
+## 7. Step 5: Windows Desktop Flavors Setup
+Official Documentation: [Flutter Windows Flavors](https://docs.flutter.dev/deployment/flavors-windows)
+
+In `windows/CMakeLists.txt`:
+```cmake
+if(DEFINED FLUTTER_FLAVOR)
+  add_definitions(-DFLUTTER_FLAVOR="${FLUTTER_FLAVOR}")
+endif()
+```
+
+In `windows/runner/main.cpp`:
+```cpp
+#ifdef FLUTTER_FLAVOR
+  std::string flavor = FLUTTER_FLAVOR;
+  std::wstring title = L"App";
+  if (flavor == "dev") {
+    title = L"App Dev";
+  } else if (flavor == "stage") {
+    title = L"App Staging";
+  }
+  if (!window.Create(title, origin, size)) {
+    return EXIT_FAILURE;
+  }
+#else
+  if (!window.Create(L"App", origin, size)) {
+    return EXIT_FAILURE;
+  }
+#endif
+```
+
+---
+
+## 8. Step 6: Flavor App Icons with `flutter_launcher_icons`
 
 Create per-flavor icon configurations in root:
 
@@ -188,11 +279,11 @@ flutter pub run flutter_launcher_icons -f flutter_launcher_icons-prod.yaml
 
 ---
 
-## 7. CLI Execution & Release Commands
+## 9. CLI Execution & Release Commands
 
 ### Running Locally
 ```bash
-# Run Development Flavor
+# Run Development Flavor (Mobile, Desktop, Web)
 flutter run --flavor dev --dart-define-from-file=config/env_dev.json
 
 # Run Staging Flavor
@@ -219,9 +310,21 @@ flutter build appbundle --flavor prod --dart-define-from-file=config/env_prod.js
 flutter build ipa --flavor prod --dart-define-from-file=config/env_prod.json
 ```
 
+#### Desktop Release Builds
+```bash
+# macOS
+flutter build macos --flavor prod --dart-define-from-file=config/env_prod.json
+
+# Windows
+flutter build windows --flavor prod --dart-define-from-file=config/env_prod.json
+
+# Linux
+flutter build linux --flavor prod --dart-define-from-file=config/env_prod.json
+```
+
 ---
 
-## 8. Anti-Patterns (Strictly Prohibited)
+## 10. Anti-Patterns (Strictly Prohibited)
 
 | Anti-Pattern | Severity | Corrective Action |
 | :--- | :--- | :--- |
@@ -229,13 +332,15 @@ flutter build ipa --flavor prod --dart-define-from-file=config/env_prod.json
 | Running `flutter run` without passing `--flavor` and `--dart-define-from-file` | **HIGH** | Always specify both flavor and config file flags. |
 | Hardcoding `com.example.app` without applicationIdSuffix on dev builds | **HIGH** | Use `.dev` suffix so developer and prod builds coexist on same test device. |
 | Forgetting to run `pod install` after adding new Xcode Configurations | **HIGH** | Run `cd ios && pod install` after modifying Build Configurations. |
+| Omitting Linux/Windows flavor CMake definitions | **MEDIUM** | Configure CMakeLists.txt to pass `FLUTTER_FLAVOR`. |
 
 ---
 
-## 9. Verification Checklist
+## 11. Verification Checklist
 
 - [ ] `flutter run --flavor dev --dart-define-from-file=config/env_dev.json` starts cleanly.
 - [ ] Android installs as `com.example.app.dev` with "App Dev" label.
 - [ ] iOS runs under `dev` scheme with `Debug-dev` configuration.
+- [ ] Desktop platforms (macOS, Windows, Linux) display appropriate flavor window titles.
 - [ ] App launcher icons reflect the selected flavor.
 - [ ] `config/env_template.json` is committed while real configs are git-ignored.

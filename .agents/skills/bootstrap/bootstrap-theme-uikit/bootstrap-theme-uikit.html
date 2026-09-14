@@ -728,7 +728,11 @@ abstract final class AppTheme {
 </div>
 <hr class="doc-divider">
 <h2 id="4--injectable-hydrated--themecubit----lib-presentation-state-management-theme---" class="doc-h2"><a href="#4--injectable-hydrated--themecubit----lib-presentation-state-management-theme---" class="heading-anchor">#</a> 4. Injectable Hydrated <code class="inline-code">ThemeCubit</code> (<code class="inline-code">lib/presentation/state-management/theme/</code>)</h2>
-<h3 class="doc-h3">4.1 State (<code class="inline-code">theme_state.dart</code>)</h3>
+<div class="alert-box alert-warning"><div class="alert-title">ВАЖЛИВО / IMPORTANT</div><div class="alert-content">
+<p><strong>Zero Flutter SDK Imports in BLoC / Cubit:</strong></p>
+<p><code class="inline-code">ThemeCubit</code>, <code class="inline-code">ThemeState</code>, and <code class="inline-code">HydratedThemeCubitMixin</code> must NEVER import <code class="inline-code">package:flutter/material.dart</code> (enforced by <code class="inline-code">avoid_flutter_imports</code>).</p>
+<p>Instead, define a pure Dart <code class="inline-code">AppThemeMode</code> enum in the state layer and map it to Flutter&#039;s <code class="inline-code">ThemeMode</code> in the presentation layer via <code class="inline-code">AppThemeModeX.toFlutter()</code>.</p>
+<h3 class="doc-h3">4.1 State &amp; Domain Enum (<code class="inline-code">theme_state.dart</code>)</h3>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -738,14 +742,19 @@ abstract final class AppTheme {
     </button>
   </div>
   <pre><code class="language-dart">import &#039;package:equatable/equatable.dart&#039;;
-import &#039;package:flutter/material.dart&#039;;
+
+enum AppThemeMode {
+  system,
+  light,
+  dark,
+}
 
 final class ThemeState extends Equatable {
-  final ThemeMode themeMode;
+  final AppThemeMode themeMode;
 
-  const ThemeState({this.themeMode = ThemeMode.system});
+  const ThemeState({this.themeMode = AppThemeMode.system});
 
-  ThemeState copyWith({ThemeMode? themeMode}) {
+  ThemeState copyWith({AppThemeMode? themeMode}) {
     return ThemeState(themeMode: themeMode ?? this.themeMode);
   }
 
@@ -763,8 +772,7 @@ final class ThemeState extends Equatable {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:hydrated_bloc/hydrated_bloc.dart&#039;;
+  <pre><code class="language-dart">import &#039;package:hydrated_bloc/hydrated_bloc.dart&#039;;
 import &#039;package:flutter_template/presentation/state-management/theme/theme_state.dart&#039;;
 
 mixin HydratedThemeCubitMixin on HydratedMixin&lt;ThemeState&gt; {
@@ -776,10 +784,10 @@ mixin HydratedThemeCubitMixin on HydratedMixin&lt;ThemeState&gt; {
     try {
       final index = json[&#039;themeModeIndex&#039;] as int?;
       return ThemeState(
-        themeMode: index != null ? ThemeMode.values[index] : ThemeMode.system,
+        themeMode: index != null ? AppThemeMode.values[index] : AppThemeMode.system,
       );
     } catch (_) {
-      return const ThemeState(themeMode: ThemeMode.system);
+      return const ThemeState(themeMode: AppThemeMode.system);
     }
   }
 
@@ -799,8 +807,7 @@ mixin HydratedThemeCubitMixin on HydratedMixin&lt;ThemeState&gt; {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-import &#039;package:hydrated_bloc/hydrated_bloc.dart&#039;;
+  <pre><code class="language-dart">import &#039;package:hydrated_bloc/hydrated_bloc.dart&#039;;
 import &#039;package:injectable/injectable.dart&#039;;
 import &#039;package:flutter_template/presentation/state-management/theme/hydrated_theme_cubit.mixin.dart&#039;;
 import &#039;package:flutter_template/presentation/state-management/theme/theme_state.dart&#039;;
@@ -809,17 +816,38 @@ import &#039;package:flutter_template/presentation/state-management/theme/theme_
 class ThemeCubit extends HydratedCubit&lt;ThemeState&gt; with HydratedThemeCubitMixin {
   ThemeCubit() : super(const ThemeState());
 
-  void setThemeMode(ThemeMode mode) {
+  void setThemeMode(AppThemeMode mode) {
     emit(state.copyWith(themeMode: mode));
   }
 
   void toggleTheme() {
     final next = switch (state.themeMode) {
-      ThemeMode.system || ThemeMode.light =&gt; ThemeMode.dark,
-      ThemeMode.dark =&gt; ThemeMode.light,
+      AppThemeMode.system || AppThemeMode.light =&gt; AppThemeMode.dark,
+      AppThemeMode.dark =&gt; AppThemeMode.light,
     };
     emit(state.copyWith(themeMode: next));
   }
+}
+</code></pre>
+</div>
+<h3 class="doc-h3">4.4 Presentation Mapping Extension (<code class="inline-code">lib/presentation/ui_utils/extensions/app_theme_mode_extension.dart</code>)</h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
+import &#039;package:flutter_template/presentation/state-management/theme/theme_state.dart&#039;;
+
+extension AppThemeModeX on AppThemeMode {
+  ThemeMode toFlutter() =&gt; switch (this) {
+    AppThemeMode.system =&gt; ThemeMode.system,
+    AppThemeMode.light =&gt; ThemeMode.light,
+    AppThemeMode.dark =&gt; ThemeMode.dark,
+  };
 }
 </code></pre>
 </div>

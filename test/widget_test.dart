@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_template/presentation/ui_kit/rating_badge.dart';
+
 import 'package:flutter_test/flutter_test.dart';
+
+import 'package:flutter_template/presentation/ui_kit/rating_badge.dart';
 
 void main() {
   testWidgets('RatingBadge displays formatted rating and star icon',

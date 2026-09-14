@@ -1,6 +1,8 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:flutter_template/infrastructure/di/injection.dart';
 import 'package:flutter_template/presentation/pages/movies/widgets/movies_skeleton_loader.dart';
 import 'package:flutter_template/presentation/pages/movies/widgets/movies_sliver_app_bar.dart';

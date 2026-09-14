@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter_template/presentation/pages/movies/movies_page.dart';
 import 'package:injectable/injectable.dart';
+
+import 'package:flutter_template/presentation/pages/movies/movies_page.dart';
 
 part 'app_router.gr.dart';
 

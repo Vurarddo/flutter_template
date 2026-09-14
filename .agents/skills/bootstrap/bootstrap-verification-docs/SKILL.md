@@ -29,9 +29,11 @@ Use this skill during the final phase of project bootstrapping:
 
 ```mermaid
 graph TD
-    CodeGen["1. Code Generation<br/>(build_runner & intl_utils)"] --> Test["2. Run Test Suite<br/>(flutter test)"]
-    Test --> Analyze["3. Static Analysis<br/>(dart analyze .)"]
-    Analyze --> Docs["4. Author README.md & RUNBOOK.md"]
+    CodeGen["1. Code Generation<br/>(build_runner & intl_utils)"] --> Sorter["2. Import Sorting<br/>(import_sorter:main)"]
+    Sorter --> Test["3. Unit & Widget Tests<br/>(flutter test)"]
+    Test --> IntegrationTest["4. Integration Tests<br/>(flutter test integration_test/...)"]
+    IntegrationTest --> Analyze["5. Static Analysis<br/>(dart analyze .)"]
+    Analyze --> Docs["6. Author README.md & RUNBOOK.md"]
 ```
 
 ### Step 1: Execute Code Generators
@@ -43,12 +45,22 @@ flutter pub run intl_utils:generate
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
 
-### Step 2: Execute Automated Tests
+### Step 2: Sort Imports Workspace-Wide
+```bash
+flutter pub run import_sorter:main
+```
+
+### Step 3: Execute Automated Unit & Widget Tests
 ```bash
 flutter test
 ```
 
-### Step 3: Run Static Analysis
+### Step 4: Execute Integration Smoke Test
+```bash
+flutter test integration_test/uikit_page_test.dart
+```
+
+### Step 5: Run Static Analysis
 ```bash
 dart analyze . --fatal-infos
 ```
@@ -73,6 +85,9 @@ Includes:
    # Run code generation
    flutter pub run build_runner build --delete-conflicting-outputs
 
+   # Sort imports
+   flutter pub run import_sorter:main
+
    # Run development flavor
    flutter run --flavor dev --dart-define-from-file=config/env_dev.json
    ```
@@ -86,15 +101,17 @@ Includes:
    | **Staging** | `flutter run --flavor stage --dart-define-from-file=config/env_stage.json` |
    | **Production** | `flutter run --flavor prod --dart-define-from-file=config/env_prod.json` |
 
-2. **Code Generation Runbook:**
+2. **Code Generation & Quality Runbook:**
    - One-off build: `flutter pub run build_runner build --delete-conflicting-outputs`
    - Watch mode: `flutter pub run build_runner watch --delete-conflicting-outputs`
    - Cache clean: `flutter pub run build_runner clean && flutter pub get`
+   - Import sorting: `flutter pub run import_sorter:main`
 
 3. **Testing Runbook:**
    - Run all tests: `flutter test`
    - Run unit tests: `flutter test test/unit/`
    - Run widget tests: `flutter test test/widget/`
+   - Run integration tests: `flutter test integration_test/uikit_page_test.dart`
 
 4. **Clean Architecture Directory Map:**
    Reference map to `lib/` and clickable links to `.agents/skills/`.
@@ -105,7 +122,9 @@ Includes:
 
 - [ ] `intl_utils:generate` generated localization classes in `lib/l10n/generated/`.
 - [ ] `build_runner` completed with zero conflicting output errors.
+- [ ] `import_sorter:main` formatted all import statements workspace-wide.
 - [ ] `flutter test` passed with 100% success rate.
+- [ ] `integration_test/uikit_page_test.dart` verified UiKit rendering and interaction.
 - [ ] `dart analyze .` returns 0 diagnostics.
 - [ ] `README.md` and `RUNBOOK.md` generated at project root.
 - [ ] Project bootstrapping complete and production-ready.

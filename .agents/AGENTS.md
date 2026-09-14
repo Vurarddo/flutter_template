@@ -62,7 +62,8 @@ Strictly adhere to the following layer boundaries and dependency rules without e
   - ALL UI colors MUST be accessed strictly through `context.colorScheme` (Material 3 standard) or custom `ThemeExtension` classes.
   - The application MUST fully support both **Light** and **Dark** themes. `ThemeData` setup must be dynamic and driven by `ColorScheme` (Light vs Dark).
   - Domain-specific or custom design tokens (e.g., trading `call`/`put`, status badges, custom gradients) MUST be defined via `ThemeExtension` (e.g., `AppCustomColors`), maintaining distinct values for Light and Dark modes.
-- **Extensions Usage Standard:**
+- **Extensions Usage & Naming Standard:**
+  - **Naming Convention (Strict):** ALL public Dart extensions MUST be suffixed with `X` (e.g., `BuildContextX`, `StringX`, `DateTimeX`, `AppThemeModeX`). Never use verbose `...Extension` suffixes (e.g. BAD: `BuildContextExtension`, GOOD: `BuildContextX`).
   - ALWAYS use `context.theme`, `context.textTheme`, `context.colorScheme`, and `context.customColors` instead of verbose `Theme.of(context)` calls.
   - **Extensions Location Strategy:**
     - Flutter & UI-specific extensions (`BuildContext`, UI string formatting, UI context wrappers): `lib/presentation/ui_utils/extensions/`.
@@ -70,6 +71,7 @@ Strictly adhere to the following layer boundaries and dependency rules without e
 - **UI Kit Standards (`lib/presentation/ui_kit/`):**
   - All reusable UI Kit widgets MUST be stateless, pure, and completely decoupled from BLoC/domain logic.
   - EVERY UI Kit component MUST include a `@Preview` decorator and a preview function for isolated IDE rendering.
+  - Every project must include an interactive showcase page `UiKitPage` displaying all design system components and verified by automated integration tests (`integration_test/uikit_page_test.dart`).
 - **Fluent UI Composition:** Chained extension wrappers (e.g., `child.unfocusWrapper()`) are allowed ONLY if the corresponding extension functions exist in `lib/presentation/ui_utils/extensions/`. Otherwise, use standard Flutter widget wrappers.
 - **Sliver Architecture:** Use a sliver-first approach (`CustomScrollView` + `SliverAppBar` + `SliverList`/`SliverGrid`) for complex scrollable screens.
 - **Animations:** Isolate animation logic from business logic and layout. Always properly dispose of `AnimationController` resources.
@@ -81,29 +83,42 @@ Strictly adhere to the following layer boundaries and dependency rules without e
 - **File Structure:** Feature BLoCs must be split into three files using `part` and `part of`:
 
 ```
-lib/presentation/state_management//
-_event.dart
-_state.dart
-_bloc.dart (or _cubit.dart)
+lib/presentation/state_management/<feature>/
+├── <feature>_event.dart
+├── <feature>_state.dart
+└── <feature>_bloc.dart (or <feature>_cubit.dart)
 ```
 
+- **Framework Isolation & Zero Flutter Imports (Strict `avoid_flutter_imports`):**
+  - BLoCs and Cubits must NEVER import `package:flutter/material.dart`, `package:flutter/widgets.dart`, or any UI layer framework packages.
+  - If a BLoC/Cubit manages concepts such as theme modes, navigation intents, or UI states, it MUST use a pure Dart enum in domain/state (e.g. `enum AppThemeMode { system, light, dark }`).
+  - Mapping from domain/state enums to Flutter SDK types (e.g., `ThemeMode`) MUST happen in the Presentation layer via an extension:
+    ```dart
+    extension AppThemeModeX on AppThemeMode {
+      ThemeMode toFlutter() => switch (this) {
+        AppThemeMode.system => ThemeMode.system,
+        AppThemeMode.light => ThemeMode.light,
+        AppThemeMode.dark => ThemeMode.dark,
+      };
+    }
+    ```
 - **State & Event Modeling:**
-- Use `sealed class` for the base state/event and `final class` for concrete variants (Dart 3+ pattern).
-- Avoid a single state class with multiple nullable flags. Model explicit lifecycle states instead: `Initial`, `InProgress`, `Success`, `Failure`.
-- Extend `Equatable` for state comparison. To generate `copyWith` automatically for state classes that require state modifications, annotate the target state class with `@CopyWith()` from `package:copy_with_extension/copy_with_extension.dart` instead of writing `copyWith` manually.
+  - Use `sealed class` for the base state/event and `final class` for concrete variants (Dart 3+ pattern).
+  - Avoid a single state class with multiple nullable flags. Model explicit lifecycle states instead: `Initial`, `InProgress`, `Success`, `Failure`.
+  - Extend `Equatable` for state comparison. To generate `copyWith` automatically for state classes that require state modifications, annotate the target state class with `@CopyWith()` from `package:copy_with_extension/copy_with_extension.dart` instead of writing `copyWith` manually.
 - **Dependency Injection:** Annotate all Blocs/Cubits with `@injectable` for DI registration via `injectable` + `get_it`.
 - **UI & BLoC Interaction:**
-- UI MUST ONLY send events via dispatching: `context.read<FeatureBloc>().add(Event())`. Never expose or call public methods on BLoC classes.
-- Use `BlocListener` for one-off side-effects (navigation, dialogs, SnackBars) and `BlocBuilder`/`BlocSelector` for visual rendering.
+  - UI MUST ONLY send events via dispatching: `context.read<FeatureBloc>().add(Event())`. Never expose or call public methods on BLoC classes.
+  - Use `BlocListener` for one-off side-effects (navigation, dialogs, SnackBars) and `BlocBuilder`/`BlocSelector` for visual rendering.
 - **Asynchrony & Safety:**
-- After ANY `await` operation inside a BLoC event handler, ALWAYS check the emitter status: `if (emit.isDone) return;`.
+  - After ANY `await` operation inside a BLoC event handler, ALWAYS check the emitter status: `if (emit.isDone) return;`.
 - **Error Handling in BLoC:**
-- Catch exceptions, log them via `addError(error, stackTrace)`, and map them to typed Domain failure states.
-- DO NOT automatically clear or reset a `Failure` state back to `Initial` within the same event handler to prevent UI flickering. Reset states ONLY via explicit user retry actions.
+  - Catch exceptions, log them via `addError(error, stackTrace)`, and map them to typed Domain failure states.
+  - DO NOT automatically clear or reset a `Failure` state back to `Initial` within the same event handler to prevent UI flickering. Reset states ONLY via explicit user retry actions.
 - **Hydrated BLoC (Strict Local Persistence Standard):**
-- Use `hydrated_bloc` strictly for non-sensitive UI preferences (e.g., filters, active tab index). NEVER persist tokens, passwords, or PII.
-- **Mandatory Serialization Separation:** ALL Hydrated BLoCs MUST extract `fromJson`/`toJson` and `storagePrefix` logic into a separate mixin file: `hydrated_<feature>_bloc.mixin.dart` implementing `mixin Hydrated<Feature>BlocMixin on HydratedMixin<FeatureState>`. This keeps the main BLoC file clean of serialization boilerplate.
-- Always handle parsing failures safely by returning a fallback default state in `fromJson`.
+  - Use `hydrated_bloc` strictly for non-sensitive UI preferences (e.g., filters, active tab index). NEVER persist tokens, passwords, or PII.
+  - **Mandatory Serialization Separation:** ALL Hydrated BLoCs MUST extract `fromJson`/`toJson` and `storagePrefix` logic into a separate mixin file: `hydrated_<feature>_bloc.mixin.dart` implementing `mixin Hydrated<Feature>BlocMixin on HydratedMixin<FeatureState>`. This keeps the main BLoC file clean of serialization boilerplate.
+  - Always handle parsing failures safely by returning a fallback default state in `fromJson`.
 
 ---
 
@@ -112,9 +127,9 @@ _bloc.dart (or _cubit.dart)
 - Implement API clients using Retrofit (`@RestApi`) and Dio in the Data layer.
 - Handle network errors at the Data Source / Repository level, mapping raw Dio exceptions to typed Domain exceptions (`ApiException`).
 - Apply explicit BLoC Event Transformers using `bloc_concurrency` to control execution flow:
-- `restartable()` for search, filtering, and autocomplete inputs.
-- `droppable()` for action buttons (e.g., submit/payment clicks) to prevent double-submit spam.
-- `sequential()` for ordered queue operations.
+  - `restartable()` for search, filtering, and autocomplete inputs.
+  - `droppable()` for action buttons (e.g., submit/payment clicks) to prevent double-submit spam.
+  - `sequential()` for ordered queue operations.
 
 ---
 
@@ -154,9 +169,11 @@ _bloc.dart (or _cubit.dart)
 
 ## 8. Linting, Formatting, Imports & BLoC Strict Rules (per `analysis_options.yaml`)
 
-- **Imports Standard:**
+- **Imports Standard & Sorting (`import_sorter`):**
   - ALWAYS use package imports (`import 'package:flutter_template/...';`) for all project files across all layers.
   - Relative imports (e.g. `import '../...';` or `import 'movie.dart';`) are strictly prohibited. The only exception is `part` / `part of` compiler directives.
+  - **Continuous Import Sorting:** ALWAYS execute `flutter pub run import_sorter:main` (or `dart run import_sorter:main`) whenever Dart files are created, refactored, or have import modifications.
+  - Configuration in `pubspec.yaml` MUST specify `import_sorter: comments: false`.
 - **Formatting:**
   - Page width: 100 characters.
   - Trailing commas: MUST be preserved.
@@ -176,13 +193,30 @@ _bloc.dart (or _cubit.dart)
 ## 9. Resources & Asset Management
 
 - **Localization:** Managed via `flutter_intl` / `intl`. Output directory: `lib/l10n/generated`.
-- **Assets:** Assets and SVGs managed via `flutter_gen`. Generated path: `lib/presentation/ui_utils/assets`.
+- **Assets & `flutter_gen` Configuration:**
+  - Output path MUST strictly be configured to `lib/presentation/ui_utils/assets` in `pubspec.yaml`:
+    ```yaml
+    flutter_gen:
+      output: lib/presentation/ui_utils/assets
+      integrations:
+        flutter_svg: true
+    ```
+  - Generating assets into `lib/gen` is STRICTLY PROHIBITED.
+  - Standard directory structure for assets: `assets/`, `assets/fonts/`, `assets/images/`, `assets/icons/`, `assets/svgs/` with `.gitkeep`.
+  - Provide commented-out templates for `assets:` and `fonts:` in `pubspec.yaml`.
 - **Excluded Files from AI Edits:** Do NOT manually modify or review generated files (`*.g.dart`, `*.gr.dart`, `*.freezed.dart`, `lib/l10n/generated/**`, `build/**`).
 
 ---
 
 ## 10. Environment Configuration & Secrets Management
 
+- **Multi-Environment Flavors Across All Platforms:**
+  - Multi-flavor environments (`dev`, `stage`, `prod`) MUST be configured across all targeted native platforms:
+    - **Android:** `android/app/build.gradle.kts` (or `build.gradle`) with `flavorDimensions += "default"`, `productFlavors` (`applicationIdSuffix`, `manifestPlaceholders`), and `AndroidManifest.xml` (`${appName}`, `${appIcon}`). Official guide: https://docs.flutter.dev/deployment/flavors
+    - **iOS:** Xcode Build Configurations (`Debug-dev`, `Release-dev`), shared Schemes (`dev`, `stage`, `prod`), `xcconfig` files, and `Info.plist`. Official guide: https://docs.flutter.dev/deployment/flavors-ios
+    - **Linux:** `linux/CMakeLists.txt` build definitions and `my_application.cc`. Official guide: https://docs.flutter.dev/deployment/flavors-linux
+    - **Windows:** `windows/CMakeLists.txt`, `windows/runner/Runner.rc`, and `windows/runner/main.cpp`. Official guide: https://docs.flutter.dev/deployment/flavors-windows
+    - **macOS:** Xcode Build Configurations and shared Schemes matching iOS.
 - **Configuration Injection:** Environment settings (e.g. `BASE_URL`, `API_KEY`, `APP_ENV`) MUST be passed using `--dart-define-from-file=config/env_dev.json` or `--dart-define`.
 - **Git Hygiene:** Local configuration files containing real environment credentials (`config/env_*.json`) MUST be listed in `.gitignore` and NEVER committed to repository. Provide `config/env_template.json` as a template.
 - **Environment Abstraction:** Access values via a centralized, strongly-typed `AppConfig` class in `lib/core/config/app_config.dart` using `String.fromEnvironment`.
@@ -200,8 +234,11 @@ _bloc.dart (or _cubit.dart)
 
 ---
 
-## 12. AI Execution Guidelines
+## 12. Workspace Setup & AI Execution Guidelines
 
+- **VS Code Workspace (`.vscode/`):**
+  - Scaffolding MUST include `.vscode/launch.json` configured for multi-environment Flavors (Debug, Profile, Release for dev, stage, prod) AND automated test runners (All tests, unit, widget, bloc, integration tests).
+  - Include `.vscode/settings.json` and `.vscode/extensions.json` recommending standard Flutter tools.
 - **Git Push Policy (Strict):** AI agents MUST NEVER automatically execute `git push` to remote repositories unless the user gives direct, explicit instruction (e.g., "запуш", "push", "запуш зміни"). Staging and creating local commits (`git add`, `git commit`) can be done as requested, but pushing to the remote repository is strictly forbidden without explicit permission.
 - Do NOT introduce any unrequested third-party packages or alternative state management solutions (e.g., Riverpod, Provider).
 - Always ensure generated code strictly complies with `injectable`, `auto_route`, and `reactive_forms` patterns used in the project.

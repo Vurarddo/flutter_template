@@ -66,20 +66,22 @@ Once the user approves the plan, execute the following sub-skills sequentially:
 | **1. Flutter Initialization** | [bootstrap-flutter-init](../bootstrap-flutter-init/SKILL.md) | Executing `flutter create` with approved org, name, and platforms. |
 | **2. Dependencies & Conflicts** | [bootstrap-dependencies-sync](../bootstrap-dependencies-sync/SKILL.md) | Injecting `pubspec.yaml` packages, running `flutter pub get`, upgrading & tightening constraints. |
 | **3. Package Compatibility Audit** | [bootstrap-package-auditor](../bootstrap-package-auditor/SKILL.md) | Running `dart analyze`, applying `dart fix --apply`, checking breaking changes. |
-| **4. Architecture & Flavors** | [bootstrap-architecture-scaffold](../bootstrap-architecture-scaffold/SKILL.md) | Scaffolding layer folders, `config/env_*.json`, `AppConfig`, `main.dart`, and `application.dart`. |
-| **5. Theme & UiKit Showcase** | [bootstrap-theme-uikit](../bootstrap-theme-uikit/SKILL.md) | Generating M3 theme `#FFDE3F`, injectable `HydratedThemeCubit`, and adaptive `UiKitPage`. |
-| **6. Verification & Runbooks** | [bootstrap-verification-docs](../bootstrap-verification-docs/SKILL.md) | Running `build_runner`, executing `flutter test`, and generating `README.md` & `RUNBOOK.md`. |
+| **4. Architecture & Flavors** | [bootstrap-architecture-scaffold](../bootstrap-architecture-scaffold/SKILL.md) | Scaffolding layer folders, native flavors (Android, iOS, Windows, Linux, macOS), `.vscode/` configs, `config/env_*.json`, `AppConfig`, `main.dart`, and `application.dart`. |
+| **5. Theme & UiKit Showcase** | [bootstrap-theme-uikit](../bootstrap-theme-uikit/SKILL.md) | Generating M3 theme `#FFDE3F`, pure Dart `AppThemeMode` with `AppThemeModeX`, injectable `HydratedThemeCubit`, and adaptive `UiKitPage`. |
+| **6. Verification & Runbooks** | [bootstrap-verification-docs](../bootstrap-verification-docs/SKILL.md) | Running `build_runner`, `import_sorter`, unit/widget tests, `uikit_page` integration test, and generating `README.md` & `RUNBOOK.md`. |
 
 ---
 
 ## 4. Global Bootstrapping Laws
 
-1. **Zero Domain Pollution:** All scaffolded template code must use universal, domain-agnostic identifiers (`Item`, `Payload`, `AppConfig`, `ThemeMode`).
+1. **Zero Domain Pollution:** All scaffolded template code must use universal, domain-agnostic identifiers (`Item`, `Payload`, `AppConfig`, `AppThemeMode`).
 2. **Strict Clean Architecture:** Domain contains pure Dart only. Data maps DTOs to Entities. BLoC/Cubit communicates exclusively with Use Cases.
-3. **Flavors First-Class:** Every project must support distinct environments (`dev`, `stage`, `prod`) driven by `config/env_*.json` and `--dart-define-from-file`.
-4. **Theme Resilience:** Theme primary color `#FFDE3F` must be dynamically applied with Light & Dark ColorSchemes, TextTheme, and `AppCustomColors` ThemeExtension.
-5. **Persistence Hygiene:** `ThemeCubit` must use `hydrated_bloc` with serialization extracted into `hydrated_theme_cubit.mixin.dart`.
-6. **Automatic Verification:** Code generation, static analysis, and test suites must pass 100% with zero warnings before completion.
+3. **Zero Flutter Imports in State Management:** BLoCs/Cubits must NEVER import `flutter/material.dart` (`avoid_flutter_imports`). State enums like `AppThemeMode` map to Flutter types via `AppThemeModeX.toFlutter()` in Presentation.
+4. **Flavors First-Class & Multi-Platform:** Every project must support distinct environments (`dev`, `stage`, `prod`) driven by `config/env_*.json` and `--dart-define-from-file`, with native flavor settings across Android, iOS, Windows, Linux, and macOS.
+5. **Continuous Import Sorting:** `import_sorter` must be configured (`comments: false`) and executed across all files.
+6. **Theme Resilience:** Theme primary color `#FFDE3F` must be dynamically applied with Light & Dark ColorSchemes, TextTheme, and `AppCustomColors` ThemeExtension.
+7. **Asset Structure Hygiene:** Assets must reside in `assets/` subfolders (`fonts/`, `images/`, `icons/`, `svgs/`) with `flutter_gen` output strictly set to `lib/presentation/ui_utils/assets` (never `lib/gen`).
+8. **Automated Integration Testing:** Bootstrapping must generate and verify an end-to-end integration test (`integration_test/uikit_page_test.dart`) exercising the `UiKitPage`.
 
 ---
 
@@ -89,12 +91,14 @@ Once the user approves the plan, execute the following sub-skills sequentially:
 - [ ] `implementation_plan.md` created and approved by user.
 - [ ] Flutter SDK upgraded to latest stable (if requested).
 - [ ] `flutter create` executed with explicit `--org` and `--platforms`.
-- [ ] Dependencies injected and synchronized in `pubspec.yaml`.
-- [ ] Package compatibility audit passed with zero deprecation warnings.
+- [ ] Dependencies injected and synchronized in `pubspec.yaml` (including `import_sorter` and `flutter_gen`).
+- [ ] Asset folders initialized (`assets/images/`, `fonts/`, `icons/`, `svgs/`).
 - [ ] Clean Architecture directory structure created with all layer hubs.
-- [ ] Flavors configured for Android (`productFlavors`), iOS (Schemes & Build Configurations), and Dart (`AppConfig`).
-- [ ] Primary theme `#FFDE3F` generated with Light/Dark support and `ThemeCubit`.
+- [ ] Flavors configured natively for Android, iOS, Windows, Linux, macOS, and Dart (`AppConfig`).
+- [ ] `.vscode/launch.json` created with flavor configs and test runners.
+- [ ] Primary theme `#FFDE3F` generated with Light/Dark support and framework-isolated `ThemeCubit`.
 - [ ] Interactive `UiKitPage` created showcasing all design system components.
 - [ ] `build_runner` and `intl_utils` code generators executed successfully.
-- [ ] All tests passed via `flutter test`.
+- [ ] `import_sorter:main` executed workspace-wide.
+- [ ] Unit, widget, and `uikit_page` integration tests passed 100%.
 - [ ] Comprehensive `README.md` and `RUNBOOK.md` documentation generated.

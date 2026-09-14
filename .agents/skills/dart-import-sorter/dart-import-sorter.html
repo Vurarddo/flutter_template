@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>flutter-ui-utils-extensions — Agent Skill Documentation</title>
+  <title>dart-import-sorter — Agent Skill Documentation</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
@@ -472,20 +472,20 @@ pre {
 <body>
   <header class="top-nav">
     <div style="display: flex; align-items: center; gap: 1.5rem;">
-      <a href="../../../../index.html" class="nav-brand">
+      <a href="../../index.html" class="nav-brand">
         <div class="brand-logo">AG</div>
         <span>Antigravity Docs</span>
       </a>
       <div class="nav-breadcrumbs">
-        <a href="../../../../index.html" data-i18n="portal_title">Центр Документації</a>
+        <a href="../../index.html" data-i18n="portal_title">Центр Документації</a>
         <span>/</span>
-        <span data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">UI Утиліти та Розширення</span>
+        <span data-cat-ua="Стандарти Dart" data-cat-en="Dart Best Practices">Стандарти Dart</span>
         <span>/</span>
-        <span style="color: var(--text-primary); font-weight: 600;">flutter-ui-utils-extensions</span>
+        <span style="color: var(--text-primary); font-weight: 600;">dart-import-sorter</span>
       </div>
     </div>
     <div class="nav-actions">
-      <a href="../../../../agents-rules.html" class="btn-icon">
+      <a href="../../agents-rules.html" class="btn-icon">
         <span>📜</span>
         <span data-i18n="project_rules">Правила AGENTS.md</span>
       </a>
@@ -502,19 +502,19 @@ pre {
   <main class="container">
     <section class="hero">
       <div class="hero-badges">
-        <span class="badge badge-category" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">UI Утиліти та Розширення</span>
+        <span class="badge badge-category" data-cat-ua="Стандарти Dart" data-cat-en="Dart Best Practices">Стандарти Dart</span>
         <span class="badge badge-tag">SKILL</span>
-        <span class="badge badge-tag">#standards</span>
-<span class="badge badge-tag">#patterns</span>
+        <span class="badge badge-tag">#automates</span>
+<span class="badge badge-tag">#standardizes</span>
+<span class="badge badge-tag">#dart</span>
 <span class="badge badge-tag">#flutter</span>
-<span class="badge badge-tag">#buildcontext</span>
-<span class="badge badge-tag">#extensions</span>
-<span class="badge badge-tag">#lib/presentation/ui_utils/extensions/</span>
-<span class="badge badge-tag">#covers</span>
-<span class="badge badge-tag">#context</span>
+<span class="badge badge-tag">#import</span>
+<span class="badge badge-tag">#statement</span>
+<span class="badge badge-tag">#sorting</span>
+<span class="badge badge-tag">#grouping</span>
       </div>
-      <h1 class="hero-title">flutter-ui-utils-extensions</h1>
-      <p class="hero-description">Standards and patterns for Flutter and BuildContext UI extensions in lib/presentation/ui_utils/extensions/. Covers context.colorScheme, context.textTheme, context.customColors, media query helpers, safe area insets, and fluent UI widget wrappers.</p>
+      <h1 class="hero-title">dart-import-sorter</h1>
+      <p class="hero-description">Automates and standardizes Dart &amp; Flutter import statement sorting, grouping, and ordering using package:import_sorter. Enforces clean separation between dart:, package:flutter, external packages, internal project imports, and part directives. Use when creating or modifying files, resolving linter warnings, running formatting pipelines, or executing project bootstrap/adoption.</p>
     </section>
 
     <div class="progress-card">
@@ -528,86 +528,78 @@ pre {
     </div>
 
     <article class="doc-content">
-<h1 class="doc-h1">Flutter UI &amp; Context Extensions</h1>
-<h2 id="1--overview---when-to-apply" class="doc-h2"><a href="#1--overview---when-to-apply" class="heading-anchor">#</a> 1. Overview &amp; When to Apply</h2>
-<p class="doc-p">Use this skill whenever:</p>
-<ul class="doc-list">
-<li>Adding or refactoring <code class="inline-code">BuildContext</code> extensions for theme, typography, color schemes, media query metrics, or localization shortcuts.</li>
-<li>Adding UI widget extension wrappers (e.g. <code class="inline-code">.unfocusWrapper()</code>, <code class="inline-code">.paddingAll()</code>, <code class="inline-code">.sliverBox()</code>).</li>
-<li>Adding <code class="inline-code">TextStyle</code> modifier extensions for concise typography adjustments.</li>
-<li>Enforcing the rule that Flutter/UI-specific extensions live in <code class="inline-code">lib/presentation/ui_utils/extensions/</code> (while pure Dart extensions live in <code class="inline-code">lib/core/extensions/</code>).</li>
-</ul>
+<h1 class="doc-h1">Dart &amp; Flutter Import Sorter Standard</h1>
+<h2 id="1--overview---architectural-role" class="doc-h2"><a href="#1--overview---architectural-role" class="heading-anchor">#</a> 1. Overview &amp; Architectural Role</h2>
+<p class="doc-p">Consistent, organized import statements eliminate merge conflicts, prevent unused or scattered imports, and make dependencies immediately visible at the top of every file.</p>
+<p class="doc-p"><code class="inline-code">import_sorter</code> (<code class="inline-code">import_sorter: ^4.6.0</code>) automatically sorts and structures imports according to the official Dart style hierarchy:</p>
+<div class="mermaid-container"><div class="mermaid">graph TD
+    A["1. Dart SDK Imports (dart:async, dart:io, dart:math)"] --> B["2. Flutter SDK Imports (package:flutter/material.dart, etc.)"]
+    B --> C["3. External Third-Party Packages (package:dio/dio.dart, package:bloc/bloc.dart)"]
+    C --> D["4. Internal Project Package Imports (package:flutter_template/...)"]
+    D --> E["5. Part & Part-Of Directives (part 'item.freezed.dart';)"]
+</div></div>
 <hr class="doc-divider">
-<h2 id="2--prerequisites---related-skills" class="doc-h2"><a href="#2--prerequisites---related-skills" class="heading-anchor">#</a> 2. Prerequisites &amp; Related Skills</h2>
-<div class="table-responsive"><table class="doc-table">
-<thead><tr>
-<th>Relation</th>
-<th>Skill</th>
-<th>Purpose</th>
-</tr></thead><tbody>
-<tr>
-<td><strong>Parent Hub</strong></td>
-<td><a href="../flutter-ui-utils-hub/flutter-ui-utils-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter UI Utilities (lib/presentation/ui_utils/). Enforces presentation helper boundaries, routing to specialized sub-skills for BuildContext extensions, TextInputFormatters, Reactive Forms accessors/adapters, and system UI helpers.">flutter-ui-utils-hub <span class="ext-icon">↗</span></a></td>
-<td>Presentation helper boundaries and directory standards.</td>
-</tr>
-<tr>
-<td><strong>Theming System</strong></td>
-<td><a href="../../theme/flutter-ui-theme-hub/flutter-ui-theme-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter Material 3 theming system. Use when configuring app themes, splitting theme files (AppTheme, AppColorScheme, AppTextTheme, AppCustomColors), setting up Light/Dark modes, or managing theme extensions. Routes to specialized sub-skills for colors, typography, and theme extensions.">flutter-ui-theme-hub <span class="ext-icon">↗</span></a></td>
-<td>Custom theme extensions and Material 3 ColorSchemes.</td>
-</tr>
-<tr>
-<td><strong>Parent UI Coordinator</strong></td>
-<td><a href="../../ui/flutter-ui-hub/flutter-ui-hub.html" class="skill-ref-link" title="Primary coordinator and architecture guide for Flutter UI development. Use when designing, creating, refactoring, or auditing UI widgets, pages, layouts, and animations. Serves as the central entry point and routes to specialized sub-skills for widgets, performance, theming, slivers, responsiveness, and motion design.">flutter-ui-hub <span class="ext-icon">↗</span></a></td>
-<td>Presentation layer architectural laws and widget decomposition.</td>
-</tr>
-</tbody></table></div>
-<hr class="doc-divider">
-<h2 id="3--standard-implementation-patterns---naming-convention" class="doc-h2"><a href="#3--standard-implementation-patterns---naming-convention" class="heading-anchor">#</a> 3. Standard Implementation Patterns &amp; Naming Convention</h2>
-<div class="alert-box alert-warning"><div class="alert-title">ВАЖЛИВО / IMPORTANT</div><div class="alert-content">
-<p><strong>Strict <code class="inline-code">...X</code> Naming Convention:</strong></p>
-<p>ALL public Dart extensions must be suffixed with <code class="inline-code">X</code> (e.g. <code class="inline-code">BuildContextX</code>, <code class="inline-code">WidgetX</code>, <code class="inline-code">TextStyleX</code>, <code class="inline-code">AppThemeModeX</code>).</p>
-<p>Never use <code class="inline-code">...Extension</code> or <code class="inline-code">...Extensions</code> (e.g. BAD: <code class="inline-code">BuildContextExtension</code>, GOOD: <code class="inline-code">BuildContextX</code>).</p>
-<h3 class="doc-h3">3.1 <code class="inline-code">BuildContext</code> Theme &amp; Layout Extensions (<code class="inline-code">context_extensions.dart</code>)</h3>
+<h2 id="2--prerequisites---configuration" class="doc-h2"><a href="#2--prerequisites---configuration" class="heading-anchor">#</a> 2. Prerequisites &amp; Configuration</h2>
+<h3 class="doc-h3">2.1 <code class="inline-code">pubspec.yaml</code> Configuration</h3>
+<p class="doc-p">Ensure <code class="inline-code">import_sorter</code> is present in <code class="inline-code">dev_dependencies</code> and configured at root:</p>
 <div class="code-block-wrapper">
   <div class="code-header">
-    <span class="code-lang">dart</span>
+    <span class="code-lang">yaml</span>
     <button class="copy-btn" onclick="copyCode(this)">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
+  <pre><code class="language-yaml">dev_dependencies:
+  import_sorter: ^4.6.0
 
-import &#039;package:flutter_template/presentation/theme/app_custom_colors.dart&#039;;
-
-extension BuildContextThemeX on BuildContext {
-  ThemeData get theme =&gt; Theme.of(this);
-  TextTheme get textTheme =&gt; theme.textTheme;
-  ColorScheme get colorScheme =&gt; theme.colorScheme;
-  Brightness get brightness =&gt; theme.brightness;
-  bool get isDark =&gt; brightness == Brightness.dark;
-
-  AppCustomColors get customColors =&gt;
-      theme.extension&lt;AppCustomColors&gt;() ?? AppCustomColors.light;
-}
-
-extension BuildContextLayoutX on BuildContext {
-  MediaQueryData get mediaQuery =&gt; MediaQuery.of(this);
-  Size get screenSize =&gt; MediaQuery.sizeOf(this);
-  double get screenWidth =&gt; screenSize.width;
-  double get screenHeight =&gt; screenSize.height;
-  EdgeInsets get viewPadding =&gt; MediaQuery.viewPaddingOf(this);
-  EdgeInsets get viewInsets =&gt; MediaQuery.viewInsetsOf(this);
-  Orientation get orientation =&gt; MediaQuery.orientationOf(this);
-
-  bool get isKeyboardVisible =&gt; MediaQuery.viewInsetsOf(this).bottom &gt; 0;
-}
+import_sorter:
+  comments: false
 </code></pre>
 </div>
 <div class="alert-box alert-success"><div class="alert-title">ПОРАДА / TIP</div><div class="alert-content">
-<p>Always prefer targeted <code class="inline-code">MediaQuery.sizeOf(context)</code>, <code class="inline-code">MediaQuery.viewInsetsOf(context)</code>, and <code class="inline-code">MediaQuery.orientationOf(context)</code> methods (Flutter 3.10+) to avoid unnecessary widget rebuilds when unrelated media query attributes change.</p>
+<p>Setting <code class="inline-code">comments: false</code> ensures <code class="inline-code">import_sorter</code> formats imports cleanly without inserting unnecessary banner comments like <code class="inline-code">// Dart imports:</code>, keeping file headers minimal and professional.</p>
 <hr class="doc-divider">
-<h3 class="doc-h3">3.2 Fluent Widget Extensions (<code class="inline-code">widget_extensions.dart</code>)</h3>
+<h2 id="3--command-line-execution" class="doc-h2"><a href="#3--command-line-execution" class="heading-anchor">#</a> 3. Command Line Execution</h2>
+<h3 class="doc-h3">Run on Entire Workspace:</h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">bash</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-bash">flutter pub run import_sorter:main
+</code></pre>
+</div>
+<p class="doc-p">Or via the Dart CLI:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">bash</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-bash">dart run import_sorter:main
+</code></pre>
+</div>
+<h3 class="doc-h3">Run on Specific Files/Directories:</h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">bash</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-bash">flutter pub run import_sorter:main lib/presentation/pages/uikit/uikit_page.dart
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="4--import-ordering-rules---hierarchy" class="doc-h2"><a href="#4--import-ordering-rules---hierarchy" class="heading-anchor">#</a> 4. Import Ordering Rules &amp; Hierarchy</h2>
+<p class="doc-p">When writing or reviewing code, imports MUST strictly adhere to the following order:</p>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -616,57 +608,68 @@ extension BuildContextLayoutX on BuildContext {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
+  <pre><code class="language-dart">// 1. Dart SDK core libraries
+import &#039;dart:async&#039;;
+import &#039;dart:convert&#039;;
+import &#039;dart:io&#039;;
 
-extension WidgetX on Widget {
-  /// Wraps a widget in a GestureDetector that dismisses the keyboard when tapped outside.
-  Widget unfocusWrapper() {
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () =&gt; FocusManager.instance.primaryFocus?.unfocus(),
-      child: this,
-    );
-  }
+// 2. Flutter SDK framework libraries
+import &#039;package:flutter/foundation.dart&#039;;
+import &#039;package:flutter/material.dart&#039;;
 
-  /// Converts a standard Box widget into a SliverToBoxAdapter.
-  Widget toSliver() =&gt; SliverToBoxAdapter(child: this);
+// 3. Third-party packages
+import &#039;package:bloc_concurrency/bloc_concurrency.dart&#039;;
+import &#039;package:dio/dio.dart&#039;;
+import &#039;package:equatable/equatable.dart&#039;;
+import &#039;package:flutter_bloc/flutter_bloc.dart&#039;;
+import &#039;package:injectable/injectable.dart&#039;;
 
-  /// Conditionally displays a widget.
-  Widget visible(bool isVisible, {Widget defaultWidget = const SizedBox.shrink()}) {
-    return isVisible ? this : defaultWidget;
-  }
-}
+// 4. Project internal package imports (ALWAYS absolute package:...)
+import &#039;package:flutter_template/domain/entities/user_entity.dart&#039;;
+import &#039;package:flutter_template/infrastructure/di/injectable.dart&#039;;
+import &#039;package:flutter_template/presentation/theme/app_theme.dart&#039;;
+
+// 5. Part directives
+part &#039;user_entity.freezed.dart&#039;;
+part &#039;user_entity.g.dart&#039;;
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h3 class="doc-h3">3.3 <code class="inline-code">TextStyle</code> Modifier Extensions (<code class="inline-code">text_style_extensions.dart</code>)</h3>
-<div class="code-block-wrapper">
-  <div class="code-header">
-    <span class="code-lang">dart</span>
-    <button class="copy-btn" onclick="copyCode(this)">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-      <span class="btn-text" data-i18n="copy">Copy</span>
-    </button>
-  </div>
-  <pre><code class="language-dart">import &#039;package:flutter/material.dart&#039;;
-
-extension TextStyleX on TextStyle {
-  TextStyle withColor(Color color) =&gt; copyWith(color: color);
-  TextStyle withOpacity(double opacity) =&gt; copyWith(color: color?.withValues(alpha: opacity));
-  TextStyle withWeight(FontWeight weight) =&gt; copyWith(fontWeight: weight);
-  TextStyle withSize(double size) =&gt; copyWith(fontSize: size);
-  TextStyle withHeight(double height) =&gt; copyWith(height: height);
-}
-</code></pre>
-</div>
+<h2 id="5--integration-into-development-lifecycle" class="doc-h2"><a href="#5--integration-into-development-lifecycle" class="heading-anchor">#</a> 5. Integration into Development Lifecycle</h2>
+<div class="table-responsive"><table class="doc-table">
+<thead><tr>
+<th>Trigger / Workflow</th>
+<th>Action</th>
+<th>Command</th>
+</tr></thead><tbody>
+<tr>
+<td><strong>New File Creation</strong></td>
+<td>Sort imports immediately after authoring new components</td>
+<td><code class="inline-code">flutter pub run import_sorter:main &lt;filepath&gt;</code></td>
+</tr>
+<tr>
+<td><strong>Refactoring / Layer Changes</strong></td>
+<td>Clean up imports across modified layers</td>
+<td><code class="inline-code">flutter pub run import_sorter:main</code></td>
+</tr>
+<tr>
+<td><strong>Project Bootstrap</strong></td>
+<td>Run after initial scaffolding and template generation</td>
+<td><code class="inline-code">flutter pub run import_sorter:main</code></td>
+</tr>
+<tr>
+<td><strong>Project Adoption</strong></td>
+<td>Sort all legacy imports during adoption pipeline</td>
+<td><code class="inline-code">flutter pub run import_sorter:main</code></td>
+</tr>
+<tr>
+<td><strong>Pre-Commit / Static Analysis</strong></td>
+<td>Execute before <code class="inline-code">dart analyze</code> to guarantee compliance</td>
+<td><code class="inline-code">flutter pub run import_sorter:main &amp;&amp; dart analyze .</code></td>
+</tr>
+</tbody></table></div>
 <hr class="doc-divider">
-<h2 id="4--location-strategy--ui-extensions-vs-core-extensions" class="doc-h2"><a href="#4--location-strategy--ui-extensions-vs-core-extensions" class="heading-anchor">#</a> 4. Location Strategy: UI Extensions vs Core Extensions</h2>
-<ul class="doc-list">
-<li><strong><code class="inline-code">lib/presentation/ui_utils/extensions/</code>:</strong> Extensions that require <code class="inline-code">package:flutter/...</code> (<code class="inline-code">BuildContext</code>, <code class="inline-code">Widget</code>, <code class="inline-code">Color</code>, <code class="inline-code">TextStyle</code>, <code class="inline-code">EdgeInsets</code>, <code class="inline-code">BoxDecoration</code>).</li>
-<li><strong><code class="inline-code">lib/core/extensions/</code>:</strong> Pure Dart extensions (<code class="inline-code">DateTime</code>, <code class="inline-code">String</code>, <code class="inline-code">num</code>, <code class="inline-code">Iterable</code>, <code class="inline-code">Map</code>) with <strong>zero Flutter SDK imports</strong>.</li>
-</ul>
-<hr class="doc-divider">
-<h2 id="5--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#5--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 5. Anti-Patterns (Strictly Prohibited)</h2>
+<h2 id="6--anti-patterns--strictly-prohibited-" class="doc-h2"><a href="#6--anti-patterns--strictly-prohibited-" class="heading-anchor">#</a> 6. Anti-Patterns (Strictly Prohibited)</h2>
 <div class="table-responsive"><table class="doc-table">
 <thead><tr>
 <th>Anti-Pattern</th>
@@ -674,112 +677,70 @@ extension TextStyleX on TextStyle {
 <th>Corrective Action</th>
 </tr></thead><tbody>
 <tr>
-<td>Naming extension <code class="inline-code">BuildContextExtension</code> or <code class="inline-code">ThemeExtensions</code></td>
-<td><strong>HIGH</strong></td>
-<td>Use <code class="inline-code">X</code> suffix: <code class="inline-code">BuildContextThemeX</code>, <code class="inline-code">BuildContextLayoutX</code>, <code class="inline-code">WidgetX</code>.</td>
-</tr>
-<tr>
-<td>Verbose <code class="inline-code">Theme.of(context).colorScheme.primary</code> in UI code</td>
-<td><strong>MEDIUM</strong></td>
-<td>Use <code class="inline-code">context.colorScheme.primary</code>.</td>
-</tr>
-<tr>
-<td>Using <code class="inline-code">MediaQuery.of(context).size</code> when only size is needed</td>
-<td><strong>HIGH</strong></td>
-<td>Use <code class="inline-code">MediaQuery.sizeOf(context)</code> or <code class="inline-code">context.screenSize</code>.</td>
-</tr>
-<tr>
-<td>Placing pure Dart extensions (e.g. <code class="inline-code">DateTime.isToday</code>) in <code class="inline-code">ui_utils/extensions/</code></td>
-<td><strong>HIGH</strong></td>
-<td>Move to <code class="inline-code">lib/core/extensions/date_time_extensions.dart</code>.</td>
-</tr>
-<tr>
-<td>Placing <code class="inline-code">BuildContext</code> extensions in <code class="inline-code">lib/core/extensions/</code></td>
+<td>Using relative imports (<code class="inline-code">import &#039;../models/user.dart&#039;;</code>)</td>
 <td><strong>CRITICAL</strong></td>
-<td>Core layer must not import Flutter SDK. Move to <code class="inline-code">presentation/ui_utils/extensions/</code>.</td>
+<td>ALWAYS use package imports (<code class="inline-code">import &#039;package:flutter_template/...&#039;;</code>).</td>
+</tr>
+<tr>
+<td>Mixing <code class="inline-code">dart:</code> and third-party imports arbitrarily</td>
+<td><strong>HIGH</strong></td>
+<td>Run <code class="inline-code">import_sorter:main</code> to restore standard grouping.</td>
+</tr>
+<tr>
+<td>Importing <code class="inline-code">flutter/material.dart</code> inside BLoCs or Cubits</td>
+<td><strong>CRITICAL</strong></td>
+<td>Strictly prohibited by <code class="inline-code">avoid_flutter_imports</code>. Use domain enums.</td>
+</tr>
+<tr>
+<td>Skipping import sorting before committing code</td>
+<td><strong>MEDIUM</strong></td>
+<td>Run <code class="inline-code">flutter pub run import_sorter:main</code> during CI and pre-commit checks.</td>
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
-<h2 id="6--verification-checklist" class="doc-h2"><a href="#6--verification-checklist" class="heading-anchor">#</a> 6. Verification Checklist</h2>
+<h2 id="7--verification-checklist" class="doc-h2"><a href="#7--verification-checklist" class="heading-anchor">#</a> 7. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">All public extensions use the <code class="inline-code">...X</code> suffix.</span>
+    <span class="check-text"><code class="inline-code">import_sorter: ^4.6.0</code> declared in <code class="inline-code">dev_dependencies</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">All UI extensions are located in <code class="inline-code">lib/presentation/ui_utils/extensions/</code>.</span>
+    <span class="check-text"><code class="inline-code">import_sorter: comments: false</code> configured in <code class="inline-code">pubspec.yaml</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">No <code class="inline-code">Theme.of(context)</code> calls remain in feature UI files; replaced with <code class="inline-code">context.colorScheme</code>, <code class="inline-code">context.textTheme</code>, etc.</span>
+    <span class="check-text"><code class="inline-code">flutter pub run import_sorter:main</code> completes with exit code 0.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Selective MediaQuery methods (<code class="inline-code">sizeOf</code>, <code class="inline-code">viewInsetsOf</code>) are used to prevent rebuild churn.</span>
+    <span class="check-text">All imports follow Dart -&gt; Flutter -&gt; 3rd-Party -&gt; Project hierarchy.</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Extension files are strictly under 150–200 lines each.</span>
+    <span class="check-text">Zero relative imports outside of <code class="inline-code">part</code> / <code class="inline-code">part of</code>.</span>
   </label>
 </div>
 
     </article>
 
-<div class="related-skills-section" style="margin-top: 3rem;">
-<h3 class="doc-h3" data-i18n="sub_skills_title">Пов'язані та рекомендовані скіли</h3>
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin-top: 1rem;">
-<a href="../../ui/flutter-ui-hub/flutter-ui-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-hub ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Віджети та Анімації" data-cat-en="UI & Widgets">
-    UI Віджети та Анімації
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Primary coordinator and architecture guide for Flutter UI development. Use when designing, creating, refactori...
-  </div>
-</a>
-<a href="../../theme/flutter-ui-theme-hub/flutter-ui-theme-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-theme-hub ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="Теми та Стилі" data-cat-en="Theme & Styling">
-    Теми та Стилі
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Primary coordinator and architecture guide for Flutter Material 3 theming system. Use when configuring app the...
-  </div>
-</a>
-<a href="../flutter-ui-utils-hub/flutter-ui-utils-hub.html" class="checklist-item" style="text-decoration: none; display: block;">
-  <div style="font-weight: 700; color: var(--brand-primary); font-family: var(--font-heading); margin-bottom: 0.3rem;">
-    flutter-ui-utils-hub ↗
-  </div>
-  <div style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;" data-cat-ua="UI Утиліти та Розширення" data-cat-en="UI Utilities">
-    UI Утиліти та Розширення
-  </div>
-  <div style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4;">
-    Primary coordinator and architecture guide for Flutter UI Utilities (lib/presentation/ui_utils/). Enforces pre...
-  </div>
-</a>
-</div></div>
 
 
     <footer class="footer">
-      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../../../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
+      <p>© 2026 Antigravity Flutter Architecture • Generated automatically with <a href="../documentation/skill-html-doc-generator/skill-html-doc-generator.html" class="doc-link">skill-html-doc-generator</a></p>
     </footer>
   </main>
 

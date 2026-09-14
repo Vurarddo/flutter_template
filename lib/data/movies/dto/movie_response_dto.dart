@@ -1,6 +1,7 @@
+import 'package:json_annotation/json_annotation.dart';
+
 import 'package:flutter_template/data/movies/dto/movie_dto.dart';
 import 'package:flutter_template/domain/movies/entities/movies_pagination.dart';
-import 'package:json_annotation/json_annotation.dart';
 
 part 'movie_response_dto.g.dart';
 

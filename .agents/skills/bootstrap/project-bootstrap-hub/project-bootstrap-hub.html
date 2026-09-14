@@ -598,28 +598,30 @@ pre {
 <tr>
 <td><strong>4. Architecture &amp; Flavors</strong></td>
 <td><a href="../bootstrap-architecture-scaffold/bootstrap-architecture-scaffold.html" class="skill-ref-link" title="Scaffolds the complete Clean Architecture directory hierarchy, multi-environment Flavors (dev, stage, prod), configuration models, DI container, and core entrypoints (main.dart, application.dart). Use when establishing the architecture backbone for a new Flutter project.">bootstrap-architecture-scaffold <span class="ext-icon">↗</span></a></td>
-<td>Scaffolding layer folders, <code class="inline-code">config/env_*.json</code>, <code class="inline-code">AppConfig</code>, <code class="inline-code">main.dart</code>, and <code class="inline-code">application.dart</code>.</td>
+<td>Scaffolding layer folders, native flavors (Android, iOS, Windows, Linux, macOS), <code class="inline-code">.vscode/</code> configs, <code class="inline-code">config/env_*.json</code>, <code class="inline-code">AppConfig</code>, <code class="inline-code">main.dart</code>, and <code class="inline-code">application.dart</code>.</td>
 </tr>
 <tr>
 <td><strong>5. Theme &amp; UiKit Showcase</strong></td>
 <td><a href="../bootstrap-theme-uikit/bootstrap-theme-uikit.html" class="skill-ref-link" title="Generates a complete Material 3 Theme with primary color #FFDE3F (Light &amp; Dark ColorScheme, TextTheme, AppCustomColors ThemeExtension), an injectable Hydrated ThemeCubit for persistent theme mode switching, and an interactive adaptive UiKitPage showcase landing displaying all core UI widgets. Use when generating project theming and the design system showcase.">bootstrap-theme-uikit <span class="ext-icon">↗</span></a></td>
-<td>Generating M3 theme <code class="inline-code">#FFDE3F</code>, injectable <code class="inline-code">HydratedThemeCubit</code>, and adaptive <code class="inline-code">UiKitPage</code>.</td>
+<td>Generating M3 theme <code class="inline-code">#FFDE3F</code>, pure Dart <code class="inline-code">AppThemeMode</code> with <code class="inline-code">AppThemeModeX</code>, injectable <code class="inline-code">HydratedThemeCubit</code>, and adaptive <code class="inline-code">UiKitPage</code>.</td>
 </tr>
 <tr>
 <td><strong>6. Verification &amp; Runbooks</strong></td>
 <td><a href="../bootstrap-verification-docs/bootstrap-verification-docs.html" class="skill-ref-link" title="Executes code generation, runs the full automated test suite, and authors the comprehensive project launch documentation (README.md and RUNBOOK.md). Use during the final phase of bootstrapping a Flutter project.">bootstrap-verification-docs <span class="ext-icon">↗</span></a></td>
-<td>Running <code class="inline-code">build_runner</code>, executing <code class="inline-code">flutter test</code>, and generating <code class="inline-code">README.md</code> &amp; <code class="inline-code">RUNBOOK.md</code>.</td>
+<td>Running <code class="inline-code">build_runner</code>, <code class="inline-code">import_sorter</code>, unit/widget tests, <code class="inline-code">uikit_page</code> integration test, and generating <code class="inline-code">README.md</code> &amp; <code class="inline-code">RUNBOOK.md</code>.</td>
 </tr>
 </tbody></table></div>
 <hr class="doc-divider">
 <h2 id="4--global-bootstrapping-laws" class="doc-h2"><a href="#4--global-bootstrapping-laws" class="heading-anchor">#</a> 4. Global Bootstrapping Laws</h2>
 <ol class="doc-ordered-list">
-<li><strong>Zero Domain Pollution:</strong> All scaffolded template code must use universal, domain-agnostic identifiers (<code class="inline-code">Item</code>, <code class="inline-code">Payload</code>, <code class="inline-code">AppConfig</code>, <code class="inline-code">ThemeMode</code>).</li>
+<li><strong>Zero Domain Pollution:</strong> All scaffolded template code must use universal, domain-agnostic identifiers (<code class="inline-code">Item</code>, <code class="inline-code">Payload</code>, <code class="inline-code">AppConfig</code>, <code class="inline-code">AppThemeMode</code>).</li>
 <li><strong>Strict Clean Architecture:</strong> Domain contains pure Dart only. Data maps DTOs to Entities. BLoC/Cubit communicates exclusively with Use Cases.</li>
-<li><strong>Flavors First-Class:</strong> Every project must support distinct environments (<code class="inline-code">dev</code>, <code class="inline-code">stage</code>, <code class="inline-code">prod</code>) driven by <code class="inline-code">config/env_*.json</code> and <code class="inline-code">--dart-define-from-file</code>.</li>
+<li><strong>Zero Flutter Imports in State Management:</strong> BLoCs/Cubits must NEVER import <code class="inline-code">flutter/material.dart</code> (<code class="inline-code">avoid_flutter_imports</code>). State enums like <code class="inline-code">AppThemeMode</code> map to Flutter types via <code class="inline-code">AppThemeModeX.toFlutter()</code> in Presentation.</li>
+<li><strong>Flavors First-Class &amp; Multi-Platform:</strong> Every project must support distinct environments (<code class="inline-code">dev</code>, <code class="inline-code">stage</code>, <code class="inline-code">prod</code>) driven by <code class="inline-code">config/env_*.json</code> and <code class="inline-code">--dart-define-from-file</code>, with native flavor settings across Android, iOS, Windows, Linux, and macOS.</li>
+<li><strong>Continuous Import Sorting:</strong> <code class="inline-code">import_sorter</code> must be configured (<code class="inline-code">comments: false</code>) and executed across all files.</li>
 <li><strong>Theme Resilience:</strong> Theme primary color <code class="inline-code">#FFDE3F</code> must be dynamically applied with Light &amp; Dark ColorSchemes, TextTheme, and <code class="inline-code">AppCustomColors</code> ThemeExtension.</li>
-<li><strong>Persistence Hygiene:</strong> <code class="inline-code">ThemeCubit</code> must use <code class="inline-code">hydrated_bloc</code> with serialization extracted into <code class="inline-code">hydrated_theme_cubit.mixin.dart</code>.</li>
-<li><strong>Automatic Verification:</strong> Code generation, static analysis, and test suites must pass 100% with zero warnings before completion.</li>
+<li><strong>Asset Structure Hygiene:</strong> Assets must reside in <code class="inline-code">assets/</code> subfolders (<code class="inline-code">fonts/</code>, <code class="inline-code">images/</code>, <code class="inline-code">icons/</code>, <code class="inline-code">svgs/</code>) with <code class="inline-code">flutter_gen</code> output strictly set to <code class="inline-code">lib/presentation/ui_utils/assets</code> (never <code class="inline-code">lib/gen</code>).</li>
+<li><strong>Automated Integration Testing:</strong> Bootstrapping must generate and verify an end-to-end integration test (<code class="inline-code">integration_test/uikit_page_test.dart</code>) exercising the <code class="inline-code">UiKitPage</code>.</li>
 </ul>
 <hr class="doc-divider">
 <h2 id="5--master-bootstrapping-checklist" class="doc-h2"><a href="#5--master-bootstrapping-checklist" class="heading-anchor">#</a> 5. Master Bootstrapping Checklist</h2>
@@ -655,14 +657,14 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Dependencies injected and synchronized in <code class="inline-code">pubspec.yaml</code>.</span>
+    <span class="check-text">Dependencies injected and synchronized in <code class="inline-code">pubspec.yaml</code> (including <code class="inline-code">import_sorter</code> and <code class="inline-code">flutter_gen</code>).</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Package compatibility audit passed with zero deprecation warnings.</span>
+    <span class="check-text">Asset folders initialized (<code class="inline-code">assets/images/</code>, <code class="inline-code">fonts/</code>, <code class="inline-code">icons/</code>, <code class="inline-code">svgs/</code>).</span>
   </label>
 </div>
 <div class="checklist-item">
@@ -676,14 +678,21 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Flavors configured for Android (<code class="inline-code">productFlavors</code>), iOS (Schemes &amp; Build Configurations), and Dart (<code class="inline-code">AppConfig</code>).</span>
+    <span class="check-text">Flavors configured natively for Android, iOS, Windows, Linux, macOS, and Dart (<code class="inline-code">AppConfig</code>).</span>
   </label>
 </div>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">Primary theme <code class="inline-code">#FFDE3F</code> generated with Light/Dark support and <code class="inline-code">ThemeCubit</code>.</span>
+    <span class="check-text"><code class="inline-code">.vscode/launch.json</code> created with flavor configs and test runners.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Primary theme <code class="inline-code">#FFDE3F</code> generated with Light/Dark support and framework-isolated <code class="inline-code">ThemeCubit</code>.</span>
   </label>
 </div>
 <div class="checklist-item">
@@ -704,7 +713,14 @@ pre {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text">All tests passed via <code class="inline-code">flutter test</code>.</span>
+    <span class="check-text"><code class="inline-code">import_sorter:main</code> executed workspace-wide.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Unit, widget, and <code class="inline-code">uikit_page</code> integration tests passed 100%.</span>
   </label>
 </div>
 <div class="checklist-item">

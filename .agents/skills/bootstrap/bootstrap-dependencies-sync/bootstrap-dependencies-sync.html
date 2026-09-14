@@ -577,7 +577,16 @@ pre {
       <span class="btn-text" data-i18n="copy">Copy</span>
     </button>
   </div>
-  <pre><code class="language-yaml">dependencies:
+  <pre><code class="language-yaml">name: my_app
+description: &quot;Production Flutter Application.&quot;
+publish_to: &quot;none&quot;
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.12.2
+
+dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -605,41 +614,81 @@ pre {
   # State Management &amp; Concurrency
   bloc: ^9.2.0
   flutter_bloc: ^9.1.1
-  hydrated_bloc: ^10.1.1
+  hydrated_bloc: ^11.0.0
   bloc_concurrency: ^0.3.0
-  equatable: ^2.0.7
+  equatable: ^2.1.0
 
   # Routing &amp; Navigation
   auto_route: ^11.1.0
 
   # Dependency Injection
   get_it: ^9.2.1
-  injectable: ^2.6.2
+  injectable: ^3.0.0
 
   # Persistence &amp; Secure Storage
-  shared_preferences: ^2.5.4
-  flutter_secure_storage: ^10.0.0
-  path_provider: ^2.1.5
+  shared_preferences: ^2.5.5
+  flutter_secure_storage: ^10.3.1
+  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
+
   flutter_lints: ^6.0.0
+  import_sorter: ^4.6.0
 
   # Code Generators
-  build_runner: ^2.13.0
-  freezed: ^3.2.4
+  build_runner: ^2.13.1
+  freezed: ^3.2.5
   json_serializable: ^6.13.0
   retrofit_generator: ^10.2.3
   auto_route_generator: ^10.5.0
-  injectable_generator: ^2.8.3
+  injectable_generator: ^3.0.2
   copy_with_extension_gen: ^17.0.0
-  flutter_gen_runner: ^5.15.0
+  flutter_gen_runner: ^5.13.0+1
   flutter_launcher_icons: ^0.14.4
 
   # Testing Mocks
   mocktail: ^1.0.4
   bloc_test: ^10.0.0
+
+# Assets &amp; SVG Generator configuration (Strictly NO lib/gen)
+flutter_gen:
+  output: lib/presentation/ui_utils/assets
+  integrations:
+    flutter_svg: true
+
+# Continuous import sorting configuration
+import_sorter:
+  comments: false
+
+# Localization configuration
+flutter_intl:
+  enabled: true
+  main_locale: en
+  output_dir: lib/l10n/generated
+  arb_dir: lib/l10n
+
+flutter:
+  uses-material-design: true
+  generate: true
+
+  # Assets template (Uncomment and populate as needed)
+  # assets:
+  #   - assets/images/
+  #   - assets/icons/
+  #   - assets/svgs/
+
+  # Fonts template (Uncomment and populate as needed)
+  # fonts:
+  #   - family: &quot;AppFont&quot;
+  #     fonts:
+  #       - asset: assets/fonts/app_font_regular.ttf
+  #         weight: 400
+  #       - asset: assets/fonts/app_font_bold.ttf
+  #         weight: 700
 </code></pre>
 </div>
 <hr class="doc-divider">

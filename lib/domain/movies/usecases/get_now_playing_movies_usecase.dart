@@ -1,6 +1,7 @@
+import 'package:injectable/injectable.dart';
+
 import 'package:flutter_template/domain/movies/entities/movies_pagination.dart';
 import 'package:flutter_template/domain/movies/repositories/i_movies_repository.dart';
-import 'package:injectable/injectable.dart';
 
 @injectable
 class GetNowPlayingMoviesUseCase {

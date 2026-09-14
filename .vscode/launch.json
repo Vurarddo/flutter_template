@@ -105,6 +105,36 @@
                 "--dart-define-from-file=config/env_prod.json",
                 "--release"
             ]
+        },
+        {
+            "name": "🧪 Run All Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/"
+        },
+        {
+            "name": "🧪 Run Unit Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/unit/"
+        },
+        {
+            "name": "🧪 Run Widget Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/widget/"
+        },
+        {
+            "name": "🧪 Run BLoC Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/bloc/"
+        },
+        {
+            "name": "🔍 Run Integration Tests (UiKit)",
+            "request": "launch",
+            "type": "dart",
+            "program": "integration_test/uikit_page_test.dart"
         }
     ]
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_template/domain/movies/entities/movie.dart';
 import 'package:flutter_template/presentation/ui_kit/app_network_image.dart';
 import 'package:flutter_template/presentation/ui_kit/rating_badge.dart';

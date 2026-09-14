@@ -63,11 +63,11 @@ lib/
 
 ---
 
-## 4. Multi-Environment Flavors Setup (`config/`)
+## 4. Multi-Environment Flavors & Native Configuration (`config/`)
 
-Create environment JSON files (added to `.gitignore`):
+### 4.1 Create Environment JSON Files (Added to `.gitignore`):
 
-### `config/env_dev.json`
+#### `config/env_dev.json`
 ```json
 {
   "APP_ENV": "dev",
@@ -76,7 +76,7 @@ Create environment JSON files (added to `.gitignore`):
 }
 ```
 
-### `config/env_stage.json`
+#### `config/env_stage.json`
 ```json
 {
   "APP_ENV": "stage",
@@ -85,7 +85,7 @@ Create environment JSON files (added to `.gitignore`):
 }
 ```
 
-### `config/env_prod.json`
+#### `config/env_prod.json`
 ```json
 {
   "APP_ENV": "prod",
@@ -94,7 +94,7 @@ Create environment JSON files (added to `.gitignore`):
 }
 ```
 
-### `config/env_template.json` (Committed to Git)
+#### `config/env_template.json` (Committed to Git)
 ```json
 {
   "APP_ENV": "dev",
@@ -105,7 +105,244 @@ Create environment JSON files (added to `.gitignore`):
 
 ---
 
-## 5. Quality & Linter Configuration (`analysis_options.yaml`)
+### 4.2 Native Platform Flavors Configuration
+Reference guides:
+- [Android Flavors](https://docs.flutter.dev/deployment/flavors)
+- [iOS Flavors](https://docs.flutter.dev/deployment/flavors-ios)
+- [Linux Flavors](https://docs.flutter.dev/deployment/flavors-linux)
+- [Windows Flavors](https://docs.flutter.dev/deployment/flavors-windows)
+
+#### A. Android (`android/app/build.gradle.kts`):
+```kotlin
+android {
+    flavorDimensions += "default"
+    productFlavors {
+        create("dev") {
+            dimension = "default"
+            applicationIdSuffix = ".dev"
+            manifestPlaceholders["appName"] = "App Dev"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_dev"
+        }
+        create("stage") {
+            dimension = "default"
+            applicationIdSuffix = ".stage"
+            manifestPlaceholders["appName"] = "App Staging"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher_stage"
+        }
+        create("prod") {
+            dimension = "default"
+            manifestPlaceholders["appName"] = "App"
+            manifestPlaceholders["appIcon"] = "@mipmap/ic_launcher"
+        }
+    }
+}
+```
+
+In `android/app/src/main/AndroidManifest.xml`:
+```xml
+<application
+    android:label="${appName}"
+    android:icon="${appIcon}">
+    ...
+</application>
+```
+
+#### B. iOS / macOS:
+- Configure Xcode Build Configurations (`Debug-dev`, `Release-dev`, `Debug-stage`, `Release-stage`, `Debug-prod`, `Release-prod`).
+- Create 3 shared Schemes: `dev`, `stage`, `prod`.
+- Configure `ios/Flutter/Debug-dev.xcconfig` etc. with `PRODUCT_BUNDLE_IDENTIFIER` and `APP_DISPLAY_NAME`.
+
+#### C. Linux (`linux/CMakeLists.txt`):
+```cmake
+if(DEFINED FLUTTER_FLAVOR)
+  add_definitions(-DFLUTTER_FLAVOR="${FLUTTER_FLAVOR}")
+endif()
+```
+
+#### D. Windows (`windows/CMakeLists.txt`):
+```cmake
+if(DEFINED FLUTTER_FLAVOR)
+  add_definitions(-DFLUTTER_FLAVOR="${FLUTTER_FLAVOR}")
+endif()
+```
+
+---
+
+## 5. VS Code Configuration (`.vscode/`)
+
+Create standard VS Code workspace files:
+
+### 5.1 `.vscode/launch.json`
+```json
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "🔧 Debug Dev",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "dev",
+                "--dart-define-from-file=config/env_dev.json"
+            ]
+        },
+        {
+            "name": "⚙️ Profile Dev",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "dev",
+                "--dart-define-from-file=config/env_dev.json",
+                "--profile"
+            ]
+        },
+        {
+            "name": "📱 Release Dev",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "dev",
+                "--dart-define-from-file=config/env_dev.json",
+                "--release"
+            ]
+        },
+        {
+            "name": "🔧 Debug Stage",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "stage",
+                "--dart-define-from-file=config/env_stage.json"
+            ]
+        },
+        {
+            "name": "⚙️ Profile Stage",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "stage",
+                "--dart-define-from-file=config/env_stage.json",
+                "--profile"
+            ]
+        },
+        {
+            "name": "📱 Release Stage",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "stage",
+                "--dart-define-from-file=config/env_stage.json",
+                "--release"
+            ]
+        },
+        {
+            "name": "🔧 Debug Prod",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "prod",
+                "--dart-define-from-file=config/env_prod.json"
+            ]
+        },
+        {
+            "name": "⚙️ Profile Prod",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "prod",
+                "--dart-define-from-file=config/env_prod.json",
+                "--profile"
+            ]
+        },
+        {
+            "name": "📱 Release Prod",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "args": [
+                "--flavor",
+                "prod",
+                "--dart-define-from-file=config/env_prod.json",
+                "--release"
+            ]
+        },
+        {
+            "name": "🧪 Run All Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/"
+        },
+        {
+            "name": "🧪 Run Unit Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/unit/"
+        },
+        {
+            "name": "🧪 Run Widget Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/widget/"
+        },
+        {
+            "name": "🧪 Run BLoC Tests",
+            "request": "launch",
+            "type": "dart",
+            "program": "test/bloc/"
+        },
+        {
+            "name": "🔍 Run Integration Tests (UiKit)",
+            "request": "launch",
+            "type": "dart",
+            "program": "integration_test/uikit_page_test.dart"
+        }
+    ]
+}
+```
+
+### 5.2 `.vscode/settings.json`
+```json
+{
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "[dart]": {
+        "editor.formatOnSave": true,
+        "editor.formatOnType": true,
+        "editor.defaultFormatter": "Dart-Code.dart-code"
+    }
+}
+```
+
+### 5.3 `.vscode/extensions.json`
+```json
+{
+    "recommendations": [
+        "Dart-Code.dart-code",
+        "Dart-Code.flutter",
+        "localizely.flutter-intl",
+        "felangel.bloc"
+    ]
+}
+```
+
+---
+
+## 6. Quality & Linter Configuration (`analysis_options.yaml`)
 
 Scaffold the standard root `analysis_options.yaml` with strict BLoC rules, code generation exclusions, and formatter guidelines:
 
@@ -147,7 +384,7 @@ formatter:
 
 ---
 
-## 6. Centralized Configuration Model (`lib/infrastructure/config/app_config.dart`)
+## 7. Centralized Configuration Model (`lib/infrastructure/config/app_config.dart`)
 
 ```dart
 enum AppEnvironment {
@@ -180,7 +417,7 @@ abstract final class AppConfig {
 
 ---
 
-## 7. Main Bootstrap Entrypoint (`lib/main.dart`)
+## 8. Main Bootstrap Entrypoint (`lib/main.dart`)
 
 ```dart
 import 'dart:async';
@@ -218,7 +455,7 @@ void main() {
 
 ---
 
-## 8. Application Root Widget (`lib/application.dart`)
+## 9. Application Root Widget (`lib/application.dart`)
 
 ```dart
 import 'package:flutter/material.dart';
@@ -231,6 +468,7 @@ import 'package:flutter_template/presentation/navigation/app_router.dart';
 import 'package:flutter_template/presentation/state-management/theme/theme_cubit.dart';
 import 'package:flutter_template/presentation/state-management/theme/theme_state.dart';
 import 'package:flutter_template/presentation/theme/app_theme.dart';
+import 'package:flutter_template/presentation/ui_utils/extensions/app_theme_mode_extension.dart';
 
 class Application extends StatelessWidget {
   const Application({super.key});
@@ -249,7 +487,7 @@ class Application extends StatelessWidget {
             routerConfig: appRouter.config(),
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: state.themeMode,
+            themeMode: state.themeMode.toFlutter(),
             localizationsDelegates: const [
               S.delegate,
               GlobalMaterialLocalizations.delegate,
@@ -267,12 +505,25 @@ class Application extends StatelessWidget {
 
 ---
 
-## 9. Verification Checklist
+## 10. Assets Hierarchy Scaffolding
+
+Scaffold empty asset folders with `.gitkeep` files:
+- `assets/fonts/.gitkeep`
+- `assets/images/.gitkeep`
+- `assets/icons/.gitkeep`
+- `assets/svgs/.gitkeep`
+
+---
+
+## 11. Verification Checklist
 
 - [ ] Clean Architecture layer folders created.
 - [ ] `config/env_*.json` files generated and added to `.gitignore`.
+- [ ] Native platform Flavors configured across Android, iOS, Linux, Windows, macOS.
+- [ ] `.vscode/launch.json` created with flavor configs and test runners.
 - [ ] `analysis_options.yaml` configured with strict BLoC rules, exclude paths, and `invalid_annotation_target: ignore`.
 - [ ] `AppConfig` strongly typed with `String.fromEnvironment`.
 - [ ] `lib/main.dart` wrapped in `runZonedGuarded` with `HydratedBloc` & `GetIt` initialization.
-- [ ] `lib/application.dart` configured with `MaterialApp.router`, `ThemeCubit`, and localization delegates.
+- [ ] `lib/application.dart` maps `state.themeMode.toFlutter()` via `AppThemeModeX`.
+- [ ] Asset folders initialized with `.gitkeep`.
 - [ ] Ready to proceed to [bootstrap-theme-uikit](../bootstrap-theme-uikit/SKILL.md).

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_template/infrastructure/config/app_config.dart';
 import 'package:injectable/injectable.dart';
+
+import 'package:flutter_template/infrastructure/config/app_config.dart';
 
 @module
 abstract class ApiClientModule {

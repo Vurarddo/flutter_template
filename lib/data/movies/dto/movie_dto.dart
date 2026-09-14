@@ -1,5 +1,6 @@
-import 'package:flutter_template/domain/movies/entities/movie.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import 'package:flutter_template/domain/movies/entities/movie.dart';
 
 part 'movie_dto.g.dart';
 

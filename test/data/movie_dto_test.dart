@@ -1,6 +1,7 @@
+import 'package:flutter_test/flutter_test.dart';
+
 import 'package:flutter_template/data/movies/dto/movie_dto.dart';
 import 'package:flutter_template/data/movies/dto/movie_response_dto.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('MovieDto & MovieResponseDto', () {

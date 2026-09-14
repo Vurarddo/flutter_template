@@ -1,5 +1,6 @@
-import 'package:flutter_template/infrastructure/config/app_environment.dart';
 import 'package:injectable/injectable.dart';
+
+import 'package:flutter_template/infrastructure/config/app_environment.dart';
 
 @lazySingleton
 class AppConfig {

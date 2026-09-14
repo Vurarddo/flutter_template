@@ -568,9 +568,11 @@ pre {
 <hr class="doc-divider">
 <h2 id="3--step-by-step-verification-pipeline" class="doc-h2"><a href="#3--step-by-step-verification-pipeline" class="heading-anchor">#</a> 3. Step-by-Step Verification Pipeline</h2>
 <div class="mermaid-container"><div class="mermaid">graph TD
-    CodeGen["1. Code Generation<br/>(build_runner & intl_utils)"] --> Test["2. Run Test Suite<br/>(flutter test)"]
-    Test --> Analyze["3. Static Analysis<br/>(dart analyze .)"]
-    Analyze --> Docs["4. Author README.md & RUNBOOK.md"]
+    CodeGen["1. Code Generation<br/>(build_runner & intl_utils)"] --> Sorter["2. Import Sorting<br/>(import_sorter:main)"]
+    Sorter --> Test["3. Unit & Widget Tests<br/>(flutter test)"]
+    Test --> IntegrationTest["4. Integration Tests<br/>(flutter test integration_test/...)"]
+    IntegrationTest --> Analyze["5. Static Analysis<br/>(dart analyze .)"]
+    Analyze --> Docs["6. Author README.md & RUNBOOK.md"]
 </div></div>
 <h3 class="doc-h3">Step 1: Execute Code Generators</h3>
 <div class="code-block-wrapper">
@@ -588,7 +590,19 @@ flutter pub run intl_utils:generate
 flutter pub run build_runner build --delete-conflicting-outputs
 </code></pre>
 </div>
-<h3 class="doc-h3">Step 2: Execute Automated Tests</h3>
+<h3 class="doc-h3">Step 2: Sort Imports Workspace-Wide</h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">bash</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-bash">flutter pub run import_sorter:main
+</code></pre>
+</div>
+<h3 class="doc-h3">Step 3: Execute Automated Unit &amp; Widget Tests</h3>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">bash</span>
@@ -600,7 +614,19 @@ flutter pub run build_runner build --delete-conflicting-outputs
   <pre><code class="language-bash">flutter test
 </code></pre>
 </div>
-<h3 class="doc-h3">Step 3: Run Static Analysis</h3>
+<h3 class="doc-h3">Step 4: Execute Integration Smoke Test</h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">bash</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-bash">flutter test integration_test/uikit_page_test.dart
+</code></pre>
+</div>
+<h3 class="doc-h3">Step 5: Run Static Analysis</h3>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">bash</span>
@@ -637,6 +663,9 @@ flutter pub run build_runner build --delete-conflicting-outputs
    # Run code generation
    flutter pub run build_runner build --delete-conflicting-outputs
 
+   # Sort imports
+   flutter pub run import_sorter:main
+
    # Run development flavor
    flutter run --flavor dev --dart-define-from-file=config/env_dev.json
 </code></pre>
@@ -670,16 +699,18 @@ flutter pub run build_runner build --delete-conflicting-outputs
 </tbody></table></div>
 </ul>
 <ol class="doc-ordered-list">
-<li><strong>Code Generation Runbook:</strong></li>
+<li><strong>Code Generation &amp; Quality Runbook:</strong></li>
 <li>One-off build: <code class="inline-code">flutter pub run build_runner build --delete-conflicting-outputs</code></li>
 <li>Watch mode: <code class="inline-code">flutter pub run build_runner watch --delete-conflicting-outputs</code></li>
 <li>Cache clean: <code class="inline-code">flutter pub run build_runner clean &amp;&amp; flutter pub get</code></li>
+<li>Import sorting: <code class="inline-code">flutter pub run import_sorter:main</code></li>
 </ul>
 <ol class="doc-ordered-list">
 <li><strong>Testing Runbook:</strong></li>
 <li>Run all tests: <code class="inline-code">flutter test</code></li>
 <li>Run unit tests: <code class="inline-code">flutter test test/unit/</code></li>
 <li>Run widget tests: <code class="inline-code">flutter test test/widget/</code></li>
+<li>Run integration tests: <code class="inline-code">flutter test integration_test/uikit_page_test.dart</code></li>
 </ul>
 <ol class="doc-ordered-list">
 <li><strong>Clean Architecture Directory Map:</strong></li>
@@ -705,7 +736,21 @@ flutter pub run build_runner build --delete-conflicting-outputs
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
+    <span class="check-text"><code class="inline-code">import_sorter:main</code> formatted all import statements workspace-wide.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
     <span class="check-text"><code class="inline-code">flutter test</code> passed with 100% success rate.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text"><code class="inline-code">integration_test/uikit_page_test.dart</code> verified UiKit rendering and interaction.</span>
   </label>
 </div>
 <div class="checklist-item">

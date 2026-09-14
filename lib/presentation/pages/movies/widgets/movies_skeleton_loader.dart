@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_template/presentation/ui_utils/extensions/context_extensions.dart';
 
 class MoviesSkeletonLoader extends StatelessWidget {

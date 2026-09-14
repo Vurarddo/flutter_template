@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_template/infrastructure/di/injection.dart';
 import 'package:flutter_template/presentation/navigation/app_router.dart';
 import 'package:flutter_template/presentation/theme/app_theme.dart';

@@ -25,7 +25,12 @@ Use this skill whenever:
 
 ---
 
-## 3. Standard Implementation Patterns
+## 3. Standard Implementation Patterns & Naming Convention
+
+> [!IMPORTANT]
+> **Strict `...X` Naming Convention:**
+> ALL public Dart extensions must be suffixed with `X` (e.g. `BuildContextX`, `WidgetX`, `TextStyleX`, `AppThemeModeX`).
+> Never use `...Extension` or `...Extensions` (e.g. BAD: `BuildContextExtension`, GOOD: `BuildContextX`).
 
 ### 3.1 `BuildContext` Theme & Layout Extensions (`context_extensions.dart`)
 
@@ -34,7 +39,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_template/presentation/theme/app_custom_colors.dart';
 
-extension ContextThemeExtensions on BuildContext {
+extension BuildContextThemeX on BuildContext {
   ThemeData get theme => Theme.of(this);
   TextTheme get textTheme => theme.textTheme;
   ColorScheme get colorScheme => theme.colorScheme;
@@ -45,7 +50,7 @@ extension ContextThemeExtensions on BuildContext {
       theme.extension<AppCustomColors>() ?? AppCustomColors.light;
 }
 
-extension ContextLayoutExtensions on BuildContext {
+extension BuildContextLayoutX on BuildContext {
   MediaQueryData get mediaQuery => MediaQuery.of(this);
   Size get screenSize => MediaQuery.sizeOf(this);
   double get screenWidth => screenSize.width;
@@ -68,7 +73,7 @@ extension ContextLayoutExtensions on BuildContext {
 ```dart
 import 'package:flutter/material.dart';
 
-extension WidgetCompositionExtensions on Widget {
+extension WidgetX on Widget {
   /// Wraps a widget in a GestureDetector that dismisses the keyboard when tapped outside.
   Widget unfocusWrapper() {
     return GestureDetector(
@@ -95,7 +100,7 @@ extension WidgetCompositionExtensions on Widget {
 ```dart
 import 'package:flutter/material.dart';
 
-extension TextStyleModifierExtensions on TextStyle {
+extension TextStyleX on TextStyle {
   TextStyle withColor(Color color) => copyWith(color: color);
   TextStyle withOpacity(double opacity) => copyWith(color: color?.withValues(alpha: opacity));
   TextStyle withWeight(FontWeight weight) => copyWith(fontWeight: weight);
@@ -117,6 +122,7 @@ extension TextStyleModifierExtensions on TextStyle {
 
 | Anti-Pattern | Severity | Corrective Action |
 | :--- | :--- | :--- |
+| Naming extension `BuildContextExtension` or `ThemeExtensions` | **HIGH** | Use `X` suffix: `BuildContextThemeX`, `BuildContextLayoutX`, `WidgetX`. |
 | Verbose `Theme.of(context).colorScheme.primary` in UI code | **MEDIUM** | Use `context.colorScheme.primary`. |
 | Using `MediaQuery.of(context).size` when only size is needed | **HIGH** | Use `MediaQuery.sizeOf(context)` or `context.screenSize`. |
 | Placing pure Dart extensions (e.g. `DateTime.isToday`) in `ui_utils/extensions/` | **HIGH** | Move to `lib/core/extensions/date_time_extensions.dart`. |
@@ -126,6 +132,7 @@ extension TextStyleModifierExtensions on TextStyle {
 
 ## 6. Verification Checklist
 
+- [ ] All public extensions use the `...X` suffix.
 - [ ] All UI extensions are located in `lib/presentation/ui_utils/extensions/`.
 - [ ] No `Theme.of(context)` calls remain in feature UI files; replaced with `context.colorScheme`, `context.textTheme`, etc.
 - [ ] Selective MediaQuery methods (`sizeOf`, `viewInsetsOf`) are used to prevent rebuild churn.

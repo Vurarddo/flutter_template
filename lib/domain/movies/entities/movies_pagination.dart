@@ -1,5 +1,6 @@
-import 'package:flutter_template/domain/movies/entities/movie.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+
+import 'package:flutter_template/domain/movies/entities/movie.dart';
 
 part 'movies_pagination.freezed.dart';
 

@@ -2,10 +2,11 @@ import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:copy_with_extension/copy_with_extension.dart';
 import 'package:equatable/equatable.dart';
+import 'package:injectable/injectable.dart';
+
 import 'package:flutter_template/domain/movies/entities/movie.dart';
 import 'package:flutter_template/domain/movies/failures/movies_failure.dart';
 import 'package:flutter_template/domain/movies/usecases/get_now_playing_movies_usecase.dart';
-import 'package:injectable/injectable.dart';
 
 part 'movies_bloc.g.dart';
 part 'movies_event.dart';

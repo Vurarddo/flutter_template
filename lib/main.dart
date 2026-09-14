@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_template/application.dart';
 import 'package:flutter_template/infrastructure/di/injection.dart';
 

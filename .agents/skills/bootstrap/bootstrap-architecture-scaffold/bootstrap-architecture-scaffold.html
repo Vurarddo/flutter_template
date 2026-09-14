@@ -608,9 +608,9 @@ pre {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="4--multi-environment-flavors-setup---config---" class="doc-h2"><a href="#4--multi-environment-flavors-setup---config---" class="heading-anchor">#</a> 4. Multi-Environment Flavors Setup (<code class="inline-code">config/</code>)</h2>
-<p class="doc-p">Create environment JSON files (added to <code class="inline-code">.gitignore</code>):</p>
-<h3 class="doc-h3"><code class="inline-code">config/env_dev.json</code></h3>
+<h2 id="4--multi-environment-flavors---native-configuration---config---" class="doc-h2"><a href="#4--multi-environment-flavors---native-configuration---config---" class="heading-anchor">#</a> 4. Multi-Environment Flavors &amp; Native Configuration (<code class="inline-code">config/</code>)</h2>
+<h3 class="doc-h3">4.1 Create Environment JSON Files (Added to <code class="inline-code">.gitignore</code>):</h3>
+<h4 class="doc-h4"><code class="inline-code">config/env_dev.json</code></h4>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">json</span>
@@ -626,7 +626,7 @@ pre {
 }
 </code></pre>
 </div>
-<h3 class="doc-h3"><code class="inline-code">config/env_stage.json</code></h3>
+<h4 class="doc-h4"><code class="inline-code">config/env_stage.json</code></h4>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">json</span>
@@ -642,7 +642,7 @@ pre {
 }
 </code></pre>
 </div>
-<h3 class="doc-h3"><code class="inline-code">config/env_prod.json</code></h3>
+<h4 class="doc-h4"><code class="inline-code">config/env_prod.json</code></h4>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">json</span>
@@ -658,7 +658,7 @@ pre {
 }
 </code></pre>
 </div>
-<h3 class="doc-h3"><code class="inline-code">config/env_template.json</code> (Committed to Git)</h3>
+<h4 class="doc-h4"><code class="inline-code">config/env_template.json</code> (Committed to Git)</h4>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">json</span>
@@ -675,7 +675,291 @@ pre {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="5--quality---linter-configuration---analysis_options-yaml--" class="doc-h2"><a href="#5--quality---linter-configuration---analysis_options-yaml--" class="heading-anchor">#</a> 5. Quality &amp; Linter Configuration (<code class="inline-code">analysis_options.yaml</code>)</h2>
+<h3 class="doc-h3">4.2 Native Platform Flavors Configuration</h3>
+<p class="doc-p">Reference guides:</p>
+<ul class="doc-list">
+<li><a href="https://docs.flutter.dev/deployment/flavors" class="doc-link">Android Flavors</a></li>
+<li><a href="https://docs.flutter.dev/deployment/flavors-ios" class="doc-link">iOS Flavors</a></li>
+<li><a href="https://docs.flutter.dev/deployment/flavors-linux" class="doc-link">Linux Flavors</a></li>
+<li><a href="https://docs.flutter.dev/deployment/flavors-windows" class="doc-link">Windows Flavors</a></li>
+</ul>
+<h4 class="doc-h4">A. Android (<code class="inline-code">android/app/build.gradle.kts</code>):</h4>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">kotlin</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-kotlin">android {
+    flavorDimensions += &quot;default&quot;
+    productFlavors {
+        create(&quot;dev&quot;) {
+            dimension = &quot;default&quot;
+            applicationIdSuffix = &quot;.dev&quot;
+            manifestPlaceholders[&quot;appName&quot;] = &quot;App Dev&quot;
+            manifestPlaceholders[&quot;appIcon&quot;] = &quot;@mipmap/ic_launcher_dev&quot;
+        }
+        create(&quot;stage&quot;) {
+            dimension = &quot;default&quot;
+            applicationIdSuffix = &quot;.stage&quot;
+            manifestPlaceholders[&quot;appName&quot;] = &quot;App Staging&quot;
+            manifestPlaceholders[&quot;appIcon&quot;] = &quot;@mipmap/ic_launcher_stage&quot;
+        }
+        create(&quot;prod&quot;) {
+            dimension = &quot;default&quot;
+            manifestPlaceholders[&quot;appName&quot;] = &quot;App&quot;
+            manifestPlaceholders[&quot;appIcon&quot;] = &quot;@mipmap/ic_launcher&quot;
+        }
+    }
+}
+</code></pre>
+</div>
+<p class="doc-p">In <code class="inline-code">android/app/src/main/AndroidManifest.xml</code>:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">xml</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-xml">&lt;application
+    android:label=&quot;${appName}&quot;
+    android:icon=&quot;${appIcon}&quot;&gt;
+    ...
+&lt;/application&gt;
+</code></pre>
+</div>
+<h4 class="doc-h4">B. iOS / macOS:</h4>
+<ul class="doc-list">
+<li>Configure Xcode Build Configurations (<code class="inline-code">Debug-dev</code>, <code class="inline-code">Release-dev</code>, <code class="inline-code">Debug-stage</code>, <code class="inline-code">Release-stage</code>, <code class="inline-code">Debug-prod</code>, <code class="inline-code">Release-prod</code>).</li>
+<li>Create 3 shared Schemes: <code class="inline-code">dev</code>, <code class="inline-code">stage</code>, <code class="inline-code">prod</code>.</li>
+<li>Configure <code class="inline-code">ios/Flutter/Debug-dev.xcconfig</code> etc. with <code class="inline-code">PRODUCT_BUNDLE_IDENTIFIER</code> and <code class="inline-code">APP_DISPLAY_NAME</code>.</li>
+</ul>
+<h4 class="doc-h4">C. Linux (<code class="inline-code">linux/CMakeLists.txt</code>):</h4>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">cmake</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-cmake">if(DEFINED FLUTTER_FLAVOR)
+  add_definitions(-DFLUTTER_FLAVOR=&quot;${FLUTTER_FLAVOR}&quot;)
+endif()
+</code></pre>
+</div>
+<h4 class="doc-h4">D. Windows (<code class="inline-code">windows/CMakeLists.txt</code>):</h4>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">cmake</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-cmake">if(DEFINED FLUTTER_FLAVOR)
+  add_definitions(-DFLUTTER_FLAVOR=&quot;${FLUTTER_FLAVOR}&quot;)
+endif()
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="5--vs-code-configuration----vscode---" class="doc-h2"><a href="#5--vs-code-configuration----vscode---" class="heading-anchor">#</a> 5. VS Code Configuration (<code class="inline-code">.vscode/</code>)</h2>
+<p class="doc-p">Create standard VS Code workspace files:</p>
+<h3 class="doc-h3">5.1 <code class="inline-code">.vscode/launch.json</code></h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">json</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-json">{
+    &quot;version&quot;: &quot;0.2.0&quot;,
+    &quot;configurations&quot;: [
+        {
+            &quot;name&quot;: &quot;🔧 Debug Dev&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;lib/main.dart&quot;,
+            &quot;args&quot;: [
+                &quot;--flavor&quot;,
+                &quot;dev&quot;,
+                &quot;--dart-define-from-file=config/env_dev.json&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;⚙️ Profile Dev&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;lib/main.dart&quot;,
+            &quot;args&quot;: [
+                &quot;--flavor&quot;,
+                &quot;dev&quot;,
+                &quot;--dart-define-from-file=config/env_dev.json&quot;,
+                &quot;--profile&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;📱 Release Dev&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;lib/main.dart&quot;,
+            &quot;args&quot;: [
+                &quot;--flavor&quot;,
+                &quot;dev&quot;,
+                &quot;--dart-define-from-file=config/env_dev.json&quot;,
+                &quot;--release&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;🔧 Debug Stage&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;lib/main.dart&quot;,
+            &quot;args&quot;: [
+                &quot;--flavor&quot;,
+                &quot;stage&quot;,
+                &quot;--dart-define-from-file=config/env_stage.json&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;⚙️ Profile Stage&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;lib/main.dart&quot;,
+            &quot;args&quot;: [
+                &quot;--flavor&quot;,
+                &quot;stage&quot;,
+                &quot;--dart-define-from-file=config/env_stage.json&quot;,
+                &quot;--profile&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;📱 Release Stage&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;lib/main.dart&quot;,
+            &quot;args&quot;: [
+                &quot;--flavor&quot;,
+                &quot;stage&quot;,
+                &quot;--dart-define-from-file=config/env_stage.json&quot;,
+                &quot;--release&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;🔧 Debug Prod&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;lib/main.dart&quot;,
+            &quot;args&quot;: [
+                &quot;--flavor&quot;,
+                &quot;prod&quot;,
+                &quot;--dart-define-from-file=config/env_prod.json&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;⚙️ Profile Prod&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;lib/main.dart&quot;,
+            &quot;args&quot;: [
+                &quot;--flavor&quot;,
+                &quot;prod&quot;,
+                &quot;--dart-define-from-file=config/env_prod.json&quot;,
+                &quot;--profile&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;📱 Release Prod&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;lib/main.dart&quot;,
+            &quot;args&quot;: [
+                &quot;--flavor&quot;,
+                &quot;prod&quot;,
+                &quot;--dart-define-from-file=config/env_prod.json&quot;,
+                &quot;--release&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;🧪 Run All Tests&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;test/&quot;
+        },
+        {
+            &quot;name&quot;: &quot;🧪 Run Unit Tests&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;test/unit/&quot;
+        },
+        {
+            &quot;name&quot;: &quot;🧪 Run Widget Tests&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;test/widget/&quot;
+        },
+        {
+            &quot;name&quot;: &quot;🧪 Run BLoC Tests&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;test/bloc/&quot;
+        },
+        {
+            &quot;name&quot;: &quot;🔍 Run Integration Tests (UiKit)&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;type&quot;: &quot;dart&quot;,
+            &quot;program&quot;: &quot;integration_test/uikit_page_test.dart&quot;
+        }
+    ]
+}
+</code></pre>
+</div>
+<h3 class="doc-h3">5.2 <code class="inline-code">.vscode/settings.json</code></h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">json</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-json">{
+    &quot;java.configuration.updateBuildConfiguration&quot;: &quot;disabled&quot;,
+    &quot;[dart]&quot;: {
+        &quot;editor.formatOnSave&quot;: true,
+        &quot;editor.formatOnType&quot;: true,
+        &quot;editor.defaultFormatter&quot;: &quot;Dart-Code.dart-code&quot;
+    }
+}
+</code></pre>
+</div>
+<h3 class="doc-h3">5.3 <code class="inline-code">.vscode/extensions.json</code></h3>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">json</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-json">{
+    &quot;recommendations&quot;: [
+        &quot;Dart-Code.dart-code&quot;,
+        &quot;Dart-Code.flutter&quot;,
+        &quot;localizely.flutter-intl&quot;,
+        &quot;felangel.bloc&quot;
+    ]
+}
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h2 id="6--quality---linter-configuration---analysis_options-yaml--" class="doc-h2"><a href="#6--quality---linter-configuration---analysis_options-yaml--" class="heading-anchor">#</a> 6. Quality &amp; Linter Configuration (<code class="inline-code">analysis_options.yaml</code>)</h2>
 <p class="doc-p">Scaffold the standard root <code class="inline-code">analysis_options.yaml</code> with strict BLoC rules, code generation exclusions, and formatter guidelines:</p>
 <div class="code-block-wrapper">
   <div class="code-header">
@@ -721,7 +1005,7 @@ formatter:
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="6--centralized-configuration-model---lib-infrastructure-config-app_config-dart--" class="doc-h2"><a href="#6--centralized-configuration-model---lib-infrastructure-config-app_config-dart--" class="heading-anchor">#</a> 6. Centralized Configuration Model (<code class="inline-code">lib/infrastructure/config/app_config.dart</code>)</h2>
+<h2 id="7--centralized-configuration-model---lib-infrastructure-config-app_config-dart--" class="doc-h2"><a href="#7--centralized-configuration-model---lib-infrastructure-config-app_config-dart--" class="heading-anchor">#</a> 7. Centralized Configuration Model (<code class="inline-code">lib/infrastructure/config/app_config.dart</code>)</h2>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -759,7 +1043,7 @@ abstract final class AppConfig {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="7--main-bootstrap-entrypoint---lib-main-dart--" class="doc-h2"><a href="#7--main-bootstrap-entrypoint---lib-main-dart--" class="heading-anchor">#</a> 7. Main Bootstrap Entrypoint (<code class="inline-code">lib/main.dart</code>)</h2>
+<h2 id="8--main-bootstrap-entrypoint---lib-main-dart--" class="doc-h2"><a href="#8--main-bootstrap-entrypoint---lib-main-dart--" class="heading-anchor">#</a> 8. Main Bootstrap Entrypoint (<code class="inline-code">lib/main.dart</code>)</h2>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -802,7 +1086,7 @@ void main() {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="8--application-root-widget---lib-application-dart--" class="doc-h2"><a href="#8--application-root-widget---lib-application-dart--" class="heading-anchor">#</a> 8. Application Root Widget (<code class="inline-code">lib/application.dart</code>)</h2>
+<h2 id="9--application-root-widget---lib-application-dart--" class="doc-h2"><a href="#9--application-root-widget---lib-application-dart--" class="heading-anchor">#</a> 9. Application Root Widget (<code class="inline-code">lib/application.dart</code>)</h2>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -821,6 +1105,7 @@ import &#039;package:flutter_template/presentation/navigation/app_router.dart&#0
 import &#039;package:flutter_template/presentation/state-management/theme/theme_cubit.dart&#039;;
 import &#039;package:flutter_template/presentation/state-management/theme/theme_state.dart&#039;;
 import &#039;package:flutter_template/presentation/theme/app_theme.dart&#039;;
+import &#039;package:flutter_template/presentation/ui_utils/extensions/app_theme_mode_extension.dart&#039;;
 
 class Application extends StatelessWidget {
   const Application({super.key});
@@ -839,7 +1124,7 @@ class Application extends StatelessWidget {
             routerConfig: appRouter.config(),
             theme: AppTheme.lightTheme,
             darkTheme: AppTheme.darkTheme,
-            themeMode: state.themeMode,
+            themeMode: state.themeMode.toFlutter(),
             localizationsDelegates: const [
               S.delegate,
               GlobalMaterialLocalizations.delegate,
@@ -856,7 +1141,16 @@ class Application extends StatelessWidget {
 </code></pre>
 </div>
 <hr class="doc-divider">
-<h2 id="9--verification-checklist" class="doc-h2"><a href="#9--verification-checklist" class="heading-anchor">#</a> 9. Verification Checklist</h2>
+<h2 id="10--assets-hierarchy-scaffolding" class="doc-h2"><a href="#10--assets-hierarchy-scaffolding" class="heading-anchor">#</a> 10. Assets Hierarchy Scaffolding</h2>
+<p class="doc-p">Scaffold empty asset folders with <code class="inline-code">.gitkeep</code> files:</p>
+<ul class="doc-list">
+<li><code class="inline-code">assets/fonts/.gitkeep</code></li>
+<li><code class="inline-code">assets/images/.gitkeep</code></li>
+<li><code class="inline-code">assets/icons/.gitkeep</code></li>
+<li><code class="inline-code">assets/svgs/.gitkeep</code></li>
+</ul>
+<hr class="doc-divider">
+<h2 id="11--verification-checklist" class="doc-h2"><a href="#11--verification-checklist" class="heading-anchor">#</a> 11. Verification Checklist</h2>
 <div class="checklist-item">
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
@@ -869,6 +1163,20 @@ class Application extends StatelessWidget {
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
     <span class="check-text"><code class="inline-code">config/env_*.json</code> files generated and added to <code class="inline-code">.gitignore</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Native platform Flavors configured across Android, iOS, Linux, Windows, macOS.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text"><code class="inline-code">.vscode/launch.json</code> created with flavor configs and test runners.</span>
   </label>
 </div>
 <div class="checklist-item">
@@ -896,7 +1204,14 @@ class Application extends StatelessWidget {
   <label class="checkbox-container">
     <input type="checkbox"  onchange="updateChecklistProgress()">
     <span class="checkmark"></span>
-    <span class="check-text"><code class="inline-code">lib/application.dart</code> configured with <code class="inline-code">MaterialApp.router</code>, <code class="inline-code">ThemeCubit</code>, and localization delegates.</span>
+    <span class="check-text"><code class="inline-code">lib/application.dart</code> maps <code class="inline-code">state.themeMode.toFlutter()</code> via <code class="inline-code">AppThemeModeX</code>.</span>
+  </label>
+</div>
+<div class="checklist-item">
+  <label class="checkbox-container">
+    <input type="checkbox"  onchange="updateChecklistProgress()">
+    <span class="checkmark"></span>
+    <span class="check-text">Asset folders initialized with <code class="inline-code">.gitkeep</code>.</span>
   </label>
 </div>
 <div class="checklist-item">

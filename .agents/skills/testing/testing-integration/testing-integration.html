@@ -586,6 +586,72 @@ Future&lt;void&gt; main() =&gt; integrationDriver();
 </div>
 <hr class="doc-divider">
 <h2 id="4--end-to-end-integration-test-implementation" class="doc-h2"><a href="#4--end-to-end-integration-test-implementation" class="heading-anchor">#</a> 4. End-to-End Integration Test Implementation</h2>
+<h3 class="doc-h3">4.1 UI Kit Showcase Smoke Test (<code class="inline-code">integration_test/uikit_page_test.dart</code>)</h3>
+<p class="doc-p">Mandatory integration test generated during project bootstrap:</p>
+<div class="code-block-wrapper">
+  <div class="code-header">
+    <span class="code-lang">dart</span>
+    <button class="copy-btn" onclick="copyCode(this)">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="btn-text" data-i18n="copy">Copy</span>
+    </button>
+  </div>
+  <pre><code class="language-dart">// integration_test/uikit_page_test.dart
+import &#039;package:flutter/material.dart&#039;;
+import &#039;package:flutter_test/flutter_test.dart&#039;;
+import &#039;package:get_it/get_it.dart&#039;;
+import &#039;package:integration_test/integration_test.dart&#039;;
+
+import &#039;package:flutter_template/main.dart&#039; as app;
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  setUp(() async {
+    await GetIt.I.reset();
+  });
+
+  tearDown(() async {
+    await GetIt.I.reset();
+  });
+
+  group(&#039;UiKitPage Integration Smoke Test&#039;, () {
+    testWidgets(&#039;renders UiKitPage, switches theme modes, and validates UI sections&#039;, (tester) async {
+      // 1. Launch the actual application
+      app.main();
+      await tester.pumpAndSettle();
+
+      // 2. Verify UiKit landing is displayed
+      expect(find.text(&#039;UI Kit &amp; Design System&#039;), findsWidgets);
+
+      // 3. Toggle Theme Switcher (System -&gt; Light -&gt; Dark)
+      final darkThemeButton = find.text(&#039;Dark&#039;);
+      if (darkThemeButton.evaluate().isNotEmpty) {
+        await tester.tap(darkThemeButton);
+        await tester.pumpAndSettle();
+      }
+
+      final lightThemeButton = find.text(&#039;Light&#039;);
+      if (lightThemeButton.evaluate().isNotEmpty) {
+        await tester.tap(lightThemeButton);
+        await tester.pumpAndSettle();
+      }
+
+      // 4. Scroll through UI showcase sections smoothly without overflow
+      final scrollable = find.byType(Scrollable).first;
+      await tester.drag(scrollable, const Offset(0, -600));
+      await tester.pumpAndSettle();
+
+      // 5. Verify Buttons &amp; Form Controls exist
+      expect(find.byType(FilledButton), findsWidgets);
+      expect(find.byType(OutlinedButton), findsWidgets);
+    });
+  });
+}
+</code></pre>
+</div>
+<hr class="doc-divider">
+<h3 class="doc-h3">4.2 Feature User Journey Test (<code class="inline-code">integration_test/item_journey_test.dart</code>)</h3>
 <div class="code-block-wrapper">
   <div class="code-header">
     <span class="code-lang">dart</span>
@@ -603,7 +669,7 @@ import &#039;package:integration_test/integration_test.dart&#039;;
 import &#039;package:flutter_template/main.dart&#039; as app;
 
 void main() {
-  final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   setUp(() async {
     // Reset DI between tests to avoid container pollution

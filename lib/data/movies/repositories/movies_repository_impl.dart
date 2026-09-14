@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
+
 import 'package:flutter_template/data/movies/client/movies_api_client.dart';
 import 'package:flutter_template/domain/movies/entities/movies_pagination.dart';
 import 'package:flutter_template/domain/movies/failures/movies_failure.dart';
 import 'package:flutter_template/domain/movies/repositories/i_movies_repository.dart';
 import 'package:flutter_template/infrastructure/config/app_config.dart';
 import 'package:flutter_template/infrastructure/network/dio_exception_mapper.dart';
-import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IMoviesRepository)
 class MoviesRepositoryImpl implements IMoviesRepository {

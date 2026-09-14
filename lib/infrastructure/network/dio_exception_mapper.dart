@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+
 import 'package:flutter_template/domain/movies/failures/movies_failure.dart';
 
 abstract final class DioExceptionMapper {

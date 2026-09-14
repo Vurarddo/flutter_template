@@ -167,17 +167,27 @@ abstract final class AppTheme {
 
 ## 4. Injectable Hydrated `ThemeCubit` (`lib/presentation/state-management/theme/`)
 
-### 4.1 State (`theme_state.dart`)
+> [!IMPORTANT]
+> **Zero Flutter SDK Imports in BLoC / Cubit:**
+> `ThemeCubit`, `ThemeState`, and `HydratedThemeCubitMixin` must NEVER import `package:flutter/material.dart` (enforced by `avoid_flutter_imports`).
+> Instead, define a pure Dart `AppThemeMode` enum in the state layer and map it to Flutter's `ThemeMode` in the presentation layer via `AppThemeModeX.toFlutter()`.
+
+### 4.1 State & Domain Enum (`theme_state.dart`)
 ```dart
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+
+enum AppThemeMode {
+  system,
+  light,
+  dark,
+}
 
 final class ThemeState extends Equatable {
-  final ThemeMode themeMode;
+  final AppThemeMode themeMode;
 
-  const ThemeState({this.themeMode = ThemeMode.system});
+  const ThemeState({this.themeMode = AppThemeMode.system});
 
-  ThemeState copyWith({ThemeMode? themeMode}) {
+  ThemeState copyWith({AppThemeMode? themeMode}) {
     return ThemeState(themeMode: themeMode ?? this.themeMode);
   }
 
@@ -188,7 +198,6 @@ final class ThemeState extends Equatable {
 
 ### 4.2 Serialization Mixin (`hydrated_theme_cubit.mixin.dart`)
 ```dart
-import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:flutter_template/presentation/state-management/theme/theme_state.dart';
 
@@ -201,10 +210,10 @@ mixin HydratedThemeCubitMixin on HydratedMixin<ThemeState> {
     try {
       final index = json['themeModeIndex'] as int?;
       return ThemeState(
-        themeMode: index != null ? ThemeMode.values[index] : ThemeMode.system,
+        themeMode: index != null ? AppThemeMode.values[index] : AppThemeMode.system,
       );
     } catch (_) {
-      return const ThemeState(themeMode: ThemeMode.system);
+      return const ThemeState(themeMode: AppThemeMode.system);
     }
   }
 
@@ -217,7 +226,6 @@ mixin HydratedThemeCubitMixin on HydratedMixin<ThemeState> {
 
 ### 4.3 Cubit Implementation (`theme_cubit.dart`)
 ```dart
-import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:flutter_template/presentation/state-management/theme/hydrated_theme_cubit.mixin.dart';
@@ -227,17 +235,31 @@ import 'package:flutter_template/presentation/state-management/theme/theme_state
 class ThemeCubit extends HydratedCubit<ThemeState> with HydratedThemeCubitMixin {
   ThemeCubit() : super(const ThemeState());
 
-  void setThemeMode(ThemeMode mode) {
+  void setThemeMode(AppThemeMode mode) {
     emit(state.copyWith(themeMode: mode));
   }
 
   void toggleTheme() {
     final next = switch (state.themeMode) {
-      ThemeMode.system || ThemeMode.light => ThemeMode.dark,
-      ThemeMode.dark => ThemeMode.light,
+      AppThemeMode.system || AppThemeMode.light => AppThemeMode.dark,
+      AppThemeMode.dark => AppThemeMode.light,
     };
     emit(state.copyWith(themeMode: next));
   }
+}
+```
+
+### 4.4 Presentation Mapping Extension (`lib/presentation/ui_utils/extensions/app_theme_mode_extension.dart`)
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_template/presentation/state-management/theme/theme_state.dart';
+
+extension AppThemeModeX on AppThemeMode {
+  ThemeMode toFlutter() => switch (this) {
+    AppThemeMode.system => ThemeMode.system,
+    AppThemeMode.light => ThemeMode.light,
+    AppThemeMode.dark => ThemeMode.dark,
+  };
 }
 ```
 

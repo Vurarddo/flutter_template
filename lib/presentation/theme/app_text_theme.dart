@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_template/presentation/ui_utils/assets/fonts.gen.dart';
 
 abstract final class AppTextTheme {

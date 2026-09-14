@@ -1,8 +1,9 @@
+import 'package:flutter_test/flutter_test.dart';
+
 import 'package:flutter_template/domain/movies/entities/movie.dart';
 import 'package:flutter_template/domain/movies/entities/movies_pagination.dart';
 import 'package:flutter_template/domain/movies/repositories/i_movies_repository.dart';
 import 'package:flutter_template/domain/movies/usecases/get_now_playing_movies_usecase.dart';
-import 'package:flutter_test/flutter_test.dart';
 
 class FakeMoviesRepository implements IMoviesRepository {
   @override

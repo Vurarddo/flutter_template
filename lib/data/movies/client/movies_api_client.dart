@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_template/data/movies/dto/movie_response_dto.dart';
-import 'package:flutter_template/data/movies/endpoints/movies_endpoints.dart';
 import 'package:injectable/injectable.dart';
 import 'package:retrofit/retrofit.dart';
+
+import 'package:flutter_template/data/movies/dto/movie_response_dto.dart';
+import 'package:flutter_template/data/movies/endpoints/movies_endpoints.dart';
 
 part 'movies_api_client.g.dart';
 
