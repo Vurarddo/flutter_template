@@ -185,12 +185,15 @@ To enable seamless navigation across trees and meshes:
 6. **Domain-Agnostic & Abstract Naming Rule (Universal Portability):**
    - ALL code snippets, class names, functions, variables, DTOs, entities, and use cases inside skills MUST use **abstract, domain-agnostic identifiers** (e.g., `[Feature]`, `Item`, `ItemDto`, `ItemEntity`, `User`, `Account`, `Product`, `Resource`, `ExampleItem`) instead of project-specific domain names (e.g., `Movie`, `TMDB`, `CryptoTrade`).
    - This ensures skills remain 100% portable, reusable, and copy-paste ready across any Flutter codebase without domain residue.
-7. **Holistic Tree Audit & De-duplication Rule (Trash & Bloat Pruning):**
+7. **Stale Pointer Policy & Router Synchronization:**
+   - *A stale pointer is worse than no pointer.* Whenever a file, skill, example, or folder is moved, renamed, or deleted, update the corresponding router table, Hub routing matrix, and relative markdown links within the **same turn**.
+   - Every pointer in a router must resolve to an active, valid file path.
+8. **Holistic Tree Audit & De-duplication Rule (Trash & Bloat Pruning):**
    - Whenever this skill is invoked to create or modify skills, the AI MUST actively audit the entire `.agents/skills/` tree, verify cross-link integrity, and eliminate redundant or duplicate files.
    - **Single Source of Truth:** Never duplicate the same concept across multiple skill folders (e.g., domain failure definitions belong strictly in `domain-failures`, not duplicated in error handling).
    - **Active Pruning:** Do NOT hesitate to delete obsolete, duplicate, or stale skills (`rm -rf`) to prevent folder bloat and keep the skill repository compact, high-signal, and clean.
    - **Banned Dependencies Enforcement:** Strictly enforce project prohibitions in all generated skill code (e.g., **CRITICAL** ban on `dartz`/`fpdart` `Either`, `provider`, `riverpod`, relative imports, and hardcoded colors).
-7. **Agent Verification Checklist:**
+9. **Agent Verification Checklist:**
    - End with a task-oriented markdown checklist (`- [ ] ...`) allowing the agent to self-verify its work before finishing.
 
 ---

@@ -28,6 +28,38 @@ Strictly adhere to the following layer boundaries and dependency rules without e
 - **Presentation Layer:** UI Screens, modular Widgets, UI Kit, Theme, and State Management (BLoC/Cubit). Must ONLY depend on Domain Entities and Use Cases.
 - **Core / Infrastructure Layer:** Dependency Injection setup (`injectable`), network configurations (`Dio`), loggers, global extensions, and constants/utilities.
 
+### Workspace Action & Skill Routing Guide (Intent & Code Navigator)
+
+Use this quick-routing index to locate target codebase paths and activate relevant skills based on user intent:
+
+- **API Endpoints & Network (REST calls, Retrofit clients, DTOs, Mappers):**
+  - **Target Paths:** `lib/data/datasources/`, `lib/data/models/`, `lib/data/mappers/`, `lib/core/network/`
+  - **Skills to Activate:** [`infrastructure-network-dio`](skills/infrastructure/infrastructure-network-dio/SKILL.md), [`data-retrofit-clients`](skills/data/data-retrofit-clients/SKILL.md), [`data-dto-mappers`](skills/data/data-dto-mappers/SKILL.md)
+
+- **Business Logic & Domain (New features, Use Cases, Entities, Repository contracts):**
+  - **Target Paths:** `lib/domain/entities/`, `lib/domain/repositories/`, `lib/domain/usecases/`, `lib/domain/failures/`
+  - **Skills to Activate:** [`domain-usecases`](skills/domain/domain-usecases/SKILL.md), [`domain-entities-freezed`](skills/domain/domain-entities-freezed/SKILL.md), [`domain-repositories`](skills/domain/domain-repositories/SKILL.md), [`domain-failures`](skills/domain/domain-failures/SKILL.md)
+
+- **State Management (BLoC/Cubit, Events, States, HydratedBLoC persistence):**
+  - **Target Paths:** `lib/presentation/state_management/<feature>/`
+  - **Skills to Activate:** [`flutter-bloc-core`](skills/presentation/state-management/flutter-bloc-core/SKILL.md), [`flutter-hydrated-bloc`](skills/presentation/state-management/flutter-hydrated-bloc/SKILL.md)
+
+- **UI Screens & UI Kit (Feature pages, widgets, design tokens, context extensions):**
+  - **Target Paths:** `lib/presentation/pages/<feature>/`, `lib/presentation/ui_kit/`, `lib/presentation/theme/`, `lib/presentation/ui_utils/extensions/`
+  - **Skills to Activate:** [`flutter-bloc-widgets`](skills/presentation/state-management/flutter-bloc-widgets/SKILL.md), [`flutter-ui-kit-components`](skills/presentation/ui/ui-kit/flutter-ui-kit-components/SKILL.md), [`flutter-ui-utils-extensions`](skills/presentation/ui-utils/flutter-ui-utils-extensions/SKILL.md), [`flutter-ui-theme-extensions`](skills/presentation/theme/flutter-ui-theme-extensions/SKILL.md)
+
+- **Flavors & Environments (Env configs, Android Gradle, iOS xcconfig, AppConfig):**
+  - **Target Paths:** `config/env_*.json`, `lib/core/config/`, `android/app/`, `ios/Runner/`
+  - **Skills to Activate:** [`native-flavors-environments`](skills/native/native-flavors-environments/SKILL.md), [`bootstrap-architecture-scaffold`](skills/bootstrap/bootstrap-architecture-scaffold/SKILL.md)
+
+- **Localization & Translations (ARB files, ICU plurals, failure string mappers):**
+  - **Target Paths:** `lib/l10n/intl_*.arb`, `lib/l10n/generated/`
+  - **Skills to Activate:** [`l10n-arb-icu`](skills/l10n/l10n-arb-icu/SKILL.md), [`l10n-presentation-integration`](skills/l10n/l10n-presentation-integration/SKILL.md)
+
+- **Automated Testing (Unit, Widget, BLoC, and E2E Integration tests):**
+  - **Target Paths:** `test/`, `integration_test/`
+  - **Skills to Activate:** [`testing-unit`](skills/testing/testing-unit/SKILL.md), [`testing-bloc`](skills/testing/testing-bloc/SKILL.md), [`testing-widget`](skills/testing/testing-widget/SKILL.md), [`testing-integration`](skills/testing/testing-integration/SKILL.md)
+
 ### Strict Inter-Layer Interaction Rules:
 
 1. **Mandatory Use Cases:** BLoCs/Cubits MUST ONLY interact with **Use Cases**. Direct interaction between BLoC/Cubit and Repositories or Data Sources is STRICTLY PROHIBITED.
@@ -239,6 +271,9 @@ lib/presentation/state_management/<feature>/
 - **VS Code Workspace (`.vscode/`):**
   - Scaffolding MUST include `.vscode/launch.json` configured for multi-environment Flavors (Debug, Profile, Release for dev, stage, prod) AND automated test runners (All tests, unit, widget, bloc, integration tests).
   - Include `.vscode/settings.json` and `.vscode/extensions.json` recommending standard Flutter tools.
+- **Router Maintenance & Stale Pointer Policy:**
+  - When a file moves, an architecture folder is reorganized, or a new module is introduced, the agent MUST update the corresponding router (in `AGENTS.md`, Skill Hubs, or feature index) within the **same turn**.
+  - *A stale pointer is worse than no pointer.* Always maintain 100% path accuracy and valid relative links.
 - **Git Push Policy (Strict):** AI agents MUST NEVER automatically execute `git push` to remote repositories unless the user gives direct, explicit instruction (e.g., "запуш", "push", "запуш зміни"). Staging and creating local commits (`git add`, `git commit`) can be done as requested, but pushing to the remote repository is strictly forbidden without explicit permission.
 - Do NOT introduce any unrequested third-party packages or alternative state management solutions (e.g., Riverpod, Provider).
 - Always ensure generated code strictly complies with `injectable`, `auto_route`, and `reactive_forms` patterns used in the project.
